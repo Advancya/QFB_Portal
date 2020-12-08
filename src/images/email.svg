@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="17.78" height="12.224" viewBox="0 0 17.78 12.224">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <g id="email" transform="translate(0 -80)">
+    <g id="Group_1333" data-name="Group 1333" transform="translate(11.786 82.254)">
+      <g id="Group_1332" data-name="Group 1332">
+        <path id="Path_624" data-name="Path 624" class="cls-1" d="M339.392,148.845l5.994,3.789V144.9Z" transform="translate(-339.392 -144.896)"/>
+      </g>
+    </g>
+    <g id="Group_1335" data-name="Group 1335" transform="translate(0 82.254)">
+      <g id="Group_1334" data-name="Group 1334">
+        <path id="Path_625" data-name="Path 625" class="cls-1" d="M0,144.9v7.739l5.994-3.789Z" transform="translate(0 -144.896)"/>
+      </g>
+    </g>
+    <g id="Group_1337" data-name="Group 1337" transform="translate(0.033 80)">
+      <g id="Group_1336" data-name="Group 1336">
+        <path id="Path_626" data-name="Path 626" class="cls-1" d="M17.6,80H2.038a1.1,1.1,0,0,0-1.078.946l8.857,5.835,8.857-5.835A1.1,1.1,0,0,0,17.6,80Z" transform="translate(-0.96 -80)"/>
+      </g>
+    </g>
+    <g id="Group_1339" data-name="Group 1339" transform="translate(0.036 86.873)">
+      <g id="Group_1338" data-name="Group 1338">
+        <path id="Path_627" data-name="Path 627" class="cls-1" d="M11.757,277.921l-1.572,1.036a.558.558,0,0,1-.611,0L8,277.92l-6.977,4.413a1.1,1.1,0,0,0,1.076.938H17.657a1.1,1.1,0,0,0,1.076-.938Z" transform="translate(-1.024 -277.92)"/>
+      </g>
+    </g>
+  </g>
+</svg>

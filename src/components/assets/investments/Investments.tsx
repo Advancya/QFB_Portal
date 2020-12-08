@@ -1,0 +1,112 @@
+import React, { useState } from "react";
+import investIcon from "../../../images/invest-icon.svg";
+import { Button, Modal } from "react-bootstrap";
+import InvestmentsListing from "./InvestmentsListing";
+import InvestmentsDetails from "./InvestmentsDetails";
+import InvestmentsRecievedProfit from "./InvestmentsRecievedProfit";
+import InvestmentsBuyAndSell from "./InvestmentsBuyAndSell";
+
+function Investments() {
+  const [showInvestmentsListing, setShowInvestmentsListing] = useState(false);
+
+  const handleCloseInvestmentsListing = () => {
+    setShowInvestmentsListing(false);
+  };
+  const handleShowInvestmentsListing = () => {
+    setShowInvestmentsListing(true);
+  };
+
+  const [showInvestmentsDetails, setshowInvestmentsDetails] = useState(false);
+
+  const handleCloseInvestmentsDetails = () => setshowInvestmentsDetails(false);
+  const handleShowInvestmentsDetails = () => {
+    handleCloseInvestmentsListing();
+    setshowInvestmentsDetails(true);
+    //cashListingProps.hideCashListingModal;
+  };
+  const handleBackInvestmentsDetails = () => {
+    setshowInvestmentsDetails(false);
+
+    setShowInvestmentsListing(true);
+  };
+
+  const [
+    showInvestmentsRecievedProfit,
+    setShowInvestmentsRecievedProfit,
+  ] = useState(false);
+
+  const handleCloseInvestmentsRecievedProfit = () =>
+    setShowInvestmentsRecievedProfit(false);
+  const handleShowInvestmentsRecievedProfit = () => {
+    handleCloseInvestmentsDetails();
+    setShowInvestmentsRecievedProfit(true);
+    //cashListingProps.hideCashListingModal;
+  };
+  const handleBackInvestmentsRecievedProfit = () => {
+    setShowInvestmentsRecievedProfit(false);
+
+    setshowInvestmentsDetails(true);
+  };
+
+  const [showInvestmentsBuyAndSell, setShowInvestmentsBuyAndSell] = useState(
+    false
+  );
+
+  const handleCloseInvestmentsBuyAndSell = () =>
+    setShowInvestmentsRecievedProfit(false);
+  const handleShowInvestmentsBuyAndSell = () => {
+    handleCloseInvestmentsDetails();
+    setShowInvestmentsBuyAndSell(true);
+    //cashListingProps.hideCashListingModal;
+  };
+  const handleBackInvestmentsBuyAndSell = () => {
+    setShowInvestmentsBuyAndSell(false);
+
+    setshowInvestmentsDetails(true);
+  };
+  return (
+    <div className="col-lg-4">
+      <div className="inner-box">
+        <div className="d-flex align-items-center">
+          <div className="ib-icon">
+            <img src={investIcon} className="img-fluid" />
+          </div>
+          <a
+            href="#"
+            className="ib-text"
+            onClick={handleShowInvestmentsListing}
+          >
+            <h4>Investments</h4>
+            <h5>3,150,000.00 QAR</h5>
+          </a>
+        </div>
+      </div>
+      <InvestmentsListing
+        showInvestmentsListingModal={showInvestmentsListing}
+        hideInvestmentsListingModal={handleCloseInvestmentsListing}
+        showInvestmentsDetailsModal={handleShowInvestmentsDetails}
+      ></InvestmentsListing>
+      <InvestmentsDetails
+        showInvestmentsDetailsModal={showInvestmentsDetails}
+        hideInvestmentsDetailsModal={handleCloseInvestmentsDetails}
+        backInvestmentsListingModal={handleBackInvestmentsDetails}
+        showInvestmentsRecievedProfit={handleShowInvestmentsRecievedProfit}
+        showInvestmentsBuyAndSell={handleShowInvestmentsBuyAndSell}
+      ></InvestmentsDetails>
+      <InvestmentsRecievedProfit
+        showInvestmentsRecievedProfitModal={showInvestmentsRecievedProfit}
+        hideInvestmentsRecievedProfitModal={
+          handleCloseInvestmentsRecievedProfit
+        }
+        backInvestmentsRecievedProfitModal={handleBackInvestmentsRecievedProfit}
+      ></InvestmentsRecievedProfit>
+      <InvestmentsBuyAndSell
+        showInvestmentsBuyAndSellModal={showInvestmentsBuyAndSell}
+        hideInvestmentsBuyAndSellModal={handleCloseInvestmentsBuyAndSell}
+        backInvestmentsBuyAndSellModal={handleBackInvestmentsBuyAndSell}
+      ></InvestmentsBuyAndSell>
+    </div>
+  );
+}
+
+export default Investments;

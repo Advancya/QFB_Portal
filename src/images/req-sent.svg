@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="146" height="146" viewBox="0 0 146 146">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #baaba4;
+      }
+
+      .cls-2 {
+        fill: #6b4f44;
+      }
+
+      .cls-3 {
+        fill: #fff;
+        stroke: #513529;
+      }
+
+      .cls-4 {
+        fill: #513529;
+      }
+
+      .cls-5 {
+        fill: none;
+        stroke: #fff;
+      }
+    </style>
+  </defs>
+  <g id="Group_1324" data-name="Group 1324" transform="translate(-915.091 -1475.091)">
+    <g id="Group_1323" data-name="Group 1323" transform="translate(915 1475)">
+      <circle id="Ellipse_85" data-name="Ellipse 85" class="cls-1" cx="73" cy="73" r="73" transform="translate(0.091 0.091)"/>
+      <path id="Union_4" data-name="Union 4" class="cls-2" d="M61.22,82.887A43.409,43.409,0,1,1,74.8,73.224l.005.008L76.994,91.2Z" transform="translate(25.089 31.76)"/>
+      <path id="Union_3" data-name="Union 3" class="cls-3" d="M61.22,82.887A43.409,43.409,0,1,1,74.8,73.224l.005.008L76.994,91.2Z" transform="translate(28.86 27.989)"/>
+      <path id="Path_614" data-name="Path 614" class="cls-4" d="M1669.751,1573.588l57.041-21.566-18.128,31.412-10.939-2.657-10.158,7.97-2.813-12.033Z" transform="translate(-1623.126 -1505.029)"/>
+      <path id="Path_615" data-name="Path 615" class="cls-5" d="M1720.346,1608.251l24.394-12.047-17.117,13.779-4.214,10.217" transform="translate(-1659.046 -1536.396)"/>
+      <path id="Path_616" data-name="Path 616" class="cls-5" d="M1745.183,1643.619l6.642,2.524" transform="translate(-1676.68 -1570.058)"/>
+      <g id="Group_1322" data-name="Group 1322" transform="translate(33.274 65.759)">
+        <rect id="Rectangle_438" data-name="Rectangle 438" class="cls-4" width="3.19" height="3.19" transform="translate(0.167) rotate(3)"/>
+        <rect id="Rectangle_439" data-name="Rectangle 439" class="cls-4" width="3.19" height="3.19" transform="translate(0.027 7.969) rotate(-2)"/>
+        <rect id="Rectangle_440" data-name="Rectangle 440" class="cls-4" width="3.19" height="3.19" transform="matrix(0.921, -0.391, 0.391, 0.921, 1.325, 16.494)"/>
+        <rect id="Rectangle_441" data-name="Rectangle 441" class="cls-4" width="3.19" height="3.19" transform="translate(4.393 23.87) rotate(-34)"/>
+        <rect id="Rectangle_442" data-name="Rectangle 442" class="cls-4" width="3.19" height="3.19" transform="translate(8.993 30.602) rotate(-43)"/>
+        <rect id="Rectangle_443" data-name="Rectangle 443" class="cls-4" width="3.19" height="3.19" transform="matrix(0.588, -0.809, 0.809, 0.588, 14.821, 36.255)"/>
+        <rect id="Rectangle_444" data-name="Rectangle 444" class="cls-4" width="3.19" height="3.19" transform="translate(21.643 40.844) rotate(-68)"/>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,8 @@
+html, html[dir="ltr"], [dir="ltr"] {direction: ltr;}
+html[dir="rtl"], [dir="rtl"] {direction: rtl;}
+
+@media all and (max-width: 991px) {
+
+}
+
+/*# sourceMappingURL=stylesEn.css.map */

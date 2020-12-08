@@ -1,0 +1,13 @@
+﻿@charset "utf-8";
+
+html {unicode-range:U+0600-06FF;}
+html, html[dir="rtl"], [dir="rtl"] {direction: rtl;}
+html[dir="ltr"], [dir="ltr"] {direction: ltr;}
+body {
+}
+
+
+@media all and (max-width: 991px) {
+}
+
+/*# sourceMappingURL=stylesAr.css.map */
