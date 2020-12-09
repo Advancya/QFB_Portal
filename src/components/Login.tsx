@@ -13,18 +13,19 @@ function Login() {
   const auth = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const initialValues: User = { username: "", password: "", language: "", currency: "", otp: "" };
-  
+  local_Strings.setLanguage(auth.language);
+
   const loginFormValidationSchema = yup.object({
     username: yup.string().required("User name is required"),
     password: yup.string().required("Password is required"),
   });
 
   const submitLogin = async (values: User) => {
-    console.log("login called")
+    
     setLoading(true);
     const x = await auth.login(values);
     if (x) {
-      history.push(`/HomePage`);
+      history.push(`/${auth.language}/Home`);
     } else {
       console.log("Error Login");
     }
@@ -32,8 +33,8 @@ function Login() {
   };
 
   useEffect(() => {    
-    local_Strings.setLanguage(auth.language);
-  }, [auth.language]);
+    
+  }, []);
 
   return (
     <div className="col-lg-4 col-container">
@@ -102,7 +103,7 @@ function Login() {
           </div>
           <div className="form-group">
             <Link
-              to="/HomePage"
+              to={`/${auth.language}/Home`}
               id="confirmBtn"
               className="btn btn-primary btn-block"
             >
