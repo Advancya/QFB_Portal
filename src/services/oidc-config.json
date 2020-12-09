@@ -1,0 +1,9 @@
+{
+  "config": {
+    "client_id": "ro.client",
+    "client_secret": "secret",
+    "scope": "api1",
+    "grant_type": "password"
+  },
+  "storage_key": "@IdentityServerOidc:IdentityServerOAuthKey"
+}
