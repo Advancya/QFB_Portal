@@ -498,6 +498,14 @@ const ar = {
   MessageFilter_UnRead: "غير مقروءة",
   MessageFilter_All: "كل الرسائل",
   MyBeneficiariesAddNew: "اضافة مستفيد جديد",
+  ProductsAndOffersAddNew: "اضافة جديد",
+  ProductsAndOffersNameLabel: "Product Name ",
+  ProductsAndOffersArNameLabel: "Product Arabic Name ",
+  ProductsAndOffersExpireLabel: "Product Expire Date ",
+  ProductsAndOffersDescrLabel: "Product Description ",
+  ProductsAndOffersArDescrLabel: "Product Arabic Description ",
+  ProductsAndOffersSaveButton: "حفظ",
+  ProductsAndOffersDeleteButton: "حذف",
 };
 
 export default ar;

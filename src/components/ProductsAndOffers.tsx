@@ -1,7 +1,16 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import productsICon from "../images/products-offers-icon.svg";
+import { localStrings as local_Strings } from '../translations/localStrings';
+import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import * as helper from '../Helpers/helper';
+import { AuthContext } from "../providers/AuthProvider";
 
 function ProductsAndOffers() {
+  const history = useHistory();
+  const auth = useContext(AuthContext);
+  local_Strings.setLanguage(auth.language);
+
   return (
     <div className="inner-box box mt-0 mb-3">
       <div className="d-flex py-2">
@@ -14,6 +23,9 @@ function ProductsAndOffers() {
           <a href="#" className="btn btn-sm btn-primary mt-1">
             See More
           </a>
+          <Link className="btn btn-sm btn-primary mt-1" to={`/${auth.language}/ProductsAndOffersAdmin`} >
+            Manage
+          </Link>
         </div>
       </div>
     </div>

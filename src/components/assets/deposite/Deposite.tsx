@@ -1,12 +1,18 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 import depositIcon from "../../../images/deposit-icon.svg";
 import { Button, Modal } from "react-bootstrap";
 import DepositeListing from "./DepositeListing";
 import DepositeDetails from "./DepositeDetails";
 import DepositeRecievedProfit from "./DepositeRecievedProfit";
+import { AuthContext } from "../../../providers/AuthProvider";
+import { PortfolioContext } from "../../../pages/Homepage";
+
 
 function Deposite() {
+  const currentContext = useContext(AuthContext);
+  const userPortfolio = useContext(PortfolioContext);
+
   const [showDepositeListing, setShowDepositeListing] = useState(false);
 
   const handleCloseDepositeListing = () => {
@@ -56,7 +62,7 @@ function Deposite() {
           </div>
           <a href="#" className="ib-text" onClick={handleShowDepositeListing}>
             <h4>Deposit</h4>
-            <h5>3,150,000.00 QAR</h5>
+            <h5>{userPortfolio.totalDeposits + " " + currentContext.userSettings.currency}</h5>
           </a>
         </div>
       </div>

@@ -506,6 +506,14 @@ const en = {
   MessageFilter_All: "",
 
   MyBeneficiariesAddNew: "Add Beneficiary",
+  ProductsAndOffersAddNew: "Add New",
+  ProductsAndOffersNameLabel: "Product Name ",
+  ProductsAndOffersArNameLabel: "Product Arabic Name ",
+  ProductsAndOffersExpireLabel: "Product Expire Date ",
+  ProductsAndOffersDescrLabel: "Product Description ",
+  ProductsAndOffersArDescrLabel: "Product Arabic Description ",
+  ProductsAndOffersSaveButton: "Save",
+  ProductsAndOffersDeleteButton: "Delete",
 };
 
 export default en;

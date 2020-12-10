@@ -1,16 +1,44 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import phoneIcon from "../images/phone-fill.svg";
 import messageIcon from "../images/message.svg";
 import cellPhoneIcon from "../images/cell-phone.svg";
 import emailIcon from "../images/email.svg";
 import { Carousel } from "react-bootstrap";
+import { AuthContext } from "../providers/AuthProvider";
+import { GetUserWelcomeData } from "../services/cmsService";
+import { localStrings as local_Strings } from '../translations/localStrings';
+
+interface ItemProps {
+  accountOfficer?: string;
+  customerShortName?: string;
+  id?: string;
+  name: string;
+  telephone: string;
+  rmMobile: string;
+  rmEmail: string;
+  //callmeBackLink: string;
+}
+
+interface CustomCarouselProps { }
+interface RenderItemProps {
+  item: ItemProps;
+  index: number;
+}
 
 function RelationManger() {
   const [index, setIndex] = useState(0);
-
+  const auth = useContext(AuthContext);
+  const [carouselItems, setCarouselItems] = useState<ItemProps[]>([]);
   const handleSelect = (selectedIndex: any, e: any) => {
     setIndex(selectedIndex);
   };
+
+  useEffect(() => {
+    GetUserWelcomeData(auth.cif).then((s) => {
+      setCarouselItems(s);
+    });
+  }, []);
+
   return (
     <Carousel
       id="carouselExampleIndicators"
@@ -18,147 +46,84 @@ function RelationManger() {
       activeIndex={index}
       onSelect={handleSelect}
       controls={false}
+
     >
-      <Carousel.Item>
-        <div className="box min-h-24">
-          <div className="box-header">
-            <h3>Relation Manager</h3>
-          </div>
-          <ul className="box-list">
-            <li>
-              <div className="box-list-details">
-                <h5>RM Name</h5>
-                <h4 className="">Ahmed Mohamed Shokry</h4>
+      {
+        carouselItems && carouselItems.length > 0 &&
+        carouselItems.map((item) =>
+
+          <Carousel.Item>
+            <div className="box min-h-24">
+              <div className="box-header">
+                <h3>Relation Manager</h3>
               </div>
-            </li>
-            <li>
-              <div className="box-list-details">
-                <div className="row no-gutters align-items-center">
-                  <div className="col-8">
-                    <h5>Phone Number</h5>
-                    <h4 className="">+974 00000000</h4>
+              <ul className="box-list">
+                <li>
+                  <div className="box-list-details">
+                    <h5>RM Name</h5>
+                    <h4 className="">{item.name || ""}</h4>
                   </div>
-                  <div className="col-4 text-right">
-                    <a href="#" className="actionIcon">
-                      <img src={phoneIcon} className="img-fluid" />
-                    </a>
+                </li>
+                <li>
+                  <div className="box-list-details">
+                    <div className="row no-gutters align-items-center">
+                      <div className="col-8">
+                        <h5>Phone Number</h5>
+                        <h4 className="">{item.telephone || ""}</h4>
+                      </div>
+                      <div className="col-4 text-right">
+                        <a href="#" className="actionIcon">
+                          <img src={phoneIcon} className="img-fluid" />
+                        </a>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                </li>
+                <li>
+                  <div className="box-list-details">
+                    <div className="row no-gutters align-items-center">
+                      <div className="col-6">
+                        <h5>Mobile Number</h5>
+                        <h4 className="">{item.rmMobile || ""}</h4>
+                      </div>
+                      <div className="col-6 text-right">
+                        <a href="#" className="actionIcon mx-1">
+                          SMS
+                    <img src={messageIcon} className="img-fluid" />
+                        </a>
+                        <a href="#" className="actionIcon mx-1">
+                          CALL
+                    <img src={cellPhoneIcon} className="img-fluid" />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div className="box-list-details">
+                    <div className="row no-gutters align-items-center">
+                      <div className="col-9">
+                        <h5>Email</h5>
+                        <h4 className="">{item.rmEmail || ""}</h4>
+                      </div>
+                      <div className="col-3 text-right">
+                        <a href="#" className="actionIcon">
+                          <img src={emailIcon} className="img-fluid" />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+              <div className="text-center px-3">
+                <a className="btn btn-primary btn-block" href="#">
+                  {local_Strings.WelcomeScreenEmail}
+          </a>
               </div>
-            </li>
-            <li>
-              <div className="box-list-details">
-                <div className="row no-gutters align-items-center">
-                  <div className="col-6">
-                    <h5>Mobile Number</h5>
-                    <h4 className="">+974 00000000</h4>
-                  </div>
-                  <div className="col-6 text-right">
-                    <a href="#" className="actionIcon mx-1">
-                      SMS
-                      <img src={messageIcon} className="img-fluid" />
-                    </a>
-                    <a href="#" className="actionIcon mx-1">
-                      CALL
-                      <img src={cellPhoneIcon} className="img-fluid" />
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div className="box-list-details">
-                <div className="row no-gutters align-items-center">
-                  <div className="col-9">
-                    <h5>Email</h5>
-                    <h4 className="">ahmedmohamed@gmail.com</h4>
-                  </div>
-                  <div className="col-3 text-right">
-                    <a href="#" className="actionIcon">
-                      <img src={emailIcon} className="img-fluid" />
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </li>
-          </ul>
-          <div className="text-center px-3">
-            <a className="btn btn-primary btn-block" href="#">
-              CALL ME BACK
-            </a>
-          </div>
-        </div>
-      </Carousel.Item>
-      <Carousel.Item>
-        <div className="box min-h-24">
-          <div className="box-header">
-            <h3>Relation Manager</h3>
-          </div>
-          <ul className="box-list">
-            <li>
-              <div className="box-list-details">
-                <h5>RM Name</h5>
-                <h4 className="">Ahmed Mohamed Shokry</h4>
-              </div>
-            </li>
-            <li>
-              <div className="box-list-details">
-                <div className="row no-gutters align-items-center">
-                  <div className="col-8">
-                    <h5>Phone Number</h5>
-                    <h4 className="">+974 00000000</h4>
-                  </div>
-                  <div className="col-4 text-right">
-                    <a href="#" className="actionIcon">
-                      <img src={phoneIcon} className="img-fluid" />
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div className="box-list-details">
-                <div className="row no-gutters align-items-center">
-                  <div className="col-6">
-                    <h5>Mobile Number</h5>
-                    <h4 className="">+974 00000000</h4>
-                  </div>
-                  <div className="col-6 text-right">
-                    <a href="#" className="actionIcon mx-1">
-                      SMS
-                      <img src={messageIcon} className="img-fluid" />
-                    </a>
-                    <a href="#" className="actionIcon mx-1">
-                      CALL
-                      <img src={cellPhoneIcon} className="img-fluid" />
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div className="box-list-details">
-                <div className="row no-gutters align-items-center">
-                  <div className="col-9">
-                    <h5>Email</h5>
-                    <h4 className="">ahmedmohamed@gmail.com</h4>
-                  </div>
-                  <div className="col-3 text-right">
-                    <a href="#" className="actionIcon">
-                      <img src={emailIcon} className="img-fluid" />
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </li>
-          </ul>
-          <div className="text-center px-3">
-            <a className="btn btn-primary btn-block" href="#">
-              CALL ME BACK
-            </a>
-          </div>
-        </div>
-      </Carousel.Item>
+            </div>
+          </Carousel.Item>
+        )
+      }
     </Carousel>
   );
 }

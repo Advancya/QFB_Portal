@@ -1,12 +1,18 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import facilitiesIcon from "../../../images/facilities-icon.svg";
 import { Button, Modal } from "react-bootstrap";
 import FacilitiesListing from "./FacilitiesListing";
 import FacilitiesDetails from "./FacilitiesDetails";
 import FacilitiesOutstandingPayment from "./FacilitiesOutstandingPayment";
 import FacilitiesHistoricalPayment from "./FacilitiesHistoricalPayment";
+import { AuthContext } from "../../../providers/AuthProvider";
+import { PortfolioContext } from "../../../pages/Homepage";
+
 
 function Facilities() {
+  const currentContext = useContext(AuthContext);
+  const userPortfolio = useContext(PortfolioContext);
+
   const [showFacilitiesListing, setShowFacilitiesListing] = useState(false);
 
   const handleCloseFacilitiesListing = () => {
@@ -74,7 +80,7 @@ function Facilities() {
           </div>
           <a href="#" className="ib-text" onClick={handleShowFacilitiesListing}>
             <h4>Facilities</h4>
-            <h5>3,150,000.00 QAR</h5>
+            <h5>{userPortfolio.totalLoans + " " + currentContext.userSettings.currency}</h5>
           </a>
         </div>
       </div>

@@ -619,6 +619,8 @@ const GetAllCurrency = async () => {
 
 const GetSettingsByCIF = async (cif: string) => {
   try {
+
+    
     const result = await apiInstance.get(
       `/api/AccountSettings/GetByCIF?cif=${cif}`
     );
@@ -721,6 +723,41 @@ const GetPublicNews = async () => {
   }
 };
 
+
+const AddProductsAndOffers = async (item: any) => {
+  try {
+    const result = await apiInstance.post(`/api/ProductsAndOffers/Add`, item);
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+
+const UpdateProductsAndOffers = async (item: any) => {
+  try {
+    const result = await apiInstance.post(`/api/ProductsAndOffers/Update`, item);
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+const DeleteProductsAndOffers = async (id: number) => {
+  try {
+    const result = await apiInstance.get(`/api/ProductsAndOffers/Delete?id=${id}`);
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
 export {
   GetStockData,
   ValidateRegisterData,
@@ -772,5 +809,8 @@ export {
   GetProductAndOffersById,
   GetNotificationsByCIF,
   GetProductsAndOffersAll,
-  GetPublicNews
+  GetPublicNews,
+  AddProductsAndOffers,
+  UpdateProductsAndOffers,
+  DeleteProductsAndOffers
 };

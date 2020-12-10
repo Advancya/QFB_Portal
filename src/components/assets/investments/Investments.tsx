@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import investIcon from "../../../images/invest-icon.svg";
 import { Button, Modal } from "react-bootstrap";
 import InvestmentsListing from "./InvestmentsListing";
 import InvestmentsDetails from "./InvestmentsDetails";
 import InvestmentsRecievedProfit from "./InvestmentsRecievedProfit";
 import InvestmentsBuyAndSell from "./InvestmentsBuyAndSell";
+import { AuthContext } from "../../../providers/AuthProvider";
+import { PortfolioContext } from "../../../pages/Homepage";
 
 function Investments() {
+  const currentContext = useContext(AuthContext);
+  const userPortfolio = useContext(PortfolioContext);
+
   const [showInvestmentsListing, setShowInvestmentsListing] = useState(false);
 
   const handleCloseInvestmentsListing = () => {
@@ -77,7 +82,7 @@ function Investments() {
             onClick={handleShowInvestmentsListing}
           >
             <h4>Investments</h4>
-            <h5>3,150,000.00 QAR</h5>
+            <h5>{userPortfolio.totalInvestment + " " + currentContext.userSettings.currency}</h5>
           </a>
         </div>
       </div>

@@ -30,7 +30,7 @@ function ToolBarLeft() {
   return (
     <div className="col-md-3 text-left">
       <div className="topLeftIcons">
-        <Link to={`/${auth.language}/HomePage`}>
+        <Link to={`/${auth.language}/Home`}>
           <FontAwesomeIcon icon={faHome} />
         </Link>        
         <a onClick={() => switchLanguage(auth.language)} style={{cursor: "pointer"}}>
