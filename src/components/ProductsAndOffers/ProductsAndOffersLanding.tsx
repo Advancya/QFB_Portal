@@ -1,13 +1,22 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import productsICon from "../../images/products-offers-icon.svg";
 import ProductsAndOffersDetails from "./ProductsAndOffersDetails";
 import ProductsAndOffersListing from "./ProductsAndOffersListing";
+import { useHistory } from "react-router-dom";
+import { localStrings as local_Strings } from "../../translations/localStrings";
+import { AuthContext } from "../../providers/AuthProvider";
+import { Link } from "react-router-dom";
+
 interface iProductsAndOffersLanding {
   showProductsAndOffersDetailsModal: () => void;
 }
 function ProductsAndOffersLanding(
   productsAndOffersLandingProps: iProductsAndOffersLanding
 ) {
+  const history = useHistory();
+  const auth = useContext(AuthContext);
+  local_Strings.setLanguage(auth.language);
+
   const [
     showProductsAndOffersListing,
     setShowProductsAndOffersListing,
@@ -53,6 +62,10 @@ function ProductsAndOffersLanding(
           >
             See More
           </a>
+          &nbsp;&nbsp;
+          <Link className="btn btn-sm btn-primary mt-1"
+            to={`/${auth.language}/ProductsAndOffersAdmin`}>Manage
+        </Link>
         </div>
       </div>
       <ProductsAndOffersListing
