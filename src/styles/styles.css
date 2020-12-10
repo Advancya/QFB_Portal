@@ -95,6 +95,10 @@ html {
   background-color: rgb(205 194 188)!important;
 }
 
+.bg-beige {
+  background-color: #e2dad7!important;
+}
+
 .bg-white {
   background-color: #fff!important;
 }
@@ -173,6 +177,10 @@ html {
 
 .min-h-32 {
   min-height: 32rem;
+}
+
+.color-gray {
+  color: #6c7279;
 }
 
 .color-black {
@@ -551,6 +559,23 @@ textarea.form-control {
   letter-spacing: 1px;
 }
 
+.box .bg-beige a {
+  color: #6b4f44;
+  font-size: 1rem;
+  text-transform: capitalize;
+  font-weight: 600;
+}
+
+.box-brief {
+  color: #000000;
+  font-size: 0.875rem;
+}
+
+.box-date {
+  color: #6c7279;
+  font-size: 0.875rem;
+}
+
 .box h2 {
   font-size: 1.6rem;
   letter-spacing: 0;
@@ -658,6 +683,14 @@ textarea.form-control {
 
 .forgotLink:hover {
   color: #8d2232;
+}
+
+.input-validation-error {
+  margin-top: 10px;
+  border: 1px solid #ff0000;
+  background-color: #ffeeee;
+  padding: 2px 7px;
+  border-radius: 10px;
 }
 
 .register-container {
@@ -855,7 +888,7 @@ ul.box-list a:hover h4 small, ul.box-list a:hover p {
 
 .scrollabel-modal-box {
   max-height: 60vh;
-  overflow-y: auto;
+  overflow-x: auto;
 }
 
 .myModal .modal-header {
@@ -1225,7 +1258,11 @@ tr.shown {
 
 @media all and (min-width: 768px) {}
 
-@media all and (min-width: 992px) {}
+@media all and (min-width: 992px) {
+  .modal-lg, .modal-xl {
+    max-width: 85%;
+  }
+}
 
 @media all and (min-width: 1024px) {}
 
