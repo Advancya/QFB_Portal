@@ -8,6 +8,8 @@ import AppBox from "./components/AppBox";
 import ProductsAndOffers from "./components/ProductsAndOffers";
 import ContactUs from "./components/ContactUs";
 
+import './translations/i18n';
+
 function App() {
   return (
     <div>
