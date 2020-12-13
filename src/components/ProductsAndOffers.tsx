@@ -23,9 +23,6 @@ function ProductsAndOffers() {
           <a href="#" className="btn btn-sm btn-primary mt-1">
             See More
           </a>
-          <Link className="btn btn-sm btn-primary mt-1" to={`/${auth.language}/ProductsAndOffersAdmin`} >
-            Manage
-          </Link>
         </div>
       </div>
     </div>

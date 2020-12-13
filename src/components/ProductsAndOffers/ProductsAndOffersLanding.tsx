@@ -62,10 +62,6 @@ function ProductsAndOffersLanding(
           >
             See More
           </a>
-          &nbsp;&nbsp;
-          <Link className="btn btn-sm btn-primary mt-1"
-            to={`/${auth.language}/ProductsAndOffersAdmin`}>Manage
-        </Link>
         </div>
       </div>
       <ProductsAndOffersListing
