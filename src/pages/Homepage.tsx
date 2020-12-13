@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Footer from "../components/Footer";
 import AuthCustomHeader from "../components/header/AuthCustomHeader";
 import Breadcrumb from "../components/Breadcrumb";
@@ -9,8 +9,15 @@ import RelationManger from "../components/RelationManger";
 import InboxLanding from "../components/Inbox/InboxLanding";
 import InboxDetails from "../components/Inbox/InboxDetails";
 import InboxListing from "../components/Inbox/InboxListing";
+import { useHistory } from "react-router-dom";
+import { AuthContext, User } from "../providers/AuthProvider";
+import { localStrings as local_Strings } from "../translations/localStrings";
 
 function HomePage() {
+  const history = useHistory();
+  const auth = useContext(AuthContext);
+  local_Strings.setLanguage(auth.language);
+
   const [showInboxDetails, setshowInboxDetails] = useState(false);
 
   const handleCloseInboxDetails = () => setshowInboxDetails(false);
@@ -21,6 +28,12 @@ function HomePage() {
   const handleBackInboxDetails = () => {
     setshowInboxDetails(false);
   };
+  auth.language === "en"
+    ? document.getElementsByTagName("html")[0].setAttribute("dir", "ltr")
+    : document.getElementsByTagName("html")[0].setAttribute("dir", "rtl");
+  auth.language === "en"
+    ? document.getElementsByTagName("html")[0].setAttribute("lang", "en")
+    : document.getElementsByTagName("html")[0].setAttribute("lang", "ar");
 
   return (
     <div>

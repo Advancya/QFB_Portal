@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import CustomHeader from "../components/header/CustomHeader";
 import Footer from "../components/Footer";
 import Login from "../components/Login";
@@ -7,8 +7,15 @@ import AppBox from "../components/AppBox";
 import ProductsAndOffers from "../components/ProductsAndOffers/ProductsAndOffersLanding";
 import ContactUsLanding from "../components/ContactUs/ContactUsLanding";
 import ProductsAndOffersLanding from "../components/ProductsAndOffers/ProductsAndOffersLanding";
+import { useHistory } from "react-router-dom";
+import { AuthContext, User } from "../providers/AuthProvider";
+import { localStrings as local_Strings } from "../translations/localStrings";
 
 function Landing() {
+  const history = useHistory();
+  const auth = useContext(AuthContext);
+  local_Strings.setLanguage(auth.language);
+
   const [
     showproductsAndOffersDetails,
     setshowproductsAndOffersDetails,
@@ -26,7 +33,12 @@ function Landing() {
   const handleBackproductsAndOffersDetails = () => {
     setshowproductsAndOffersDetails(false);
   };
-
+  auth.language === "en"
+    ? document.getElementsByTagName("html")[0].setAttribute("dir", "ltr")
+    : document.getElementsByTagName("html")[0].setAttribute("dir", "rtl");
+  auth.language === "en"
+    ? document.getElementsByTagName("html")[0].setAttribute("lang", "en")
+    : document.getElementsByTagName("html")[0].setAttribute("lang", "ar");
   return (
     <div>
       <CustomHeader />

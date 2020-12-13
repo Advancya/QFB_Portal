@@ -2,14 +2,14 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router } from "react-router-dom";
 import RoutingMap from "./router/routingMap";
-import "./index.css";
+//import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 //import "bootstrap";
 //import "bootstrap/dist/js/popper.min.js";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/styles.css";
-import "./styles/stylesEn.css";
+//import "./styles/stylesEn.css";
 import "./styles/font-awesome.min.css";
 import { AuthProvider } from "./providers/AuthProvider";
 import ScrollToTop from "./shared/scrollToTop";

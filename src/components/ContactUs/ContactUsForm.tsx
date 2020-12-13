@@ -103,7 +103,7 @@ function ContactUsForm(contactUsFormProps: iContactUsForm) {
                 <div className="col-md-8">
                   <Form>
                     <Form.Row>
-                      <Col sm={6}>
+                      <Col md={6}>
                         <Form.Group controlId="formName">
                           <Form.Label>Name</Form.Label>
                           <Form.Control
@@ -112,7 +112,7 @@ function ContactUsForm(contactUsFormProps: iContactUsForm) {
                           />
                         </Form.Group>
                       </Col>
-                      <Col sm={6}>
+                      <Col md={6}>
                         <Form.Group controlId="formCountry">
                           <Form.Label>Country</Form.Label>
                           <Form.Control
@@ -129,7 +129,7 @@ function ContactUsForm(contactUsFormProps: iContactUsForm) {
                       </Col>
                     </Form.Row>
                     <Form.Row>
-                      <Col sm={6}>
+                      <Col md={6}>
                         <Form.Group controlId="formMobile">
                           <Form.Label>Mobile</Form.Label>
                           <Form.Control
@@ -138,7 +138,7 @@ function ContactUsForm(contactUsFormProps: iContactUsForm) {
                           />
                         </Form.Group>
                       </Col>
-                      <Col sm={6}>
+                      <Col md={6}>
                         <Form.Group controlId="formMobile">
                           <Form.Label>Email address</Form.Label>
                           <Form.Control
@@ -149,12 +149,12 @@ function ContactUsForm(contactUsFormProps: iContactUsForm) {
                       </Col>
                     </Form.Row>
                     <Form.Row>
-                      <Col sm={12}>
+                      <Col md={12}>
                         <Form.Group controlId="forQuery">
                           <Form.Label>Query</Form.Label>
                           <Form.Control
                             as="textarea"
-                            placeholder="We'll never share your email with anyone else. We'll never share your email with anyone else."
+                            placeholder="We'll never share your email with anyone else. We'll never share your email with anyone else. We'll never share your email with anyone else. We'll never share your email with anyone else. We'll never share your email with anyone else. We'll never share your email with anyone else."
                           />
                         </Form.Group>
                       </Col>

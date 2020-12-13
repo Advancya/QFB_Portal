@@ -8,6 +8,32 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'ADLSA';
+  src: url('../fonts/ADLSA-Light.eot');
+  src: url('../fonts/ADLSA-Light.woff') format('woff'), url('../fonts/ADLSA-Light.ttf') format('truetype'), url('../fonts/ADLSA-Light.svg') format('svg');
+  font-weight: 500;
+  font-style: normal;
+}
+
+html[dir="rtl"], [dir="rtl"] {
+  direction: rtl;
+}
+
+[dir="rtl"] body {
+  font-family: 'ADLSA', Tahoma;
+  text-align: right;
+}
+
+html[dir="ltr"], [dir="ltr"] {
+  direction: ltr;
+}
+
+[dir="ltr"] body {
+  font-family: 'Archer', sans-serif;
+  text-align: left;
+}
+
 ::-webkit-scrollbar {
   width: 10px;
 }
@@ -231,7 +257,6 @@ html {
 
 body {
   color: #161616;
-  font-family: 'Archer', sans-serif;
   background: #fbfcff;
 }
 
@@ -608,7 +633,7 @@ a.box:hover {
 }
 
 .inner-box .ib-icon img {
-  margin-left: -1.75rem;
+  margin-inline-start: -1.75rem;
   min-width: 2.5rem;
 }
 
@@ -850,12 +875,12 @@ ul.box-list a:hover h4 small, ul.box-list a:hover p {
 }
 
 .viewLink i {
-  margin-left: 0.25rem;
+  margin-inline-start: 0.25rem;
   transition: all 0.2s;
 }
 
 .viewLink:hover i {
-  margin-left: 0.1rem;
+  margin-inline-start: 0.1rem;
   color: #6b4f44;
 }
 
@@ -871,7 +896,7 @@ ul.box-list a:hover h4 small, ul.box-list a:hover p {
 .loginSideBoxBoxes .inner-box .ib-icon img {
   min-width: 3.5rem;
   max-width: 3.5rem;
-  margin-left: -2.25rem;
+  margin-inline-start: -2.25rem;
 }
 
 .footer {
@@ -1307,7 +1332,12 @@ tr.shown {
   }
 }
 
-@media all and (max-width: 991px) {}
+@media all and (max-width: 991px) {
+  .modal-lg, .modal-xl {
+    max-width: 85%;
+    margin: 1.75rem auto;
+  }
+}
 
 @media all and (max-width: 767px) {}
 
