@@ -65,7 +65,7 @@ function ProductsAndOffersListing() {
       .then((responseData: IProductAndOffersProps[]) => {
         if (responseData) {
           setData(
-            responseData.filter((d) => new Date(d.expiryDate) > new Date())
+            responseData.filter((d) => new Date(d.expiryDate) > new Date()).sort((a, b) => moment(b.createdDate).diff(moment(a.createdDate)))
           );
         } else {
           setData([]);
@@ -165,8 +165,8 @@ function ProductsAndOffersListing() {
                         (auth.language === "en" ? item.name : item.nameAr)}
                     </h6>
                     <div className="text-15">
-                      {item.createdDate
-                        ? moment(item.createdDate).format("DD-MM-YYYY")
+                      {item.expiryDate
+                        ? moment(item.expiryDate).format("DD-MM-YYYY")
                         : ""}
                     </div>
                   </div>

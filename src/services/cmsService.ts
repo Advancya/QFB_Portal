@@ -798,7 +798,7 @@ const GetAllCustomerList = async () => {
 const SendNotificationsToCIFs = async (item: any) => {
   try {
     const result = await apiInstance.get(
-      `/api/Notifications/SendToCIFs=${queryString.stringify(item)}`
+      `/api/Notifications/SendToCIFs?${queryString.stringify(item)}`
     );
 
     return result.data;
@@ -812,7 +812,7 @@ const SendNotificationsToCIFs = async (item: any) => {
 const SendNotificationsToAll = async (item: any) => {
   try {
     const result = await apiInstance.get(
-      `/api/Notifications/SendToAll=${queryString.stringify(item)}`
+      `/api/Notifications/SendToAllWithLang?${queryString.stringify(item)}`
     );
 
     return result.data;

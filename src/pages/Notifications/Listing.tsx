@@ -45,7 +45,7 @@ function NotificationsListing() {
       .then((responseData: INotificationsDetail[]) => {
         if (responseData) {
           setData(
-            responseData.filter((d) => new Date(d.expiryDate) > new Date())
+            responseData.filter((d) => new Date(d.expiryDate) > new Date()).sort((a, b) => moment(b.messageSendDate).diff(moment(a.messageSendDate)))
           );
         } else {
           setData([]);
@@ -107,8 +107,8 @@ function NotificationsListing() {
                         item.messageSubTitle}
                     </h6>
                     <div className="text-15">
-                      {item.messageSendDate
-                        ? moment(item.messageSendDate).format("DD-MM-YYYY")
+                      {item.expiryDate
+                        ? moment(item.expiryDate).format("DD-MM-YYYY")
                         : ""}
                     </div>
                   </div>

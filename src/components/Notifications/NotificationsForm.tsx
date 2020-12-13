@@ -16,6 +16,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import '@ckeditor/ckeditor5-build-classic/build/translations/ar.js';
 //import Base64UploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/base64uploadadapter';
 import { emptyNotificationsDetail, INotificationsDetail } from "../../Helpers/publicInterfaces";
+import queryString from "query-string";
 
 interface DetailsProps {
   item?: INotificationsDetail
@@ -66,22 +67,32 @@ function NotificationsForm(props: DetailsProps) {
   const submitTheRecord = async (values: INotificationsDetail) => {
 
     setLoading(true);
-    const item = data.id > 0 ? values : {
-      messageTitle: values.messageTitle,
-      messageTitleAr: values.messageTitleAr,
+    const item = selected.length === customerList.length ? {
+      title: values.messageTitle,
+      titleAr: values.messageTitleAr,
       createdDate: moment().toISOString(),
-      expiryDate: values.expiryDate,
-      messageBody: values.messageBody,
-      messageBodyAr: values.messageBodyAr,
-    };
+      expireyData: moment(values.expiryDate).toISOString(),
+      message: values.messageBody,
+      messageAr: values.messageBodyAr,
+    } : {
+        cif: selected.flatMap(x => x["value"]).toString(),
+        title: values.messageTitle,
+        titleAr: values.messageTitleAr,
+        createdDate: moment().toISOString(),
+        expireyData: moment(values.expiryDate).toISOString(),
+        message: values.messageBody,
+        messageAr: values.messageBodyAr,
+      };
 
-    // const x = data.id > 0 ? await UpdateNotifications(item) : await AddNotifications(item);
-    // if (x) {
-    //   props.refreshList();
-    //   props.OnHide();
-    // } else {
-    //   console.log("Error while updating record");
-    // }
+    //console.log(decodeURIComponent(queryString.stringify(item)));
+    //console.log(selected.length === customerList.length);
+    const x = selected.length === customerList.length ? await SendNotificationsToAll(item) : await SendNotificationsToCIFs(item);
+    if (x) {
+      props.refreshList();
+      props.OnHide();
+    } else {
+      console.log("Error while updating record");
+    }
     setLoading(false);
   };
 
