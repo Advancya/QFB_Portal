@@ -506,6 +506,22 @@ const ar = {
   ProductsAndOffersArDescrLabel: "Product Arabic Description ",
   ProductsAndOffersSaveButton: "حفظ",
   ProductsAndOffersDeleteButton: "حذف",
+  NotificationsAddNew: "Add New",
+  NotificationsDeleteButton: "Delete",
+  NotificationsSubjectLabel: "Subject",
+
+  deleteBtn: "حذف",
+  deleteSure: "هل أنت واثق؟",
+  deleteSureMessage: "You want to delete this item?",
+  deleteYesBtn: "نعم ، احذفه!",
+  cancelBtn: "إلغاء",
+  NotificationsCustomerNameLabel: "Customers ",
+  NotificationsNameLabel: "Subject ",
+  NotificationsArNameLabel: "Arabic Subject ",
+  NotificationsExpireLabel: "Expire Date ",
+  NotificationsDescrLabel: "Message Body ",
+  NotificationsArDescrLabel: "Arabic Message Body ",
+  NotificationsSaveButton: "Save",
 };
 
 export default ar;

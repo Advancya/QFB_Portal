@@ -8,12 +8,13 @@ import moment from "moment";
 import { Formik } from "formik";
 import * as yup from "yup";
 import InvalidFieldError from '../../shared/invalid-field-error';
-import DatePicker from 'react-datepicker';
-
+import 'react-confirm-alert/src/react-confirm-alert.css';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import '@ckeditor/ckeditor5-build-classic/build/translations/ar.js';
 //import Base64UploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/base64uploadadapter';
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 
 interface IProductAndOffersDetail {
   id: number;
@@ -43,8 +44,8 @@ const initialData = {
   details: "",
   detailsAr: "",
 };
-function ProductsAndOffersDetails(props: DetailsProps) {
-  const showMoreProductsAndOffersDetails = () => {
+function ProductsAndOffersForm(props: DetailsProps) {
+  const showMoreProductsAndOffersForm = () => {
     console.log("retrieve more from server");
   };
   const auth = useContext(AuthContext);
@@ -168,6 +169,7 @@ function ProductsAndOffersDetails(props: DetailsProps) {
                     onChange={(date: Date) => setFieldValue("expiryDate", date)}
                     placeholderText={""}
                     readOnly={!props.editable}
+                    minDate={new Date()}
                     dateFormat="MMMM dd, yyyy" />
                   {/* {touched.expiryDate && errors.expiryDate && InvalidFieldError(errors.expiryDate)} */}
                 </div>
@@ -185,8 +187,8 @@ function ProductsAndOffersDetails(props: DetailsProps) {
                       toolbar: ['heading', '|', 'bold', 'italic', '|', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo', '|', 'imageUpload'],
                       allowedContent: true,
                       extraAllowedContent: 'div(*)',
-                      language: auth.language,
-                      content: auth.language,
+                      language: "en",
+                      content: "en",
                     }}
                   />
                 </div>
@@ -204,8 +206,8 @@ function ProductsAndOffersDetails(props: DetailsProps) {
                       toolbar: ['heading', '|', 'bold', 'italic', '|', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo', '|', 'imageUpload'],
                       allowedContent: true,
                       extraAllowedContent: 'div(*)',
-                      language: auth.language,
-                      content: auth.language,
+                      language: "ar",
+                      content: "ar",
                     }}
                   />
                 </div>
@@ -226,4 +228,4 @@ function ProductsAndOffersDetails(props: DetailsProps) {
   );
 }
 
-export default ProductsAndOffersDetails;
+export default ProductsAndOffersForm;

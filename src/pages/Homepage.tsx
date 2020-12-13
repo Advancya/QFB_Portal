@@ -94,7 +94,7 @@ function HomePage() {
   return (
     <div>
       <AuthCustomHeader />
-      <Breadcrumb />
+      <Breadcrumb pageName={""} />
       <section id="main-section" className="main-section">
         <div className="container-fluid">
           <div className="row">

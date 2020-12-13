@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome } from "@fortawesome/free-solid-svg-icons";
+import { faCogs, faHome } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import * as helper from "../../Helpers/helper";
@@ -40,6 +40,9 @@ function ToolBarLeft() {
             ? local_Strings.arabic
             : local_Strings.english}
         </a>
+        <Link to={`/${auth.language}/Admin`}>
+          <FontAwesomeIcon icon={faCogs} />
+        </Link>
       </div>
     </div>
   );

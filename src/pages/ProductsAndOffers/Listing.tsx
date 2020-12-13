@@ -1,14 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import dateIcon from "../../images/calendar-inactive.png";
-import Footer from "../../components/Footer";
-import AuthCustomHeader from "../../components/header/AuthCustomHeader";
 import Breadcrumb from "../../components/Breadcrumb";
 import { GetProductsAndOffersAll, DeleteProductsAndOffers } from "../../services/cmsService";
 import moment from "moment";
 import { localStrings as local_Strings } from '../../translations/localStrings';
 import { AuthContext } from "../../providers/AuthProvider";
-import ProductsAndOffersDetails from "../../components/ProductsAndOffers/Details";
+import ProductsAndOffersForm from "../../components/ProductsAndOffers/ProductsAndOffersForm";
+import { confirmAlert } from 'react-confirm-alert';
 
 interface IProductAndOffersProps {
   id: number;
@@ -90,24 +89,24 @@ function ProductsAndOffersListing() {
 
   return (
     <div>
-      <AuthCustomHeader />
-      <Breadcrumb />
+      <Breadcrumb pageName={local_Strings.ProductsAndOffersListingTitle} />
       <div className="d-flex align-items-center">
         <div className="ib-text">
           <h3 className="mb-2">{local_Strings.ProductsAndOffersListingTitle}</h3>
         </div>
+        <button
+          type="button"
+          className="btn btn-sm btn-primary mt-1" style={{ marginLeft: 50 }}
+          onClick={() => {
+            setItemSelected(initialData);
+            setDetailsScreenAsEditable(true);
+            setshowProductsAndOffersDetails(true);
+          }}
+        >
+          {local_Strings.ProductsAndOffersAddNew}
+        </button>
       </div>
-      <button
-        type="button"
-        className="btn btn-sm btn-primary mt-1" style={{ float: "right" }}
-        onClick={() => {
-          setItemSelected(initialData);
-          setDetailsScreenAsEditable(true);
-          setshowProductsAndOffersDetails(true);
-        }}
-      >
-        {local_Strings.ProductsAndOffersAddNew}
-      </button>
+
 
       <div className="box modal-box py-0 mb-0 scrollabel-modal-box">
         <ul className="box-list" id="dataList">
@@ -116,7 +115,23 @@ function ProductsAndOffersListing() {
             data.map((item, index) =>
 
               <li className="shown" key={index}>
-                <a onClick={() => deleteTheRecord(item.id)} style={{ cursor: "pointer", float: "right" }}>
+                <a onClick={() => {
+                  confirmAlert({
+                    title: local_Strings.deleteSure,
+                    message: local_Strings.deleteSureMessage,
+                    buttons: [
+                      {
+                        label: local_Strings.ProductsAndOffersDeleteButton,
+                        onClick: () => deleteTheRecord(item.id)
+                      },
+                      {
+                        label: local_Strings.cancelBtn,
+                        onClick: () => { }
+                      }
+                    ]
+                  });
+
+                }} style={{ cursor: "pointer", float: "right" }}>
                   {local_Strings.ProductsAndOffersDeleteButton}
                 </a>
                 <a onClick={() => {
@@ -126,7 +141,7 @@ function ProductsAndOffersListing() {
                 }} style={{ cursor: "pointer", float: "right" }}>
                   {local_Strings.BeneficiaryEditButton}
                 </a>
-                
+
                 <a
                   href="#"
                   className="row align-items-center"
@@ -162,8 +177,7 @@ function ProductsAndOffersListing() {
 
         </ul>
       </div>
-      <Footer />
-      <ProductsAndOffersDetails
+      <ProductsAndOffersForm
         item={selectedItem}
         show={showProductsAndOffersDetails}
         editable={showDetailsScreenAsEditable}

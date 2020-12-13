@@ -758,6 +758,70 @@ const DeleteProductsAndOffers = async (id: number) => {
   }
 };
 
+
+const GetNotificationsAll = async () => {
+  try {
+    const result = await apiInstance.get(`/api/Notifications/All`);
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+
+const AddNotifications = async (item: any) => {
+  try {
+    const result = await apiInstance.post(`/api/Notifications/Add`, item);
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+
+const GetAllCustomerList = async () => {
+  try {
+    const result = await apiInstance.get(`/api/ManagmentCustomerList`);
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+
+const SendNotificationsToCIFs = async (item: any) => {
+  try {
+    const result = await apiInstance.get(
+      `/api/Notifications/SendToCIFs=${queryString.stringify(item)}`
+    );
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+
+const SendNotificationsToAll = async (item: any) => {
+  try {
+    const result = await apiInstance.get(
+      `/api/Notifications/SendToAll=${queryString.stringify(item)}`
+    );
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
 export {
   GetStockData,
   ValidateRegisterData,
@@ -812,5 +876,10 @@ export {
   GetPublicNews,
   AddProductsAndOffers,
   UpdateProductsAndOffers,
-  DeleteProductsAndOffers
+  DeleteProductsAndOffers,
+  GetNotificationsAll,
+  AddNotifications,
+  GetAllCustomerList,
+  SendNotificationsToCIFs,
+  SendNotificationsToAll
 };
