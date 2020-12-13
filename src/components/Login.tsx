@@ -12,7 +12,7 @@ function Login() {
   const history = useHistory();
   const auth = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
-  const initialValues: User = { username: "", password: "", language: "", currency: "", otp: "" };
+  const initialValues: User = { username: "", password: "" };
   local_Strings.setLanguage(auth.language);
 
   const loginFormValidationSchema = yup.object({
@@ -43,7 +43,7 @@ function Login() {
           <h3>{local_Strings.LoginWithCredentialsTitle}</h3>
         </div>
         <Formik
-          initialValues={{ username: "", password: "", language: "", currency: "", otp: "" }}
+          initialValues={{ username: "", password: "" }}
           validationSchema={loginFormValidationSchema}
           onSubmit={(values) => submitLogin(values)}
         >

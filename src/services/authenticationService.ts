@@ -40,10 +40,12 @@ async function authenticate(username: string, password: string) {
 
     if (response.status === 200) {
       const access_token = response.data["access_token"];
-      console.log(`Bearer ${access_token}`);
+      
       localStorage.setItem(defaultData.AccessTokenStorageKey, access_token);
       localStorage.setItem(defaultData.RefreshTokenStorageKey, response.data["refresh_token"]);      
       
+      console.log("token is saved on local storage");
+
       return true;
     } else {
       return false;

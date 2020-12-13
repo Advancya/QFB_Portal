@@ -506,6 +506,30 @@ const en = {
   MessageFilter_All: "",
 
   MyBeneficiariesAddNew: "Add Beneficiary",
+  ProductsAndOffersAddNew: "Add New",
+  ProductsAndOffersNameLabel: "Product Name ",
+  ProductsAndOffersArNameLabel: "Product Arabic Name ",
+  ProductsAndOffersExpireLabel: "Product Expire Date ",
+  ProductsAndOffersDescrLabel: "Product Description ",
+  ProductsAndOffersArDescrLabel: "Product Arabic Description ",
+  ProductsAndOffersSaveButton: "Save",
+  ProductsAndOffersDeleteButton: "Delete",
+  
+  NotificationsAddNew: "Add New",
+  NotificationsDeleteButton: "Delete",
+  NotificationsSubjectLabel: "Subject",
+  deleteBtn: "Delete",
+  deleteSure: "Are you sure?",
+  deleteSureMessage: "You want to delete this item?",
+  deleteYesBtn: "Yes, delete it!",
+  cancelBtn: "Cancel",
+  NotificationsCustomerNameLabel: "Customers ",
+  NotificationsNameLabel: "Subject ",
+  NotificationsArNameLabel: "Arabic Subject ",
+  NotificationsExpireLabel: "Expire Date ",
+  NotificationsDescrLabel: "Message Body ",
+  NotificationsArDescrLabel: "Arabic Message Body ",
+  NotificationsSaveButton: "Save",
 };
 
 export default en;

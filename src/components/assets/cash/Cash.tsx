@@ -1,9 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import cashIcon from "../../../images/cash-icon.svg";
 import CashListing from "./CashListing";
 import CashDetails from "./CashDetails";
+import { AuthContext } from "../../../providers/AuthProvider";
+import { PortfolioContext } from "../../../pages/Homepage";
+
 function Cash() {
+  const currentContext = useContext(AuthContext);
+  const userPortfolio = useContext(PortfolioContext);
+
   const [showCashListing, setShowCashListing] = useState(false);
 
   const handleCloseCashListing = () => {
@@ -36,7 +42,7 @@ function Cash() {
           </div>
           <a href="#" className="ib-text" onClick={handleShowCashListing}>
             <h4>Cash</h4>
-            <h5>3,150,000.00 QAR</h5>
+            <h5>{userPortfolio.totalCash + " " + currentContext.userSettings.currency}</h5>
           </a>
         </div>
       </div>

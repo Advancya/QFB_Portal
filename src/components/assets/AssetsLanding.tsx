@@ -1,14 +1,19 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Cash from "./cash/Cash";
 import Investments from "./investments/Investments";
 import Deposite from "./deposite/Deposite";
+import { AuthContext } from "../../providers/AuthProvider";
+import { PortfolioContext } from "../../pages/Homepage";
 
 function AssetsLanding() {
+  const currentContext = useContext(AuthContext);
+  const userPortfolio = useContext(PortfolioContext);
+
   return (
     <div className="box min-h-16">
       <h3 className="mt-1">Assets</h3>
       <h2 className="mb-2">
-        9,450,000.00 <small>QAR</small>
+        {userPortfolio.totalAssets + " "}<small>{currentContext.userSettings.currency}</small>
       </h2>
 
       <div className="inner-boxes">

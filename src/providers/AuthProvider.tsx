@@ -5,19 +5,24 @@ import { authenticate } from "../services/authenticationService";
 import defaultData from "../constants/defaultData";
 import * as helper from '../Helpers/helper';
 
-export type User = { username: string; password: string; language: string; currency: string; otp: string };
-const initialUserData = { username: "", password: "", language: "", currency: "", otp: "" };
+export type User = { username: string; password: string; };
+export interface IUserSettings { cif: string; language: string; currency: string; otp: string };
+const initialUserData = { username: "", password: "" };
+const initialSettingsData = { cif: "1934", language: "en", currency: "QAR", otp: "SMS" };
 
 export const AuthContext = React.createContext<{
-  user: User;
+  //user: User;
+  userSettings: IUserSettings,
   isSignIn: boolean;
   cif: string;
   login: (user: User) => Promise<boolean>;
   logout: () => void;
   language: string;
   changeLanguage: (language: string) => void;
+  changeUserSettings: (settings: IUserSettings) => void;
 }>({
-  user: initialUserData,
+  //user: initialUserData,
+  userSettings: initialSettingsData,
   isSignIn: false,
   cif: "",
   login: (user) => {
@@ -27,14 +32,16 @@ export const AuthContext = React.createContext<{
   },
   logout: () => { },
   language: "en",
-  changeLanguage: (language) => { }
+  changeLanguage: (language) => { },
+  changeUserSettings: (settings) => { },
 });
 
 interface AuthProviderProps { }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [cif, setCif] = useState<string>("");
-  const [user, setUser] = useState<User>(initialUserData);
+  const [cif, setCif] = useState<string>(initialSettingsData.cif);
+  //const [user, setUser] = useState<User>(initialUserData);
+  const [userSettings, setUserSettings] = useState<IUserSettings>(initialSettingsData);
   const [isSignIn, setIsSignIn] = useState<boolean>(false);
   const [language, setLanguage] = useState(helper.getLanguage());
 
@@ -43,12 +50,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const data = await GetUserLocalData();
       if (data != null) {
         const userData = JSON.parse(data);
-        setUser(userData);
-        setCif(userData.username);
+        //setUser(userData);
+        setCif(data.cif);
+        setUserSettings(data);
         setIsSignIn(true);
       } else {
-        setCif("");
-        setUser(initialUserData);
+        setCif(initialSettingsData.cif);
+        //setUser(initialUserData);
+        setUserSettings(initialSettingsData);
         setIsSignIn(false);
       }
     };
@@ -58,7 +67,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
-        user,
+        //user,
+        userSettings,
         isSignIn,
         cif,
         login: async (userData) => {
@@ -73,11 +83,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
               .then(async (settings: any) => {
                 if (settings && settings.length > 0) {
                   const _userSettings = settings[0];
-                  const _userData = { ...userData, ..._userSettings };
-                  setUser(_userData);
-                  
-                  await SaveUserDataLocally(_userData);    
-                  console.log("saved user data");              
+                  setUserSettings(_userSettings);                  
+                  await SaveUserDataLocally(_userSettings);    
+                  console.log("user settings is saved on local storage");
                 }
               });
               return resutl;
@@ -87,13 +95,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         },
         logout: async () => {
           setCif("");
-          setUser(initialUserData);          
+          //setUser(initialUserData);
+          await SaveUserDataLocally("");     
         },
         language,
-        changeLanguage: (lang) => {
-console.log("current language is " + language);
-          setLanguage(lang);
-        }
+        changeLanguage: setLanguage,
+        changeUserSettings: setUserSettings,
       }}
     >
       {children}

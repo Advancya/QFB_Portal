@@ -4,6 +4,7 @@ import HomePage from "../pages/Homepage";
 import Landing from "../pages/Landing";
 import { ToastProvider } from 'react-toast-notifications'
 import { AuthContext } from "../providers/AuthProvider";
+import Admin from "../pages/Admin";
 
 const PageNotFound = () => <div>Page not found</div>;
 
@@ -26,7 +27,9 @@ const RoutingMap = () => {
         <Route path={["/en/Home", "/ar/Home"]}>
           <HomePage />
         </Route>
-
+        <Route path={["/en/Admin", "/ar/Admin"]}>
+          <Admin />
+        </Route>        
         <Route component={PageNotFound} />
       </Switch>
     </ToastProvider>
