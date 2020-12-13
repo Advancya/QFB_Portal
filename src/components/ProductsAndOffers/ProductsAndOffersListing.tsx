@@ -47,16 +47,15 @@ function ProductsAndOffersListing(
           <div className="box modal-box p-4 scrollabel-modal-box">
             <div className="row">
               <div className="col-md-6 col-lg-4 col-container">
-                <div className="box login-container">
+                <a
+                  href="#"
+                  onClick={
+                    productsAndOffersListingProps.showProductsAndOffersDetailsModal
+                  }
+                  className="box login-container"
+                >
                   <div className="box-header bg-beige">
-                    <a
-                      href="#"
-                      onClick={
-                        productsAndOffersListingProps.showProductsAndOffersDetailsModal
-                      }
-                    >
-                      Product Number | 123456789
-                    </a>
+                    <h3>Product Number | 123456789</h3>
                   </div>
                   <div className="box-body p-3">
                     <div className="box-brief mb-3">
@@ -65,19 +64,18 @@ function ProductsAndOffersListing(
                     </div>
                     <div className="box-date">16/11/2020</div>
                   </div>
-                </div>
+                </a>
               </div>
               <div className="col-md-6 col-lg-4 col-container">
-                <div className="box login-container">
+                <a
+                  href="#"
+                  onClick={
+                    productsAndOffersListingProps.showProductsAndOffersDetailsModal
+                  }
+                  className="box login-container"
+                >
                   <div className="box-header bg-beige">
-                    <a
-                      href="#"
-                      onClick={
-                        productsAndOffersListingProps.showProductsAndOffersDetailsModal
-                      }
-                    >
-                      Product Number | 123456789
-                    </a>
+                    <h3>Product Number | 123456789</h3>
                   </div>
                   <div className="box-body p-3">
                     <div className="box-brief mb-3">
@@ -86,19 +84,18 @@ function ProductsAndOffersListing(
                     </div>
                     <div className="box-date">16/11/2020</div>
                   </div>
-                </div>
+                </a>
               </div>
               <div className="col-md-6 col-lg-4 col-container">
-                <div className="box login-container">
+                <a
+                  href="#"
+                  onClick={
+                    productsAndOffersListingProps.showProductsAndOffersDetailsModal
+                  }
+                  className="box login-container"
+                >
                   <div className="box-header bg-beige">
-                    <a
-                      href="#"
-                      onClick={
-                        productsAndOffersListingProps.showProductsAndOffersDetailsModal
-                      }
-                    >
-                      Product Number | 123456789
-                    </a>
+                    <h3>Product Number | 123456789</h3>
                   </div>
                   <div className="box-body p-3">
                     <div className="box-brief mb-3">
@@ -107,41 +104,18 @@ function ProductsAndOffersListing(
                     </div>
                     <div className="box-date">16/11/2020</div>
                   </div>
-                </div>
-              </div>
-
-              <div className="col-md-6 col-lg-4 col-container">
-                <div className="box login-container">
-                  <div className="box-header bg-beige">
-                    <a
-                      href="#"
-                      onClick={
-                        productsAndOffersListingProps.showProductsAndOffersDetailsModal
-                      }
-                    >
-                      Product Number | 123456789
-                    </a>
-                  </div>
-                  <div className="box-body p-3">
-                    <div className="box-brief mb-3">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                      sed do eiusmod tempor.
-                    </div>
-                    <div className="box-date">16/11/2020</div>
-                  </div>
-                </div>
+                </a>
               </div>
               <div className="col-md-6 col-lg-4 col-container">
-                <div className="box login-container">
+                <a
+                  href="#"
+                  onClick={
+                    productsAndOffersListingProps.showProductsAndOffersDetailsModal
+                  }
+                  className="box login-container"
+                >
                   <div className="box-header bg-beige">
-                    <a
-                      href="#"
-                      onClick={
-                        productsAndOffersListingProps.showProductsAndOffersDetailsModal
-                      }
-                    >
-                      Product Number | 123456789
-                    </a>
+                    <h3>Product Number | 123456789</h3>
                   </div>
                   <div className="box-body p-3">
                     <div className="box-brief mb-3">
@@ -150,19 +124,18 @@ function ProductsAndOffersListing(
                     </div>
                     <div className="box-date">16/11/2020</div>
                   </div>
-                </div>
+                </a>
               </div>
               <div className="col-md-6 col-lg-4 col-container">
-                <div className="box login-container">
+                <a
+                  href="#"
+                  onClick={
+                    productsAndOffersListingProps.showProductsAndOffersDetailsModal
+                  }
+                  className="box login-container"
+                >
                   <div className="box-header bg-beige">
-                    <a
-                      href="#"
-                      onClick={
-                        productsAndOffersListingProps.showProductsAndOffersDetailsModal
-                      }
-                    >
-                      Product Number | 123456789
-                    </a>
+                    <h3>Product Number | 123456789</h3>
                   </div>
                   <div className="box-body p-3">
                     <div className="box-brief mb-3">
@@ -171,41 +144,18 @@ function ProductsAndOffersListing(
                     </div>
                     <div className="box-date">16/11/2020</div>
                   </div>
-                </div>
-              </div>
-
-              <div className="col-md-6 col-lg-4 col-container">
-                <div className="box login-container">
-                  <div className="box-header bg-beige">
-                    <a
-                      href="#"
-                      onClick={
-                        productsAndOffersListingProps.showProductsAndOffersDetailsModal
-                      }
-                    >
-                      Product Number | 123456789
-                    </a>
-                  </div>
-                  <div className="box-body p-3">
-                    <div className="box-brief mb-3">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                      sed do eiusmod tempor.
-                    </div>
-                    <div className="box-date">16/11/2020</div>
-                  </div>
-                </div>
+                </a>
               </div>
               <div className="col-md-6 col-lg-4 col-container">
-                <div className="box login-container">
+                <a
+                  href="#"
+                  onClick={
+                    productsAndOffersListingProps.showProductsAndOffersDetailsModal
+                  }
+                  className="box login-container"
+                >
                   <div className="box-header bg-beige">
-                    <a
-                      href="#"
-                      onClick={
-                        productsAndOffersListingProps.showProductsAndOffersDetailsModal
-                      }
-                    >
-                      Product Number | 123456789
-                    </a>
+                    <h3>Product Number | 123456789</h3>
                   </div>
                   <div className="box-body p-3">
                     <div className="box-brief mb-3">
@@ -214,21 +164,18 @@ function ProductsAndOffersListing(
                     </div>
                     <div className="box-date">16/11/2020</div>
                   </div>
-                </div>
+                </a>
               </div>
               <div className="col-md-6 col-lg-4 col-container">
-                <div className="box login-container">
+                <a
+                  href="#"
+                  onClick={
+                    productsAndOffersListingProps.showProductsAndOffersDetailsModal
+                  }
+                  className="box login-container"
+                >
                   <div className="box-header bg-beige">
-                    <h3>
-                      <a
-                        href="#"
-                        onClick={
-                          productsAndOffersListingProps.showProductsAndOffersDetailsModal
-                        }
-                      >
-                        Product Number | 123456789
-                      </a>
-                    </h3>
+                    <h3>Product Number | 123456789</h3>
                   </div>
                   <div className="box-body p-3">
                     <div className="box-brief mb-3">
@@ -237,7 +184,47 @@ function ProductsAndOffersListing(
                     </div>
                     <div className="box-date">16/11/2020</div>
                   </div>
-                </div>
+                </a>
+              </div>
+              <div className="col-md-6 col-lg-4 col-container">
+                <a
+                  href="#"
+                  onClick={
+                    productsAndOffersListingProps.showProductsAndOffersDetailsModal
+                  }
+                  className="box login-container"
+                >
+                  <div className="box-header bg-beige">
+                    <h3>Product Number | 123456789</h3>
+                  </div>
+                  <div className="box-body p-3">
+                    <div className="box-brief mb-3">
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                      sed do eiusmod tempor.
+                    </div>
+                    <div className="box-date">16/11/2020</div>
+                  </div>
+                </a>
+              </div>
+              <div className="col-md-6 col-lg-4 col-container">
+                <a
+                  href="#"
+                  onClick={
+                    productsAndOffersListingProps.showProductsAndOffersDetailsModal
+                  }
+                  className="box login-container"
+                >
+                  <div className="box-header bg-beige">
+                    <h3>Product Number | 123456789</h3>
+                  </div>
+                  <div className="box-body p-3">
+                    <div className="box-brief mb-3">
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                      sed do eiusmod tempor.
+                    </div>
+                    <div className="box-date">16/11/2020</div>
+                  </div>
+                </a>
               </div>
             </div>
           </div>

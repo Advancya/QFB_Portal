@@ -5,7 +5,7 @@ import Login from "../components/Login";
 import Register from "../components/Register";
 import AppBox from "../components/AppBox";
 import ProductsAndOffers from "../components/ProductsAndOffers/ProductsAndOffersLanding";
-import ContactUs from "../components/ContactUs";
+import ContactUsLanding from "../components/ContactUs/ContactUsLanding";
 import ProductsAndOffersLanding from "../components/ProductsAndOffers/ProductsAndOffersLanding";
 
 function Landing() {
@@ -13,11 +13,15 @@ function Landing() {
     showproductsAndOffersDetails,
     setshowproductsAndOffersDetails,
   ] = useState(false);
+  const [showContactUslanding, setshowContactUslanding] = useState(false);
   const handleCloseproductsAndOffersDetails = () =>
     setshowproductsAndOffersDetails(false);
   const handleShowproductsAndOffersDetails = () => {
     setshowproductsAndOffersDetails(true);
     //inboxListingProps.hideproductsAndOffersListingModal;
+  };
+  const handleShowcontactUsLanding = () => {
+    setshowContactUslanding(true);
   };
   const handleBackproductsAndOffersDetails = () => {
     setshowproductsAndOffersDetails(false);
@@ -43,7 +47,9 @@ function Landing() {
                   }
                 />
 
-                <ContactUs />
+                <ContactUsLanding
+                  showContactUsDetailsModal={handleShowcontactUsLanding}
+                />
               </div>
             </div>
           </div>

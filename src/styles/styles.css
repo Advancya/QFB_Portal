@@ -257,7 +257,7 @@ input:active, input:hover, a:active, a:hover {
   outline: 0;
 }
 
-input:focus, select:focus, textarea:focus, input.focus, select.focus, textarea.focus, .form-control:focus {
+input:focus, select:focus, textarea:focus, input.focus, select.focus, .custom-select:focus, textarea.focus, .form-control:focus {
   box-shadow: none !important;
   border-color: #8d2232;
 }
@@ -266,7 +266,7 @@ a:active, a:focus, a:hover {
   text-decoration: underline;
 }
 
-input.form-control, select.form-control, textarea.form-control, .custom-file-label, .custom-file-label {
+input.form-control, select.form-control, select.custom-select, textarea.form-control, .custom-file-label, .custom-file-label {
   border: 1px solid #d8d8d8;
   border-radius: 1rem;
   color: #000;
@@ -290,7 +290,7 @@ input.form-control, select.form-control, textarea.form-control, .custom-file-lab
   font: normal normal normal 14px/1 FontAwesome;
 }
 
-input.form-control, select.form-control, .custom-file-input, .custom-file-label {
+input.form-control, select.form-control, select.custom-select, .custom-file-input, .custom-file-label {
   height: calc(1.5em + .75rem + 2px);
   border-radius: 1.5rem;
 }
@@ -559,11 +559,16 @@ textarea.form-control {
   letter-spacing: 1px;
 }
 
-.box .bg-beige a {
+.box .bg-beige h3 {
   color: #6b4f44;
   font-size: 1rem;
   text-transform: capitalize;
   font-weight: 600;
+}
+
+a.box:hover {
+  text-decoration: none;
+  background-color: #f1f3f7;
 }
 
 .box-brief {
@@ -1076,7 +1081,7 @@ ul.box-list a:hover h4 small, ul.box-list a:hover p {
   margin-bottom: 1.25rem;
 }
 
-.filter-box input.form-control, .filter-box select.form-control, .filter-box textarea.form-control, .filter-box .custom-file-label, .filter-box .custom-file-label {
+.filter-box input.form-control, .filter-box select.form-control, .filter-box select.custom-select, .filter-box textarea.form-control, .filter-box .custom-file-label, .filter-box .custom-file-label {
   color: #000;
   font-size: 0.9rem;
 }
