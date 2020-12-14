@@ -1,18 +1,20 @@
 import React, { useState } from "react";
-import CustomHeader from "../components/header/CustomHeader";
+import AuthCustomHeader from "../components/header/AuthCustomHeader";
 import Footer from "../components/Footer";
 import ProductsAndOffersListing from "../pages/ProductsAndOffers/Listing";
 import NotificationsListing from "../pages/Notifications/Listing";
+import OffersListing from "../pages/Offers/Listing";
 
 function Landing() {
   const [showLeftSection, setLeftSection] = useState({
     ProductsAndOffers: true,
     Notifications: false,
+    Offers: false,
   });
 
   return (
     <div>
-      <CustomHeader />
+      <AuthCustomHeader />
       <div>
         <div id="main-section" className="main-section pt-4">
           <div className="container-fluid">
@@ -20,38 +22,61 @@ function Landing() {
               <div className="col-lg-8 col-container flex-column">
                 {showLeftSection.ProductsAndOffers && <ProductsAndOffersListing />}
                 {showLeftSection.Notifications && <NotificationsListing />}
+                {showLeftSection.Offers && <OffersListing />}
               </div>
               <div className="col-lg-4 col-container flex-column loginSideBoxBoxes">
-                <ul className="box-list" id="dataList">
-                  <li className="shown">
-                    <a
-                      href="#"
-                      className="row align-items-center"
-                      onClick={() => setLeftSection({
-                        ProductsAndOffers: true,
-                        Notifications: false,
-                      })}
-                    >
-                      <h6 className="mb-1 text-600">
-                        Manage Products And Offers
+                <div className="box pb-0 min-h-16">
+                  <div className="box-header">
+                    <h3>Admin Sections</h3>
+                  </div>
+                  <ul className="box-list" id="dataList">
+                    <li className="shown">
+                      <a
+                        href="#"
+                        className="row align-items-center"
+                        onClick={() => setLeftSection({
+                          ProductsAndOffers: true,
+                          Notifications: false,
+                          Offers: false,
+                        })}
+                      >
+                        <h6 className="mb-1">
+                          Manage Products And Offers
                       </h6>
-                    </a>
-                  </li>
-                  <li className="shown">
-                    <a
-                      href="#"
-                      className="row align-items-center"
-                      onClick={() => setLeftSection({
-                        ProductsAndOffers: false,
-                        Notifications: true,
-                      })}
-                    >
-                      <h6 className="mb-1 text-600">
-                        Manage Notifications
+                      </a>
+                    </li>
+                    <li className="shown">
+                      <a
+                        href="#"
+                        className="row align-items-center"
+                        onClick={() => setLeftSection({
+                          ProductsAndOffers: false,
+                          Notifications: true,
+                          Offers: false,
+                        })}
+                      >
+                        <h6 className="mb-1">
+                          Manage Notifications
                       </h6>
-                    </a>
-                  </li>
-                </ul>
+                      </a>
+                    </li>
+                    <li className="shown">
+                      <a
+                        href="#"
+                        className="row align-items-center"
+                        onClick={() => setLeftSection({
+                          ProductsAndOffers: false,
+                          Notifications: false,
+                          Offers: true,
+                        })}
+                      >
+                        <h6 className="mb-1">
+                          Manage Offers
+                      </h6>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>

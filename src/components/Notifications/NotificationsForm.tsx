@@ -16,6 +16,11 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import '@ckeditor/ckeditor5-build-classic/build/translations/ar.js';
 //import Base64UploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/base64uploadadapter';
 import { emptyNotificationsDetail, INotificationsDetail } from "../../Helpers/publicInterfaces";
+import queryString from "query-string";
+import { useToasts } from 'react-toast-notifications';
+import Constant from "../../constants/defaultData";
+import LoadingOverlay from 'react-loading-overlay';
+import PuffLoader from "react-spinners/PuffLoader";
 
 interface DetailsProps {
   item?: INotificationsDetail
@@ -55,33 +60,47 @@ function NotificationsForm(props: DetailsProps) {
   const [customerList, setCustomerList] = useState<ICustomer[]>([emptyCustomer]);
   const [selected, setSelected] = useState([]);
   const [data, setData] = useState<INotificationsDetail>(emptyNotificationsDetail);
-
-  const [loading, setLoading] = useState(false);
+  const { addToast } = useToasts();
+  const [isLoading, setLoading] = useState(false);
   const formValidationSchema = yup.object({
-    messageTitle: yup.string().required("Subject is required"),
-    messageTitleAr: yup.string().required("Arabic Subject is required"),
-    expiryDate: yup.string().required("Expire date is required"),
+    messageTitle: yup.string().nullable().required("Subject is required"),
+    messageTitleAr: yup.string().nullable().required("Arabic Subject is required"),
+    expiryDate: yup.string().nullable().required("Expire date is required"),
   });
 
   const submitTheRecord = async (values: INotificationsDetail) => {
 
     setLoading(true);
-    const item = data.id > 0 ? values : {
-      messageTitle: values.messageTitle,
-      messageTitleAr: values.messageTitleAr,
+    const item = selected.length === customerList.length ? {
+      title: values.messageTitle,
+      titleAr: values.messageTitleAr,
       createdDate: moment().toISOString(),
-      expiryDate: values.expiryDate,
-      messageBody: values.messageBody,
-      messageBodyAr: values.messageBodyAr,
-    };
+      expireyData: moment(values.expiryDate).toISOString(),
+      message: values.messageBody,
+      messageAr: values.messageBodyAr,
+    } : {
+        cif: selected.flatMap(x => x["value"]).toString(),
+        title: values.messageTitle,
+        titleAr: values.messageTitleAr,
+        createdDate: moment().toISOString(),
+        expireyData: moment(values.expiryDate).toISOString(),
+        message: values.messageBody,
+        messageAr: values.messageBodyAr,
+      };
 
-    // const x = data.id > 0 ? await UpdateNotifications(item) : await AddNotifications(item);
-    // if (x) {
-    //   props.refreshList();
-    //   props.OnHide();
-    // } else {
-    //   console.log("Error while updating record");
-    // }
+    //console.log(decodeURIComponent(queryString.stringify(item)));
+    //console.log(selected.length === customerList.length);
+    const x = selected.length === customerList.length ? await SendNotificationsToAll(item) : await SendNotificationsToCIFs(item);
+    if (x) {
+      addToast(local_Strings.NotificationsSavedMessage, {
+        appearance: 'success',
+        autoDismiss: true,
+      });
+      props.refreshList();
+      props.OnHide();
+    } else {
+      console.log("Error while updating record");
+    }
     setLoading(false);
   };
 
@@ -105,9 +124,7 @@ function NotificationsForm(props: DetailsProps) {
   }, []);
 
   useEffect(() => {
-    if (props.editable && props.item) {
-      setData(props.item);
-    }
+    setData(props.item || emptyNotificationsDetail);
   }, [props.item]);
 
   //console.log(data);
@@ -154,11 +171,20 @@ function NotificationsForm(props: DetailsProps) {
         </button>
       </Modal.Header>
       <Modal.Body>
+        <LoadingOverlay
+          active={isLoading}
+          spinner={<PuffLoader
+            size={Constant.SpnnerSize}
+            color={Constant.SpinnerColor}
+          />}
+        />
         <Formik
           initialValues={data}
           validationSchema={formValidationSchema}
           onSubmit={(values) => submitTheRecord(values)}
           enableReinitialize={true}
+          validateOnChange={props.editable}
+          validateOnBlur={props.editable}
         >
           {({
             values,
@@ -172,7 +198,7 @@ function NotificationsForm(props: DetailsProps) {
             <div className="box modal-box py-0 mb-0 scrollabel-modal-box">
               <div className="box-body">
                 <div className="form-group">
-                  <label>{local_Strings.NotificationsCustomerNameLabel}</label>
+                  <label className="mb-1 text-600">{local_Strings.NotificationsCustomerNameLabel}</label>
                   <MultiSelect
                     options={options}
                     value={selected}
@@ -182,7 +208,7 @@ function NotificationsForm(props: DetailsProps) {
                   {touched.messageTitle && errors.messageTitle && InvalidFieldError(errors.messageTitle)}
                 </div>
                 <div className="form-group">
-                  <label>{local_Strings.NotificationsNameLabel}</label>
+                  <label className="mb-1 text-600">{local_Strings.NotificationsNameLabel}</label>
                   <input type="text" className="form-control"
                     readOnly={!props.editable}
                     value={values.messageTitle || ""}
@@ -191,7 +217,7 @@ function NotificationsForm(props: DetailsProps) {
                   {touched.messageTitle && errors.messageTitle && InvalidFieldError(errors.messageTitle)}
                 </div>
                 <div className="form-group">
-                  <label>{local_Strings.NotificationsArNameLabel}</label>
+                  <label className="mb-1 text-600">{local_Strings.NotificationsArNameLabel}</label>
                   <input type="text" className="form-control"
                     readOnly={!props.editable}
                     value={values.messageTitleAr || ""}
@@ -200,21 +226,23 @@ function NotificationsForm(props: DetailsProps) {
                   {touched.messageTitleAr && errors.messageTitleAr && InvalidFieldError(errors.messageTitleAr)}
                 </div>
                 <div className="form-group">
-                  <label>{local_Strings.NotificationsExpireLabel}</label>
+                  <label className="mb-1 text-600">{local_Strings.NotificationsExpireLabel}</label>
 
                   <DatePicker name="expiryDate"
                     selected={!!values.expiryDate ? new Date(values.expiryDate) : null}
                     onChange={(date: Date) => setFieldValue("expiryDate", date)}
+                    onBlur={handleBlur("expiryDate")}
                     placeholderText={""}
                     readOnly={!props.editable}
                     minDate={new Date()}
                     dateFormat="MMMM dd, yyyy" />
-                  {/* {touched.expiryDate && errors.expiryDate && InvalidFieldError(errors.expiryDate)} */}
+                  {touched.expiryDate && errors.expiryDate && InvalidFieldError(errors.expiryDate)}
                 </div>
                 <div className="form-group">
-                  <label>{local_Strings.NotificationsDescrLabel}</label>
-                  <CKEditor
+                  <label className="mb-1 text-600">{local_Strings.NotificationsDescrLabel}</label>
+                  {props.editable ? <CKEditor
                     editor={ClassicEditor}
+                    readOnly={!props.editable}
                     data={values.messageBody || ""}
                     onChange={(event: any, editor: any) => {
                       const _text = editor.getData();
@@ -228,12 +256,18 @@ function NotificationsForm(props: DetailsProps) {
                       language: "en",
                       content: "en",
                     }}
-                  />
+                  /> : <label className="box-brief mb-3">
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: values.messageBody
+                        }} />
+                    </label>}
                 </div>
                 <div className="form-group">
-                  <label>{local_Strings.NotificationsArDescrLabel}</label>
-                  <CKEditor
+                  <label className="mb-1 text-600">{local_Strings.NotificationsArDescrLabel}</label>
+                  {props.editable ? <CKEditor
                     editor={ClassicEditor}
+                    readOnly={!props.editable}
                     data={values.messageBodyAr || ""}
                     onChange={(event: any, editor: any) => {
                       const _text = editor.getData();
@@ -247,12 +281,17 @@ function NotificationsForm(props: DetailsProps) {
                       language: "ar",
                       content: "ar",
                     }}
-                  />
+                  /> : <label className="box-brief mb-3">
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: values.messageBodyAr
+                        }} />
+                    </label>}
                 </div>
                 {props.editable &&
                   <div className="form-group">
 
-                    <button className="btn btn-sm btn-primary mt-1" type="button" style={{ float: "right", margin: 20 }}
+                    <button className="btn btn-sm btn-primary mt-1" type="submit" style={{ float: "right", margin: 20 }}
                       onClick={(e) => handleSubmit()}>
                       {local_Strings.NotificationsSaveButton}</button>
                   </div>

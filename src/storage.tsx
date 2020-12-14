@@ -8,7 +8,7 @@ import AppBox from "./components/AppBox";
 import ProductsAndOffers from "./components/ProductsAndOffers/ProductsAndOffersLanding";
 import ContactUsLanding from "./components/ContactUs/ContactUsLanding";
 
-import "./translations/i18n";
+//import "./translations/i18n";
 
 export function setStorage(key: any, value: any) {
   localStorage.setItem(key, value);

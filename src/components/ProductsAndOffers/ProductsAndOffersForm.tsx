@@ -15,16 +15,11 @@ import '@ckeditor/ckeditor5-build-classic/build/translations/ar.js';
 //import Base64UploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/base64uploadadapter';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-
-interface IProductAndOffersDetail {
-  id: number;
-  name: string;
-  nameAr: string;
-  createdDate: string;
-  expiryDate: string;
-  details: string;
-  detailsAr: string;
-}
+import { emptyProductAndOffersData, IProductAndOffersDetail } from "../../Helpers/publicInterfaces";
+import { useToasts } from 'react-toast-notifications';
+import Constant from "../../constants/defaultData";
+import LoadingOverlay from 'react-loading-overlay';
+import PuffLoader from "react-spinners/PuffLoader";
 
 interface DetailsProps {
   item?: IProductAndOffersDetail
@@ -35,28 +30,19 @@ interface DetailsProps {
   refreshList: () => void;
 }
 
-const initialData = {
-  id: 0,
-  name: "",
-  nameAr: "",
-  createdDate: "",
-  expiryDate: "",
-  details: "",
-  detailsAr: "",
-};
 function ProductsAndOffersForm(props: DetailsProps) {
   const showMoreProductsAndOffersForm = () => {
     console.log("retrieve more from server");
   };
   const auth = useContext(AuthContext);
   local_Strings.setLanguage(auth.language);
-  const [data, setData] = useState<IProductAndOffersDetail>(initialData);
-
-  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState<IProductAndOffersDetail>(emptyProductAndOffersData);
+  const { addToast } = useToasts();
+  const [isLoading, setLoading] = useState(false);
   const formValidationSchema = yup.object({
-    name: yup.string().required("Name is required"),
-    nameAr: yup.string().required("Arabic Name is required"),
-    expiryDate: yup.string().required("Expire date is required"),
+    name: yup.string().nullable().required("Name is required"),
+    nameAr: yup.string().nullable().required("Arabic Name is required"),
+    expiryDate: yup.string().nullable().required("Expire date is required"),
   });
 
   const submitTheRecord = async (values: IProductAndOffersDetail) => {
@@ -66,13 +52,17 @@ function ProductsAndOffersForm(props: DetailsProps) {
       name: values.name,
       nameAr: values.nameAr,
       createdDate: moment().toISOString(),
-      expiryDate: values.expiryDate,
+      expiryDate: moment(values.expiryDate).toISOString(),
       details: values.details,
       detailsAr: values.detailsAr,
     };
 
     const x = data.id > 0 ? await UpdateProductsAndOffers(item) : await AddProductsAndOffers(item);
     if (x) {
+      addToast(local_Strings.ProductsAndOffersSavedMessage, {
+        appearance: 'success',
+        autoDismiss: true,
+      });
       props.refreshList();
       props.OnHide();
     } else {
@@ -82,9 +72,7 @@ function ProductsAndOffersForm(props: DetailsProps) {
   };
 
   useEffect(() => {
-    if (props.editable && props.item) {
-      setData(props.item);
-    }
+    setData(props.item || emptyProductAndOffersData);
   }, [props.item]);
 
   //console.log(data);
@@ -126,11 +114,20 @@ function ProductsAndOffersForm(props: DetailsProps) {
         </button>
       </Modal.Header>
       <Modal.Body>
+        <LoadingOverlay
+          active={isLoading}
+          spinner={<PuffLoader
+            size={Constant.SpnnerSize}
+            color={Constant.SpinnerColor}
+          />}
+        />
         <Formik
           initialValues={data}
           validationSchema={formValidationSchema}
           onSubmit={(values) => submitTheRecord(values)}
           enableReinitialize={true}
+          validateOnChange={props.editable}
+          validateOnBlur={props.editable}
         >
           {({
             values,
@@ -144,7 +141,7 @@ function ProductsAndOffersForm(props: DetailsProps) {
             <div className="box modal-box py-0 mb-0 scrollabel-modal-box">
               <div className="box-body">
                 <div className="form-group">
-                  <label>{local_Strings.ProductsAndOffersNameLabel}</label>
+                  <label className="mb-1 text-600">{local_Strings.ProductsAndOffersNameLabel}</label>
                   <input type="text" className="form-control"
                     readOnly={!props.editable}
                     value={values.name || ""}
@@ -153,7 +150,7 @@ function ProductsAndOffersForm(props: DetailsProps) {
                   {touched.name && errors.name && InvalidFieldError(errors.name)}
                 </div>
                 <div className="form-group">
-                  <label>{local_Strings.ProductsAndOffersArNameLabel}</label>
+                  <label className="mb-1 text-600">{local_Strings.ProductsAndOffersArNameLabel}</label>
                   <input type="text" className="form-control"
                     readOnly={!props.editable}
                     value={values.nameAr || ""}
@@ -162,21 +159,23 @@ function ProductsAndOffersForm(props: DetailsProps) {
                   {touched.nameAr && errors.nameAr && InvalidFieldError(errors.nameAr)}
                 </div>
                 <div className="form-group">
-                  <label>{local_Strings.ProductsAndOffersExpireLabel}</label>
+                  <label className="mb-1 text-600">{local_Strings.ProductsAndOffersExpireLabel}</label>
 
                   <DatePicker name="expiryDate"
                     selected={!!values.expiryDate ? new Date(values.expiryDate) : null}
                     onChange={(date: Date) => setFieldValue("expiryDate", date)}
+                    onBlur={handleBlur("expiryDate")}
                     placeholderText={""}
                     readOnly={!props.editable}
                     minDate={new Date()}
                     dateFormat="MMMM dd, yyyy" />
-                  {/* {touched.expiryDate && errors.expiryDate && InvalidFieldError(errors.expiryDate)} */}
+                  {touched.expiryDate && errors.expiryDate && InvalidFieldError(errors.expiryDate)}
                 </div>
                 <div className="form-group">
-                  <label>{local_Strings.ProductsAndOffersDescrLabel}</label>
-                  <CKEditor
+                  <label className="mb-1 text-600">{local_Strings.ProductsAndOffersDescrLabel}</label>
+                  {props.editable ? <CKEditor
                     editor={ClassicEditor}
+                    readOnly={!props.editable}
                     data={values.details || ""}
                     onChange={(event: any, editor: any) => {
                       const _text = editor.getData();
@@ -190,12 +189,18 @@ function ProductsAndOffersForm(props: DetailsProps) {
                       language: "en",
                       content: "en",
                     }}
-                  />
+                  /> : <label className="box-brief mb-3">
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: values.details
+                        }} />
+                    </label>}
                 </div>
                 <div className="form-group">
-                  <label>{local_Strings.ProductsAndOffersArDescrLabel}</label>                  
-                  <CKEditor
+                  <label className="mb-1 text-600">{local_Strings.ProductsAndOffersArDescrLabel}</label>
+                  {props.editable ? <CKEditor
                     editor={ClassicEditor}
+                    readOnly={!props.editable}
                     data={values.detailsAr || ""}
                     onChange={(event: any, editor: any) => {
                       const _text = editor.getData();
@@ -209,12 +214,17 @@ function ProductsAndOffersForm(props: DetailsProps) {
                       language: "ar",
                       content: "ar",
                     }}
-                  />
+                  /> : <label className="box-brief mb-3">
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: values.detailsAr
+                        }} />
+                    </label>}
                 </div>
                 {props.editable &&
                   <div className="form-group">
 
-                    <button className="btn btn-sm btn-primary mt-1" type="button" style={{ float: "right", margin: 20 }}
+                    <button className="btn btn-sm btn-primary mt-1" type="submit" style={{ float: "right", margin: 20 }}
                       onClick={(e) => handleSubmit()}>
                       {local_Strings.ProductsAndOffersSaveButton}</button>
                   </div>

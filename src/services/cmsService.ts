@@ -798,7 +798,7 @@ const GetAllCustomerList = async () => {
 const SendNotificationsToCIFs = async (item: any) => {
   try {
     const result = await apiInstance.get(
-      `/api/Notifications/SendToCIFs=${queryString.stringify(item)}`
+      `/api/Notifications/SendToCIFs?${queryString.stringify(item)}`
     );
 
     return result.data;
@@ -812,7 +812,7 @@ const SendNotificationsToCIFs = async (item: any) => {
 const SendNotificationsToAll = async (item: any) => {
   try {
     const result = await apiInstance.get(
-      `/api/Notifications/SendToAll=${queryString.stringify(item)}`
+      `/api/Notifications/SendToAllWithLang?${queryString.stringify(item)}`
     );
 
     return result.data;
@@ -821,6 +821,52 @@ const SendNotificationsToAll = async (item: any) => {
     return null;
   }
 };
+
+const GetAllContactUs = async () => {
+  try {
+    const result = await apiInstance.get(`/api/ContactUs/All`);
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+
+const AddNewOffer = async (item: any) => {
+  try {
+    const result = await apiInstance.post(`/api/Offer/Add`, item);
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+const DeleteOfferById = async (id: number) => {
+  try {
+    const result = await apiInstance.get(`/api/Offer/Delete?id=${id}`);
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+const UpdateOfferDetail = async (item: any) => {
+  try {
+    const result = await apiInstance.post(`/api/Offer/Update`, item);
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
 
 export {
   GetStockData,
@@ -881,5 +927,9 @@ export {
   AddNotifications,
   GetAllCustomerList,
   SendNotificationsToCIFs,
-  SendNotificationsToAll
+  SendNotificationsToAll,
+  GetAllContactUs,
+  AddNewOffer,
+  DeleteOfferById,
+  UpdateOfferDetail
 };

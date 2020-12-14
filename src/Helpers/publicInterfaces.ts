@@ -11,7 +11,7 @@ export interface INotificationsDetail {
   id: number;
   customerId: string;
   customerName: string;
-  expiryDate: string;  
+  expiryDate: string;
   isRead: string;
   messageBody: string;
   messageBodyAr: string;
@@ -28,7 +28,7 @@ export const emptyNotificationsDetail = {
   id: 0,
   customerId: "",
   customerName: "",
-  expiryDate: "",  
+  expiryDate: "",
   isRead: "",
   messageBody: "",
   messageBodyAr: "",
@@ -40,3 +40,77 @@ export const emptyNotificationsDetail = {
   messageTitleAr: "",
   messageTo: "",
 }
+
+
+export interface IContactUs {
+  id: number;
+  name: string;
+  country: string;
+  mobile: string;
+  email: string;
+  query: string;
+  createDate: string;
+}
+
+export const emptyContactUs = {
+  id: 0,
+  name: "",
+  country: "",
+  mobile: "",
+  email: "",
+  query: "",
+  createDate: ""
+}
+
+export interface IProductAndOffersDetail {
+  id: number;
+  name: string;
+  nameAr: string;
+  createdDate: string;
+  expiryDate: string;
+  details: string;
+  detailsAr: string;
+}
+
+export const emptyProductAndOffersData = {
+  id: 0,
+  name: "",
+  nameAr: "",
+  createdDate: "",
+  expiryDate: "",
+  details: "",
+  detailsAr: "",
+};
+
+
+export interface IOfferDetail {
+  id: number;
+  cif: string;
+  title: string;
+  titleAr: string;
+  createdDate: string;
+  expireDate: string;
+  description: string;
+  descriptionAr: string;
+  selectedOfferDetails: string;
+  selectedOfferDetailsAr: string;
+  fileName: string;
+  fileContent: string;
+  offersSubscriptions: string[];
+}
+
+export const emptyOfferData = {
+  id: 0,
+  cif: "",
+  title: "",
+  titleAr: "",
+  createdDate: "",
+  expireDate: "",
+  description: "",
+  descriptionAr: "",
+  selectedOfferDetails: "",
+  selectedOfferDetailsAr: "",
+  fileName: "",
+  fileContent: "",
+  offersSubscriptions: [""]
+};

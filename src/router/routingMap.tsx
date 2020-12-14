@@ -5,6 +5,7 @@ import Landing from "../pages/Landing";
 import { ToastProvider } from 'react-toast-notifications'
 import { AuthContext } from "../providers/AuthProvider";
 import Admin from "../pages/Admin";
+import ContactUsListing from "../pages/ContactUs/Listing";
 
 const PageNotFound = () => <div>Page not found</div>;
 
@@ -23,7 +24,9 @@ const RoutingMap = () => {
         <Route exact={true} path={["/en", "/ar", "/en/", "/ar/"]}>
           <Landing />
         </Route>
-
+        <Route path={["/en/ContactUs", "/ar/ContactUs"]}>
+          <ContactUsListing />
+        </Route>
         <Route path={["/en/Home", "/ar/Home"]}>
           <HomePage />
         </Route>

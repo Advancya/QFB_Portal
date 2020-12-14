@@ -5,10 +5,14 @@ import Footer from "./components/Footer";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import AppBox from "./components/AppBox";
+<<<<<<< HEAD
 import ProductsAndOffers from "./components/ProductsAndOffers/ProductsAndOffersLanding";
 import ContactUsLanding from "./components/ContactUs/ContactUsLanding";
 
 import "./translations/i18n";
+=======
+import ContactUs from "./components/ContactUs";
+>>>>>>> 1c964b4ff100541feb391bd67e590210088c4dc8
 import ProductsAndOffersLanding from "./components/ProductsAndOffers/ProductsAndOffersLanding";
 
 function App() {
