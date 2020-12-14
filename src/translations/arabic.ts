@@ -547,6 +547,13 @@ const ar = {
   OfferSavedMessage: "New Offer has been saved successfully!",
   OfferDeletedMessage: "An Offer has been deleted successfully!",
   searchPlaceholder: "بحث",
+
+  OfferSubscriptionsTite: "Subscriptions Lists",
+  OfferSubscriptionsDateLabel: "Subscriptions Date",
+  OfferSubscriptionsRequestLabel: "Subscriptions Request",
+  OfferSubscriptionsOfferLabel: "Subscribe for Offer ",
+  OfferSubscriptionsAmountLabel: "Amount",
+  OfferSubscriptionsCurrencyLabel: "Currency",
 };
 
 export default ar;

@@ -114,3 +114,26 @@ export const emptyOfferData = {
   fileContent: "",
   offersSubscriptions: [""]
 };
+
+
+export interface IOfferSubscriptions {
+  id: number;
+  offerId: string
+  subscriptionRequest: string;
+  offerDate: string;
+  subscriptionAmount: string;
+  currency: string;
+  subscriptionDate: string;
+  offer: string;
+}
+
+export const emptyOfferSubscriptions = {
+  id: 0,
+  offerId: "",
+  subscriptionRequest: "",
+  offerDate: "",
+  subscriptionAmount: "",
+  currency: "",
+  subscriptionDate: "",
+  offer: "",
+}

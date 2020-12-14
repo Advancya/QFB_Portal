@@ -833,7 +833,6 @@ const GetAllContactUs = async () => {
   }
 };
 
-
 const AddNewOffer = async (item: any) => {
   try {
     const result = await apiInstance.post(`/api/Offer/Add`, item);
@@ -867,6 +866,17 @@ const UpdateOfferDetail = async (item: any) => {
   }
 };
 
+
+const GetAllOfferSubscriptions = async () => {
+  try {
+    const result = await apiInstance.get(`/api/OfferSubscriptions/All`);
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
 
 export {
   GetStockData,
@@ -931,5 +941,6 @@ export {
   GetAllContactUs,
   AddNewOffer,
   DeleteOfferById,
-  UpdateOfferDetail
+  UpdateOfferDetail,
+  GetAllOfferSubscriptions
 };

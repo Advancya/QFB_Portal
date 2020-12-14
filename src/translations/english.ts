@@ -554,6 +554,13 @@ const en = {
   OfferSavedMessage: "New Offer has been saved successfully!",
   OfferDeletedMessage: "An Offer has been deleted successfully!",
   searchPlaceholder: "Search",
+
+  OfferSubscriptionsTite: "Subscriptions Lists",
+  OfferSubscriptionsDateLabel: "Subscriptions Date",
+  OfferSubscriptionsRequestLabel: "Subscriptions Request",
+  OfferSubscriptionsOfferLabel: "Subscribe for Offer ",
+  OfferSubscriptionsAmountLabel: "Amount",
+  OfferSubscriptionsCurrencyLabel: "Currency",
 };
 
 export default en;
