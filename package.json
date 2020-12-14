@@ -1,6 +1,9 @@
 {
   "name": "qfb-webportal",
   "version": "0.1.0",
+  "engines": {
+    "node": "12.18.4"
+  },
   "private": true,
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^19.0.2",
