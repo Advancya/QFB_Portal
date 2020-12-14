@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 function ToolBarRight() {
   return (
     <div className="col-md-9">
-      <div className="topRight">
+      <div className="topRight text-right">
         <Link to="/HomePage1">Standard Settlements Instructions</Link>
         <Link to="/HomePage2">Documents Listing</Link>
         <Link to="/HomePage3">Settings</Link>

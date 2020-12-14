@@ -12,13 +12,6 @@ import InboxListing from "../components/Inbox/InboxListing";
 import { useHistory } from "react-router-dom";
 import { AuthContext, User } from "../providers/AuthProvider";
 import { localStrings as local_Strings } from "../translations/localStrings";
-
-function HomePage() {
-  const history = useHistory();
-  const auth = useContext(AuthContext);
-  local_Strings.setLanguage(auth.language);
-
-import { AuthContext, User } from "../providers/AuthProvider";
 import axios from "axios";
 import { GetUserLocalData } from "../Helpers/authHelper";
 import { GetUserPortfolio, GetGuarantees } from "../services/cmsService";
@@ -49,9 +42,14 @@ const intialPortfolioData = {
   totalGuarantees: 0,
 };
 
-export const PortfolioContext = createContext<IUserPortfolio>(intialPortfolioData);
+export const PortfolioContext = createContext<IUserPortfolio>(
+  intialPortfolioData
+);
 
 function HomePage() {
+  const history = useHistory();
+  const auth = useContext(AuthContext);
+  local_Strings.setLanguage(auth.language);
   const currentContext = useContext(AuthContext);
   const [showInboxDetails, setshowInboxDetails] = useState(false);
   const handleCloseInboxDetails = () => setshowInboxDetails(false);
@@ -69,7 +67,9 @@ function HomePage() {
     ? document.getElementsByTagName("html")[0].setAttribute("lang", "en")
     : document.getElementsByTagName("html")[0].setAttribute("lang", "ar");
 
-  const [userPortfolio, setUserPortfolio] = useState<IUserPortfolio>(intialPortfolioData);
+  const [userPortfolio, setUserPortfolio] = useState<IUserPortfolio>(
+    intialPortfolioData
+  );
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {

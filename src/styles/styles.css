@@ -214,7 +214,7 @@ html {
 }
 
 .color-gold {
-  color: rgb(81 53 41);
+  color: rgb(81, 53, 41)!important;
 }
 
 .color-light-gold {
@@ -302,6 +302,20 @@ input.form-control, select.form-control, select.custom-select, textarea.form-con
   opacity: 1;
   border: 1px solid rgba(205, 194, 188, 0.5);
   color: rgba(107, 79, 68, 0.8);
+}
+
+.readonly {
+  background-color: #FFF;
+  opacity: 1;
+  border: 1px solid rgba(205, 194, 188, 0.5);
+  color: rgba(107, 79, 68, 0.8);
+  min-height: calc(1.5em + .75rem + 2px);
+  border-radius: 1.5rem;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  background-clip: padding-box;
 }
 
 .form-control:disabled[type="date"] {
@@ -842,7 +856,7 @@ ul.box-list h4 {
   text-transform: none;
   letter-spacing: 0;
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 600;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1273,15 +1287,44 @@ tr.shown {
   margin: 0!important;
 }
 
-.download-link i:first-child {
+[dir=ltr] .download-link i:first-child {
   border-bottom-left-radius: 8px;
   border-top-left-radius: 8px;
   opacity: 0.8;
 }
 
-.download-link i:last-child {
+[dir=ltr] .download-link i:last-child {
   border-bottom-right-radius: 8px;
   border-top-right-radius: 8px;
+}
+
+/**rtl***/
+
+[dir="rtl"] .text-right {
+  text-align: left!important;
+}
+
+[dir="rtl"] .text-left {
+  text-align: right!important;
+}
+
+[dir=rtl] .download-link i:first-child {
+  border-bottom-right-radius: 8px;
+  border-top-right-radius: 8px;
+  opacity: 0.8;
+}
+
+[dir=rtl] .download-link i:last-child {
+  border-bottom-left-radius: 8px;
+  border-top-left-radius: 8px;
+}
+
+[dir=rtl] .fa-chevron-left, [dir=rtl] .fa-chevron-right, [dir=rtl] .fa-arrow-right {
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  transform: rotate(180deg);
 }
 
 /* Media Queries */
@@ -1290,7 +1333,7 @@ tr.shown {
 
 @media all and (min-width: 992px) {
   .modal-lg, .modal-xl {
-    max-width: 85%;
+    max-width: 70%;
   }
 }
 

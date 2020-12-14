@@ -1,7 +1,7 @@
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AuthContext } from "../providers/AuthProvider";
-import { localStrings as local_Strings } from '../translations/localStrings';
+import { localStrings as local_Strings } from "../translations/localStrings";
 
 function Breadcrumb({ pageName }) {
   const location = useLocation();
@@ -9,7 +9,7 @@ function Breadcrumb({ pageName }) {
   local_Strings.setLanguage(auth.language);
 
   return (
-    <section id="breadcrumb-section" className="breadcrumb-section">
+    <div id="breadcrumb-section" className="breadcrumb-section">
       <div className="container-fluid">
         <nav aria-label="breadcrumb">
           <ol className="breadcrumb">
@@ -19,15 +19,15 @@ function Breadcrumb({ pageName }) {
             <li className="breadcrumb-item active" aria-current="page">
               {location.pathname.replace(`/${auth.language}/`, "")}
             </li>
-            {!!pageName &&
+            {!!pageName && (
               <li className="breadcrumb-item active" aria-current="page">
                 {pageName}
               </li>
-            }
+            )}
           </ol>
         </nav>
       </div>
-    </section>
+    </div>
   );
 }
 

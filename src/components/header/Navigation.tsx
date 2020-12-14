@@ -5,11 +5,12 @@ import offerIcon from "../../images/offer-icon.svg";
 import requestIcon from "../../images/request-icon.svg";
 import { Switch, Route, Link } from "react-router-dom";
 import Requests from "../requests/Requests";
+import Transactions from "../transactions/Transactions";
 
 function Navigation() {
   return (
     <div className="col-md-7">
-      <div className="welcomeText">
+      <div className="welcomeText text-right">
         <Link to="/" className="">
           Welcome, Ahmed Mohamed Ahmed Mohamed
           <i className="fa fa-user-circle-o"></i>
@@ -27,20 +28,19 @@ function Navigation() {
         >
           MENU <span className="fa fa-bars"></span>
         </button>
-        <div className="collapse navbar-collapse" id="navbarNavDropdown">
-          <ul className="navbar-nav ml-auto">
+        <div
+          className="collapse navbar-collapse justify-content-end"
+          id="navbarNavDropdown"
+        >
+          <ul className="navbar-nav">
             <li className="nav-item active">
               <Link className="nav-link" to="/">
                 <img src={holdingsIcon} className="images-fluid" />
                 Holdings
               </Link>
             </li>
-            <li className="nav-item">
-              <Link className="nav-link px-2" to="/">
-                <img src={transactionIcon} className="images-fluid" />
-                Transactions
-              </Link>
-            </li>
+
+            <Transactions></Transactions>
             <li className="nav-item">
               <Link className="nav-link" to="/">
                 <img src={offerIcon} className="images-fluid" />

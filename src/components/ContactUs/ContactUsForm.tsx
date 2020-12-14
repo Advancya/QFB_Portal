@@ -115,11 +115,7 @@ function ContactUsForm(contactUsFormProps: iContactUsForm) {
                       <Col md={6}>
                         <Form.Group controlId="formCountry">
                           <Form.Label>Country</Form.Label>
-                          <Form.Control
-                            as="select"
-                            placeholder="Country"
-                            custom
-                          >
+                          <Form.Control as="select" placeholder="Country">
                             <option>Qatar</option>
                             <option>Egypt</option>
                             <option>USA</option>
