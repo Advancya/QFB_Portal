@@ -11,7 +11,7 @@ export interface INotificationsDetail {
   id: number;
   customerId: string;
   customerName: string;
-  expiryDate: string;  
+  expiryDate: string;
   isRead: string;
   messageBody: string;
   messageBodyAr: string;
@@ -28,7 +28,7 @@ export const emptyNotificationsDetail = {
   id: 0,
   customerId: "",
   customerName: "",
-  expiryDate: "",  
+  expiryDate: "",
   isRead: "",
   messageBody: "",
   messageBodyAr: "",
@@ -39,4 +39,25 @@ export const emptyNotificationsDetail = {
   messageTitle: "",
   messageTitleAr: "",
   messageTo: "",
+}
+
+
+export interface IContactUs {
+  id: number;
+  name: string;
+  country: string;
+  mobile: string;
+  email: string;
+  query: string;
+  createDate: string;
+}
+
+export const emptyContactUs = {
+  id: 0,
+  name: "",
+  country: "",
+  mobile: "",
+  email: "",
+  query: "",
+  createDate: ""
 }

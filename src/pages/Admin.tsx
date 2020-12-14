@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import CustomHeader from "../components/header/CustomHeader";
+import AuthCustomHeader from "../components/header/AuthCustomHeader";
 import Footer from "../components/Footer";
 import ProductsAndOffersListing from "../pages/ProductsAndOffers/Listing";
 import NotificationsListing from "../pages/Notifications/Listing";
@@ -12,7 +12,7 @@ function Landing() {
 
   return (
     <div>
-      <CustomHeader />
+      <AuthCustomHeader />
       <div>
         <div id="main-section" className="main-section pt-4">
           <div className="container-fluid">

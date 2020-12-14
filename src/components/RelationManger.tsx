@@ -50,9 +50,9 @@ function RelationManger() {
     >
       {
         carouselItems && carouselItems.length > 0 &&
-        carouselItems.map((item) =>
+        carouselItems.map((item, index) =>
 
-          <Carousel.Item>
+          <Carousel.Item key={index}>
             <div className="box min-h-24">
               <div className="box-header">
                 <h3>Relation Manager</h3>

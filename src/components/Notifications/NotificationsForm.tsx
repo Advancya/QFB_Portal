@@ -116,9 +116,7 @@ function NotificationsForm(props: DetailsProps) {
   }, []);
 
   useEffect(() => {
-    if (props.editable && props.item) {
-      setData(props.item);
-    }
+    setData(props.item || emptyNotificationsDetail);
   }, [props.item]);
 
   //console.log(data);
@@ -226,6 +224,7 @@ function NotificationsForm(props: DetailsProps) {
                   <label>{local_Strings.NotificationsDescrLabel}</label>
                   <CKEditor
                     editor={ClassicEditor}
+                    readOnly={!props.editable}
                     data={values.messageBody || ""}
                     onChange={(event: any, editor: any) => {
                       const _text = editor.getData();
@@ -245,6 +244,7 @@ function NotificationsForm(props: DetailsProps) {
                   <label>{local_Strings.NotificationsArDescrLabel}</label>
                   <CKEditor
                     editor={ClassicEditor}
+                    readOnly={!props.editable}
                     data={values.messageBodyAr || ""}
                     onChange={(event: any, editor: any) => {
                       const _text = editor.getData();

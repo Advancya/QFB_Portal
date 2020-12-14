@@ -35,32 +35,24 @@ function ProductsAndOffersListing() {
   const [showClearFilter, setShowClearFilter] = useState(false);
   const [data, setData] = useState<IProductAndOffersProps[]>([]);
   const [isLoading, setLoading] = useState(true);
-  const showMoreProductsAndOffersListing = () => {
-    console.log("retrieve more from server");
-  };
-  const [showProductsAndOffersDetails, setshowProductsAndOffersDetails] = useState(false);
-  const [showDetailsScreenAsEditable, setDetailsScreenAsEditable] = useState(false);
-  const handleCloseProductsAndOffersDetails = () => setshowProductsAndOffersDetails(false);
-  const handleShowProductsAndOffersDetails = () => {
-    setshowProductsAndOffersDetails(true);
-    //inboxListingProps.hideProductsAndOffersListingModal;
-  };
-  const handleBackProductsAndOffersDetails = () => {
-    setshowProductsAndOffersDetails(false);
-  };
-  const [selectedItem, setItemSelected] = useState<IProductAndOffersProps>(initialData);
 
+  const [formAttributes, setFormAttributes] = useState({
+    showForm: false,
+    showEditable: false,
+    selectedItem: initialData,
+  });
+  
   useEffect(() => {
     let isMounted = true;
 
-    refreshProductsAndOffersList();
+    refreshList();
 
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
   }, []);
 
-  const refreshProductsAndOffersList = () => {
+  const refreshList = () => {
     GetProductsAndOffersAll()
       .then((responseData: IProductAndOffersProps[]) => {
         if (responseData) {
@@ -80,7 +72,7 @@ function ProductsAndOffersListing() {
     setLoading(true);
     const x = await DeleteProductsAndOffers(id);
     if (x) {
-      refreshProductsAndOffersList();
+      refreshList();
     } else {
       console.log("Error while updating record");
     }
@@ -97,11 +89,11 @@ function ProductsAndOffersListing() {
         <button
           type="button"
           className="btn btn-sm btn-primary mt-1" style={{ marginLeft: 50 }}
-          onClick={() => {
-            setItemSelected(initialData);
-            setDetailsScreenAsEditable(true);
-            setshowProductsAndOffersDetails(true);
-          }}
+          onClick={() => setFormAttributes({
+            selectedItem: initialData,
+            showForm: true,
+            showEditable: true
+          })}
         >
           {local_Strings.ProductsAndOffersAddNew}
         </button>
@@ -134,22 +126,22 @@ function ProductsAndOffersListing() {
                 }} style={{ cursor: "pointer", float: "right" }}>
                   {local_Strings.ProductsAndOffersDeleteButton}
                 </a>
-                <a onClick={() => {
-                  setItemSelected(item);
-                  setDetailsScreenAsEditable(true);
-                  setshowProductsAndOffersDetails(true);
-                }} style={{ cursor: "pointer", float: "right" }}>
+                <a onClick={() => setFormAttributes({
+                  selectedItem: item,
+                  showForm: true,
+                  showEditable: true
+                })} style={{ cursor: "pointer", float: "right" }}>
                   {local_Strings.BeneficiaryEditButton}
                 </a>
 
                 <a
                   href="#"
                   className="row align-items-center"
-                  onClick={() => {
-                    setItemSelected(item);
-                    setDetailsScreenAsEditable(false);
-                    setshowProductsAndOffersDetails(true);
-                  }}
+                  onClick={() => setFormAttributes({
+                    selectedItem: item,
+                    showForm: true,
+                    showEditable: false
+                  })}
                 >
                   <div className="col-12 col-sm-12">
                     <div className="mb-1 d-flex align-items-center">
@@ -161,13 +153,13 @@ function ProductsAndOffersListing() {
                       </span>
                     </div>
                     <h6 className="mb-1 text-600">
-                      {local_Strings.ProductsAndOffersListingNameLabel +
+                      {local_Strings.ProductsAndOffersListingNameLabel + " " +
                         (auth.language === "en" ? item.name : item.nameAr)}
                     </h6>
                     <div className="text-15">
-                      {item.expiryDate
+                      {local_Strings.NotificationsExpireLabel +  " " + (item.expiryDate
                         ? moment(item.expiryDate).format("DD-MM-YYYY")
-                        : ""}
+                        : "")}
                     </div>
                   </div>
                 </a>
@@ -178,12 +170,18 @@ function ProductsAndOffersListing() {
         </ul>
       </div>
       <ProductsAndOffersForm
-        item={selectedItem}
-        show={showProductsAndOffersDetails}
-        editable={showDetailsScreenAsEditable}
-        OnHide={handleCloseProductsAndOffersDetails}
-        OnBack={handleBackProductsAndOffersDetails}
-        refreshList={() => refreshProductsAndOffersList()}
+        item={formAttributes.selectedItem}
+        show={formAttributes.showForm}
+        editable={formAttributes.showEditable}
+        OnHide={() => setFormAttributes({
+          ...formAttributes, showForm: false
+        })
+        }
+        OnBack={() => setFormAttributes({
+          ...formAttributes, showForm: false
+        })
+        }
+        refreshList={() => refreshList()}
       />
     </div>
   );

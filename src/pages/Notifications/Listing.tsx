@@ -15,32 +15,22 @@ function NotificationsListing() {
   const [showClearFilter, setShowClearFilter] = useState(false);
   const [data, setData] = useState<INotificationsDetail[]>([]);
   const [isLoading, setLoading] = useState(true);
-  const showMoreNotificationsListing = () => {
-    console.log("retrieve more from server");
-  };
-  const [showNotificationsForm, setshowNotificationsForm] = useState(false);
-  const [showDetailsScreenAsEditable, setDetailsScreenAsEditable] = useState(false);
-  const handleCloseNotificationsForm = () => setshowNotificationsForm(false);
-  const handleShowNotificationsForm = () => {
-    setshowNotificationsForm(true);
-    //inboxListingProps.hideNotificationsListingModal;
-  };
-  const handleBackNotificationsForm = () => {
-    setshowNotificationsForm(false);
-  };
-  const [selectedItem, setItemSelected] = useState<INotificationsDetail>(emptyNotificationsDetail);
-
+  const [formAttributes, setFormAttributes] = useState({
+    showForm: false,
+    showEditable: false,
+    selectedItem: emptyNotificationsDetail,
+  })
   useEffect(() => {
     let isMounted = true;
 
-    refreshNotificationsList();
+    refreshList();
 
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
   }, []);
 
-  const refreshNotificationsList = () => {
+  const refreshList = () => {
     GetNotificationsAll()
       .then((responseData: INotificationsDetail[]) => {
         if (responseData) {
@@ -66,11 +56,11 @@ function NotificationsListing() {
         <button
           type="button"
           className="btn btn-sm btn-primary mt-1" style={{ marginLeft: 50 }}
-          onClick={() => {
-            setItemSelected(emptyNotificationsDetail);
-            setDetailsScreenAsEditable(true);
-            setshowNotificationsForm(true);
-          }}
+          onClick={() => setFormAttributes({
+            selectedItem: emptyNotificationsDetail,
+            showForm: true,
+            showEditable: true
+          })}
         >
           {local_Strings.NotificationsAddNew}
         </button>
@@ -87,11 +77,11 @@ function NotificationsListing() {
                 <a
                   href="#"
                   className="row align-items-center"
-                  onClick={() => {
-                    setItemSelected(item);
-                    setDetailsScreenAsEditable(false);
-                    setshowNotificationsForm(true);
-                  }}
+                  onClick={() => setFormAttributes({
+                    selectedItem: item,
+                    showForm: true,
+                    showEditable: false
+                  })}
                 >
                   <div className="col-12 col-sm-12">
                     <div className="mb-1 d-flex align-items-center">
@@ -103,13 +93,13 @@ function NotificationsListing() {
                       </span>
                     </div>
                     <h6 className="mb-1 text-600">
-                      {local_Strings.NotificationsSubjectLabel +
+                      {local_Strings.NotificationsSubjectLabel + " " +
                         item.messageSubTitle}
                     </h6>
                     <div className="text-15">
-                      {item.expiryDate
+                      {local_Strings.NotificationsExpireLabel +  " " + (item.expiryDate
                         ? moment(item.expiryDate).format("DD-MM-YYYY")
-                        : ""}
+                        : "")}
                     </div>
                   </div>
                 </a>
@@ -119,12 +109,18 @@ function NotificationsListing() {
         </ul>
       </div>
       <NotificationsForm
-        item={selectedItem}
-        show={showNotificationsForm}
-        editable={showDetailsScreenAsEditable}
-        OnHide={handleCloseNotificationsForm}
-        OnBack={handleBackNotificationsForm}
-        refreshList={() => refreshNotificationsList()}
+        item={formAttributes.selectedItem}
+        show={formAttributes.showForm}
+        editable={formAttributes.showEditable}
+        OnHide={() => setFormAttributes({
+          ...formAttributes, showForm: false
+        })
+        }
+        OnBack={() => setFormAttributes({
+          ...formAttributes, showForm: false
+        })
+        }
+        refreshList={() => refreshList()}
       />
     </div>
   );

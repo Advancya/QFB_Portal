@@ -822,6 +822,17 @@ const SendNotificationsToAll = async (item: any) => {
   }
 };
 
+const GetAllContactUs = async () => {
+  try {
+    const result = await apiInstance.get(`/api/ContactUs/All`);
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
 export {
   GetStockData,
   ValidateRegisterData,
@@ -881,5 +892,6 @@ export {
   AddNotifications,
   GetAllCustomerList,
   SendNotificationsToCIFs,
-  SendNotificationsToAll
+  SendNotificationsToAll,
+  GetAllContactUs
 };

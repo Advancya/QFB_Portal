@@ -82,9 +82,7 @@ function ProductsAndOffersForm(props: DetailsProps) {
   };
 
   useEffect(() => {
-    if (props.editable && props.item) {
-      setData(props.item);
-    }
+    setData(props.item || initialData);
   }, [props.item]);
 
   //console.log(data);
@@ -177,6 +175,7 @@ function ProductsAndOffersForm(props: DetailsProps) {
                   <label>{local_Strings.ProductsAndOffersDescrLabel}</label>
                   <CKEditor
                     editor={ClassicEditor}
+                    readOnly={!props.editable}                    
                     data={values.details || ""}
                     onChange={(event: any, editor: any) => {
                       const _text = editor.getData();
@@ -196,6 +195,7 @@ function ProductsAndOffersForm(props: DetailsProps) {
                   <label>{local_Strings.ProductsAndOffersArDescrLabel}</label>                  
                   <CKEditor
                     editor={ClassicEditor}
+                    readOnly={!props.editable}
                     data={values.detailsAr || ""}
                     onChange={(event: any, editor: any) => {
                       const _text = editor.getData();

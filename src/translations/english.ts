@@ -530,6 +530,7 @@ const en = {
   NotificationsDescrLabel: "Message Body ",
   NotificationsArDescrLabel: "Arabic Message Body ",
   NotificationsSaveButton: "Save",
+  
 };
 
 export default en;
