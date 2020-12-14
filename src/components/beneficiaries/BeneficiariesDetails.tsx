@@ -51,11 +51,11 @@ function BeneficiariesDetails(
             <li className="pb-3">
               <div className="row align-items-center">
                 <div className="col-sm-8">
-                  <h5 className="mb-2">27 October 2020</h5>
+                  <h4 className="mb-2">Beneficiary ID | 12345678912345</h4>
                   <h4>Transfer to Ahmed</h4>
                 </div>
                 <div className="col-sm-4 text-sm-right">
-                  <span className="status-badge">In Progress</span>
+                  <span className="status-badge">Qatar</span>
                 </div>
               </div>
             </li>
@@ -63,18 +63,18 @@ function BeneficiariesDetails(
           <div className="py-2">
             <div className="row col-lg-8">
               <div className="col-lg-6 form-group">
-                <label>From Account</label>
+                <label>Beneficiary ID</label>
 
-                <div className="readonly">2345678374656789 (QAR)</div>
+                <div className="readonly">QAR72341838470</div>
               </div>
 
               <div className="col-lg-6 form-group">
-                <label>To Account</label>
-                <div className="readonly">2345678374656789 (QAR)</div>
+                <label>Beneficiary Bank Swift Code</label>
+                <div className="readonly">QAR123456</div>
               </div>
 
               <div className="col-lg-6 form-group">
-                <label>Select Transfer Currency</label>
+                <label>Beneficiary Full Name</label>
 
                 <div className="readonly">QAR</div>
               </div>
@@ -97,6 +97,7 @@ function BeneficiariesDetails(
                   <i className="fa fa-calendar-o" aria-hidden="true"></i>
                 </div>
               </div>
+
               <div className="col-lg-12">
                 <label>Description / Purpose Of Payment</label>
 
