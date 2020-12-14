@@ -18,3 +18,18 @@ code {
   padding: 2px 7px;
   border-radius: 10px;
 }
+.cursor-pointer {
+  cursor: pointer !important;
+}
+.field-group {position: relative;}
+.demandDateValue {position: absolute; top: 25%;}
+.demandDateValue span {color: #000; font-weight: 500; font-size: 0.9rem; display: inline-block;}
+.demandDateValue .l-icon {max-width: 1rem;}
+.card-header-search {margin-bottom: 1rem;}
+.searchInputIcon {display: block; padding: 0 0.75rem; margin: 0 0.5rem; margin-left: 90%;}
+.btnFileDelete {
+  color: #901235;
+  border: 0;
+  background-color: transparent;
+  font-weight: 500;
+}

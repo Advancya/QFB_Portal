@@ -507,14 +507,16 @@ const en = {
 
   MyBeneficiariesAddNew: "Add Beneficiary",
   ProductsAndOffersAddNew: "Add New",
-  ProductsAndOffersNameLabel: "Product Name ",
-  ProductsAndOffersArNameLabel: "Product Arabic Name ",
-  ProductsAndOffersExpireLabel: "Product Expire Date ",
-  ProductsAndOffersDescrLabel: "Product Description ",
-  ProductsAndOffersArDescrLabel: "Product Arabic Description ",
+  ProductsAndOffersNameLabel: "Name ",
+  ProductsAndOffersArNameLabel: "Arabic Name ",
+  ProductsAndOffersExpireLabel: "Expire Date ",
+  ProductsAndOffersDescrLabel: "Description ",
+  ProductsAndOffersArDescrLabel: "Arabic Description ",
   ProductsAndOffersSaveButton: "Save",
-  ProductsAndOffersDeleteButton: "Delete",
-  
+  ProductsAndOffersDeleteButton: "Delete",  
+  ProductsAndOffersSavedMessage: "New Product has been saved successfully!",
+  ProductsAndOffersDeletedMessage: "A Product has been deleted successfully!",
+
   NotificationsAddNew: "Add New",
   NotificationsDeleteButton: "Delete",
   NotificationsSubjectLabel: "Subject",
@@ -530,7 +532,28 @@ const en = {
   NotificationsDescrLabel: "Message Body ",
   NotificationsArDescrLabel: "Arabic Message Body ",
   NotificationsSaveButton: "Save",
-  
+  NotificationsSavedMessage: "New Notification has been saved successfully!",
+
+  OfferAddNew: "Add New",
+  OfferNameLabel: "Title ",
+  OfferArNameLabel: "Arabic Title ",
+  OfferExpireLabel: "Expire Date ",
+  OfferDescrLabel: "Description ",
+  OfferArDescrLabel: "Arabic Description ",
+  selectedOfferDetailsLabel: "selected Offer ",
+  selectedOfferDetailsArLabel: "Arabic selected Offer ",
+  OfferAttachment: "Attachment",
+  OfferSaveButton: "Save",
+  OfferDeleteButton: "Delete",
+
+  isEmptyText: " is empty.",
+  moreThanLimit: "The total upload size limit is 10 MB.",
+  supportedFileTypeError: "Selected file {*} is not supported.",
+  formValidationMessage: "Please fill the needed fields before saving",
+  sizeLabel: "Size",
+  OfferSavedMessage: "New Offer has been saved successfully!",
+  OfferDeletedMessage: "An Offer has been deleted successfully!",
+  searchPlaceholder: "Search",
 };
 
 export default en;

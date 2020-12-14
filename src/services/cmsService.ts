@@ -833,6 +833,41 @@ const GetAllContactUs = async () => {
   }
 };
 
+
+const AddNewOffer = async (item: any) => {
+  try {
+    const result = await apiInstance.post(`/api/Offer/Add`, item);
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+const DeleteOfferById = async (id: number) => {
+  try {
+    const result = await apiInstance.get(`/api/Offer/Delete?id=${id}`);
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+const UpdateOfferDetail = async (item: any) => {
+  try {
+    const result = await apiInstance.post(`/api/Offer/Update`, item);
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+
 export {
   GetStockData,
   ValidateRegisterData,
@@ -893,5 +928,8 @@ export {
   GetAllCustomerList,
   SendNotificationsToCIFs,
   SendNotificationsToAll,
-  GetAllContactUs
+  GetAllContactUs,
+  AddNewOffer,
+  DeleteOfferById,
+  UpdateOfferDetail
 };

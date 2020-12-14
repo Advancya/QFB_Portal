@@ -8,40 +8,26 @@ import { localStrings as local_Strings } from '../../translations/localStrings';
 import { AuthContext } from "../../providers/AuthProvider";
 import ProductsAndOffersForm from "../../components/ProductsAndOffers/ProductsAndOffersForm";
 import { confirmAlert } from 'react-confirm-alert';
-
-interface IProductAndOffersProps {
-  id: number;
-  name: string;
-  nameAr: string;
-  createdDate: string;
-  expiryDate: string;
-  details: string;
-  detailsAr: string;
-}
-
-const initialData = {
-  id: 0,
-  name: "",
-  nameAr: "",
-  createdDate: "",
-  expiryDate: "",
-  details: "",
-  detailsAr: "",
-};
+import { emptyProductAndOffersData, IProductAndOffersDetail } from "../../Helpers/publicInterfaces";
+import { useToasts } from 'react-toast-notifications';
+import Constant from "../../constants/defaultData";
+import LoadingOverlay from 'react-loading-overlay';
+import PuffLoader from "react-spinners/PuffLoader";
 
 function ProductsAndOffersListing() {
   const auth = useContext(AuthContext);
   local_Strings.setLanguage(auth.language);
   const [showClearFilter, setShowClearFilter] = useState(false);
-  const [data, setData] = useState<IProductAndOffersProps[]>([]);
+  const [data, setData] = useState<IProductAndOffersDetail[]>([]);
+  const [filteredData, setFilteredData] = useState<IProductAndOffersDetail[]>([]);
   const [isLoading, setLoading] = useState(true);
-
+  const { addToast } = useToasts();
   const [formAttributes, setFormAttributes] = useState({
     showForm: false,
     showEditable: false,
-    selectedItem: initialData,
+    selectedItem: emptyProductAndOffersData,
   });
-  
+
   useEffect(() => {
     let isMounted = true;
 
@@ -53,12 +39,15 @@ function ProductsAndOffersListing() {
   }, []);
 
   const refreshList = () => {
+    setLoading(true);
     GetProductsAndOffersAll()
-      .then((responseData: IProductAndOffersProps[]) => {
+      .then((responseData: IProductAndOffersDetail[]) => {
         if (responseData) {
-          setData(
-            responseData.filter((d) => new Date(d.expiryDate) > new Date()).sort((a, b) => moment(b.createdDate).diff(moment(a.createdDate)))
-          );
+          const _data = responseData.filter((d) => new Date(d.expiryDate) > new Date()).sort((a, b) => moment(b.createdDate).diff(moment(a.createdDate)));
+
+          setData(_data);
+          setFilteredData(_data);
+
         } else {
           setData([]);
         }
@@ -72,6 +61,10 @@ function ProductsAndOffersListing() {
     setLoading(true);
     const x = await DeleteProductsAndOffers(id);
     if (x) {
+      addToast(local_Strings.ProductsAndOffersDeletedMessage, {
+        appearance: 'success',
+        autoDismiss: true,
+      });
       refreshList();
     } else {
       console.log("Error while updating record");
@@ -90,7 +83,7 @@ function ProductsAndOffersListing() {
           type="button"
           className="btn btn-sm btn-primary mt-1" style={{ marginLeft: 50 }}
           onClick={() => setFormAttributes({
-            selectedItem: initialData,
+            selectedItem: emptyProductAndOffersData,
             showForm: true,
             showEditable: true
           })}
@@ -98,13 +91,40 @@ function ProductsAndOffersListing() {
           {local_Strings.ProductsAndOffersAddNew}
         </button>
       </div>
-
+      <br />
+      <LoadingOverlay
+        active={isLoading}
+        spinner={<PuffLoader
+          size={Constant.SpnnerSize}
+          color={Constant.SpinnerColor}
+        />}
+      />
+      <div className="card-header-search">
+        <div className="row align-items-center">
+          <div className="col-md-8">
+            <div className="field-group">
+              <input type="text" className="form-control"
+                placeholder={local_Strings.searchPlaceholder}
+                onChange={(e) => {
+                  if (!!e.target.value) {
+                    setFilteredData(data.filter((f) => Object.values(f).filter((t: any) => t && t.toString().toLowerCase().indexOf(e.target.value.toLowerCase()) !== -1).length > 0));
+                  } else {
+                    setFilteredData(data);
+                  }
+                }} />
+              <div className="demandDateValue searchInputIcon">
+                <i className="fa fa-search"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div className="box modal-box py-0 mb-0 scrollabel-modal-box">
         <ul className="box-list" id="dataList">
           {
-            data && data.length > 0 &&
-            data.map((item, index) =>
+            filteredData && filteredData.length > 0 &&
+            filteredData.map((item, index) =>
 
               <li className="shown" key={index}>
                 <a onClick={() => {
@@ -153,11 +173,10 @@ function ProductsAndOffersListing() {
                       </span>
                     </div>
                     <h6 className="mb-1 text-600">
-                      {local_Strings.ProductsAndOffersListingNameLabel + " " +
-                        (auth.language === "en" ? item.name : item.nameAr)}
+                      {auth.language === "en" ? item.name : item.nameAr}
                     </h6>
                     <div className="text-15">
-                      {local_Strings.NotificationsExpireLabel +  " " + (item.expiryDate
+                      {local_Strings.NotificationsExpireLabel + " " + (item.expiryDate
                         ? moment(item.expiryDate).format("DD-MM-YYYY")
                         : "")}
                     </div>

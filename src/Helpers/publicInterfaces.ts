@@ -61,3 +61,56 @@ export const emptyContactUs = {
   query: "",
   createDate: ""
 }
+
+export interface IProductAndOffersDetail {
+  id: number;
+  name: string;
+  nameAr: string;
+  createdDate: string;
+  expiryDate: string;
+  details: string;
+  detailsAr: string;
+}
+
+export const emptyProductAndOffersData = {
+  id: 0,
+  name: "",
+  nameAr: "",
+  createdDate: "",
+  expiryDate: "",
+  details: "",
+  detailsAr: "",
+};
+
+
+export interface IOfferDetail {
+  id: number;
+  cif: string;
+  title: string;
+  titleAr: string;
+  createdDate: string;
+  expireDate: string;
+  description: string;
+  descriptionAr: string;
+  selectedOfferDetails: string;
+  selectedOfferDetailsAr: string;
+  fileName: string;
+  fileContent: string;
+  offersSubscriptions: string[];
+}
+
+export const emptyOfferData = {
+  id: 0,
+  cif: "",
+  title: "",
+  titleAr: "",
+  createdDate: "",
+  expireDate: "",
+  description: "",
+  descriptionAr: "",
+  selectedOfferDetails: "",
+  selectedOfferDetailsAr: "",
+  fileName: "",
+  fileContent: "",
+  offersSubscriptions: [""]
+};

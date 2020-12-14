@@ -5,10 +5,7 @@ import Footer from "./components/Footer";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import AppBox from "./components/AppBox";
-import ProductsAndOffers from "./components/ProductsAndOffers/ProductsAndOffersLanding";
 import ContactUs from "./components/ContactUs";
-
-import "./translations/i18n";
 import ProductsAndOffersLanding from "./components/ProductsAndOffers/ProductsAndOffersLanding";
 
 function App() {
