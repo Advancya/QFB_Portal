@@ -250,7 +250,7 @@ function NotificationsForm(props: DetailsProps) {
                     }}
                     config={{
                       //plugins: [Base64UploadAdapter],
-                      toolbar: ['heading', '|', 'bold', 'italic', '|', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo', '|', 'imageUpload'],
+                      toolbar: ['heading', '|', 'bold', 'italic', '|', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo'],
                       allowedContent: true,
                       extraAllowedContent: 'div(*)',
                       language: "en",
@@ -275,7 +275,7 @@ function NotificationsForm(props: DetailsProps) {
                     }}
                     config={{
                       //plugins: [Base64UploadAdapter],
-                      toolbar: ['heading', '|', 'bold', 'italic', '|', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo', '|', 'imageUpload'],
+                      toolbar: ['heading', '|', 'bold', 'italic', '|', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo'],
                       allowedContent: true,
                       extraAllowedContent: 'div(*)',
                       language: "ar",

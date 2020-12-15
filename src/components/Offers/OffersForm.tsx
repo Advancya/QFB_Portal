@@ -217,7 +217,7 @@ function OffersForm(props: DetailsProps) {
                     }}
                     config={{
                       //plugins: [Base64UploadAdapter],
-                      toolbar: ['heading', '|', 'bold', 'italic', '|', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo', '|', 'imageUpload'],
+                      toolbar: ['heading', '|', 'bold', 'italic', '|', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo'],
                       allowedContent: true,
                       extraAllowedContent: 'div(*)',
                       language: "en",
@@ -241,7 +241,7 @@ function OffersForm(props: DetailsProps) {
                     }}
                     config={{
                       //plugins: [Base64UploadAdapter],
-                      toolbar: ['heading', '|', 'bold', 'italic', '|', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo', '|', 'imageUpload'],
+                      toolbar: ['heading', '|', 'bold', 'italic', '|', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo'],
                       allowedContent: true,
                       extraAllowedContent: 'div(*)',
                       language: "ar",
@@ -266,7 +266,7 @@ function OffersForm(props: DetailsProps) {
                       }}
                       config={{
                         //plugins: [Base64UploadAdapter],
-                        toolbar: ['heading', '|', 'bold', 'italic', '|', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo', '|', 'imageUpload'],
+                        toolbar: ['heading', '|', 'bold', 'italic', '|', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo'],
                         allowedContent: true,
                         extraAllowedContent: 'div(*)',
                         language: "en",
@@ -291,7 +291,7 @@ function OffersForm(props: DetailsProps) {
                       }}
                       config={{
                         //plugins: [Base64UploadAdapter],
-                        toolbar: ['heading', '|', 'bold', 'italic', '|', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo', '|', 'imageUpload'],
+                        toolbar: ['heading', '|', 'bold', 'italic', '|', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo'],
                         allowedContent: true,
                         extraAllowedContent: 'div(*)',
                         language: "ar",
@@ -308,56 +308,61 @@ function OffersForm(props: DetailsProps) {
 
                   <label className="mb-1 text-600">{local_Strings.OfferAttachment}</label>
                   {props.editable ?
-                    <input type="file" multiple={false}
-                      className="form-control-file"
-                      accept='application/pdf,.pdf'
-                      ref={fileInputRef}
-                      onBlur={handleBlur("fileName")}
-                      onChange={() => {
+                    <React.Fragment>
+                      <input type="file" multiple={false}
+                        id="customFileInput"
+                        lang={auth.language}
+                        className="custom-file-input"
+                        accept='application/pdf,.pdf'
+                        ref={fileInputRef}
+                        onBlur={handleBlur("fileName")}
+                        onChange={() => {
 
-                        const file = fileInputRef.current.files[0];
-                        const supportedExtensions = ['pdf'];
-                        if (file) {
-                          if (file.size <= 0) {
-                            addToast(file.name + local_Strings.isEmptyText, {
-                              appearance: 'error',
-                              autoDismiss: true,
-                            });
-                            fileInputRef.current.value = "";
-                          } else if (!supportedExtensions.includes(file.name.toLowerCase().split('.').pop())) {
-                            addToast(local_Strings.supportedFileTypeError.replace("{*}", file.name), {
-                              appearance: 'error',
-                              autoDismiss: true,
-                            });
-                            fileInputRef.current.value = "";
-                          } else if ((file.size / 1024 / 1024) > 10 ||
-                            (file.size / 1024 / 1024) > 10
-                          ) {
-                            addToast(local_Strings.moreThanLimit, {
-                              appearance: 'error',
-                              autoDismiss: true,
-                            });
-                            fileInputRef.current.value = "";
-                          } else {
-                            const reader = new FileReader();
-                            reader.onload = (e: any) => {
-                              const content = new TextDecoder().decode(Buffer.from(e.target.result));
-                              const fileContent = content.split(',').pop();
-                              setFieldValue("fileName", file.name);
-                              setFieldValue("fileContent", fileContent);
-                              const _calSize = (3 * ((fileContent ? fileContent.length : 1) / 4 / 1024 / 1024)).toFixed(4);
-                              setFileSize(Math.round((Number(_calSize) + Number.EPSILON) * 100) / 100);
+                          const file = fileInputRef.current.files[0];
+                          const supportedExtensions = ['pdf'];
+                          if (file) {
+                            if (file.size <= 0) {
+                              addToast(file.name + local_Strings.isEmptyText, {
+                                appearance: 'error',
+                                autoDismiss: true,
+                              });
+                              fileInputRef.current.value = "";
+                            } else if (!supportedExtensions.includes(file.name.toLowerCase().split('.').pop())) {
+                              addToast(local_Strings.supportedFileTypeError.replace("{*}", file.name), {
+                                appearance: 'error',
+                                autoDismiss: true,
+                              });
+                              fileInputRef.current.value = "";
+                            } else if ((file.size / 1024 / 1024) > 10 ||
+                              (file.size / 1024 / 1024) > 10
+                            ) {
+                              addToast(local_Strings.moreThanLimit, {
+                                appearance: 'error',
+                                autoDismiss: true,
+                              });
+                              fileInputRef.current.value = "";
+                            } else {
+                              const reader = new FileReader();
+                              reader.onload = (e: any) => {
+                                const content = new TextDecoder().decode(Buffer.from(e.target.result));
+                                const fileContent = content.split(',').pop();
+                                setFieldValue("fileName", file.name);
+                                setFieldValue("fileContent", fileContent);
+                                const _calSize = (3 * ((fileContent ? fileContent.length : 1) / 4 / 1024 / 1024)).toFixed(4);
+                                setFileSize(Math.round((Number(_calSize) + Number.EPSILON) * 100) / 100);
+                              }
+                              reader.readAsDataURL(file);
+                              fileInputRef.current.value = "";
                             }
-                            reader.readAsDataURL(file);
-                            fileInputRef.current.value = "";
                           }
-                        }
-                      }} /> : null}
+                        }} />
+                      <label className="custom-file-label" style={{ position: "relative" }}
+                        htmlFor="customFileInput">
+                        {local_Strings.OfferFileBrowseLabel}
+                      </label>
+                    </React.Fragment> : null}
                   {!!values.fileName &&
-                    <div className="row no-gutters align-items-center" style={{
-                      width: "50%",
-                      margin: "15px 0px",
-                    }}>
+                    <div className="row no-gutters align-items-center view-attachment">
                       <div className="col-2 col-lg-2 text-center">
                         <img alt="" src={pdfIcon}
                           style={{ maxWidth: "75%" }} className="img-fluid" />
@@ -381,13 +386,13 @@ function OffersForm(props: DetailsProps) {
                       </div>
                       {props.editable &&
                         <div className="col-2 col-lg-1 text-center">
-                          <button className="btnFileDelete" onClick={() => {  
+                          <button className="btnFileDelete" onClick={() => {
                             setFieldValue("fileName", "");
-                            setFieldValue("fileContent", "");                          
+                            setFieldValue("fileContent", "");
                             setData({
                               ...data, fileName: "", fileContent: "",
                             });
-                           }}
+                          }}
                           >
                             <i className="fa fa-trash-o"></i>
                           </button>

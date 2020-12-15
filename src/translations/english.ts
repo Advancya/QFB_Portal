@@ -546,6 +546,7 @@ const en = {
   OfferSaveButton: "Save",
   OfferDeleteButton: "Delete",
 
+  OfferFileBrowseLabel: "Browse to upload a file",
   isEmptyText: " is empty.",
   moreThanLimit: "The total upload size limit is 10 MB.",
   supportedFileTypeError: "Selected file {*} is not supported.",
