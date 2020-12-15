@@ -13,6 +13,7 @@ import { useToasts } from 'react-toast-notifications';
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from 'react-loading-overlay';
 import PuffLoader from "react-spinners/PuffLoader";
+import Pagination from '../../shared/pagination';
 
 function OffersListing() {
   const auth = useContext(AuthContext);
@@ -107,9 +108,10 @@ function OffersListing() {
                 placeholder={local_Strings.searchPlaceholder}
                 onChange={(e) => {
                   if (!!e.target.value) {
-                    setFilteredData(data.filter((f) => Object.values(f).filter((t: any) => t && t.toString().toLowerCase().indexOf(e.target.value.toLowerCase()) !== -1).length > 0));
+                    const _filteredData = [...data];
+                    setFilteredData(_filteredData.filter((f) => Object.values(f).filter((t: any) => t && t.toString().toLowerCase().indexOf(e.target.value.toLowerCase()) !== -1).length > 0).slice(0, 10));
                   } else {
-                    setFilteredData(data);
+                    setFilteredData(data.slice(0, 10));
                   }
                 }} />
               <div className="demandDateValue searchInputIcon">
@@ -187,6 +189,11 @@ function OffersListing() {
 
         </ul>
       </div>
+      {data.length > 10 &&
+        <Pagination items={data as []}
+        onChangePage={setFilteredData}
+        initialPage={1} pageSize={10} />
+      }
       <OffersForm
         item={formAttributes.selectedItem}
         show={formAttributes.showForm}

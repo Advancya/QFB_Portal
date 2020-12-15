@@ -66,3 +66,14 @@ code {
   width: 50%;
   margin: 15px 0px;
 }
+.paging-block {margin: 2rem 0 0 0;}
+.paging-block .page-link {border: 0; color: #6B4F44; }
+.paging-block .page-link:hover, .paging-block .page-item.active .page-link {
+    color: #FFF;
+    background-color: #6B4F44;
+	border-radius: 0.25rem;
+}
+.paging-block .page-item.active .page-link {
+	background-color: #d8d8d8;
+	cursor: default;
+}

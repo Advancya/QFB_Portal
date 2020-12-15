@@ -57,8 +57,8 @@ function OffersForm(props: DetailsProps) {
       titleAr: values.titleAr,
       createdDate: moment().toISOString(),
       expireDate: moment(values.expireDate).toISOString(),
-      description: values.description,
-      descriptionAr: values.descriptionAr,
+      description: "",
+      descriptionAr: "",
       selectedOfferDetails: values.selectedOfferDetails,
       selectedOfferDetailsAr: values.selectedOfferDetailsAr,
       fileName: values.fileName,
@@ -205,54 +205,6 @@ function OffersForm(props: DetailsProps) {
                     minDate={new Date()}
                     dateFormat="MMMM dd, yyyy" />
                   {touched.expireDate && errors.expireDate && InvalidFieldError(errors.expireDate)}
-                </div>
-                <div className="form-group">
-                  <label className="mb-1 text-600">{local_Strings.OfferDescrLabel}</label>
-                  {props.editable ? <CKEditor
-                    editor={ClassicEditor}
-                    data={values.description || ""}
-                    onChange={(event: any, editor: any) => {
-                      const _text = editor.getData();
-                      setFieldValue("description", _text);
-                    }}
-                    config={{
-                      //plugins: [Base64UploadAdapter],
-                      toolbar: ['heading', '|', 'bold', 'italic', '|', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo'],
-                      allowedContent: true,
-                      extraAllowedContent: 'div(*)',
-                      language: "en",
-                      content: "en",
-                    }}
-                  /> : <label className="box-brief mb-3">
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: values.description
-                        }} />
-                    </label>}
-                </div>
-                <div className="form-group">
-                  <label className="mb-1 text-600">{local_Strings.OfferArDescrLabel}</label>
-                  {props.editable ? <CKEditor
-                    editor={ClassicEditor}
-                    data={values.descriptionAr || ""}
-                    onChange={(event: any, editor: any) => {
-                      const _text = editor.getData();
-                      setFieldValue("descriptionAr", _text);
-                    }}
-                    config={{
-                      //plugins: [Base64UploadAdapter],
-                      toolbar: ['heading', '|', 'bold', 'italic', '|', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo'],
-                      allowedContent: true,
-                      extraAllowedContent: 'div(*)',
-                      language: "ar",
-                      content: "ar",
-                    }}
-                  /> : <label className="box-brief mb-3">
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: values.descriptionAr
-                        }} />
-                    </label>}
                 </div>
                 <div className="form-group">
                   <label className="mb-1 text-600">{local_Strings.selectedOfferDetailsLabel}</label>

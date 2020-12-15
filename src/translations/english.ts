@@ -540,8 +540,8 @@ const en = {
   OfferExpireLabel: "Expire Date ",
   OfferDescrLabel: "Description ",
   OfferArDescrLabel: "Arabic Description ",
-  selectedOfferDetailsLabel: "selected Offer ",
-  selectedOfferDetailsArLabel: "Arabic selected Offer ",
+  selectedOfferDetailsLabel: "Offer Details ",
+  selectedOfferDetailsArLabel: "Arabic Offer Details ",
   OfferAttachment: "Attachment",
   OfferSaveButton: "Save",
   OfferDeleteButton: "Delete",
@@ -562,6 +562,9 @@ const en = {
   OfferSubscriptionsOfferLabel: "Subscribe for Offer ",
   OfferSubscriptionsAmountLabel: "Amount",
   OfferSubscriptionsCurrencyLabel: "Currency",
+
+  pagingNext: "Next",
+  pagingPrevious: "Previous",
 };
 
 export default en;
