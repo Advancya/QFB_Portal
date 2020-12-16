@@ -41,7 +41,7 @@ function NotificationsListing() {
     GetNotificationsAll()
       .then((responseData: INotificationsDetail[]) => {
         if (responseData) {
-          const _data = responseData.filter((d) => new Date(d.expiryDate) > new Date()).sort((a, b) => moment(b.messageSendDate).diff(moment(a.messageSendDate)));
+          const _data = responseData.sort((a, b) => moment(b.messageSendDate).diff(moment(a.messageSendDate)));
 
           setData(_data);
           setFilteredData(_data);

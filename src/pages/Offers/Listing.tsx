@@ -44,7 +44,7 @@ function OffersListing() {
     GetOfferAll()
       .then((responseData: IOfferDetail[]) => {
         if (responseData) {
-          const _data = responseData.filter((d) => new Date(d.expireDate) > new Date()).sort((a, b) => moment(b.createdDate).diff(moment(a.createdDate)));
+          const _data = responseData.sort((a, b) => moment(b.createdDate).diff(moment(a.createdDate)));
 
           setData(_data);
           setFilteredData(_data);
