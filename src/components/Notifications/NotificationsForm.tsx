@@ -74,7 +74,6 @@ function NotificationsForm(props: DetailsProps) {
       cif: selectedCustomer.length === customerList.length ? "" : selectedCustomer.flatMap(x => x["value"]).toString(),
       title: values.messageTitle,
       titleAr: values.messageTitleAr,
-      createdDate: moment().utc(true),
       expiryData: moment(values.expiryDate).utc(true),
       message: values.messageBody,
       messageAr: values.messageBodyAr,
@@ -144,7 +143,7 @@ function NotificationsForm(props: DetailsProps) {
       }
     } else {
       setData(emptyNotificationsDetail);
-      //setSelected([]);
+      setSelected([]);
     }
 
   }, [props.item]);

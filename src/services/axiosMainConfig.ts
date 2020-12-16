@@ -11,7 +11,7 @@ const identityInstance = axios.create({
 
 const apiInstance = axios.create({
   baseURL: defaultData.ApiBaseUrl,
-  timeout: 50000,
+  timeout: 250000,
 });
 
 apiInstance.interceptors.request.use(async (config) => {
