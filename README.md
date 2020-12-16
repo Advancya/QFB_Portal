@@ -51,4 +51,6 @@ git init
 git add .
 git commit -m "Initial Commit"
 git remote add azure "https://null@portalcms.scm.azurewebsites.net/PortalCms.git"
-git push azure master
+
+git pull azure master
+git push azure master --force
