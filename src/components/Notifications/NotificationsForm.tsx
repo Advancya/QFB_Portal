@@ -16,7 +16,6 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import '@ckeditor/ckeditor5-build-classic/build/translations/ar.js';
 //import Base64UploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/base64uploadadapter';
 import { emptyNotificationsDetail, INotificationsDetail } from "../../Helpers/publicInterfaces";
-import queryString from "query-string";
 import { useToasts } from 'react-toast-notifications';
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from 'react-loading-overlay';
@@ -71,24 +70,16 @@ function NotificationsForm(props: DetailsProps) {
   const submitTheRecord = async (values: INotificationsDetail) => {
 
     setLoading(true);
-    const item = selectedCustomer.length === customerList.length ? {
+    const item = {
+      cif: selectedCustomer.length === customerList.length ? "" : selectedCustomer.flatMap(x => x["value"]).toString(),
       title: values.messageTitle,
       titleAr: values.messageTitleAr,
-      createdDate: moment().toISOString(),
-      expireyData: moment(values.expiryDate).toISOString(),
+      createdDate: moment().utc(true),
+      expiryData: moment(values.expiryDate).utc(true),
       message: values.messageBody,
       messageAr: values.messageBodyAr,
-    } : {
-        cif: selectedCustomer.flatMap(x => x["value"]).toString(),
-        title: values.messageTitle,
-        titleAr: values.messageTitleAr,
-        createdDate: moment().utc(true),
-        expireyData: moment(values.expiryDate).utc(true),
-        message: values.messageBody,
-        messageAr: values.messageBodyAr,
-      };
+    };
 
-    //console.log(decodeURIComponent(queryString.stringify(item)));
     //console.log(selectedCustomer.length === customerList.length);
     const x = selectedCustomer.length === customerList.length ? await SendNotificationsToAll(item) : await SendNotificationsToCIFs(item);
     if (x) {
@@ -110,8 +101,22 @@ function NotificationsForm(props: DetailsProps) {
 
     GetAllCustomerList()
       .then((responseData: ICustomer[]) => {
-        if (responseData && isMounted) {
-          setCustomerList(responseData);
+        if (responseData && responseData.length > 0 && isMounted) {
+
+          const _customers = responseData;
+          setCustomerList(_customers);
+
+          setTimeout(() => {
+            if (_customers.length > 0 && !!_customers[0].id) {
+              const _selectCustomers = _customers.filter((i) => i.id === props.item.customerId);
+              if (_selectCustomers.length > 0) {
+                setSelected([{
+                  "value": _selectCustomers[0].id,
+                  "label": _selectCustomers[0].shortName
+                }]);
+              }
+            }
+          }, 2000);
         }
       })
       .catch((e: any) => console.log(e))
@@ -126,14 +131,20 @@ function NotificationsForm(props: DetailsProps) {
   useEffect(() => {
 
     if (props.item && props.item.id > 0) {
-      const _selectCustomers = customerList.filter((i) => i.id === props.item.customerId);
-      setSelected([{
-        "value": _selectCustomers[0].id,
-        "label": _selectCustomers[0].shortName
-      }]);
       setData(props.item);
+
+      if (customerList.length > 0 && !!customerList[0].id) {
+        const _selectCustomers = customerList.filter((i) => i.id === props.item.customerId);
+        if (_selectCustomers.length > 0) {
+          setSelected([{
+            "value": _selectCustomers[0].id,
+            "label": _selectCustomers[0].shortName
+          }]);
+        }
+      }
     } else {
       setData(emptyNotificationsDetail);
+      //setSelected([]);
     }
 
   }, [props.item]);
@@ -144,7 +155,7 @@ function NotificationsForm(props: DetailsProps) {
     "value": (c.id ? c.id : ""),
     "label": (c.shortName ? c.shortName : "")
   })) : [];
-  
+
   return (
     <Modal
       show={props.show}

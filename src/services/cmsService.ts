@@ -797,8 +797,8 @@ const GetAllCustomerList = async () => {
 
 const SendNotificationsToCIFs = async (item: any) => {
   try {
-    const result = await apiInstance.get(
-      `/api/Notifications/SendToCIFs?${queryString.stringify(item)}`
+    const result = await apiInstance.post(
+      `/api/Notifications/SendToCIFs`, item
     );
 
     return result.data;
@@ -811,8 +811,8 @@ const SendNotificationsToCIFs = async (item: any) => {
 
 const SendNotificationsToAll = async (item: any) => {
   try {
-    const result = await apiInstance.get(
-      `/api/Notifications/SendToAllWithLang?${queryString.stringify(item)}`
+    const result = await apiInstance.post(
+      `/api/Notifications/SendToAllWithLang`, item
     );
 
     return result.data;
