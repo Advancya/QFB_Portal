@@ -82,8 +82,8 @@ function NotificationsForm(props: DetailsProps) {
         cif: selected.flatMap(x => x["value"]).toString(),
         title: values.messageTitle,
         titleAr: values.messageTitleAr,
-        createdDate: moment().toISOString(),
-        expireyData: moment(values.expiryDate).toISOString(),
+        createdDate: moment().utc(true),
+        expireyData: moment(values.expiryDate).utc(true),
         message: values.messageBody,
         messageAr: values.messageBodyAr,
       };

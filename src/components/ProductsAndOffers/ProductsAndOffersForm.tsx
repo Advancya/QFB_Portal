@@ -51,8 +51,8 @@ function ProductsAndOffersForm(props: DetailsProps) {
     const item = data.id > 0 ? values : {
       name: values.name,
       nameAr: values.nameAr,
-      createdDate: moment().toISOString(),
-      expiryDate: moment(values.expiryDate).toISOString(),
+      createdDate: moment().utc(true),
+      expiryDate: moment(values.expiryDate).utc(true),
       details: values.details,
       detailsAr: values.detailsAr,
     };

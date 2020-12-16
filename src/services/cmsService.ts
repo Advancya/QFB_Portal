@@ -388,7 +388,7 @@ const GetProductAndOffers = async () => {
   }
 };
 
-const GetOfferById = async (id: string) => {
+const GetOfferById = async (id: number) => {
   try {
     const result = await apiInstance.get(`/api/Offer/GetById?id=${id}`);
 

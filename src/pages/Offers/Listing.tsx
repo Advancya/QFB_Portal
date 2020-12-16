@@ -195,7 +195,7 @@ function OffersListing() {
         initialPage={1} pageSize={10} />
       }
       <OffersForm
-        item={formAttributes.selectedItem}
+        itemID={formAttributes.selectedItem.id}
         show={formAttributes.showForm}
         editable={formAttributes.showEditable}
         OnHide={() => setFormAttributes({

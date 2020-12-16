@@ -3,7 +3,7 @@ import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
 import dateIcon from "../../images/calendar-inactive.png";
 import { localStrings as local_Strings } from '../../translations/localStrings';
 import { AuthContext } from "../../providers/AuthProvider";
-import { AddNewOffer, UpdateOfferDetail } from "../../services/cmsService";
+import { AddNewOffer, GetOfferById, UpdateOfferDetail } from "../../services/cmsService";
 import moment from "moment";
 import { Formik } from "formik";
 import * as yup from "yup";
@@ -25,7 +25,7 @@ import pdfIcon from "../../images/pdf.png";
 const mime = require('mime');
 
 interface DetailsProps {
-  item?: IOfferDetail
+  itemID?: number
   show: boolean;
   editable: boolean;
   OnHide: () => void;
@@ -41,10 +41,11 @@ function OffersForm(props: DetailsProps) {
   const [data, setData] = useState<IOfferDetail>(emptyOfferData);
   const [fileSize, setFileSize] = useState<number>(0);
   const [isLoading, setLoading] = useState<boolean>(false);
+
   const formValidationSchema = yup.object({
     title: yup.string().nullable().required("Title is required"),
     titleAr: yup.string().nullable().required("Arabic title is required"),
-    fileName: yup.string().nullable().required("Please upload a PDF file. " + local_Strings.moreThanLimit),
+    //fileName: yup.string().nullable().required("Please upload a PDF file. " + local_Strings.moreThanLimit),
     expireDate: yup.string().nullable().required("Expire date is required"),
   });
 
@@ -55,8 +56,8 @@ function OffersForm(props: DetailsProps) {
       cif: auth.cif,
       title: values.title,
       titleAr: values.titleAr,
-      createdDate: moment().toISOString(),
-      expireDate: moment(values.expireDate).toISOString(),
+      createdDate: moment().utc(true),
+      expireDate: moment(values.expireDate).utc(true),
       description: "",
       descriptionAr: "",
       selectedOfferDetails: values.selectedOfferDetails,
@@ -81,15 +82,29 @@ function OffersForm(props: DetailsProps) {
   };
 
   useEffect(() => {
+    let isMounted = true;
+    if (props.itemID && props.itemID > 0) {
 
-    if (props.item) {
-      setData(props.item);
-
-      const _calSize = (3 * (props.item.fileContent.length / 4 / 1024 / 1024)).toFixed(4);
-      setFileSize(Math.round((Number(_calSize) + Number.EPSILON) * 100) / 100);
+      setLoading(true);
+      GetOfferById(props.itemID)
+        .then((responseData: any) => {
+          if (responseData && responseData.length > 0 && isMounted) {
+            const _item = responseData[0] as IOfferDetail;
+            setData(_item);
+            const _calSize = (3 * (_item.fileContent.length / 4 / 1024 / 1024)).toFixed(4);
+            setFileSize(Math.round((Number(_calSize) + Number.EPSILON) * 100) / 100);
+          }
+        })
+        .catch((e: any) => console.log(e))
+        .finally(() => setLoading(false));
+    } else {
+      setData(emptyOfferData);
     }
 
-  }, [props.item]);
+    return () => {
+      isMounted = false;
+    }; // use effect cleanup to set flag false, if unmounted
+  }, [props.itemID]);
 
   const b64toBlob = (b64Data: any, contentType = '', sliceSize = 512) => {
     const byteCharacters = atob(b64Data);
@@ -351,7 +366,7 @@ function OffersForm(props: DetailsProps) {
                         </div>
                       }
                     </div>}
-                  {touched.fileName && errors.fileName && InvalidFieldError(errors.fileName)}
+                  {/* {touched.fileName && errors.fileName && InvalidFieldError(errors.fileName)} */}
                 </div>
                 {props.editable &&
                   <div className="form-group">
