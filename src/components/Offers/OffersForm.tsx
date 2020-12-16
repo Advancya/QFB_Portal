@@ -3,7 +3,7 @@ import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
 import dateIcon from "../../images/calendar-inactive.png";
 import { localStrings as local_Strings } from '../../translations/localStrings';
 import { AuthContext } from "../../providers/AuthProvider";
-import { AddNewOffer, UpdateOfferDetail } from "../../services/cmsService";
+import { AddNewOffer, GetOfferById, UpdateOfferDetail } from "../../services/cmsService";
 import moment from "moment";
 import { Formik } from "formik";
 import * as yup from "yup";
@@ -25,7 +25,7 @@ import pdfIcon from "../../images/pdf.png";
 const mime = require('mime');
 
 interface DetailsProps {
-  item?: IOfferDetail
+  itemID?: number
   show: boolean;
   editable: boolean;
   OnHide: () => void;
@@ -41,10 +41,11 @@ function OffersForm(props: DetailsProps) {
   const [data, setData] = useState<IOfferDetail>(emptyOfferData);
   const [fileSize, setFileSize] = useState<number>(0);
   const [isLoading, setLoading] = useState<boolean>(false);
+
   const formValidationSchema = yup.object({
     title: yup.string().nullable().required("Title is required"),
     titleAr: yup.string().nullable().required("Arabic title is required"),
-    fileName: yup.string().nullable().required("Please upload a PDF file. " + local_Strings.moreThanLimit),
+    //fileName: yup.string().nullable().required("Please upload a PDF file. " + local_Strings.moreThanLimit),
     expireDate: yup.string().nullable().required("Expire date is required"),
   });
 
@@ -55,10 +56,10 @@ function OffersForm(props: DetailsProps) {
       cif: auth.cif,
       title: values.title,
       titleAr: values.titleAr,
-      createdDate: moment().toISOString(),
-      expireDate: moment(values.expireDate).toISOString(),
-      description: values.description,
-      descriptionAr: values.descriptionAr,
+      createdDate: moment().utc(true),
+      expireDate: moment(values.expireDate).utc(true),
+      description: "",
+      descriptionAr: "",
       selectedOfferDetails: values.selectedOfferDetails,
       selectedOfferDetailsAr: values.selectedOfferDetailsAr,
       fileName: values.fileName,
@@ -81,15 +82,29 @@ function OffersForm(props: DetailsProps) {
   };
 
   useEffect(() => {
+    let isMounted = true;
+    if (props.itemID && props.itemID > 0) {
 
-    if (props.item) {
-      setData(props.item);
-
-      const _calSize = (3 * (props.item.fileContent.length / 4 / 1024 / 1024)).toFixed(4);
-      setFileSize(Math.round((Number(_calSize) + Number.EPSILON) * 100) / 100);
+      setLoading(true);
+      GetOfferById(props.itemID)
+        .then((responseData: any) => {
+          if (responseData && responseData.length > 0 && isMounted) {
+            const _item = responseData[0] as IOfferDetail;
+            setData(_item);
+            const _calSize = (3 * (_item.fileContent.length / 4 / 1024 / 1024)).toFixed(4);
+            setFileSize(Math.round((Number(_calSize) + Number.EPSILON) * 100) / 100);
+          }
+        })
+        .catch((e: any) => console.log(e))
+        .finally(() => setLoading(false));
+    } else {
+      setData(emptyOfferData);
     }
 
-  }, [props.item]);
+    return () => {
+      isMounted = false;
+    }; // use effect cleanup to set flag false, if unmounted
+  }, [props.itemID]);
 
   const b64toBlob = (b64Data: any, contentType = '', sliceSize = 512) => {
     const byteCharacters = atob(b64Data);
@@ -207,54 +222,6 @@ function OffersForm(props: DetailsProps) {
                   {touched.expireDate && errors.expireDate && InvalidFieldError(errors.expireDate)}
                 </div>
                 <div className="form-group">
-                  <label className="mb-1 text-600">{local_Strings.OfferDescrLabel}</label>
-                  {props.editable ? <CKEditor
-                    editor={ClassicEditor}
-                    data={values.description || ""}
-                    onChange={(event: any, editor: any) => {
-                      const _text = editor.getData();
-                      setFieldValue("description", _text);
-                    }}
-                    config={{
-                      //plugins: [Base64UploadAdapter],
-                      toolbar: ['heading', '|', 'bold', 'italic', '|', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo', '|', 'imageUpload'],
-                      allowedContent: true,
-                      extraAllowedContent: 'div(*)',
-                      language: "en",
-                      content: "en",
-                    }}
-                  /> : <label className="box-brief mb-3">
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: values.description
-                        }} />
-                    </label>}
-                </div>
-                <div className="form-group">
-                  <label className="mb-1 text-600">{local_Strings.OfferArDescrLabel}</label>
-                  {props.editable ? <CKEditor
-                    editor={ClassicEditor}
-                    data={values.descriptionAr || ""}
-                    onChange={(event: any, editor: any) => {
-                      const _text = editor.getData();
-                      setFieldValue("descriptionAr", _text);
-                    }}
-                    config={{
-                      //plugins: [Base64UploadAdapter],
-                      toolbar: ['heading', '|', 'bold', 'italic', '|', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo', '|', 'imageUpload'],
-                      allowedContent: true,
-                      extraAllowedContent: 'div(*)',
-                      language: "ar",
-                      content: "ar",
-                    }}
-                  /> : <label className="box-brief mb-3">
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: values.descriptionAr
-                        }} />
-                    </label>}
-                </div>
-                <div className="form-group">
                   <label className="mb-1 text-600">{local_Strings.selectedOfferDetailsLabel}</label>
                   {props.editable ?
                     <CKEditor
@@ -266,7 +233,7 @@ function OffersForm(props: DetailsProps) {
                       }}
                       config={{
                         //plugins: [Base64UploadAdapter],
-                        toolbar: ['heading', '|', 'bold', 'italic', '|', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo', '|', 'imageUpload'],
+                        toolbar: ['heading', '|', 'bold', 'italic', '|', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo'],
                         allowedContent: true,
                         extraAllowedContent: 'div(*)',
                         language: "en",
@@ -291,7 +258,7 @@ function OffersForm(props: DetailsProps) {
                       }}
                       config={{
                         //plugins: [Base64UploadAdapter],
-                        toolbar: ['heading', '|', 'bold', 'italic', '|', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo', '|', 'imageUpload'],
+                        toolbar: ['heading', '|', 'bold', 'italic', '|', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo'],
                         allowedContent: true,
                         extraAllowedContent: 'div(*)',
                         language: "ar",
@@ -308,56 +275,61 @@ function OffersForm(props: DetailsProps) {
 
                   <label className="mb-1 text-600">{local_Strings.OfferAttachment}</label>
                   {props.editable ?
-                    <input type="file" multiple={false}
-                      className="form-control-file"
-                      accept='application/pdf,.pdf'
-                      ref={fileInputRef}
-                      onBlur={handleBlur("fileName")}
-                      onChange={() => {
+                    <React.Fragment>
+                      <input type="file" multiple={false}
+                        id="customFileInput"
+                        lang={auth.language}
+                        className="custom-file-input"
+                        accept='application/pdf,.pdf'
+                        ref={fileInputRef}
+                        onBlur={handleBlur("fileName")}
+                        onChange={() => {
 
-                        const file = fileInputRef.current.files[0];
-                        const supportedExtensions = ['pdf'];
-                        if (file) {
-                          if (file.size <= 0) {
-                            addToast(file.name + local_Strings.isEmptyText, {
-                              appearance: 'error',
-                              autoDismiss: true,
-                            });
-                            fileInputRef.current.value = "";
-                          } else if (!supportedExtensions.includes(file.name.toLowerCase().split('.').pop())) {
-                            addToast(local_Strings.supportedFileTypeError.replace("{*}", file.name), {
-                              appearance: 'error',
-                              autoDismiss: true,
-                            });
-                            fileInputRef.current.value = "";
-                          } else if ((file.size / 1024 / 1024) > 10 ||
-                            (file.size / 1024 / 1024) > 10
-                          ) {
-                            addToast(local_Strings.moreThanLimit, {
-                              appearance: 'error',
-                              autoDismiss: true,
-                            });
-                            fileInputRef.current.value = "";
-                          } else {
-                            const reader = new FileReader();
-                            reader.onload = (e: any) => {
-                              const content = new TextDecoder().decode(Buffer.from(e.target.result));
-                              const fileContent = content.split(',').pop();
-                              setFieldValue("fileName", file.name);
-                              setFieldValue("fileContent", fileContent);
-                              const _calSize = (3 * ((fileContent ? fileContent.length : 1) / 4 / 1024 / 1024)).toFixed(4);
-                              setFileSize(Math.round((Number(_calSize) + Number.EPSILON) * 100) / 100);
+                          const file = fileInputRef.current.files[0];
+                          const supportedExtensions = ['pdf'];
+                          if (file) {
+                            if (file.size <= 0) {
+                              addToast(file.name + local_Strings.isEmptyText, {
+                                appearance: 'error',
+                                autoDismiss: true,
+                              });
+                              fileInputRef.current.value = "";
+                            } else if (!supportedExtensions.includes(file.name.toLowerCase().split('.').pop())) {
+                              addToast(local_Strings.supportedFileTypeError.replace("{*}", file.name), {
+                                appearance: 'error',
+                                autoDismiss: true,
+                              });
+                              fileInputRef.current.value = "";
+                            } else if ((file.size / 1024 / 1024) > 10 ||
+                              (file.size / 1024 / 1024) > 10
+                            ) {
+                              addToast(local_Strings.moreThanLimit, {
+                                appearance: 'error',
+                                autoDismiss: true,
+                              });
+                              fileInputRef.current.value = "";
+                            } else {
+                              const reader = new FileReader();
+                              reader.onload = (e: any) => {
+                                const content = new TextDecoder().decode(Buffer.from(e.target.result));
+                                const fileContent = content.split(',').pop();
+                                setFieldValue("fileName", file.name);
+                                setFieldValue("fileContent", fileContent);
+                                const _calSize = (3 * ((fileContent ? fileContent.length : 1) / 4 / 1024 / 1024)).toFixed(4);
+                                setFileSize(Math.round((Number(_calSize) + Number.EPSILON) * 100) / 100);
+                              }
+                              reader.readAsDataURL(file);
+                              fileInputRef.current.value = "";
                             }
-                            reader.readAsDataURL(file);
-                            fileInputRef.current.value = "";
                           }
-                        }
-                      }} /> : null}
+                        }} />
+                      <label className="custom-file-label" style={{ position: "relative" }}
+                        htmlFor="customFileInput">
+                        {local_Strings.OfferFileBrowseLabel}
+                      </label>
+                    </React.Fragment> : null}
                   {!!values.fileName &&
-                    <div className="row no-gutters align-items-center" style={{
-                      width: "50%",
-                      margin: "15px 0px",
-                    }}>
+                    <div className="row no-gutters align-items-center view-attachment">
                       <div className="col-2 col-lg-2 text-center">
                         <img alt="" src={pdfIcon}
                           style={{ maxWidth: "75%" }} className="img-fluid" />
@@ -381,20 +353,20 @@ function OffersForm(props: DetailsProps) {
                       </div>
                       {props.editable &&
                         <div className="col-2 col-lg-1 text-center">
-                          <button className="btnFileDelete" onClick={() => {  
+                          <button className="btnFileDelete" onClick={() => {
                             setFieldValue("fileName", "");
-                            setFieldValue("fileContent", "");                          
+                            setFieldValue("fileContent", "");
                             setData({
                               ...data, fileName: "", fileContent: "",
                             });
-                           }}
+                          }}
                           >
                             <i className="fa fa-trash-o"></i>
                           </button>
                         </div>
                       }
                     </div>}
-                  {touched.fileName && errors.fileName && InvalidFieldError(errors.fileName)}
+                  {/* {touched.fileName && errors.fileName && InvalidFieldError(errors.fileName)} */}
                 </div>
                 {props.editable &&
                   <div className="form-group">

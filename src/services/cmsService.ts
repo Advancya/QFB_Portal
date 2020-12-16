@@ -388,7 +388,7 @@ const GetProductAndOffers = async () => {
   }
 };
 
-const GetOfferById = async (id: string) => {
+const GetOfferById = async (id: number) => {
   try {
     const result = await apiInstance.get(`/api/Offer/GetById?id=${id}`);
 
@@ -797,8 +797,8 @@ const GetAllCustomerList = async () => {
 
 const SendNotificationsToCIFs = async (item: any) => {
   try {
-    const result = await apiInstance.get(
-      `/api/Notifications/SendToCIFs?${queryString.stringify(item)}`
+    const result = await apiInstance.post(
+      `/api/Notifications/SendToCIFs`, item
     );
 
     return result.data;
@@ -811,8 +811,8 @@ const SendNotificationsToCIFs = async (item: any) => {
 
 const SendNotificationsToAll = async (item: any) => {
   try {
-    const result = await apiInstance.get(
-      `/api/Notifications/SendToAllWithLang?${queryString.stringify(item)}`
+    const result = await apiInstance.post(
+      `/api/Notifications/SendToAllWithLang`, item
     );
 
     return result.data;
@@ -832,7 +832,6 @@ const GetAllContactUs = async () => {
     return null;
   }
 };
-
 
 const AddNewOffer = async (item: any) => {
   try {
@@ -867,6 +866,17 @@ const UpdateOfferDetail = async (item: any) => {
   }
 };
 
+
+const GetAllOfferSubscriptions = async () => {
+  try {
+    const result = await apiInstance.get(`/api/OfferSubscriptions/All`);
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
 
 export {
   GetStockData,
@@ -931,5 +941,6 @@ export {
   GetAllContactUs,
   AddNewOffer,
   DeleteOfferById,
-  UpdateOfferDetail
+  UpdateOfferDetail,
+  GetAllOfferSubscriptions
 };

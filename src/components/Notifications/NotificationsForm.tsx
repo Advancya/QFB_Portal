@@ -16,7 +16,6 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import '@ckeditor/ckeditor5-build-classic/build/translations/ar.js';
 //import Base64UploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/base64uploadadapter';
 import { emptyNotificationsDetail, INotificationsDetail } from "../../Helpers/publicInterfaces";
-import queryString from "query-string";
 import { useToasts } from 'react-toast-notifications';
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from 'react-loading-overlay';
@@ -58,7 +57,7 @@ function NotificationsForm(props: DetailsProps) {
   const auth = useContext(AuthContext);
   local_Strings.setLanguage(auth.language);
   const [customerList, setCustomerList] = useState<ICustomer[]>([emptyCustomer]);
-  const [selected, setSelected] = useState([]);
+  const [selectedCustomer, setSelected] = useState([]);
   const [data, setData] = useState<INotificationsDetail>(emptyNotificationsDetail);
   const { addToast } = useToasts();
   const [isLoading, setLoading] = useState(false);
@@ -71,26 +70,17 @@ function NotificationsForm(props: DetailsProps) {
   const submitTheRecord = async (values: INotificationsDetail) => {
 
     setLoading(true);
-    const item = selected.length === customerList.length ? {
+    const item = {
+      cif: selectedCustomer.length === customerList.length ? "" : selectedCustomer.flatMap(x => x["value"]).toString(),
       title: values.messageTitle,
       titleAr: values.messageTitleAr,
-      createdDate: moment().toISOString(),
-      expireyData: moment(values.expiryDate).toISOString(),
+      expiryData: moment(values.expiryDate).utc(true),
       message: values.messageBody,
       messageAr: values.messageBodyAr,
-    } : {
-        cif: selected.flatMap(x => x["value"]).toString(),
-        title: values.messageTitle,
-        titleAr: values.messageTitleAr,
-        createdDate: moment().toISOString(),
-        expireyData: moment(values.expiryDate).toISOString(),
-        message: values.messageBody,
-        messageAr: values.messageBodyAr,
-      };
+    };
 
-    //console.log(decodeURIComponent(queryString.stringify(item)));
-    //console.log(selected.length === customerList.length);
-    const x = selected.length === customerList.length ? await SendNotificationsToAll(item) : await SendNotificationsToCIFs(item);
+    //console.log(selectedCustomer.length === customerList.length);
+    const x = selectedCustomer.length === customerList.length ? await SendNotificationsToAll(item) : await SendNotificationsToCIFs(item);
     if (x) {
       addToast(local_Strings.NotificationsSavedMessage, {
         appearance: 'success',
@@ -110,8 +100,22 @@ function NotificationsForm(props: DetailsProps) {
 
     GetAllCustomerList()
       .then((responseData: ICustomer[]) => {
-        if (responseData && isMounted) {
-          setCustomerList(responseData);
+        if (responseData && responseData.length > 0 && isMounted) {
+
+          const _customers = responseData;
+          setCustomerList(_customers);
+
+          setTimeout(() => {
+            if (_customers.length > 0 && !!_customers[0].id) {
+              const _selectCustomers = _customers.filter((i) => i.id === props.item.customerId);
+              if (_selectCustomers.length > 0) {
+                setSelected([{
+                  "value": _selectCustomers[0].id,
+                  "label": _selectCustomers[0].shortName
+                }]);
+              }
+            }
+          }, 2000);
         }
       })
       .catch((e: any) => console.log(e))
@@ -124,7 +128,24 @@ function NotificationsForm(props: DetailsProps) {
   }, []);
 
   useEffect(() => {
-    setData(props.item || emptyNotificationsDetail);
+
+    if (props.item && props.item.id > 0) {
+      setData(props.item);
+
+      if (customerList.length > 0 && !!customerList[0].id) {
+        const _selectCustomers = customerList.filter((i) => i.id === props.item.customerId);
+        if (_selectCustomers.length > 0) {
+          setSelected([{
+            "value": _selectCustomers[0].id,
+            "label": _selectCustomers[0].shortName
+          }]);
+        }
+      }
+    } else {
+      setData(emptyNotificationsDetail);
+      setSelected([]);
+    }
+
   }, [props.item]);
 
   //console.log(data);
@@ -201,7 +222,7 @@ function NotificationsForm(props: DetailsProps) {
                   <label className="mb-1 text-600">{local_Strings.NotificationsCustomerNameLabel}</label>
                   <MultiSelect
                     options={options}
-                    value={selected}
+                    value={selectedCustomer}
                     onChange={setSelected}
                     labelledBy={"Select"}
                   />
@@ -250,7 +271,7 @@ function NotificationsForm(props: DetailsProps) {
                     }}
                     config={{
                       //plugins: [Base64UploadAdapter],
-                      toolbar: ['heading', '|', 'bold', 'italic', '|', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo', '|', 'imageUpload'],
+                      toolbar: ['heading', '|', 'bold', 'italic', '|', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo'],
                       allowedContent: true,
                       extraAllowedContent: 'div(*)',
                       language: "en",
@@ -275,7 +296,7 @@ function NotificationsForm(props: DetailsProps) {
                     }}
                     config={{
                       //plugins: [Base64UploadAdapter],
-                      toolbar: ['heading', '|', 'bold', 'italic', '|', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo', '|', 'imageUpload'],
+                      toolbar: ['heading', '|', 'bold', 'italic', '|', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo'],
                       allowedContent: true,
                       extraAllowedContent: 'div(*)',
                       language: "ar",

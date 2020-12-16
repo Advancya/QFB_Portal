@@ -19,6 +19,7 @@ import { useToasts } from "react-toast-notifications";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
+import Pagination from "../../shared/pagination";
 
 function ProductsAndOffersListing() {
   const auth = useContext(AuthContext);
@@ -51,9 +52,9 @@ function ProductsAndOffersListing() {
     GetProductsAndOffersAll()
       .then((responseData: IProductAndOffersDetail[]) => {
         if (responseData) {
-          const _data = responseData
-            .filter((d) => new Date(d.expiryDate) > new Date())
-            .sort((a, b) => moment(b.createdDate).diff(moment(a.createdDate)));
+          const _data = responseData.sort((a, b) =>
+            moment(b.createdDate).diff(moment(a.createdDate))
+          );
 
           setData(_data);
           setFilteredData(_data);
@@ -102,53 +103,64 @@ function ProductsAndOffersListing() {
             {local_Strings.ProductsAndOffersAddNew}
           </button>
         </div>
-        <LoadingOverlay
-          active={isLoading}
-          spinner={
-            <PuffLoader
-              size={Constant.SpnnerSize}
-              color={Constant.SpinnerColor}
-            />
+        <button
+          type="button"
+          className="btn btn-sm btn-primary mt-1"
+          style={{ marginLeft: 50 }}
+          onClick={() =>
+            setFormAttributes({
+              selectedItem: emptyProductAndOffersData,
+              showForm: true,
+              showEditable: true,
+            })
           }
-        />
-        <div className="card-header-search">
-          <div className="row align-items-center">
-            <div className="col-md-12">
-              <div className="field-group">
-                <div className="input-group mb-2 mr-sm-2">
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder={local_Strings.searchPlaceholder}
-                    onChange={(e) => {
-                      if (!!e.target.value) {
-                        setFilteredData(
-                          data.filter(
-                            (f) =>
-                              Object.values(f).filter(
-                                (t: any) =>
-                                  t &&
-                                  t
-                                    .toString()
-                                    .toLowerCase()
-                                    .indexOf(e.target.value.toLowerCase()) !==
-                                    -1
-                              ).length > 0
-                          )
-                        );
-                      } else {
-                        setFilteredData(data);
-                      }
-                    }}
-                  />
-                  <div className="input-group-append">
-                    <div className="input-group-text">
-                      <div className="demandDateValue searchInputIcon">
-                        <i className="fa fa-search"></i>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+        >
+          {local_Strings.ProductsAndOffersAddNew}
+        </button>
+      </div>
+      <br />
+      <LoadingOverlay
+        active={isLoading}
+        spinner={
+          <PuffLoader
+            size={Constant.SpnnerSize}
+            color={Constant.SpinnerColor}
+          />
+        }
+      />
+      <div className="card-header-search">
+        <div className="row align-items-center">
+          <div className="col-md-8">
+            <div className="field-group">
+              <input
+                type="text"
+                className="form-control"
+                placeholder={local_Strings.searchPlaceholder}
+                onChange={(e) => {
+                  if (!!e.target.value) {
+                    const _filteredData = [...data];
+                    setFilteredData(
+                      _filteredData
+                        .filter(
+                          (f) =>
+                            Object.values(f).filter(
+                              (t: any) =>
+                                t &&
+                                t
+                                  .toString()
+                                  .toLowerCase()
+                                  .indexOf(e.target.value.toLowerCase()) !== -1
+                            ).length > 0
+                        )
+                        .slice(0, 10)
+                    );
+                  } else {
+                    setFilteredData(data.slice(0, 10));
+                  }
+                }}
+              />
+              <div className="demandDateValue searchInputIcon">
+                <i className="fa fa-search"></i>
               </div>
             </div>
           </div>
@@ -249,6 +261,32 @@ function ProductsAndOffersListing() {
           refreshList={() => refreshList()}
         />
       </div>
+      {data.length > 10 && (
+        <Pagination
+          items={data as []}
+          onChangePage={setFilteredData}
+          initialPage={1}
+          pageSize={10}
+        />
+      )}
+      <ProductsAndOffersForm
+        item={formAttributes.selectedItem}
+        show={formAttributes.showForm}
+        editable={formAttributes.showEditable}
+        OnHide={() =>
+          setFormAttributes({
+            ...formAttributes,
+            showForm: false,
+          })
+        }
+        OnBack={() =>
+          setFormAttributes({
+            ...formAttributes,
+            showForm: false,
+          })
+        }
+        refreshList={() => refreshList()}
+      />
     </div>
   );
 }

@@ -15,7 +15,7 @@ function ToolBarRight() {
       <div className="topRight text-right">
         <Link to="/HomePage1">Standard Settlements Instructions</Link>
         <Link to="/HomePage2">Documents Listing</Link>
-        <Link to="/HomePage3">Settings</Link>
+        <Link to={`/${auth.language}/OfferSubscriptions`}>Settings</Link>
         <Link to={`/${auth.language}/ContactUs`}>Contact Us</Link>
       </div>
     </div>
