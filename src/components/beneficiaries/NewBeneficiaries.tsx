@@ -1,35 +1,35 @@
 import React, { useState } from "react";
 import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
-import transactionSentIcon from "../../images/req-sent.svg";
+import beneficiarySentIcon from "../../images/req-sent.svg";
 
-interface iNewTransaction {
-  showNewTransactionModal: boolean;
-  hideNewTransactionModal: () => void;
-  backNewTransactionModal: () => void;
+interface iNewBeneficiary {
+  showNewBeneficiaryModal: boolean;
+  hideNewBeneficiaryModal: () => void;
+  backNewBeneficiaryModal: () => void;
 }
-function NewTransaction(newTransactionProps: iNewTransaction) {
-  const [showTransactionFields, setShowTransactionFields] = useState(false);
+function NewBeneficiary(newBeneficiaryProps: iNewBeneficiary) {
+  const [showBeneficiaryFields, setShowBeneficiaryFields] = useState(false);
   const [valideForm, setValideForm] = useState(false);
   const [valideFormOTP, setvalideFormOTP] = useState(false);
 
-  const transactionTypeOnchangeHandler = (e: any) => {
+  const beneficiaryTypeOnchangeHandler = (e: any) => {
     if (e.target.value != 0) {
-      setShowTransactionFields(true);
+      setShowBeneficiaryFields(true);
     } else {
-      setShowTransactionFields(false);
+      setShowBeneficiaryFields(false);
     }
   };
 
-  const applyTransactionHandler = () => {
+  const applyBeneficiaryHandler = () => {
     setValideForm(true);
   };
-  const applyOTPTransactionHandler = () => {
+  const applyOTPBeneficiaryHandler = () => {
     setvalideFormOTP(true);
   };
   return (
     <Modal
-      show={newTransactionProps.showNewTransactionModal}
-      onHide={newTransactionProps.hideNewTransactionModal}
+      show={newBeneficiaryProps.showNewBeneficiaryModal}
+      onHide={newBeneficiaryProps.hideNewBeneficiaryModal}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
@@ -42,7 +42,7 @@ function NewTransaction(newTransactionProps: iNewTransaction) {
             <div className="ib-icon">
               <a
                 href="#"
-                onClick={newTransactionProps.backNewTransactionModal}
+                onClick={newBeneficiaryProps.backNewBeneficiaryModal}
                 className="backToAccountsList"
               >
                 <i className="fa fa-chevron-left"></i>
@@ -56,7 +56,7 @@ function NewTransaction(newTransactionProps: iNewTransaction) {
         <button
           type="button"
           className="close"
-          onClick={newTransactionProps.hideNewTransactionModal}
+          onClick={newBeneficiaryProps.hideNewBeneficiaryModal}
         >
           <span aria-hidden="true">×</span>
         </button>
@@ -66,14 +66,14 @@ function NewTransaction(newTransactionProps: iNewTransaction) {
           className={valideForm ? "box modal-box d-none" : "box modal-box"}
           id="applyReqBox"
         >
-          <div className="py-2">
-            <div className="row col-lg-8">
-              <div className="col-lg-12">
-                <label>Transaction Type</label>
+          <div className="container-fluid">
+            <div className="row ">
+              <div className="col-lg-9 form-group">
+                <label>Beneficiary Type</label>
                 <select
                   className="form-control"
                   id="reqTypeSelect"
-                  onChange={transactionTypeOnchangeHandler}
+                  onChange={beneficiaryTypeOnchangeHandler}
                 >
                   <option value="0">Select Type</option>
                   <option value="1">Within my account</option>
@@ -85,78 +85,150 @@ function NewTransaction(newTransactionProps: iNewTransaction) {
           </div>
           <div
             className={
-              showTransactionFields ? "newReqFields" : "newReqFields d-none"
+              showBeneficiaryFields ? "newReqFields" : "newReqFields d-none"
             }
             id="newReqFields"
           >
             <div className="py-2">
-              <div className="row col-lg-8">
-                <div className="col-lg-6 form-group">
-                  <label>From Account</label>
-                  <select className="form-control">
-                    <option value="0">2345678374656789 (QAR)</option>
-                    <option value="1">2345678374656789 (QAR)</option>
-                    <option value="2">2345678374656789 (QAR)</option>
-                    <option value="3">2345678374656789 (QAR) </option>
-                  </select>
-                </div>
+              <div className=" col-lg-9">
+                <div className="row mb-5">
+                  <div className="col-lg-6 form-group">
+                    <label>Beneficiary ID</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="QAR72341838470"
+                    />
+                  </div>
 
-                <div className="col-lg-6 form-group">
-                  <label>To Account</label>
-                  <select className="form-control">
-                    <option value="0">2345678374656789 (QAR)</option>
-                    <option value="1">2345678374656789 (QAR)</option>
-                    <option value="2">2345678374656789 (QAR)</option>
-                    <option value="3">2345678374656789 (QAR) </option>
-                  </select>
+                  <div className="col-lg-6 form-group">
+                    <label>Beneficiary Bank Swift Code</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="QAR72341838470"
+                    />
+                  </div>
+                  <div className="col-lg-6 form-group">
+                    <label>Beneficiary QFB account Number or IBAN</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="QAR72341838470"
+                    />
+                  </div>
+                  <div className="col-lg-6 form-group">
+                    <label>Beneficiary Bank</label>
+                    <select className="form-control">
+                      <option value="0">QFB</option>
+                      <option value="1">QFB</option>
+                      <option value="2">QFB</option>
+                      <option value="3">QFB</option>
+                    </select>
+                  </div>
                 </div>
+                <div className="row mb-5">
+                  <div className="col-lg-6 form-group">
+                    <label>Beneficiary Full Name</label>
 
-                <div className="col-lg-6 form-group">
-                  <label>Select Transfer Currency</label>
-                  <select className="form-control">
-                    <option value="0">QAR</option>
-                    <option value="1">EGy</option>
-                    <option value="2">USD</option>
-                    <option value="3">AED</option>
-                  </select>
-                </div>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Mohamed Ahmed"
+                    />
+                  </div>
 
-                <div className="col-lg-6 form-group">
-                  <label>Amount</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="250.000,000 (QAR)"
-                  />
+                  <div className="col-lg-6 form-group">
+                    <label>Beneficiary Account Number</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Mohamed Ahmed"
+                    />
+                  </div>
+
+                  <div className="col-lg-6 form-group">
+                    <label>Beneficiary Account Currency</label>
+
+                    <select className="form-control">
+                      <option value="0">QAR</option>
+                      <option value="1">EGy</option>
+                      <option value="2">USD</option>
+                      <option value="3">AED</option>
+                    </select>
+                  </div>
+
+                  <div className="col-lg-6 form-group">
+                    <label>Beneficiary IBAN</label>
+
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Mohamed Ahmed"
+                    />
+                  </div>
+
+                  <div className="col-lg-6 form-group">
+                    <label>Beneficiary Country</label>
+
+                    <select className="form-control">
+                      <option value="0">Qatar</option>
+                      <option value="1">USA</option>
+                      <option value="2">Egypt</option>
+                      <option value="3">UAE</option>
+                    </select>
+                  </div>
+                  <div className="col-lg-6 form-group">
+                    <label>Beneficiary City</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Doha"
+                    />
+                  </div>
+                  <div className="col-lg-12 form-group">
+                    <label>Beneficiary Address</label>
+
+                    <textarea
+                      value="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+incididunt ut labore"
+                      className="form-control"
+                    ></textarea>
+                  </div>
                 </div>
-                <div className="col-lg-6 form-group">
-                  <label>Beneficiary</label>
-                  <select className="form-control">
-                    <option value="0">Ahmed Ali</option>
-                    <option value="1">Ahmed Ali</option>
-                    <option value="2">Ahmed Ali</option>
-                    <option value="3">Ahmed Ali</option>
-                  </select>
-                </div>
-                <div className="col-lg-6 form-group customDate">
-                  <label>Request Date</label>
-                  <input type="date" className="form-control" />
-                </div>
-                <div className="col-lg-12">
-                  <label>Description / Purpose Of Payment</label>
-                  <textarea value="" className="form-control"></textarea>
+                <div className="row">
+                  <div className="col-lg-6 form-group ">
+                    <label>Intermediary Bank SWIFT CODE</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="123"
+                    />
+                  </div>
+                  <div className="col-lg-6 form-group ">
+                    <label>Intermediary Bank Name</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Bank Name"
+                    />
+                  </div>
+
+                  <div className="col-lg-6 form-group">
+                    <label>Routing Number/Sort Code,if any</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="124345"
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-
-            <div className="text-right p-3">
-              <button
-                id="applyReqBtn"
-                className="btn btn-primary"
-                onClick={applyTransactionHandler}
-              >
-                Submit
-              </button>
+              <div className="text-right p-3">
+                <button id="applyReqBtn" className="btn btn-primary">
+                  Submit
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -189,7 +261,7 @@ function NewTransaction(newTransactionProps: iNewTransaction) {
             <button
               id="submitOTPBtn"
               className="btn btn-primary"
-              onClick={applyOTPTransactionHandler}
+              onClick={applyOTPBeneficiaryHandler}
             >
               Submit
             </button>
@@ -203,17 +275,17 @@ function NewTransaction(newTransactionProps: iNewTransaction) {
           <div className="py-2 px-3 text-center text-sm-left">
             <div className="row align-items-center justify-content-center">
               <div className="col-sm-2">
-                <img src={transactionSentIcon} className="img-fluid my-3" />
+                <img src={beneficiarySentIcon} className="img-fluid my-3" />
               </div>
               <div className="col-sm-8">
-                <h2 className="m-0 mb-4">Transaction Sent</h2>
-                <h5>Your transaction has been sent successfully to your RM</h5>
+                <h2 className="m-0 mb-4">Beneficiary Sent</h2>
+                <h5>Your beneficiary has been sent successfully to your RM</h5>
               </div>
             </div>
           </div>
           <div className="text-right p-3">
             <button
-              id="doneTransactionBtn"
+              id="doneBeneficiaryBtn"
               data-dismiss="modal"
               className="btn btn-primary"
             >
@@ -226,4 +298,4 @@ function NewTransaction(newTransactionProps: iNewTransaction) {
   );
 }
 
-export default NewTransaction;
+export default NewBeneficiary;

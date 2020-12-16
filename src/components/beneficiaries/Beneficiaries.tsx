@@ -4,12 +4,12 @@ import depositIcon from "../../../images/deposit-icon.svg";
 import { Button, Modal } from "react-bootstrap";
 import BeneficiariesListing from "./BeneficiariesListing";
 import BeneficiariesDetails from "./BeneficiariesDetails";
-import NewTransaction from "./NewBeneficiaries";
-import transactionIcon from "../../images/transaction-icon.svg";
+import NewBeneficiary from "./NewBeneficiaries";
 interface iBeneficiaries {
-  hideTransactionsListingModal: () => void;
+  showBeneficiariesListingModal?: () => void;
 }
 function Beneficiaries(beneficiariesProps: iBeneficiaries) {
+  ///benfeciaries
   const [showBeneficiariesListing, setShowBeneficiariesListing] = useState(
     false
   );
@@ -18,8 +18,13 @@ function Beneficiaries(beneficiariesProps: iBeneficiaries) {
     setShowBeneficiariesListing(false);
   };
   const handleShowBeneficiariesListing = () => {
-    //beneficiariesProps.hideTransactionsListingModal();
+    //handleCloseTransactionsListing();
     setShowBeneficiariesListing(true);
+  };
+  const handleBackBeneficiariesListing = () => {
+    handleCloseBeneficiariesListing();
+
+    // handleShowTransactionsListing();
   };
 
   const [showBeneficiariesDetails, setshowBeneficiariesDetails] = useState(
@@ -38,48 +43,51 @@ function Beneficiaries(beneficiariesProps: iBeneficiaries) {
     handleShowBeneficiariesListing();
   };
 
-  const [showNewTransaction, setShowNewTransaction] = useState(false);
+  const [showNewBeneficiary, setShowNewBeneficiary] = useState(false);
 
-  const handleCloseNewTransaction = () => {
-    setShowNewTransaction(false);
+  const handleCloseNewBeneficiary = () => {
+    setShowNewBeneficiary(false);
   };
-  const handleShowNewTransaction = () => {
+  const handleShowNewBeneficiary = () => {
     handleCloseBeneficiariesListing();
-    setShowNewTransaction(true);
+    setShowNewBeneficiary(true);
   };
-  const handleBackNewTransaction = () => {
-    setShowNewTransaction(false);
+  const handleBackNewBeneficiary = () => {
+    setShowNewBeneficiary(false);
 
     handleShowBeneficiariesListing();
   };
 
   return (
     <div>
-      <a
+      {/*   <a
         className="btnOutlineWhite bg-white color-gold"
         href="#"
         onClick={handleShowBeneficiariesListing}
-        id="newTransactionBtn"
+        id="newBeneficiaryBtn"
       >
         Beneficiaries
-      </a>
+        
+      </a> */}
+
       <BeneficiariesListing
         showBeneficiariesListingModal={showBeneficiariesListing}
         hideBeneficiariesListingModal={handleCloseBeneficiariesListing}
         showBeneficiariesDetailsModal={handleShowBeneficiariesDetails}
-        showNewTransactionModal={handleShowNewTransaction}
+        backBeneficiariesListingModal={handleBackBeneficiariesListing}
+        showNewBeneficiaryModal={handleShowNewBeneficiary}
       ></BeneficiariesListing>
       <BeneficiariesDetails
         showBeneficiariesDetailsModal={showBeneficiariesDetails}
         hideBeneficiariesDetailsModal={handleCloseBeneficiariesDetails}
-        backBeneficiariesListingModal={handleBackBeneficiariesDetails}
-        showNewTransactionModal={handleShowNewTransaction}
+        backBeneficiariesDetailsgModal={handleBackBeneficiariesDetails}
+        showNewBeneficiaryModal={handleShowNewBeneficiary}
       ></BeneficiariesDetails>
-      <NewTransaction
-        showNewTransactionModal={showNewTransaction}
-        hideNewTransactionModal={handleCloseNewTransaction}
-        backNewTransactionModal={handleBackNewTransaction}
-      ></NewTransaction>
+      <NewBeneficiary
+        showNewBeneficiaryModal={showNewBeneficiary}
+        hideNewBeneficiaryModal={handleCloseNewBeneficiary}
+        backNewBeneficiaryModal={handleBackNewBeneficiary}
+      ></NewBeneficiary>
     </div>
   );
 }

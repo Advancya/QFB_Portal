@@ -6,6 +6,7 @@ import requestIcon from "../../images/request-icon.svg";
 import { Switch, Route, Link } from "react-router-dom";
 import Requests from "../requests/Requests";
 import Transactions from "../transactions/Transactions";
+import AuthOffersLanding from "../AuthOffers/AuthOffersLanding";
 
 function Navigation() {
   return (
@@ -41,12 +42,7 @@ function Navigation() {
             </li>
 
             <Transactions></Transactions>
-            <li className="nav-item">
-              <Link className="nav-link" to="/">
-                <img src={offerIcon} className="images-fluid" />
-                Offers
-              </Link>
-            </li>
+            <AuthOffersLanding></AuthOffersLanding>
 
             <Requests></Requests>
             <li className="nav-item">

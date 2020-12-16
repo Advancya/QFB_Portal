@@ -5,8 +5,8 @@ import excelIcon from "../../../images/excel.svg";
 interface iBeneficiariesDetails {
   showBeneficiariesDetailsModal: boolean;
   hideBeneficiariesDetailsModal: () => void;
-  backBeneficiariesListingModal: () => void;
-  showNewTransactionModal: () => void;
+  backBeneficiariesDetailsgModal: () => void;
+  showNewBeneficiaryModal: () => void;
 }
 function BeneficiariesDetails(
   beneficiariesDetailsProps: iBeneficiariesDetails
@@ -26,14 +26,14 @@ function BeneficiariesDetails(
           <div className="modal-header-text">
             <a
               href="#"
-              onClick={beneficiariesDetailsProps.backBeneficiariesListingModal}
+              onClick={beneficiariesDetailsProps.backBeneficiariesDetailsgModal}
               className="backToAccountsList"
             >
               <i className="fa fa-chevron-left"></i>
             </a>
           </div>
           <div className="ib-text">
-            <h4>Beneficiaries</h4>
+            <h4>Beneficiaries Details</h4>
           </div>
         </div>
 
@@ -51,8 +51,8 @@ function BeneficiariesDetails(
             <li className="pb-3">
               <div className="row align-items-center">
                 <div className="col-sm-8">
-                  <h4 className="mb-2">Beneficiary ID | 12345678912345</h4>
-                  <h4>Transfer to Ahmed</h4>
+                  <h4>Beneficiary ID | 12345678912345</h4>
+                  <h4 className="text-18">Transfer to Ahmed</h4>
                 </div>
                 <div className="col-sm-4 text-sm-right">
                   <span className="status-badge">Qatar</span>
@@ -61,53 +61,98 @@ function BeneficiariesDetails(
             </li>
           </ul>
           <div className="py-2">
-            <div className="row col-lg-8">
-              <div className="col-lg-6 form-group">
-                <label>Beneficiary ID</label>
+            <div className=" col-lg-9">
+              <div className="row mb-5">
+                <div className="col-lg-6 form-group">
+                  <label>Beneficiary ID</label>
+                  <div className="readonly">QAR72341838470</div>
+                </div>
 
-                <div className="readonly">QAR72341838470</div>
-              </div>
+                <div className="col-lg-6 form-group">
+                  <label>Beneficiary Bank Swift Code</label>
+                  <div className="readonly">QAR123456</div>
+                </div>
+                <div className="col-lg-6 form-group">
+                  <label>Beneficiary QFB account Number or IBAN</label>
 
-              <div className="col-lg-6 form-group">
-                <label>Beneficiary Bank Swift Code</label>
-                <div className="readonly">QAR123456</div>
-              </div>
+                  <div className="readonly">QAR72341838470</div>
+                </div>
+                <div className="col-lg-6 form-group">
+                  <label>Beneficiary Bank</label>
 
-              <div className="col-lg-6 form-group">
-                <label>Beneficiary Full Name</label>
-
-                <div className="readonly">QAR</div>
-              </div>
-
-              <div className="col-lg-6 form-group">
-                <label>Amount</label>
-
-                <div className="readonly">250.000,000 (QAR)</div>
-              </div>
-              <div className="col-lg-6 form-group">
-                <label>Beneficiary</label>
-
-                <div className="readonly">Ahmed Ali</div>
-              </div>
-              <div className="col-lg-6 form-group customDate">
-                <label>Request Date</label>
-
-                <div className="readonly date d-flex justify-content-between align-items-center">
-                  2020-09-01
-                  <i className="fa fa-calendar-o" aria-hidden="true"></i>
+                  <div className="readonly">QFB</div>
                 </div>
               </div>
+              <div className="row mb-5">
+                <div className="col-lg-6 form-group">
+                  <label>Beneficiary Full Name</label>
 
-              <div className="col-lg-12">
-                <label>Description / Purpose Of Payment</label>
+                  <div className="readonly">Mohamed Ahmed</div>
+                </div>
 
-                <div className="readonly">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat.
+                <div className="col-lg-6 form-group">
+                  <label>Beneficiary Account Number</label>
+
+                  <div className="readonly">QAR72341838470</div>
+                </div>
+
+                <div className="col-lg-6 form-group">
+                  <label>Beneficiary Account Currency</label>
+
+                  <div className="readonly">QAR</div>
+                </div>
+
+                <div className="col-lg-6 form-group">
+                  <label>Beneficiary IBAN</label>
+
+                  <div className="readonly">QAR72341838470</div>
+                </div>
+
+                <div className="col-lg-6 form-group">
+                  <label>Beneficiary Country</label>
+
+                  <div className="readonly">Qatar</div>
+                </div>
+                <div className="col-lg-6 form-group">
+                  <label>Beneficiary Address</label>
+
+                  <div className="readonly">
+                    Qatar Towers, 123 Street, Doha, Qatar
+                  </div>
+                </div>
+
+                <div className="col-lg-6 form-group">
+                  <label>Beneficiary City</label>
+
+                  <div className="readonly">Doha</div>
                 </div>
               </div>
+              <div className="row mb-5">
+                <div className="col-lg-6 form-group ">
+                  <label>Intermediary Bank SWIFT CODE</label>
+
+                  <div className="readonly">QAR72341838470</div>
+                </div>
+                <div className="col-lg-6 form-group ">
+                  <label>Intermediary Bank Name</label>
+
+                  <div className="readonly">QAR72341838470</div>
+                </div>
+
+                <div className="col-lg-6 form-group">
+                  <label>Routing Number/Sort Code,if any</label>
+
+                  <div className="readonly">QAR72341838470</div>
+                </div>
+              </div>
+            </div>
+            <div className="text-right p-3">
+              <button id="applyReqBtn" className="btn btn-primary mx-2">
+                Edit
+              </button>
+              <button id="applyReqBtn" className="btn btn-primary">
+                Save
+              </button>
             </div>
           </div>
         </div>

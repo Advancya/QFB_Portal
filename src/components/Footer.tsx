@@ -1,13 +1,13 @@
 import React from "react";
+import { localStrings as local_Strings } from "../translations/localStrings";
 
 function Footer() {
   return (
     <footer className="footer">
       <div className="belowFooter">
-        {" "}
-        Qatar First Bank LLC(Public) is authorized by QFCRA under license
-        No.00091 and listed on the Qatar Stock Exchange Sitemap |{" "}
-        <a href="#">Terms &amp; Conditions</a>{" "}
+        {local_Strings.footerTxt}
+
+        <a href="#"> {local_Strings.footerTxtTerms}</a>
       </div>
     </footer>
   );

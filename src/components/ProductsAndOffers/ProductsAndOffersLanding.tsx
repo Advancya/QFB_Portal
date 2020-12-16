@@ -4,6 +4,7 @@ import ProductsAndOffersDetails from "./ProductsAndOffersDetails";
 import ProductsAndOffersListing from "./ProductsAndOffersListing";
 import { useHistory } from "react-router-dom";
 import { localStrings as local_Strings } from "../../translations/localStrings";
+
 import { AuthContext } from "../../providers/AuthProvider";
 import { Link } from "react-router-dom";
 
@@ -53,14 +54,14 @@ function ProductsAndOffersLanding(
           <img src={productsICon} className="img-fluid" />
         </div>
         <div className="ib-text px-4">
-          <h3 className="mb-2">PRODUCTS AND OFFERS</h3>
-          <p>Click here to see our latest!</p>
+          <h3 className="mb-2">{local_Strings.productAndOffersLandingTitle}</h3>
+          <p>{local_Strings.productAndOffersLandingInfo}</p>
           <a
             href="#"
             onClick={handleShowProductsAndOffersListing}
             className="btn btn-sm btn-primary mt-1"
           >
-            See More
+            {local_Strings.productAndOffersLandingButton}
           </a>
         </div>
       </div>

@@ -20,7 +20,9 @@ function Landing() {
           <div className="container-fluid">
             <div className="row">
               <div className="col-lg-8 col-container flex-column">
-                {showLeftSection.ProductsAndOffers && <ProductsAndOffersListing />}
+                {showLeftSection.ProductsAndOffers && (
+                  <ProductsAndOffersListing />
+                )}
                 {showLeftSection.Notifications && <NotificationsListing />}
                 {showLeftSection.Offers && <OffersListing />}
               </div>
@@ -34,45 +36,45 @@ function Landing() {
                       <a
                         href="#"
                         className="row align-items-center"
-                        onClick={() => setLeftSection({
-                          ProductsAndOffers: true,
-                          Notifications: false,
-                          Offers: false,
-                        })}
+                        onClick={() =>
+                          setLeftSection({
+                            ProductsAndOffers: true,
+                            Notifications: false,
+                            Offers: false,
+                          })
+                        }
                       >
-                        <h6 className="mb-1">
-                          Manage Products And Offers
-                      </h6>
+                        <h6 className="mb-1">Manage Products And Offers</h6>
                       </a>
                     </li>
                     <li className="shown">
                       <a
                         href="#"
                         className="row align-items-center"
-                        onClick={() => setLeftSection({
-                          ProductsAndOffers: false,
-                          Notifications: true,
-                          Offers: false,
-                        })}
+                        onClick={() =>
+                          setLeftSection({
+                            ProductsAndOffers: false,
+                            Notifications: true,
+                            Offers: false,
+                          })
+                        }
                       >
-                        <h6 className="mb-1">
-                          Manage Notifications
-                      </h6>
+                        <h6 className="mb-1">Manage Notifications</h6>
                       </a>
                     </li>
                     <li className="shown">
                       <a
                         href="#"
                         className="row align-items-center"
-                        onClick={() => setLeftSection({
-                          ProductsAndOffers: false,
-                          Notifications: false,
-                          Offers: true,
-                        })}
+                        onClick={() =>
+                          setLeftSection({
+                            ProductsAndOffers: false,
+                            Notifications: false,
+                            Offers: true,
+                          })
+                        }
                       >
-                        <h6 className="mb-1">
-                          Manage Offers
-                      </h6>
+                        <h6 className="mb-1">Manage Offers</h6>
                       </a>
                     </li>
                   </ul>

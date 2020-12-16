@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import inquiriesIcon from "../../images/inquiries-icon.svg";
 import ContactUsForm from "./ContactUsForm";
+import { localStrings as local_Strings } from "../../translations/localStrings";
+
 interface iContactUsLanding {
   showContactUsDetailsModal: () => void;
 }
@@ -21,14 +23,14 @@ function ContactUsLanding(contactUsLandingProps: iContactUsLanding) {
           <img src={inquiriesIcon} className="img-fluid" />
         </div>
         <div className="ib-text px-4">
-          <h3 className="mb-2">For any inquiries contact us</h3>
-          <p>Click here to get in touch for any query.</p>
+          <h3 className="mb-2">{local_Strings.contactUsLandingTitle}</h3>
+          <p>{local_Strings.contactUsLandingInfo}</p>
           <a
             href="#"
             onClick={handleShowContactUsForm}
             className="btn btn-sm btn-primary mt-1"
           >
-            Contact
+            {local_Strings.contactUsLandingButton}
           </a>
         </div>
       </div>

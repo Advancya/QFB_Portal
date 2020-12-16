@@ -505,10 +505,10 @@ const ar = {
   ProductsAndOffersDescrLabel: "Description ",
   ProductsAndOffersArDescrLabel: "Arabic Description ",
   ProductsAndOffersSaveButton: "حفظ",
-  ProductsAndOffersDeleteButton: "حذف",  
+  ProductsAndOffersDeleteButton: "حذف",
   ProductsAndOffersSavedMessage: "New Product has been saved successfully!",
   ProductsAndOffersDeletedMessage: "A Product has been deleted successfully!",
-  
+
   NotificationsAddNew: "Add New",
   NotificationsDeleteButton: "Delete",
   NotificationsSubjectLabel: "Subject",
@@ -526,13 +526,13 @@ const ar = {
   NotificationsDescrLabel: "Message Body ",
   NotificationsArDescrLabel: "Arabic Message Body ",
   NotificationsSaveButton: "Save",
-  
+
   OfferAddNew: "Add New",
   OfferNameLabel: "Title ",
   OfferArNameLabel: "Arabic Title ",
   OfferExpireLabel: "Expire Date ",
   OfferDescrLabel: "Description ",
-  OfferArDescrLabel: "Arabic Description ",  
+  OfferArDescrLabel: "Arabic Description ",
   selectedOfferDetailsLabel: "selected Offer ",
   selectedOfferDetailsArLabel: "Arabic selected Offer ",
   OfferAttachment: "Attachment",
@@ -547,6 +547,27 @@ const ar = {
   OfferSavedMessage: "New Offer has been saved successfully!",
   OfferDeletedMessage: "An Offer has been deleted successfully!",
   searchPlaceholder: "بحث",
+  /***Web** */
+
+  footerTxt:
+    "بنك قطر الأول مرخص من قبل هيئة تنظيم مركز قطر للمال بموجب ترخيص رقم 00091 ومدرج في خريطة موقع بورصة قطر |  ",
+  footerTxtTerms: "الشروط و الاحكام",
+  headerLogoTxt: "البوابة المصرفية الألكترونيه",
+
+  registerLandingTitle: "غير مسجل حتى الآن؟",
+  registerLandingInfo:
+    "حقق أقصى استفادة من يومك من خلال الخدمات المصرفية عبر الإنترنت مع بنك قطر الأول.",
+  registerLandingButton: "سجل الان",
+  appLandingTitle: "يمكنك أيضًا الوصول إلى حسابك في أي وقت من هاتفك المحمول.",
+  appLandingInfo: "حمل التطبيق اليوم",
+
+  productAndOffersLandingTitle: "المنتجات والعروض",
+  productAndOffersLandingInfo: "انقر هنا لمشاهدة أحدث ما لدينا!",
+  productAndOffersLandingButton: "شاهد المزيد",
+
+  contactUsLandingTitle: "لأية استفسارات اتصل بنا",
+  contactUsLandingInfo: "انقر هنا للاتصال بأي استفسار.",
+  contactUsLandingButton: "اتصل",
 };
 
 export default ar;

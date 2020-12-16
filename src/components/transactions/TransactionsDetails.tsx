@@ -59,7 +59,7 @@ function TransactionsDetails(transactionsDetailsProps: iTransactionsDetails) {
             </li>
           </ul>
           <div className="py-2">
-            <div className="row col-lg-8">
+            <div className="row col-lg-9">
               <div className="col-lg-6 form-group">
                 <label>From Account</label>
 

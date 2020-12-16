@@ -205,7 +205,7 @@ html {
   min-height: 32rem;
 }
 
-.color-gray {
+.color-grey {
   color: #6c7279;
 }
 
@@ -360,6 +360,7 @@ textarea.form-control {
   border-radius: 1rem;
   padding: 0.25rem 1rem;
   text-transform: uppercase;
+  min-width: 120px;
 }
 
 .btn-primary:hover {
@@ -1229,6 +1230,7 @@ tr.shown {
   min-width: 6rem;
   text-align: center;
   /*border: 1px solid #f6f1ee;*/
+  font-weight: 600;
 }
 
 .status-badge-lg {
@@ -1296,6 +1298,14 @@ tr.shown {
 [dir=ltr] .download-link i:last-child {
   border-bottom-right-radius: 8px;
   border-top-right-radius: 8px;
+}
+
+/**Admin**/
+
+.input-group-text {
+  border-radius: 1.5rem;
+  background-color: #6b4f44;
+  color: #fff;
 }
 
 /**rtl***/

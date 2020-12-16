@@ -513,7 +513,7 @@ const en = {
   ProductsAndOffersDescrLabel: "Description ",
   ProductsAndOffersArDescrLabel: "Arabic Description ",
   ProductsAndOffersSaveButton: "Save",
-  ProductsAndOffersDeleteButton: "Delete",  
+  ProductsAndOffersDeleteButton: "Delete",
   ProductsAndOffersSavedMessage: "New Product has been saved successfully!",
   ProductsAndOffersDeletedMessage: "A Product has been deleted successfully!",
 
@@ -554,6 +554,27 @@ const en = {
   OfferSavedMessage: "New Offer has been saved successfully!",
   OfferDeletedMessage: "An Offer has been deleted successfully!",
   searchPlaceholder: "Search",
+  /***Web** */
+  footerTxt:
+    "Qatar First Bank LLC(Public) is authorized by QFCRA under license No.00091 and listed on the Qatar Stock Exchange Sitemap | ",
+  footerTxtTerms: "Terms and Conditions",
+  headerLogoTxt: "ONLINE BANKING PORTAL",
+
+  registerLandingTitle: "NOT REGISTERED YET?",
+  registerLandingInfo:
+    "Make the most of your day by banking online with Qatar First Bank.",
+  registerLandingButton: "REGISTER NOW",
+
+  appLandingTitle: "You can also access your account anytime from your mobile.",
+  appLandingInfo: "Download the app Today",
+
+  productAndOffersLandingTitle: "PRODUCTS AND OFFERS",
+  productAndOffersLandingInfo: "Click here to see our latest!",
+  productAndOffersLandingButton: "See More",
+
+  contactUsLandingTitle: "For any inquiries contact us",
+  contactUsLandingInfo: "Click here to get in touch for any query.",
+  contactUsLandingButton: "Contact",
 };
 
 export default en;

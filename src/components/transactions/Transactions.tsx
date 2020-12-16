@@ -6,6 +6,9 @@ import TransactionsListing from "./TransactionsListing";
 import TransactionsDetails from "./TransactionsDetails";
 import NewTransaction from "./NewTransactions";
 import transactionIcon from "../../images/transaction-icon.svg";
+import NewBeneficiary from "../beneficiaries/NewBeneficiaries";
+import BeneficiariesDetails from "../beneficiaries/BeneficiariesDetails";
+import BeneficiariesListing from "../beneficiaries/BeneficiariesListing";
 
 function Transactions() {
   const [showTransactionsListing, setShowTransactionsListing] = useState(false);
@@ -45,6 +48,54 @@ function Transactions() {
 
     handleShowTransactionsListing();
   };
+  ///benfeciaries
+  const [showBeneficiariesListing, setShowBeneficiariesListing] = useState(
+    false
+  );
+
+  const handleCloseBeneficiariesListing = () => {
+    setShowBeneficiariesListing(false);
+  };
+  const handleShowBeneficiariesListing = () => {
+    handleCloseTransactionsListing();
+    setShowBeneficiariesListing(true);
+  };
+  const handleBackBeneficiariesListing = () => {
+    handleCloseBeneficiariesListing();
+
+    handleShowTransactionsListing();
+  };
+
+  const [showBeneficiariesDetails, setshowBeneficiariesDetails] = useState(
+    false
+  );
+
+  const handleCloseBeneficiariesDetails = () =>
+    setshowBeneficiariesDetails(false);
+  const handleShowBeneficiariesDetails = () => {
+    handleCloseBeneficiariesListing();
+    setshowBeneficiariesDetails(true);
+  };
+  const handleBackBeneficiariesDetails = () => {
+    setshowBeneficiariesDetails(false);
+
+    handleShowBeneficiariesListing();
+  };
+
+  const [showNewBeneficiary, setShowNewBeneficiary] = useState(false);
+
+  const handleCloseNewBeneficiary = () => {
+    setShowNewBeneficiary(false);
+  };
+  const handleShowNewBeneficiary = () => {
+    handleCloseBeneficiariesListing();
+    setShowNewBeneficiary(true);
+  };
+  const handleBackNewBeneficiary = () => {
+    setShowNewBeneficiary(false);
+
+    handleShowBeneficiariesListing();
+  };
 
   return (
     <div>
@@ -63,6 +114,7 @@ function Transactions() {
         hideTransactionsListingModal={handleCloseTransactionsListing}
         showTransactionsDetailsModal={handleShowTransactionsDetails}
         showNewTransactionModal={handleShowNewTransaction}
+        showBeneficiariesListing={handleShowBeneficiariesListing}
       ></TransactionsListing>
       <TransactionsDetails
         showTransactionsDetailsModal={showTransactionsDetails}
@@ -75,6 +127,24 @@ function Transactions() {
         hideNewTransactionModal={handleCloseNewTransaction}
         backNewTransactionModal={handleBackNewTransaction}
       ></NewTransaction>
+      <BeneficiariesListing
+        showBeneficiariesListingModal={showBeneficiariesListing}
+        hideBeneficiariesListingModal={handleCloseBeneficiariesListing}
+        showBeneficiariesDetailsModal={handleShowBeneficiariesDetails}
+        backBeneficiariesListingModal={handleBackBeneficiariesListing}
+        showNewBeneficiaryModal={handleShowNewBeneficiary}
+      ></BeneficiariesListing>
+      <BeneficiariesDetails
+        showBeneficiariesDetailsModal={showBeneficiariesDetails}
+        hideBeneficiariesDetailsModal={handleCloseBeneficiariesDetails}
+        backBeneficiariesDetailsgModal={handleBackBeneficiariesDetails}
+        showNewBeneficiaryModal={handleShowNewBeneficiary}
+      ></BeneficiariesDetails>
+      <NewBeneficiary
+        showNewBeneficiaryModal={showNewBeneficiary}
+        hideNewBeneficiaryModal={handleCloseNewBeneficiary}
+        backNewBeneficiaryModal={handleBackNewBeneficiary}
+      ></NewBeneficiary>
     </div>
   );
 }

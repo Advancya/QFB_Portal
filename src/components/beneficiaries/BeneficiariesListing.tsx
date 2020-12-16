@@ -1,18 +1,19 @@
 import React, { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
-import transactionIconColor from "../../images/transaction-icon-color.svg";
+import beneficiaryIconColor from "../../images/beneficiary-icon-color.svg";
 
 interface iBeneficiariesListing {
   showBeneficiariesListingModal: boolean;
   hideBeneficiariesListingModal: () => void;
   showBeneficiariesDetailsModal: () => void;
-  showNewTransactionModal: () => void;
+  showNewBeneficiaryModal: () => void;
+  backBeneficiariesListingModal: () => void;
 }
 function BeneficiariesListing(
   beneficiariesListingProps: iBeneficiariesListing
 ) {
   const [showClearFilter, setShowClearFilter] = useState(false);
-  const [showTransactionDateFilter, setShowTransactionDateFilter] = useState(
+  const [showBeneficiaryDateFilter, setShowBeneficiaryDateFilter] = useState(
     false
   );
 
@@ -28,9 +29,9 @@ function BeneficiariesListing(
   };
   const requestDateFilterOnchangeHandler = (e: any) => {
     if (e.target.value == 4) {
-      setShowTransactionDateFilter(true);
+      setShowBeneficiaryDateFilter(true);
     } else {
-      setShowTransactionDateFilter(false);
+      setShowBeneficiaryDateFilter(false);
     }
   };
 
@@ -47,16 +48,24 @@ function BeneficiariesListing(
       >
         <Modal.Header>
           <div className="d-flex align-items-center">
-            <div className="ib-icon bg-icon">
-              <img src={transactionIconColor} className="img-fluid" />
+            <div className="modal-header-text">
+              <a
+                href="#"
+                onClick={
+                  beneficiariesListingProps.backBeneficiariesListingModal
+                }
+                className="backToAccountsList"
+              >
+                <i className="fa fa-chevron-left"></i>
+              </a>
             </div>
             <div className="ib-text d-flex align-items-center">
               <h4>Beneficiaries</h4>
               <a
                 className="btnOutlineWhite"
                 href="#"
-                onClick={beneficiariesListingProps.showNewTransactionModal}
-                id="newTransactionBtn"
+                onClick={beneficiariesListingProps.showNewBeneficiaryModal}
+                id="newBeneficiaryBtn"
               >
                 <i className="fa fa-plus-circle"></i> New Beneficiaries
               </a>

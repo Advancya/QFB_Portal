@@ -66,9 +66,9 @@ function NewTransaction(newTransactionProps: iNewTransaction) {
           className={valideForm ? "box modal-box d-none" : "box modal-box"}
           id="applyReqBox"
         >
-          <div className="py-2">
-            <div className="row col-lg-8">
-              <div className="col-lg-12">
+          <div className="container-fluid">
+            <div className="row">
+              <div className="col-lg-9 form-group">
                 <label>Transaction Type</label>
                 <select
                   className="form-control"
@@ -90,7 +90,7 @@ function NewTransaction(newTransactionProps: iNewTransaction) {
             id="newReqFields"
           >
             <div className="py-2">
-              <div className="row col-lg-8">
+              <div className="row col-lg-9">
                 <div className="col-lg-6 form-group">
                   <label>From Account</label>
                   <select className="form-control">

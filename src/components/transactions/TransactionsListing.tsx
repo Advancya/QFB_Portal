@@ -2,12 +2,16 @@ import React, { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import transactionIconColor from "../../images/transaction-icon-color.svg";
 import Beneficiaries from "../beneficiaries/Beneficiaries";
+import BeneficiariesDetails from "../beneficiaries/BeneficiariesDetails";
+import BeneficiariesListing from "../beneficiaries/BeneficiariesListing";
+import NewBeneficiary from "../beneficiaries/NewBeneficiaries";
 
 interface iTransactionsListing {
   showTransactionsListingModal: boolean;
   hideTransactionsListingModal: () => void;
   showTransactionsDetailsModal: () => void;
   showNewTransactionModal: () => void;
+  showBeneficiariesListing: () => void;
 }
 function TransactionsListing(transactionsListingProps: iTransactionsListing) {
   const [showClearFilter, setShowClearFilter] = useState(false);
@@ -64,12 +68,14 @@ function TransactionsListing(transactionsListingProps: iTransactionsListing) {
               >
                 <i className="fa fa-plus-circle"></i> New Transaction
               </a>
-
-              <Beneficiaries
-                hideTransactionsListingModal={
-                  transactionsListingProps.hideTransactionsListingModal
-                }
-              ></Beneficiaries>
+              <a
+                className="btnOutlineWhite bg-white color-gold"
+                href="#"
+                onClick={transactionsListingProps.showBeneficiariesListing}
+                id="newBeneficiaryBtn"
+              >
+                Beneficiaries
+              </a>
             </div>
           </div>
           <button
