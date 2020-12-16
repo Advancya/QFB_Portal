@@ -58,7 +58,7 @@ function NotificationsForm(props: DetailsProps) {
   const auth = useContext(AuthContext);
   local_Strings.setLanguage(auth.language);
   const [customerList, setCustomerList] = useState<ICustomer[]>([emptyCustomer]);
-  const [selected, setSelected] = useState([]);
+  const [selectedCustomer, setSelected] = useState([]);
   const [data, setData] = useState<INotificationsDetail>(emptyNotificationsDetail);
   const { addToast } = useToasts();
   const [isLoading, setLoading] = useState(false);
@@ -71,7 +71,7 @@ function NotificationsForm(props: DetailsProps) {
   const submitTheRecord = async (values: INotificationsDetail) => {
 
     setLoading(true);
-    const item = selected.length === customerList.length ? {
+    const item = selectedCustomer.length === customerList.length ? {
       title: values.messageTitle,
       titleAr: values.messageTitleAr,
       createdDate: moment().toISOString(),
@@ -79,7 +79,7 @@ function NotificationsForm(props: DetailsProps) {
       message: values.messageBody,
       messageAr: values.messageBodyAr,
     } : {
-        cif: selected.flatMap(x => x["value"]).toString(),
+        cif: selectedCustomer.flatMap(x => x["value"]).toString(),
         title: values.messageTitle,
         titleAr: values.messageTitleAr,
         createdDate: moment().utc(true),
@@ -89,8 +89,8 @@ function NotificationsForm(props: DetailsProps) {
       };
 
     //console.log(decodeURIComponent(queryString.stringify(item)));
-    //console.log(selected.length === customerList.length);
-    const x = selected.length === customerList.length ? await SendNotificationsToAll(item) : await SendNotificationsToCIFs(item);
+    //console.log(selectedCustomer.length === customerList.length);
+    const x = selectedCustomer.length === customerList.length ? await SendNotificationsToAll(item) : await SendNotificationsToCIFs(item);
     if (x) {
       addToast(local_Strings.NotificationsSavedMessage, {
         appearance: 'success',
@@ -124,7 +124,18 @@ function NotificationsForm(props: DetailsProps) {
   }, []);
 
   useEffect(() => {
-    setData(props.item || emptyNotificationsDetail);
+
+    if (props.item && props.item.id > 0) {
+      const _selectCustomers = customerList.filter((i) => i.id === props.item.customerId);
+      setSelected([{
+        "value": _selectCustomers[0].id,
+        "label": _selectCustomers[0].shortName
+      }]);
+      setData(props.item);
+    } else {
+      setData(emptyNotificationsDetail);
+    }
+
   }, [props.item]);
 
   //console.log(data);
@@ -133,7 +144,7 @@ function NotificationsForm(props: DetailsProps) {
     "value": (c.id ? c.id : ""),
     "label": (c.shortName ? c.shortName : "")
   })) : [];
-
+  
   return (
     <Modal
       show={props.show}
@@ -201,7 +212,7 @@ function NotificationsForm(props: DetailsProps) {
                   <label className="mb-1 text-600">{local_Strings.NotificationsCustomerNameLabel}</label>
                   <MultiSelect
                     options={options}
-                    value={selected}
+                    value={selectedCustomer}
                     onChange={setSelected}
                     labelledBy={"Select"}
                   />
