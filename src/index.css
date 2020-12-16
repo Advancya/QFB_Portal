@@ -11,6 +11,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
 .input-validation-error {
   margin-top: 10px;
   border: 1px solid #ff0000;
@@ -18,18 +19,61 @@ code {
   padding: 2px 7px;
   border-radius: 10px;
 }
+
 .cursor-pointer {
   cursor: pointer !important;
 }
-.field-group {position: relative;}
-.demandDateValue {position: absolute; top: 25%;}
-.demandDateValue span {color: #000; font-weight: 500; font-size: 0.9rem; display: inline-block;}
-.demandDateValue .l-icon {max-width: 1rem;}
-.card-header-search {margin-bottom: 1rem;}
-.searchInputIcon {display: block; padding: 0 0.75rem; margin: 0 0.5rem; margin-left: 90%;}
+
+.field-group {
+  position: relative;
+}
+
+.demandDateValue {
+  position: absolute;
+  top: 25%;
+}
+
+.demandDateValue span {
+  color: #000;
+  font-weight: 500;
+  font-size: 0.9rem;
+  display: inline-block;
+}
+
+.demandDateValue .l-icon {
+  max-width: 1rem;
+}
+
+.card-header-search {
+  margin-bottom: 1rem;
+}
+
+.searchInputIcon {
+  display: block;
+  padding: 0 0.75rem;
+  margin: 0 0.5rem;
+  margin-left: 90%;
+}
+
 .btnFileDelete {
   color: #901235;
   border: 0;
   background-color: transparent;
   font-weight: 500;
+}
+
+.view-attachment {
+  width: 50%;
+  margin: 15px 0px;
+}
+.paging-block {margin: 2rem 0 0 0;}
+.paging-block .page-link {border: 0; color: #6B4F44; }
+.paging-block .page-link:hover, .paging-block .page-item.active .page-link {
+    color: #FFF;
+    background-color: #6B4F44;
+	border-radius: 0.25rem;
+}
+.paging-block .page-item.active .page-link {
+	background-color: #d8d8d8;
+	cursor: default;
 }

@@ -540,12 +540,13 @@ const en = {
   OfferExpireLabel: "Expire Date ",
   OfferDescrLabel: "Description ",
   OfferArDescrLabel: "Arabic Description ",
-  selectedOfferDetailsLabel: "selected Offer ",
-  selectedOfferDetailsArLabel: "Arabic selected Offer ",
+  selectedOfferDetailsLabel: "Offer Details ",
+  selectedOfferDetailsArLabel: "Arabic Offer Details ",
   OfferAttachment: "Attachment",
   OfferSaveButton: "Save",
   OfferDeleteButton: "Delete",
 
+  OfferFileBrowseLabel: "Browse to upload a file",
   isEmptyText: " is empty.",
   moreThanLimit: "The total upload size limit is 10 MB.",
   supportedFileTypeError: "Selected file {*} is not supported.",
@@ -561,6 +562,9 @@ const en = {
   OfferSubscriptionsOfferLabel: "Subscribe for Offer ",
   OfferSubscriptionsAmountLabel: "Amount",
   OfferSubscriptionsCurrencyLabel: "Currency",
+
+  pagingNext: "Next",
+  pagingPrevious: "Previous",
 };
 
 export default en;

@@ -11,6 +11,7 @@ import { emptyNotificationsDetail, INotificationsDetail } from "../../Helpers/pu
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from 'react-loading-overlay';
 import PuffLoader from "react-spinners/PuffLoader";
+import Pagination from '../../shared/pagination';
 
 function NotificationsListing() {
   const auth = useContext(AuthContext);
@@ -23,7 +24,8 @@ function NotificationsListing() {
     showForm: false,
     showEditable: false,
     selectedItem: emptyNotificationsDetail,
-  })
+  });
+
   useEffect(() => {
     let isMounted = true;
 
@@ -50,7 +52,6 @@ function NotificationsListing() {
       .catch((e: any) => console.log(e))
       .finally(() => setLoading(false));
   }
-
 
   return (
     <div>
@@ -87,9 +88,10 @@ function NotificationsListing() {
                 placeholder={local_Strings.searchPlaceholder}
                 onChange={(e) => {
                   if (!!e.target.value) {
-                    setFilteredData(data.filter((f) => Object.values(f).filter((t: any) => t && t.toString().toLowerCase().indexOf(e.target.value.toLowerCase()) !== -1).length > 0));
+                    const _filteredData = [...data];
+                    setFilteredData(_filteredData.filter((f) => Object.values(f).filter((t: any) => t && t.toString().toLowerCase().indexOf(e.target.value.toLowerCase()) !== -1).length > 0).slice(0, 10));
                   } else {
-                    setFilteredData(data);
+                    setFilteredData(data.slice(0, 10));
                   }
                 }} />
               <div className="demandDateValue searchInputIcon">
@@ -141,6 +143,11 @@ function NotificationsListing() {
             )}
         </ul>
       </div>
+      {data.length > 10 &&
+        <Pagination items={data as []}
+          onChangePage={setFilteredData}
+          initialPage={1} pageSize={10} />
+      }
       <NotificationsForm
         item={formAttributes.selectedItem}
         show={formAttributes.showForm}
