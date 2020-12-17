@@ -7,7 +7,7 @@ import DepositeDetails from "./DepositeDetails";
 import DepositeRecievedProfit from "./DepositeRecievedProfit";
 import { AuthContext } from "../../../providers/AuthProvider";
 import { PortfolioContext } from "../../../pages/Homepage";
-
+import { localStrings as local_Strings } from "../../../translations/localStrings";
 
 function Deposite() {
   const currentContext = useContext(AuthContext);
@@ -61,8 +61,12 @@ function Deposite() {
             <img src={depositIcon} className="img-fluid" />
           </div>
           <a href="#" className="ib-text" onClick={handleShowDepositeListing}>
-            <h4>Deposit</h4>
-            <h5>{userPortfolio.totalDeposits + " " + currentContext.userSettings.currency}</h5>
+            <h4>{local_Strings.PortfolioAssetsOption3}</h4>
+            <h5>
+              {userPortfolio.totalDeposits +
+                " " +
+                currentContext.userSettings.currency}
+            </h5>
           </a>
         </div>
       </div>

@@ -7,6 +7,7 @@ import InvestmentsRecievedProfit from "./InvestmentsRecievedProfit";
 import InvestmentsBuyAndSell from "./InvestmentsBuyAndSell";
 import { AuthContext } from "../../../providers/AuthProvider";
 import { PortfolioContext } from "../../../pages/Homepage";
+import { localStrings as local_Strings } from "../../../translations/localStrings";
 
 function Investments() {
   const currentContext = useContext(AuthContext);
@@ -81,8 +82,12 @@ function Investments() {
             className="ib-text"
             onClick={handleShowInvestmentsListing}
           >
-            <h4>Investments</h4>
-            <h5>{userPortfolio.totalInvestment + " " + currentContext.userSettings.currency}</h5>
+            <h4>{local_Strings.PortfolioAssetsOption2}</h4>
+            <h5>
+              {userPortfolio.totalInvestment +
+                " " +
+                currentContext.userSettings.currency}
+            </h5>
           </a>
         </div>
       </div>

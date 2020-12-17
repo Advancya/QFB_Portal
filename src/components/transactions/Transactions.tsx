@@ -9,6 +9,7 @@ import transactionIcon from "../../images/transaction-icon.svg";
 import NewBeneficiary from "../beneficiaries/NewBeneficiaries";
 import BeneficiariesDetails from "../beneficiaries/BeneficiariesDetails";
 import BeneficiariesListing from "../beneficiaries/BeneficiariesListing";
+import { localStrings as local_Strings } from "../../translations/localStrings";
 
 function Transactions() {
   const [showTransactionsListing, setShowTransactionsListing] = useState(false);
@@ -106,7 +107,7 @@ function Transactions() {
           onClick={handleShowTransactionsListing}
         >
           <img src={transactionIcon} className="images-fluid" />
-          Transactions
+          {local_Strings.navigationItem2}
         </a>
       </li>
       <TransactionsListing

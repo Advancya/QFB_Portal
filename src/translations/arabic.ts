@@ -83,7 +83,7 @@ const ar = {
 
   WelcomeScreenMsg:
     "أهلا بك {0} في بنك QFB ، نحن سعداء بخدمتك وكونك عميل ، ونأمل أن نلبي جميع احتياجاتك ..",
-  WelcomeScreenTitle: "أهلا بك",
+  WelcomeScreenTitle: "مدير العلاقات",
   WelcomeScreenPopUpTitle: "اطلب معاودة الاتصال بي",
   WelcomeScreenPopUpMessage: "تم إرسال طلبك إلى ",
   WelcomeScreenClose: "أغلق",
@@ -579,6 +579,24 @@ const ar = {
 
   pagingNext: "التالى",
   pagingPrevious: "السابق",
+
+  navigationUserMessage: "مرحبا ، أحمد محمد أحمد محمد",
+  navigationItem1: "القابضة",
+  navigationItem2: "المعاملات",
+  navigationItem3: "العروض",
+  navigationItem4: "الطلبات",
+  navigationItem5: "الرسائل",
+  navigationItem6: "إشعارات",
+
+  topBarRightItem1: "تعليمات التسوية القياسية",
+  topBarRightItem2: "قائمة الوثائق",
+  topBarRightItem3: "إعدادات",
+  topBarRightItem4: "اتصل بنا",
+
+  landingInboxTitle: "صندوق الوارد",
+  landingMore: "عرض المزيد",
+  dummyTitle: "العنوان يذهب هنا",
+  dummyDesc: "أبجد هوز دولور الجلوس امات، consectetur adipis.",
 };
 
 export default ar;

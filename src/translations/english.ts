@@ -81,7 +81,7 @@ const en = {
 
   DrawerContentHomeLabel: "Home",
   DrawerContentSwitchLangLabel: "العربية",
-  WelcomeScreenTitle: "Welcome",
+  WelcomeScreenTitle: "Relation Manager",
   WelcomeScreenMsg:
     "Welcome {0} to QFB bank, we are glade to serve you and have you as a customer, we hope to satisfy all your needs..",
   WelcomeScreenPopUpTitle: "CALL ME BACK RREQUSET",
@@ -555,7 +555,7 @@ const en = {
   OfferSavedMessage: "New Offer has been saved successfully!",
   OfferDeletedMessage: "An Offer has been deleted successfully!",
   searchPlaceholder: "Search",
-  /***Web** */
+  /***Web***/
   footerTxt:
     "Qatar First Bank LLC(Public) is authorized by QFCRA under license No.00091 and listed on the Qatar Stock Exchange Sitemap | ",
   footerTxtTerms: "Terms and Conditions",
@@ -586,6 +586,24 @@ const en = {
 
   pagingNext: "Next",
   pagingPrevious: "Previous",
+
+  navigationUserMessage: "Welcome, Ahmed Mohamed Ahmed Mohamed",
+  navigationItem1: "Holdings",
+  navigationItem2: "Transactions",
+  navigationItem3: "Offers",
+  navigationItem4: "Requests",
+  navigationItem5: "Messages",
+  navigationItem6: "Notifications",
+
+  topBarRightItem1: "Standard Settlements Instructions",
+  topBarRightItem2: "Documents Listing",
+  topBarRightItem3: "Settings",
+  topBarRightItem4: "Contact Us",
+
+  landingInboxTitle: "Inbox",
+  landingMore: "View More",
+  dummyTitle: "Title Goes Here",
+  dummyDesc: "Lorem ipsum dolor sit amet, consectetur adipi.",
 };
 
 export default en;

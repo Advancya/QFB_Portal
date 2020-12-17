@@ -58,7 +58,7 @@ function AuthOffersLanding(authOffersLandingProps: iAuthOffersLanding) {
       <li className="nav-item">
         <a className="nav-link" onClick={handleShowAuthOffersListing} href="#">
           <img src={offerIcon} className="images-fluid" />
-          Offers
+          {local_Strings.navigationItem3}
         </a>
       </li>
       <AuthOffersListing

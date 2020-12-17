@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import InboxDetails from "./InboxDetails";
 import InboxListing from "./InboxListing";
+import { localStrings as local_Strings } from "../../translations/localStrings";
+
 interface iInboxLanding {
   showInboxDetailsModal: () => void;
 }
@@ -31,9 +33,9 @@ function InboxLanding(inboxLandingProps: iInboxLanding) {
   return (
     <div className="box pb-0 min-h-16">
       <div className="box-header">
-        <h3>Inbox</h3>
+        <h3>{local_Strings.landingInboxTitle}</h3>
         <a href="#" className="viewLink" onClick={handleShowInboxListing}>
-          View All <i className="fa fa-arrow-right"></i>
+          {local_Strings.landingMore} <i className="fa fa-arrow-right"></i>
         </a>
       </div>
       <ul className="box-list">
@@ -44,10 +46,10 @@ function InboxLanding(inboxLandingProps: iInboxLanding) {
             onClick={inboxLandingProps.showInboxDetailsModal}
           >
             <h4>
-              <span className="unread">Title Goes Here</span>
+              <span className="unread">{local_Strings.dummyTitle}</span>
               <small>02/08/2020 &nbsp; 01:57 pm</small>
             </h4>
-            <p>Lorem ipsum dolor sit amet, consectetur adipi.</p>
+            <p>{local_Strings.dummyDesc}</p>
           </a>
         </li>
         <li>
@@ -57,10 +59,10 @@ function InboxLanding(inboxLandingProps: iInboxLanding) {
             onClick={inboxLandingProps.showInboxDetailsModal}
           >
             <h4>
-              <span>Title Goes Here</span>
+              <span className="unread">{local_Strings.dummyTitle}</span>
               <small>02/08/2020 &nbsp; 01:57 pm</small>
             </h4>
-            <p>Lorem ipsum dolor sit amet, consectetur adipi.</p>
+            <p>{local_Strings.dummyDesc}</p>
           </a>
         </li>
         <li>
@@ -70,10 +72,10 @@ function InboxLanding(inboxLandingProps: iInboxLanding) {
             onClick={inboxLandingProps.showInboxDetailsModal}
           >
             <h4>
-              <span>Title Goes Here</span>
+              <span className="unread">{local_Strings.dummyTitle}</span>
               <small>02/08/2020 &nbsp; 01:57 pm</small>
             </h4>
-            <p>Lorem ipsum dolor sit amet, consectetur adipi.</p>
+            <p>{local_Strings.dummyDesc}</p>
           </a>
         </li>
       </ul>

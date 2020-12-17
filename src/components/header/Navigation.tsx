@@ -7,13 +7,14 @@ import { Switch, Route, Link } from "react-router-dom";
 import Requests from "../requests/Requests";
 import Transactions from "../transactions/Transactions";
 import AuthOffersLanding from "../AuthOffers/AuthOffersLanding";
+import { localStrings as local_Strings } from "../../translations/localStrings";
 
 function Navigation() {
   return (
     <div className="col-md-7">
       <div className="welcomeText text-right">
         <Link to="/" className="">
-          Welcome, Ahmed Mohamed Ahmed Mohamed
+          {local_Strings.navigationUserMessage}
           <i className="fa fa-user-circle-o"></i>
         </Link>
       </div>
@@ -27,7 +28,7 @@ function Navigation() {
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          MENU <span className="fa fa-bars"></span>
+          <span className="fa fa-bars"></span>
         </button>
         <div
           className="collapse navbar-collapse justify-content-end"
@@ -37,7 +38,7 @@ function Navigation() {
             <li className="nav-item active">
               <Link className="nav-link" to="/">
                 <img src={holdingsIcon} className="images-fluid" />
-                Holdings
+                {local_Strings.navigationItem1}
               </Link>
             </li>
 

@@ -5,6 +5,7 @@ import CashListing from "./CashListing";
 import CashDetails from "./CashDetails";
 import { AuthContext } from "../../../providers/AuthProvider";
 import { PortfolioContext } from "../../../pages/Homepage";
+import { localStrings as local_Strings } from "../../../translations/localStrings";
 
 function Cash() {
   const currentContext = useContext(AuthContext);
@@ -41,8 +42,12 @@ function Cash() {
             <img src={cashIcon} className="img-fluid" />
           </div>
           <a href="#" className="ib-text" onClick={handleShowCashListing}>
-            <h4>Cash</h4>
-            <h5>{userPortfolio.totalCash + " " + currentContext.userSettings.currency}</h5>
+            <h4>{local_Strings.PortfolioAssetsOption1}</h4>
+            <h5>
+              {userPortfolio.totalCash +
+                " " +
+                currentContext.userSettings.currency}
+            </h5>
           </a>
         </div>
       </div>

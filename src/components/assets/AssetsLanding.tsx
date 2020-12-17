@@ -4,6 +4,7 @@ import Investments from "./investments/Investments";
 import Deposite from "./deposite/Deposite";
 import { AuthContext } from "../../providers/AuthProvider";
 import { PortfolioContext } from "../../pages/Homepage";
+import { localStrings as local_Strings } from "../../translations/localStrings";
 
 function AssetsLanding() {
   const currentContext = useContext(AuthContext);
@@ -11,9 +12,10 @@ function AssetsLanding() {
 
   return (
     <div className="box min-h-16">
-      <h3 className="mt-1">Assets</h3>
+      <h3 className="mt-1">{local_Strings.PortfolioAssetsTitle}</h3>
       <h2 className="mb-2">
-        {userPortfolio.totalAssets + " "}<small>{currentContext.userSettings.currency}</small>
+        {userPortfolio.totalAssets + " "}
+        <small>{currentContext.userSettings.currency}</small>
       </h2>
 
       <div className="inner-boxes">

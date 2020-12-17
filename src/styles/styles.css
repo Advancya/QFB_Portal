@@ -1071,12 +1071,21 @@ ul.box-list a:hover h4 small, ul.box-list a:hover p {
   background-color: #e2dad7;
 }
 
-.table-box table th:first-child {
+[dir="ltr"] .table-box table th:first-child {
   border-radius: 1rem 0 0 0;
 }
 
-.table-box table th:last-child {
+[dir="ltr"] .table-box table th:last-child {
   border-radius: 0 1rem 0 0;
+}
+
+[dir="rtl"] .table-box table th:first-child {
+  border-radius: 1rem 0 0 0;
+  border-radius: 0 1rem 0 0;
+}
+
+[dir="rtl"] .table-box table th:last-child {
+  border-radius: 1rem 0 0 0;
 }
 
 /*.table-box .table-striped tbody tr:nth-of-type(odd)  {background-color: #f6f1ee;}*/
@@ -1329,7 +1338,7 @@ tr.shown {
   border-top-left-radius: 8px;
 }
 
-[dir=rtl] .fa-chevron-left, [dir=rtl] .fa-chevron-right, [dir=rtl] .fa-arrow-right {
+[dir=rtl] .fa-chevron-left, [dir=rtl] .fa-chevron-right, [dir=rtl] .fa-arrow-right, [dir=rtl] .fa-caret-right {
   -webkit-transform: rotate(180deg);
   -moz-transform: rotate(180deg);
   -ms-transform: rotate(180deg);

@@ -6,6 +6,7 @@ import RequestsListing from "./RequestsListing";
 import RequestsDetails from "./RequestsDetails";
 import NewRequest from "./NewRequest";
 import requestIcon from "../../images/request-icon.svg";
+import { localStrings as local_Strings } from "../../translations/localStrings";
 
 function Requests() {
   const [showRequestsListing, setShowRequestsListing] = useState(false);
@@ -50,7 +51,7 @@ function Requests() {
       <li className="nav-item">
         <a className="nav-link" href="#" onClick={handleShowRequestsListing}>
           <img src={requestIcon} className="images-fluid" />
-          Requests
+          {local_Strings.navigationItem4}
         </a>
       </li>
       <RequestsListing

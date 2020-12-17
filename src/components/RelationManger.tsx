@@ -6,7 +6,7 @@ import emailIcon from "../images/email.svg";
 import { Carousel } from "react-bootstrap";
 import { AuthContext } from "../providers/AuthProvider";
 import { GetUserWelcomeData } from "../services/cmsService";
-import { localStrings as local_Strings } from '../translations/localStrings';
+import { localStrings as local_Strings } from "../translations/localStrings";
 
 interface ItemProps {
   accountOfficer?: string;
@@ -19,7 +19,7 @@ interface ItemProps {
   //callmeBackLink: string;
 }
 
-interface CustomCarouselProps { }
+interface CustomCarouselProps {}
 interface RenderItemProps {
   item: ItemProps;
   index: number;
@@ -46,30 +46,28 @@ function RelationManger() {
       activeIndex={index}
       onSelect={handleSelect}
       controls={false}
-
     >
-      {
-        carouselItems && carouselItems.length > 0 &&
-        carouselItems.map((item, index) =>
-
+      {carouselItems &&
+        carouselItems.length > 0 &&
+        carouselItems.map((item, index) => (
           <Carousel.Item key={index}>
             <div className="box min-h-24">
               <div className="box-header">
-                <h3>Relation Manager</h3>
+                <h3>{local_Strings.WelcomeScreenTitle}</h3>
               </div>
               <ul className="box-list">
                 <li>
                   <div className="box-list-details">
-                    <h5>RM Name</h5>
-                    <h4 className="">{item.name || ""}</h4>
+                    <h5> {local_Strings.WelcomeScreenRMNameLabel}</h5>
+                    <h6 className="">{item.name || ""}</h6>
                   </div>
                 </li>
                 <li>
                   <div className="box-list-details">
                     <div className="row no-gutters align-items-center">
                       <div className="col-8">
-                        <h5>Phone Number</h5>
-                        <h4 className="">{item.telephone || ""}</h4>
+                        <h5> {local_Strings.WelcomeScreenRMPhoneLabel}</h5>
+                        <h6 className="">{item.telephone || ""}</h6>
                       </div>
                       <div className="col-4 text-right">
                         <a href="#" className="actionIcon">
@@ -83,17 +81,17 @@ function RelationManger() {
                   <div className="box-list-details">
                     <div className="row no-gutters align-items-center">
                       <div className="col-6">
-                        <h5>Mobile Number</h5>
-                        <h4 className="">{item.rmMobile || ""}</h4>
+                        <h5>{local_Strings.WelcomeScreenRMMobileLabel}</h5>
+                        <h6 className="">{item.rmMobile || ""}</h6>
                       </div>
                       <div className="col-6 text-right">
                         <a href="#" className="actionIcon mx-1">
-                          SMS
-                    <img src={messageIcon} className="img-fluid" />
+                          {local_Strings.WelcomeScreenSMS}
+                          <img src={messageIcon} className="img-fluid" />
                         </a>
                         <a href="#" className="actionIcon mx-1">
-                          CALL
-                    <img src={cellPhoneIcon} className="img-fluid" />
+                          {local_Strings.WelcomeScreenCall}
+                          <img src={cellPhoneIcon} className="img-fluid" />
                         </a>
                       </div>
                     </div>
@@ -102,11 +100,13 @@ function RelationManger() {
                 <li>
                   <div className="box-list-details">
                     <div className="row no-gutters align-items-center">
-                      <div className="col-9">
-                        <h5>Email</h5>
-                        <h4 className="">{item.rmEmail || ""}</h4>
+                      <div className="col-10">
+                        <h5>{local_Strings.WelcomeScreenEmail}</h5>
+                        <h6 className="text-break d-block">
+                          {item.rmEmail || ""}
+                        </h6>
                       </div>
-                      <div className="col-3 text-right">
+                      <div className="col-2 text-right">
                         <a href="#" className="actionIcon">
                           <img src={emailIcon} className="img-fluid" />
                         </a>
@@ -118,12 +118,11 @@ function RelationManger() {
               <div className="text-center px-3">
                 <a className="btn btn-primary btn-block" href="#">
                   {local_Strings.WelcomeScreenEmail}
-          </a>
+                </a>
               </div>
             </div>
           </Carousel.Item>
-        )
-      }
+        ))}
     </Carousel>
   );
 }

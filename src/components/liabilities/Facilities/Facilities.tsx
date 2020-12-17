@@ -7,7 +7,7 @@ import FacilitiesOutstandingPayment from "./FacilitiesOutstandingPayment";
 import FacilitiesHistoricalPayment from "./FacilitiesHistoricalPayment";
 import { AuthContext } from "../../../providers/AuthProvider";
 import { PortfolioContext } from "../../../pages/Homepage";
-
+import { localStrings as local_Strings } from "../../../translations/localStrings";
 
 function Facilities() {
   const currentContext = useContext(AuthContext);
@@ -79,8 +79,12 @@ function Facilities() {
             <img src={facilitiesIcon} className="img-fluid" />
           </div>
           <a href="#" className="ib-text" onClick={handleShowFacilitiesListing}>
-            <h4>Facilities</h4>
-            <h5>{userPortfolio.totalLoans + " " + currentContext.userSettings.currency}</h5>
+            <h4>{local_Strings.PortfolioLiabilitiesOption1}</h4>
+            <h5>
+              {userPortfolio.totalLoans +
+                " " +
+                currentContext.userSettings.currency}
+            </h5>
           </a>
         </div>
       </div>

@@ -5,6 +5,7 @@ import GuaranteesListing from "./GuaranteesListing";
 import GuaranteesDetails from "./GuaranteesDetails";
 import { AuthContext } from "../../../providers/AuthProvider";
 import { PortfolioContext } from "../../../pages/Homepage";
+import { localStrings as local_Strings } from "../../../translations/localStrings";
 
 function Guarantees() {
   const currentContext = useContext(AuthContext);
@@ -41,8 +42,12 @@ function Guarantees() {
             <img src={guarantiesIcon} className="img-fluid" />
           </div>
           <a href="#" className="ib-text" onClick={handleShowGuaranteesListing}>
-            <h4>Guarantees</h4>
-            <h5>{userPortfolio.totalGuarantees + " " + currentContext.userSettings.currency}</h5>
+            <h4>{local_Strings.PortfolioLiabilitiesOption2}</h4>
+            <h5>
+              {userPortfolio.totalGuarantees +
+                " " +
+                currentContext.userSettings.currency}
+            </h5>
           </a>
         </div>
       </div>
