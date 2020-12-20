@@ -87,7 +87,7 @@ function HomePage() {
     axios
       .all([requestOne, requestTwo])
       .then((responseData: any) => {
-        if (isMounted && responseData && responseData.length > 0) {
+        if (isMounted && responseData && responseData.length > 0 && responseData[0] && responseData[0][0]) {
           if (responseData[1].length > 0) {
             setUserPortfolio({
               ...responseData[0][0],
@@ -104,7 +104,7 @@ function HomePage() {
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, []);
+  }, [currentContext.cif]);
 
   return (
     <div>

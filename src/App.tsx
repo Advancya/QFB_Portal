@@ -41,8 +41,7 @@ function App() {
         <div id="main-section" className="main-section pt-4">
           <div className="container-fluid">
             <div className="row">
-              <Login />
-
+              <Login setUserCredentials={() => {}} showOTP={() => {}} />
               <div className="col-lg-4 col-container flex-column">
                 <Register />
                 <AppBox />

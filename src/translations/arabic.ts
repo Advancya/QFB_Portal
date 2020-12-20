@@ -597,6 +597,8 @@ const ar = {
   landingMore: "عرض المزيد",
   dummyTitle: "العنوان يذهب هنا",
   dummyDesc: "أبجد هوز دولور الجلوس امات، consectetur adipis.",
+
+  otpErrorMessage: "الكود غير صحيح",
 };
 
 export default ar;

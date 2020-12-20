@@ -604,6 +604,8 @@ const en = {
   landingMore: "View More",
   dummyTitle: "Title Goes Here",
   dummyDesc: "Lorem ipsum dolor sit amet, consectetur adipi.",
+
+  otpErrorMessage: "Incorrect OTP code",
 };
 
 export default en;

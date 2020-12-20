@@ -1,6 +1,7 @@
 {
   "config": {
     "client_id": "ro.client",
+    "m_client_id": "m.m.client",
     "client_secret": "secret",
     "scope": "api1",
     "grant_type": "password"

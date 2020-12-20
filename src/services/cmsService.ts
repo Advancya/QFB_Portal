@@ -17,7 +17,7 @@ async function generateRegistrationToken() {
       "connect/token",
       queryString.stringify({
         grant_type: "client_credentials",
-        client_id: oidc.config.client_id,
+        client_id: oidc.config.m_client_id,
         client_secret: oidc.config.client_secret,
         scope: oidc.config.scope,
       }),

@@ -137,3 +137,13 @@ export const emptyOfferSubscriptions = {
   subscriptionDate: "",
   offer: "",
 }
+
+export interface IInboxDetail {
+  adviceType: string;
+  adviceDate: string;
+  dateRange: string;
+  description: string;
+  pdfName: string;
+  isRead: boolean;
+  pdfUrl: string;
+}

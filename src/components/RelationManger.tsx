@@ -37,7 +37,7 @@ function RelationManger() {
     GetUserWelcomeData(auth.cif).then((s) => {
       setCarouselItems(s);
     });
-  }, []);
+  }, [auth.cif]);
 
   return (
     <Carousel

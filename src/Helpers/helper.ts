@@ -107,16 +107,6 @@ export interface IRequestFilter {
   Status: string;
   Type: string;
 }
-
-export interface IInboxDetail {
-  adviceType: string;
-  adviceDate: string;
-  dateRange: string;
-  description: string;
-  pdfName: string;
-  isRead: boolean;
-}
-
 export interface INotificationListing {
   id: string;
   messageTitle: string;

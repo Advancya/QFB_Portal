@@ -7,12 +7,19 @@ import { AuthContext, User } from "../providers/AuthProvider";
 import InvalidFieldError from '../shared/invalid-field-error';
 import { localStrings as local_Strings } from '../translations/localStrings';
 import * as helper from '../Helpers/helper';
+import { SendOTP } from "../services/cmsService";
 
-function Login() {
+interface IProps {
+  setUserCredentials: any;
+  showOTP: any;
+}
+
+const Login: React.FC<IProps> = (props) => {
+
   const history = useHistory();
   const auth = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
-  const initialValues: User = { username: "", password: "" };
+  const initialValues: User = { username: "", password: "", otp: "" };
   local_Strings.setLanguage(auth.language);
 
   const loginFormValidationSchema = yup.object({
@@ -21,19 +28,24 @@ function Login() {
   });
 
   const submitLogin = async (values: User) => {
-    
+
     setLoading(true);
-    const x = await auth.login(values);
-    if (x) {
-      history.push(`/${auth.language}/Home`);
-    } else {
-      console.log("Error Login");
-    }
-    setLoading(false);
+    SendOTP(values.username)
+      .then((res) => {
+        props.setUserCredentials({
+          username: values.username,
+          password: values.password,
+          otp: "",
+        });
+        props.showOTP(true);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
-  useEffect(() => {    
-    
+  useEffect(() => {
+
   }, []);
 
   return (
@@ -43,7 +55,7 @@ function Login() {
           <h3>{local_Strings.LoginWithCredentialsTitle}</h3>
         </div>
         <Formik
-          initialValues={{ username: "", password: "" }}
+          initialValues={initialValues}
           validationSchema={loginFormValidationSchema}
           onSubmit={(values) => submitLogin(values)}
         >
@@ -59,9 +71,9 @@ function Login() {
               <div className="form-group">
                 <label>{local_Strings.LoginWithCredentialsUserNameLabel}</label>
                 <input type="text" className="form-control" id="usernameField"
-                value={values.username || ""}
-                onChange={handleChange("username")}
-                onBlur={handleBlur("username")} />
+                  value={values.username || ""}
+                  onChange={handleChange("username")}
+                  onBlur={handleBlur("username")} />
                 {touched.username && errors.username && InvalidFieldError(errors.username)}
               </div>
               <div className="form-group">
@@ -77,8 +89,8 @@ function Login() {
               </div>
               <div className="form-group text-right">
                 <a href="#" className="forgotLink">
-                {local_Strings.LoginWithCredentialsPasswordResetLabel}
-            </a>
+                  {local_Strings.LoginWithCredentialsPasswordResetLabel}
+                </a>
               </div>
               <div className="form-group">
 
@@ -89,28 +101,7 @@ function Login() {
               </div>
             </div>
           )}
-        </Formik>
-        <div className="box-body d-none" id="OtpBox">
-          <p>You'll receive an sms with the OTP number</p>
-          <div className="form-group">
-            <label>Enter OTP</label>
-            <input type="password" className="form-control" id="otpField" />
-          </div>
-          <div className="form-group text-right">
-            <a href="#" className="forgotLink">
-              Resend OTP ?
-            </a>
-          </div>
-          <div className="form-group">
-            <Link
-              to={`/${auth.language}/Home`}
-              id="confirmBtn"
-              className="btn btn-primary btn-block"
-            >
-              Confirm
-            </Link>
-          </div>
-        </div>
+        </Formik>        
       </div>
     </div>
   );
