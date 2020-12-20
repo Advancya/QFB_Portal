@@ -62,6 +62,7 @@ function NotificationsForm(props: DetailsProps) {
   const { addToast } = useToasts();
   const [isLoading, setLoading] = useState(false);
   const formValidationSchema = yup.object({
+    cifs: yup.string().nullable().min(1).required("Select at least one customer"),
     messageTitle: yup.string().nullable().required("Subject is required"),
     messageTitleAr: yup.string().nullable().required("Arabic Subject is required"),
     expiryDate: yup.string().nullable().required("Expire date is required"),
@@ -200,7 +201,7 @@ function NotificationsForm(props: DetailsProps) {
           />}
         />
         <Formik
-          initialValues={data}
+          initialValues={{...data, cifs: selectedCustomer}}
           validationSchema={formValidationSchema}
           onSubmit={(values) => submitTheRecord(values)}
           enableReinitialize={true}
@@ -226,7 +227,7 @@ function NotificationsForm(props: DetailsProps) {
                     onChange={setSelected}
                     labelledBy={"Select"}
                   />
-                  {touched.messageTitle && errors.messageTitle && InvalidFieldError(errors.messageTitle)}
+                  {touched.cifs && errors.cifs && InvalidFieldError(errors.cifs.toString())}
                 </div>
                 <div className="form-group">
                   <label className="mb-1 text-600">{local_Strings.NotificationsNameLabel}</label>
