@@ -218,6 +218,7 @@ const ar = {
   OutstandingPaymentsText: "المدفوعات المعلقة",
   ViewOutstandingPayments: "عرض المدفوعات المعلقة",
 
+  TransactionScreenFilter_None: "--SELECT--",
   TransactionScreenFilter_LastWeek: "الاسبوع الماضي",
   TransactionScreenFilter_LastMonth: "الشهر الماضي",
   TransactionScreenFilter_Last3Months: "آخر 3 أشهر",

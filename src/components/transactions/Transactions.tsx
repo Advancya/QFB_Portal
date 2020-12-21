@@ -10,10 +10,11 @@ import NewBeneficiary from "../beneficiaries/NewBeneficiaries";
 import BeneficiariesDetails from "../beneficiaries/BeneficiariesDetails";
 import BeneficiariesListing from "../beneficiaries/BeneficiariesListing";
 import { localStrings as local_Strings } from "../../translations/localStrings";
+import { emptyTransactionDetail, ITransactionDetail } from "../../Helpers/publicInterfaces";
 
 function Transactions() {
   const [showTransactionsListing, setShowTransactionsListing] = useState(false);
-
+  const [item, setDetail] = useState<ITransactionDetail>(emptyTransactionDetail);
   const handleCloseTransactionsListing = () => {
     setShowTransactionsListing(false);
   };
@@ -25,8 +26,9 @@ function Transactions() {
 
   const handleCloseTransactionsDetails = () =>
     setshowTransactionsDetails(false);
-  const handleShowTransactionsDetails = () => {
+  const handleShowTransactionsDetails = (detail: ITransactionDetail) => {
     handleCloseTransactionsListing();
+    setDetail(detail);
     setshowTransactionsDetails(true);
   };
   const handleBackTransactionsDetails = () => {
@@ -116,36 +118,37 @@ function Transactions() {
         showTransactionsDetailsModal={handleShowTransactionsDetails}
         showNewTransactionModal={handleShowNewTransaction}
         showBeneficiariesListing={handleShowBeneficiariesListing}
-      ></TransactionsListing>
+      />
       <TransactionsDetails
         showTransactionsDetailsModal={showTransactionsDetails}
         hideTransactionsDetailsModal={handleCloseTransactionsDetails}
         backTransactionsListingModal={handleBackTransactionsDetails}
         showNewTransactionModal={handleShowNewTransaction}
-      ></TransactionsDetails>
+        item={item}
+      />
       <NewTransaction
         showNewTransactionModal={showNewTransaction}
         hideNewTransactionModal={handleCloseNewTransaction}
         backNewTransactionModal={handleBackNewTransaction}
-      ></NewTransaction>
+      />
       <BeneficiariesListing
         showBeneficiariesListingModal={showBeneficiariesListing}
         hideBeneficiariesListingModal={handleCloseBeneficiariesListing}
         showBeneficiariesDetailsModal={handleShowBeneficiariesDetails}
         backBeneficiariesListingModal={handleBackBeneficiariesListing}
         showNewBeneficiaryModal={handleShowNewBeneficiary}
-      ></BeneficiariesListing>
+      />
       <BeneficiariesDetails
         showBeneficiariesDetailsModal={showBeneficiariesDetails}
         hideBeneficiariesDetailsModal={handleCloseBeneficiariesDetails}
         backBeneficiariesDetailsgModal={handleBackBeneficiariesDetails}
         showNewBeneficiaryModal={handleShowNewBeneficiary}
-      ></BeneficiariesDetails>
+      />
       <NewBeneficiary
         showNewBeneficiaryModal={showNewBeneficiary}
         hideNewBeneficiaryModal={handleCloseNewBeneficiary}
         backNewBeneficiaryModal={handleBackNewBeneficiary}
-      ></NewBeneficiary>
+      />
     </div>
   );
 }

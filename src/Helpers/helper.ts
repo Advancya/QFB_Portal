@@ -1,5 +1,5 @@
 import moment from "moment";
-
+import { ICommonFilter, ITransactionDetail } from "./publicInterfaces"
 
 export interface ITransactionFilter {
   exposeFilter: boolean,
@@ -25,7 +25,7 @@ export interface ITransaction {
   trxDescirption: string,
 }
 
-export const getLanguage = () => {    
+export const getLanguage = () => {
   return window.location.pathname.split("/")[1];
 }
 
@@ -81,25 +81,6 @@ export interface IRequestDetail {
   requestStatusAR?: string;
 }
 
-export interface ITransactionDetail {
-  id: number;
-  transactionDate: string;
-  requestDate: string;
-  transferFromAccount: string;
-  transferToAccount: string;
-  amount: string;
-  currency: string;
-  description: string;
-  status: string;
-  transactionTypeId: string;
-  beneficiaryId: string;
-  requestStatus?: string;
-  requestSubject?: string;
-  requestSubjectAR?: string;
-  requestStatusAR?: string;
-  beneficiaryFullName?: string;
-}
-
 export interface IRequestFilter {
   DateOption: string;
   StartDate?: Date;
@@ -153,9 +134,9 @@ export const filterTransactions = (
       filteredTransactions = transactions.filter(
         (t) =>
           moment(t.bookingDate ? t.bookingDate : t.installmentDate).toDate() >=
-            moment(filter.StartDate).toDate() &&
+          moment(filter.StartDate).toDate() &&
           moment(t.bookingDate ? t.bookingDate : t.installmentDate).toDate() <=
-            moment(filter.EndDate).toDate()
+          moment(filter.EndDate).toDate()
       );
       break;
     default:
@@ -246,9 +227,9 @@ export const filterRequests = (
       filteredRequests = transactions.filter(
         (t) =>
           moment(t.requestCreateDate).toDate() >=
-            moment(filter.StartDate).toDate() &&
+          moment(filter.StartDate).toDate() &&
           moment(t.requestCreateDate).toDate() <=
-            moment(filter.EndDate).toDate()
+          moment(filter.EndDate).toDate()
       );
       break;
     default:
@@ -274,57 +255,79 @@ export const filterRequests = (
 
 export const filterTransactionList = (
   transactions: ITransactionDetail[],
-  filter: IRequestFilter
+  filter: ICommonFilter
 ) => {
-  let filteredRequests = [] as ITransactionDetail[];
+  let filteredTransactions = [] as ITransactionDetail[];
   switch (filter.DateOption) {
     case "1":
-      filteredRequests = transactions.filter(
+      filteredTransactions = transactions.filter(
         (t) =>
           moment(t.transactionDate).toDate() >=
           moment().subtract(1, "week").toDate()
       );
       break;
     case "2":
-      filteredRequests = transactions.filter(
+      filteredTransactions = transactions.filter(
         (t) =>
           moment(t.transactionDate).toDate() >=
           moment().subtract(1, "month").toDate()
       );
       break;
     case "3":
-      filteredRequests = transactions.filter(
+      filteredTransactions = transactions.filter(
         (t) =>
           moment(t.transactionDate).toDate() >=
           moment().subtract(3, "month").toDate()
       );
       break;
     case "4":
-      filteredRequests = transactions.filter(
+      filteredTransactions = transactions.filter(
         (t) =>
           moment(t.transactionDate).toDate() >=
-            moment(filter.StartDate).toDate() &&
+          moment(filter.StartDate).toDate() &&
           moment(t.transactionDate).toDate() <= moment(filter.EndDate).toDate()
       );
       break;
     default:
-      filteredRequests = transactions;
+      filteredTransactions = transactions;
       break;
   }
 
-  if (filter.Status && filter.Status !== "0") {
-    filteredRequests = filteredRequests.filter(
-      (t) => String(t.status).toLowerCase() === filter.Status.toLowerCase()
-    );
+  if (
+    filter.AmountOperator &&
+    filter.AmountOperator !== "" &&
+    filter.Amount !== ""
+  ) {
+    switch (filter.AmountOperator) {
+      case "=":
+        filteredTransactions = filteredTransactions.filter(
+          (t) => parseFloat(t.amount) === parseFloat(filter.Amount)
+        );
+        break;
+      case ">=":
+        filteredTransactions = filteredTransactions.filter(
+          (t) => parseFloat(t.amount) >= parseFloat(filter.Amount)
+        );
+        break;
+      case ">":
+        filteredTransactions = filteredTransactions.filter(
+          (t) => parseFloat(t.amount) > parseFloat(filter.Amount)
+        );
+        break;
+      case "<=":
+        filteredTransactions = filteredTransactions.filter(
+          (t) => parseFloat(t.amount) <= parseFloat(filter.Amount)
+        );
+        break;
+      case "<":
+        filteredTransactions = filteredTransactions.filter(
+          (t) => parseFloat(t.amount) < parseFloat(filter.Amount)
+        );
+        break;
+    }
   }
 
-  if (filter.Type && filter.Type !== "0") {
-    filteredRequests = filteredRequests.filter(
-      (t) => String(t.transactionTypeId) === String(filter.Type)
-    );
-  }
-
-  return filteredRequests;
+  return filteredTransactions;
 };
 
 export const filterReadableList = (
@@ -375,16 +378,16 @@ export const transformingStringToJSON = (input: string[], language: string) => {
         const valueStr =
           language === "en"
             ? languageSpecificStr
-                .replace(":", "")
-                .trim()
-                .substr(
-                  valueStrIndex + 1,
-                  languageSpecificStr.replace(":", "").trim().length
-                )
+              .replace(":", "")
+              .trim()
+              .substr(
+                valueStrIndex + 1,
+                languageSpecificStr.replace(":", "").trim().length
+              )
             : languageSpecificStr
-                .replace(":", "")
-                .trim()
-                .substr(0, valueStrIndex);
+              .replace(":", "")
+              .trim()
+              .substr(0, valueStrIndex);
         outputJSONStr =
           outputJSONStr +
           `"${uniquePropStr}": {"label": "${labelStr}", "value": "${valueStr}"},`;
@@ -499,17 +502,17 @@ export const prepareInvestmentHoldings1stDrill = (
     chartData.map((item: any) => {
       i == 0
         ? data.push({
-            y: item.nominalAmount || item.investmentAmount,
-            key: item.subAssetId,
-            name: item.secDescirption,
-            color: "#724B44",
-          })
+          y: item.nominalAmount || item.investmentAmount,
+          key: item.subAssetId,
+          name: item.secDescirption,
+          color: "#724B44",
+        })
         : data.push({
-            y: item.invRecievedProfit,
-            key: item.subAssetId,
-            name: item.secDescirption,
-            color: "#B39758",
-          });
+          y: item.invRecievedProfit,
+          key: item.subAssetId,
+          name: item.secDescirption,
+          color: "#B39758",
+        });
     });
 
     series.push({

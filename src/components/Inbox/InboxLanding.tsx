@@ -92,7 +92,7 @@ function InboxLanding(inboxLandingProps: iInboxLanding) {
         {data &&
           data.length > 0 &&
           data.slice(0, 3).map((item, index) =>
-            <li>
+            <li key={index}>
               <a
                 href="#"
                 className="d-block"

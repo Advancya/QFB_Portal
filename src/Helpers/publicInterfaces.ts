@@ -147,3 +147,64 @@ export interface IInboxDetail {
   isRead: boolean;
   pdfUrl: string;
 }
+
+export interface IRequestDetail {
+  id: number;
+  requestCreateDate: string;
+  remarks: string;
+  requestStatus: string;
+  requestTypeId: string;
+  requestSubject: string;
+  requestSubjectAR?: string;
+  requestStatusAR?: string;
+}
+
+export interface ITransactionDetail {
+  id: number;
+  transactionDate: string;
+  requestDate: string;
+  transferFromAccount: string;
+  transferToAccount: string;
+  amount: string;
+  currency: string;
+  description: string;
+  status: string;
+  transactionTypeId: number;
+  beneficiaryId: string;
+  requestStatus?: string;
+  requestSubject?: string;
+  requestSubjectAR?: string;
+  requestStatusAR?: string;
+  beneficiaryFullName?: string;
+}
+
+export const emptyTransactionDetail = {
+  id: 0,
+  transactionDate: "",
+  requestDate: "",
+  transferFromAccount: "",
+  transferToAccount: "",
+  amount: "",
+  currency: "",
+  description: "",
+  status: "",
+  transactionTypeId: 0,
+  beneficiaryId: "",
+}
+
+export interface ICommonFilter {
+  filterApplied: boolean;
+  DateOption: string;
+  StartDate?: Date;
+  EndDate?: Date;
+  AmountOperator: string;
+  Amount: string;
+}
+
+export interface IRequestFilter {
+  DateOption: string;
+  StartDate?: Date;
+  EndDate?: Date;
+  Status: string;
+  Type: string;
+}
