@@ -878,6 +878,17 @@ const GetAllOfferSubscriptions = async () => {
   }
 };
 
+const GetAllRequestTypes = async () => {
+  try {
+    const result = await apiInstance.get(`/api/RequestTypes`);
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
 export {
   GetStockData,
   ValidateRegisterData,
@@ -942,5 +953,6 @@ export {
   AddNewOffer,
   DeleteOfferById,
   UpdateOfferDetail,
-  GetAllOfferSubscriptions
+  GetAllOfferSubscriptions,
+  GetAllRequestTypes
 };

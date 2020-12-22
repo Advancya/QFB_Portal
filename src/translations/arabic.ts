@@ -137,7 +137,7 @@ const ar = {
   CashDetailsBeneficiaryAccount: "حساب المستفيد",
   CashDetailsPaymentDetails: "بيانات الدفع",
 
-  ScrollForMoreLabel: "انتقل إلى المزيد",
+  ScrollForMoreLabel: "أكثر",
   CaretIconRight: "caretleft",
 
   DepositeListingTitle: "قائمة حساب الإيداع",
@@ -498,6 +498,7 @@ const ar = {
   MessageFilter_Read: "مقروءة",
   MessageFilter_UnRead: "غير مقروءة",
   MessageFilter_All: "كل الرسائل",
+  
   MyBeneficiariesAddNew: "اضافة مستفيد جديد",
   ProductsAndOffersAddNew: "اضافة جديد",
   ProductsAndOffersNameLabel: "Name ",

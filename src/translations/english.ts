@@ -136,7 +136,7 @@ const en = {
   CashDetailsBeneficiaryAccount: "Beneficiary Account",
   CashDetailsPaymentDetails: "Payment Details",
 
-  ScrollForMoreLabel: "Scroll for More",
+  ScrollForMoreLabel: "More",
   CaretIconRight: "caretright",
 
   DepositeListingTitle: "Deposite Account Listing",
@@ -262,7 +262,7 @@ const en = {
   OfferSelectCurrencyLabel: "Select Currency",
   OfferButton: "Submit",
 
-  RequestListingTitle: "Request Listing Page",
+  RequestListingTitle: "Requests",
   RequestListingAddButton: "New Request",
   RequestListingFilterButton: "Filter",
   RequestListingSampleStatus: "Closed",
@@ -501,10 +501,10 @@ const en = {
   RequestListingFilterStatusOption3: "In Progress",
   RequestListingFilterStatusOption4: "Cancelled",
 
-  MessageFilter_Read: "",
-  MessageFilter_UnRead: "",
-  MessageFilter_All: "",
-
+  MessageFilter_Read: "Read",
+  MessageFilter_UnRead: "Unread",
+  MessageFilter_All: "All Messages",
+  
   MyBeneficiariesAddNew: "Add Beneficiary",
   ProductsAndOffersAddNew: "Add New",
   ProductsAndOffersNameLabel: "Name ",

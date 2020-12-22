@@ -148,6 +148,20 @@ export interface IInboxDetail {
   pdfUrl: string;
 }
 
+export const emptyInboxDetail = {
+  adviceType: "",
+  adviceDate: "",
+  dateRange: "",
+  description: "",
+  pdfName: "",
+  isRead: false,
+  pdfUrl: "",
+}
+export interface IInboxFilter {
+  filterApplied: boolean;
+  Status: string;
+}
+
 export interface IRequestDetail {
   id: number;
   requestCreateDate: string;
@@ -202,6 +216,35 @@ export interface ICommonFilter {
 }
 
 export interface IRequestFilter {
+  DateOption: string;
+  StartDate?: Date;
+  EndDate?: Date;
+  Status: string;
+  Type: string;
+}
+
+export interface IRequestDetail {
+  id: number;
+  requestCreateDate: string;
+  remarks: string;
+  requestStatus: string;
+  requestTypeId: string;
+  requestSubject: string;
+  requestSubjectAR?: string;
+  requestStatusAR?: string;
+}
+
+export const emptyRequestDetail = {
+  id: 0,
+  requestCreateDate: "",
+  remarks: "",
+  requestStatus: "",
+  requestTypeId: "0",
+  requestSubject: "",
+}
+
+export interface IRequestFilter {
+  filterApplied: boolean;
   DateOption: string;
   StartDate?: Date;
   EndDate?: Date;

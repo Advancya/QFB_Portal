@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import dateIcon from "../../images/calendar-inactive.png";
-import Breadcrumb from "../../components/Breadcrumb";
+import Breadcrumb from "../Breadcrumb";
 import { GetNotificationsAll } from "../../services/cmsService";
 import moment from "moment";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
-import NotificationsForm from "../../components/Notifications/NotificationsForm";
+import NotificationsForm from "./NotificationsForm";
 import {
   emptyNotificationsDetail,
   INotificationsDetail,
@@ -172,7 +172,7 @@ function NotificationsListing() {
                             {local_Strings.NotificationsExpireLabel +
                               " " +
                               (item.expiryDate
-                                ? moment(item.expiryDate).format("DD-MM-YYYY")
+                                ? moment(item.expiryDate).format("DD/MM/YYYY")
                                 : "")}
                           </div>
                         </div>

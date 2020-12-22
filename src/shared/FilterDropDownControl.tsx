@@ -26,11 +26,11 @@ const FilterDropDownControl: React.FC<IFilterDropDownControlProps> = (props) => 
             <select
                 className="form-control w-50"
                 value={props.value || "0"}
-                onChange={props.onChange}
+                onChange={(e) => props.onChange(e.target.value)}
             >
                 <option value="0">{local_Strings.SelectItem}</option>
                 {props.options && props.options.length > 0 &&
-                    props.options.map((o) => <option value={o.value}>{o.label}</option>)
+                    props.options.map((o, i) => <option key={i} value={o.value}>{o.label}</option>)
                 }
             </select>
         </React.Fragment>

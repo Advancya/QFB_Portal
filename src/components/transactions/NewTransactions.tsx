@@ -7,7 +7,7 @@ interface iNewTransaction {
   hideNewTransactionModal: () => void;
   backNewTransactionModal: () => void;
 }
-function NewTransaction(newTransactionProps: iNewTransaction) {
+function NewTransaction(props: iNewTransaction) {
   const [showTransactionFields, setShowTransactionFields] = useState(false);
   const [valideForm, setValideForm] = useState(false);
   const [valideFormOTP, setvalideFormOTP] = useState(false);
@@ -28,8 +28,8 @@ function NewTransaction(newTransactionProps: iNewTransaction) {
   };
   return (
     <Modal
-      show={newTransactionProps.showNewTransactionModal}
-      onHide={newTransactionProps.hideNewTransactionModal}
+      show={props.showNewTransactionModal}
+      onHide={props.hideNewTransactionModal}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
@@ -42,7 +42,7 @@ function NewTransaction(newTransactionProps: iNewTransaction) {
             <div className="ib-icon">
               <a
                 href="#"
-                onClick={newTransactionProps.backNewTransactionModal}
+                onClick={props.backNewTransactionModal}
                 className="backToAccountsList"
               >
                 <i className="fa fa-chevron-left"></i>
@@ -56,7 +56,7 @@ function NewTransaction(newTransactionProps: iNewTransaction) {
         <button
           type="button"
           className="close"
-          onClick={newTransactionProps.hideNewTransactionModal}
+          onClick={props.hideNewTransactionModal}
         >
           <span aria-hidden="true">×</span>
         </button>

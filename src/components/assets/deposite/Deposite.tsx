@@ -63,7 +63,7 @@ function Deposite() {
           <a href="#" className="ib-text" onClick={handleShowDepositeListing}>
             <h4>{local_Strings.PortfolioAssetsOption3}</h4>
             <h5>
-              {userPortfolio.totalDeposits +
+              {(userPortfolio.totalDeposits || "0") +
                 " " +
                 currentContext.userSettings.currency}
             </h5>

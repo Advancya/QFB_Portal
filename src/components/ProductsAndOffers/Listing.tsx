@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import dateIcon from "../../images/calendar-inactive.png";
-import Breadcrumb from "../../components/Breadcrumb";
+import Breadcrumb from "../Breadcrumb";
 import {
   GetProductsAndOffersAll,
   DeleteProductsAndOffers,
@@ -9,7 +9,7 @@ import {
 import moment from "moment";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
-import ProductsAndOffersForm from "../../components/ProductsAndOffers/ProductsAndOffersForm";
+import ProductsAndOffersForm from "./ProductsAndOffersForm";
 import { confirmAlert } from "react-confirm-alert";
 import {
   emptyProductAndOffersData,
@@ -229,7 +229,7 @@ function ProductsAndOffersListing() {
                             {local_Strings.NotificationsExpireLabel +
                               " " +
                               (item.expiryDate
-                                ? moment(item.expiryDate).format("DD-MM-YYYY")
+                                ? moment(item.expiryDate).format("DD/MM/YYYY")
                                 : "")}
                           </div>
                         </div>

@@ -26,7 +26,7 @@ interface iTransactionsListing {
   showBeneficiariesListing: () => void;
 }
 
-function TransactionsListing(transactionsListingProps: iTransactionsListing) {
+function TransactionsListing(props: iTransactionsListing) {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
   const [isLoading, setLoading] = useState(true);
@@ -37,6 +37,8 @@ function TransactionsListing(transactionsListingProps: iTransactionsListing) {
   const [filters, setFilter] = useState<ICommonFilter>({
     filterApplied: false,
     DateOption: "0",
+    StartDate: moment().add(-7, "days").toDate(),
+    EndDate: moment().toDate(),
     AmountOperator: "",
     Amount: "0",
   });
@@ -44,7 +46,7 @@ function TransactionsListing(transactionsListingProps: iTransactionsListing) {
   useEffect(() => {
     let isMounted = true;
 
-    GetTransactionsByCIF("1934")
+    GetTransactionsByCIF(currentContext.cif)
       .then((responseData: ITransactionDetail[]) => {
         if (isMounted && responseData && responseData.length > 0) {
           setData(responseData);
@@ -67,10 +69,10 @@ function TransactionsListing(transactionsListingProps: iTransactionsListing) {
       <a
         href="#"
         className="row align-items-center"
-        onClick={() => transactionsListingProps.showTransactionsDetailsModal(item)}
+        onClick={() => props.showTransactionsDetailsModal(item)}
       >
         <div className="col-sm-8">
-          <h5>{!!item.transactionDate ? moment(item.transactionDate).format("DD-MM-YYYY") : ""}</h5>
+          <h5>{!!item.transactionDate ? moment(item.transactionDate).format("DD/MM/YYYY") : ""}</h5>
           <h4>{(currentContext.language === "ar" ? item.requestSubjectAR : item.requestSubject)
             + " (" + item.amount + " " + (item.currency || currentContext.userSettings.currency) + ")"}</h4>
         </div>
@@ -89,8 +91,8 @@ function TransactionsListing(transactionsListingProps: iTransactionsListing) {
   return (
     <div>
       <Modal
-        show={transactionsListingProps.showTransactionsListingModal}
-        onHide={transactionsListingProps.hideTransactionsListingModal}
+        show={props.showTransactionsListingModal}
+        onHide={props.hideTransactionsListingModal}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
@@ -107,7 +109,7 @@ function TransactionsListing(transactionsListingProps: iTransactionsListing) {
               <a
                 className="btnOutlineWhite"
                 href="#"
-                onClick={transactionsListingProps.showNewTransactionModal}
+                onClick={props.showNewTransactionModal}
                 id="newTransactionBtn"
               >
                 <i className="fa fa-plus-circle"></i> {local_Strings.TransactionsListingNewButton}
@@ -115,7 +117,7 @@ function TransactionsListing(transactionsListingProps: iTransactionsListing) {
               <a
                 className="btnOutlineWhite bg-white color-gold"
                 href="#"
-                onClick={transactionsListingProps.showBeneficiariesListing}
+                onClick={props.showBeneficiariesListing}
                 id="newBeneficiaryBtn"
               >
                 {local_Strings.TransactionsListingBeneficiariesButton}
@@ -125,7 +127,7 @@ function TransactionsListing(transactionsListingProps: iTransactionsListing) {
           <button
             type="button"
             className="close"
-            onClick={transactionsListingProps.hideTransactionsListingModal}
+            onClick={props.hideTransactionsListingModal}
           >
             <span aria-hidden="true">×</span>
           </button>
@@ -178,11 +180,12 @@ function TransactionsListing(transactionsListingProps: iTransactionsListing) {
             <ul className="box-list" id="reqList">
               {filteredData &&
                 filteredData.length > 0 &&
+                !!filteredData[0].transactionDate ?
                 filteredData.slice(0, offset).map((item, index) => renderItem(item, index)
-                )}
+                ) : NoResult(local_Strings.NoDataToShow)}
             </ul>
           </div>
-          <FilterMoreButtonControl showMore={data.length > rowLimit &&
+          <FilterMoreButtonControl showMore={data && filteredData && data.length > rowLimit &&
             offset < filteredData.length} onClickMore={() => setOffset(offset + 5)} />
           <LoadingOverlay
             active={isLoading}

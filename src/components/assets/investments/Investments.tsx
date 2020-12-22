@@ -84,7 +84,7 @@ function Investments() {
           >
             <h4>{local_Strings.PortfolioAssetsOption2}</h4>
             <h5>
-              {userPortfolio.totalInvestment +
+              {(userPortfolio.totalInvestment || "0") +
                 " " +
                 currentContext.userSettings.currency}
             </h5>

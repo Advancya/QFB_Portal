@@ -44,7 +44,7 @@ function Cash() {
           <a href="#" className="ib-text" onClick={handleShowCashListing}>
             <h4>{local_Strings.PortfolioAssetsOption1}</h4>
             <h5>
-              {userPortfolio.totalCash +
+              {(userPortfolio.totalCash || "0") +
                 " " +
                 currentContext.userSettings.currency}
             </h5>

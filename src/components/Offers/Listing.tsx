@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import dateIcon from "../../images/calendar-inactive.png";
-import Breadcrumb from "../../components/Breadcrumb";
+import Breadcrumb from "../Breadcrumb";
 import { GetOfferAll, DeleteOfferById } from "../../services/cmsService";
 import moment from "moment";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
-import OffersForm from "../../components/Offers/OffersForm";
+import OffersForm from "./OffersForm";
 import { confirmAlert } from "react-confirm-alert";
 import { emptyOfferData, IOfferDetail } from "../../Helpers/publicInterfaces";
 import { useToasts } from "react-toast-notifications";
@@ -220,7 +220,7 @@ function OffersListing() {
                             {local_Strings.NotificationsExpireLabel +
                               " " +
                               (item.expireDate
-                                ? moment(item.expireDate).format("DD-MM-YYYY")
+                                ? moment(item.expireDate).format("DD/MM/YYYY")
                                 : "")}
                           </div>
                         </div>

@@ -81,7 +81,7 @@ function Facilities() {
           <a href="#" className="ib-text" onClick={handleShowFacilitiesListing}>
             <h4>{local_Strings.PortfolioLiabilitiesOption1}</h4>
             <h5>
-              {userPortfolio.totalLoans +
+              {(userPortfolio.totalLoans || "0") +
                 " " +
                 currentContext.userSettings.currency}
             </h5>

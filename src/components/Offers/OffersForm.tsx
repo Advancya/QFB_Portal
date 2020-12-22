@@ -21,6 +21,7 @@ import Constant from "../../constants/defaultData";
 import LoadingOverlay from 'react-loading-overlay';
 import PuffLoader from "react-spinners/PuffLoader";
 import pdfIcon from "../../images/pdf.png";
+import * as helper from "../../Helpers/helper";
 
 const mime = require('mime');
 
@@ -105,25 +106,6 @@ function OffersForm(props: DetailsProps) {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
   }, [props.itemID]);
-
-  const b64toBlob = (b64Data: any, contentType = '', sliceSize = 512) => {
-    const byteCharacters = atob(b64Data);
-    const byteArrays = Uint8Array[byteCharacters.length];
-
-    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-      const slice = byteCharacters.slice(offset, offset + sliceSize);
-
-      const byteNumbers = new Array(slice.length);
-      for (let i = 0; i < slice.length; i++) {
-        byteNumbers[i] = slice.charCodeAt(i);
-      }
-
-      const byteArray = new Uint8Array(byteNumbers);
-      byteArrays.push(byteArray);
-    }
-
-    return new Blob(byteArrays, { type: contentType });
-  }
 
   return (
     <Modal
@@ -338,7 +320,7 @@ function OffersForm(props: DetailsProps) {
                         onClick={() => {
 
                           if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-                            window.navigator.msSaveOrOpenBlob(b64toBlob(data.fileContent, mime.getType(data.fileName)), data.fileName);
+                            window.navigator.msSaveOrOpenBlob(helper.b64toBlob(data.fileContent, mime.getType(data.fileName)), data.fileName);
                           }
                           else {
                             const fileContent = `data:${mime.getType(data.fileName)};base64,${data.fileContent}`;

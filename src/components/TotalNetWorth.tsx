@@ -13,7 +13,7 @@ function TotalNetWorth() {
       <div className="box box min-h-24">
         <h3>{local_Strings.PortfolioTotalNetWorth}</h3>
         <h2 className="mb-3">
-          {userPortfolio.networth + " "}
+          {(userPortfolio.networth || "0") + " "}
           <small>{currentContext.userSettings.currency}</small>
         </h2>
         <div className="chart-block">

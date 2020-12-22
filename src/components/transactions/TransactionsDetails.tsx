@@ -105,7 +105,7 @@ function TransactionsDetails(props: iTransactionsDetails) {
                   <div className="col-lg-6 form-group customDate">
                     <label>{local_Strings.TransactionDateLabel}</label>
                     <div className="readonly date d-flex justify-content-between align-items-center">
-                      {props.item.transactionDate ? moment(props.item.transactionDate).format("DD-MM-YYYY") : ""}
+                      {props.item.transactionDate ? moment(props.item.transactionDate).format("DD/MM/YYYY") : ""}
                       <i className="fa fa-calendar-o" aria-hidden="true"></i>
                     </div>
                   </div>

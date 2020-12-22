@@ -119,13 +119,14 @@ function Transactions() {
         showNewTransactionModal={handleShowNewTransaction}
         showBeneficiariesListing={handleShowBeneficiariesListing}
       />
-      <TransactionsDetails
-        showTransactionsDetailsModal={showTransactionsDetails}
-        hideTransactionsDetailsModal={handleCloseTransactionsDetails}
-        backTransactionsListingModal={handleBackTransactionsDetails}
-        showNewTransactionModal={handleShowNewTransaction}
-        item={item}
-      />
+      {item && item.id > 0 &&
+        <TransactionsDetails
+          showTransactionsDetailsModal={showTransactionsDetails}
+          hideTransactionsDetailsModal={handleCloseTransactionsDetails}
+          backTransactionsListingModal={handleBackTransactionsDetails}
+          showNewTransactionModal={handleShowNewTransaction}
+          item={item}
+        />}
       <NewTransaction
         showNewTransactionModal={showNewTransaction}
         hideNewTransactionModal={handleCloseNewTransaction}

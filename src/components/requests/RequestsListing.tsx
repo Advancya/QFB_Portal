@@ -1,40 +1,146 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import requestIcon from "../../images/request-icon-color.svg";
+import FilterDateControl from '../../shared/FilterDateControl';
+import FilterCustomDateControl from '../../shared/FilterCustomDateControl';
+import FilterDropDownControl from '../../shared/FilterDropDownControl';
+import FilterButtonControl from '../../shared/FilterButtonControl';
+import FilterMoreButtonControl from '../../shared/FilterMoreButtonControl';
+import moment from "moment";
+import { localStrings as local_Strings } from '../../translations/localStrings';
+import { AuthContext } from "../../providers/AuthProvider";
+import { emptyRequestDetail, IRequestFilter, IRequestDetail } from "../../Helpers/publicInterfaces";
+import * as helper from "../../Helpers/helper";
+import NoResult from "../../shared/NoResult";
+import {
+  GetAllRequestTypes,
+  GetRequestsByCIF,
+  SendOTP
+} from "../../services/cmsService";
+import { useToasts } from 'react-toast-notifications';
+import Constant from "../../constants/defaultData";
+import LoadingOverlay from 'react-loading-overlay';
+import PuffLoader from "react-spinners/PuffLoader";
+import axios from "axios";
+
+interface IRequestType {
+  id: number;
+  nameEn: string;
+  nameAr: string;
+}
 
 interface iRequestsListing {
   showRequestsListingModal: boolean;
   hideRequestsListingModal: () => void;
-  showRequestsDetailsModal: () => void;
+  showRequestsDetailsModal: (detail: IRequestDetail) => void;
   showNewRequestModal: () => void;
 }
-function RequestsListing(requestsListingProps: iRequestsListing) {
-  const [showClearFilter, setShowClearFilter] = useState(false);
-  const [showRequestDateFilter, setShowRequestDateFilter] = useState(false);
 
-  const applyFilter = () => {
-    setShowClearFilter(true);
-  };
+function RequestsListing(props: iRequestsListing) {
+  
+  const currentContext = useContext(AuthContext);
+  local_Strings.setLanguage(currentContext.language);
+  const [isLoading, setLoading] = useState(true);
+  const rowLimit: number = Constant.RecordPerPage;
+  const [offset, setOffset] = useState<number>(rowLimit);
+  const [data, setData] = useState<IRequestDetail[]>([emptyRequestDetail]);
+  const [filteredData, setFilteredData] = useState<IRequestDetail[]>([emptyRequestDetail]);
+  const [filters, setFilter] = useState<IRequestFilter>({
+    filterApplied: false,
+    DateOption: "0",
+    StartDate: moment().add(-7, "days").toDate(),
+    EndDate: moment().toDate(),
+    Status: "0",
+    Type: "0",
+  });
+  const [requestTypes, setRequestTypes] = useState<IRequestType[]>([
+    {
+      id: 0,
+      nameEn: "",
+      nameAr: "",
+    },
+  ]);
 
-  const clearFilter = () => {
-    setShowClearFilter(false);
-  };
-  const showMoreRequestsListing = () => {
-    console.log("retrieve more from server");
-  };
-  const requestDateFilterOnchangeHandler = (e: any) => {
-    if (e.target.value == 4) {
-      setShowRequestDateFilter(true);
-    } else {
-      setShowRequestDateFilter(false);
-    }
-  };
+  useEffect(() => {
+    let isMounted = true;
+
+    const requestOne = GetAllRequestTypes();
+    const requestTwo = GetRequestsByCIF(currentContext.cif);
+    axios
+      .all([requestOne, requestTwo])
+      .then((responseData: any) => {
+        if (responseData && responseData.length > 0 && isMounted) {
+          setRequestTypes(responseData[0] as IRequestType[]);
+          const requests = responseData[1] as IRequestDetail[];
+          
+          setData(requests);
+          setFilteredData(requests);
+
+          if (requests.length < rowLimit) {
+            setOffset(requests.length);
+          }
+        }
+      })
+      .catch((e: any) => console.log(e))
+      .finally(() => setLoading(false));
+
+    return () => {
+      isMounted = false;
+    }; // use effect cleanup to set flag false, if unmounted
+  }, []);
+
+  const renderItem = (item: IRequestDetail, index: number) => (
+    <li className="shown">
+      {" "}
+      <a
+        href="#"
+        className="row align-items-center"
+        onClick={() => props.showRequestsDetailsModal(item)}
+      >
+        <div className="col-sm-8">
+          <h5>{moment(item.requestCreateDate).format("DD/MM/YYYY")}</h5>
+          <h4>{currentContext.language !== "ar" ? item.requestSubject : item.requestSubjectAR}</h4>
+        </div>
+        <div className="col-8 col-sm-3 text-sm-right">
+          {" "}
+          <span className="status-badge ">{currentContext.language !== "ar" ? item.requestStatus : item.requestStatusAR}</span>{" "}
+        </div>
+        <div className="col-4 col-sm-1 text-right">
+          {" "}
+          <i className="fa fa-chevron-right"></i>{" "}
+        </div>
+      </a>{" "}
+    </li>
+  );
+
+  const statusFilterOptions = [
+    {
+      label: local_Strings.RequestListingFilterStatusOption1,
+      value: "Awaiting acknowledgement",
+    },
+    { label: local_Strings.RequestListingFilterStatusOption2, value: "Closed" },
+    {
+      label: local_Strings.RequestListingFilterStatusOption3,
+      value: "In Progress",
+    },
+    { label: local_Strings.RequestListingFilterStatusOption4, value: "Cancelled" },
+  ];
+
+  const typeFilterOptions = [];
+  requestTypes && requestTypes.length > 0 &&
+    requestTypes[0].id > 0 &&
+    requestTypes.forEach((r: IRequestType) =>
+      typeFilterOptions.push({
+        label: currentContext.language === "en" ? r.nameEn || "" : r.nameAr || "",
+        value: String(r.id),
+      })
+    );
 
   return (
     <div>
       <Modal
-        show={requestsListingProps.showRequestsListingModal}
-        onHide={requestsListingProps.hideRequestsListingModal}
+        show={props.showRequestsListingModal}
+        onHide={props.hideRequestsListingModal}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
@@ -47,21 +153,21 @@ function RequestsListing(requestsListingProps: iRequestsListing) {
               <img src={requestIcon} className="img-fluid" />
             </div>
             <div className="ib-text d-flex align-items-center">
-              <h4>Requests</h4>
+              <h4>{local_Strings.RequestListingTitle}</h4>
               <a
                 className="btnOutlineWhite"
                 href="#"
-                onClick={requestsListingProps.showNewRequestModal}
+                onClick={props.showNewRequestModal}
                 id="newRequestBtn"
               >
-                <i className="fa fa-plus-circle"></i> New Request
+                <i className="fa fa-plus-circle"></i>{local_Strings.RequestListingAddButton}
               </a>
             </div>
           </div>
           <button
             type="button"
             className="close"
-            onClick={requestsListingProps.hideRequestsListingModal}
+            onClick={props.hideRequestsListingModal}
           >
             <span aria-hidden="true">×</span>
           </button>
@@ -70,269 +176,75 @@ function RequestsListing(requestsListingProps: iRequestsListing) {
           <form className="filter-box">
             <div className="row headRow align-items-center">
               <div className="col-sm-3">
-                <label>Select Date</label>
-                <select
-                  className="form-control selectDateDD"
-                  id="selectDateDD"
-                  onChange={requestDateFilterOnchangeHandler}
-                >
-                  <option value="0">Select Date</option>
-                  <option value="1">Last Week</option>
-                  <option value="2">Last Month</option>
-                  <option value="3">Last 3 Months</option>
-                  <option value="4">Custom Date</option>
-                </select>
+                <FilterDateControl value={filters.DateOption}
+                  onChange={(_value: string) => setFilter({ ...filters, DateOption: _value })} />
               </div>
               <div className="col-sm-3">
-                <label>Request Status</label>
-                <select className="form-control" id="inlineFormCustomSelect3">
-                  <option>All</option>
-                  <option value="1">Pending</option>
-                  <option value="2">Closed </option>
-                  <option value="3">Cancelled</option>
-                </select>
+                <FilterDropDownControl label={local_Strings.RequestListingFilterStatus}
+                  options={statusFilterOptions} value={filters.Status || "0"}
+                  onChange={(_value: string) =>
+                    setFilter({ ...filters, Status: _value })} />
               </div>
               <div className="col-sm-3">
-                <label>Request Type</label>
-                <select className="form-control" id="selectReqTypeDD">
-                  <option value="0">Select Type</option>
-                  <option value="1">Account Statement</option>
-                  <option value="2">Change Mobile Number</option>
-                  <option value="3">Audit Balance Confirmation </option>
-                  <option value="4">Change Email Address</option>
-                  <option value="5">Upload Renewed Documents</option>
-                  <option value="6">
-                    Change Monthly Portfolio Statement Reference Currency{" "}
-                  </option>
-                </select>
+                <FilterDropDownControl label={local_Strings.RequestListingFilterType}
+                  options={typeFilterOptions} value={filters.Type || "0"}
+                  onChange={(_value: string) =>
+                    setFilter({ ...filters, Type: _value })} />
               </div>
               <div className="col-sm-3">
-                <label>
-                  <button
-                    id="resetFilter"
-                    type="reset"
-                    className={
-                      showClearFilter
-                        ? "resetBtn resetFilter"
-                        : "resetBtn resetFilter invisible"
-                    }
-                    onClick={clearFilter}
-                  >
-                    Clear Filter <i className="fa fa-close"></i>
-                  </button>
-                </label>
-                <button
-                  id="applyFilter"
-                  type="button"
-                  className="btn btn-primary btn-sm btn-block applyFilter"
-                  onClick={applyFilter}
-                >
-                  Apply
-                </button>
+                <FilterButtonControl
+                  clearFilter={() => {
+                    setFilter({
+                      filterApplied: false,
+                      DateOption: "0",
+                      StartDate: moment().toDate(),
+                      EndDate: moment().toDate(),
+                      Status: "0",
+                      Type: "0",
+                    });
+                    setFilteredData(data);
+                    setOffset(rowLimit);
+                  }}
+                  applyFilter={() => {
+                    setFilter({ ...filters, filterApplied: true });
+                    console.log(filters);
+                    const _filteredData = helper.filterRequests(
+                      data,
+                      filters
+                    );
+                    setFilteredData(_filteredData);
+                  }}
+                  showClearFilter={filters.filterApplied} />
               </div>
-              <div
-                className={
-                  showRequestDateFilter
-                    ? "col-sm-9 py-3 customDate"
-                    : "col-sm-9 py-3 customDate d-none"
-                }
-                id="customDate"
-              >
-                <div className="row">
-                  <div className="col-lg-4">
-                    <label>From</label>
-                    <input type="date" className="form-control" />
-                  </div>
-                  <div className="col-lg-4">
-                    <label>To</label>
-                    <input type="date" className="form-control" />
-                  </div>
-                </div>
-              </div>
+              <FilterCustomDateControl
+                onStartDateChange={(_value: string) => setFilter({ ...filters, StartDate: moment(_value).toDate() })}
+                onEndDateChange={(_value: string) => setFilter({ ...filters, EndDate: moment(_value).toDate() })}
+                StartDate={filters.StartDate}
+                EndDate={filters.EndDate}
+                showCustomDateFilter={filters.DateOption === "4"} />
             </div>
           </form>
           <div className="box modal-box">
             <ul className="box-list" id="reqList">
-              <li className="shown">
-                {" "}
-                <a
-                  href="#"
-                  className="row align-items-center"
-                  onClick={requestsListingProps.showRequestsDetailsModal}
-                >
-                  <div className="col-sm-8">
-                    <h5>05/11/2020</h5>
-                    <h4>Soler sumitLorem ipsum doler </h4>
-                  </div>
-                  <div className="col-8 col-sm-3 text-sm-right">
-                    {" "}
-                    <span className="status-badge ">Pending</span>{" "}
-                  </div>
-                  <div className="col-4 col-sm-1 text-right">
-                    {" "}
-                    <i className="fa fa-chevron-right"></i>{" "}
-                  </div>
-                </a>{" "}
-              </li>
-              <li className="shown">
-                {" "}
-                <a
-                  href="#"
-                  className="row align-items-center"
-                  onClick={requestsListingProps.showRequestsDetailsModal}
-                >
-                  <div className="col-sm-8">
-                    <h5>05/11/2020</h5>
-                    <h4>Soler sumitLorem ipsum doler </h4>
-                  </div>
-                  <div className="col-8 col-sm-3 text-sm-right">
-                    {" "}
-                    <span className="status-badge ">Closed</span>{" "}
-                  </div>
-                  <div className="col-4 col-sm-1 text-right">
-                    {" "}
-                    <i className="fa fa-chevron-right"></i>{" "}
-                  </div>
-                </a>{" "}
-              </li>
-              <li className="shown">
-                {" "}
-                <a
-                  href="#"
-                  className="row align-items-center"
-                  onClick={requestsListingProps.showRequestsDetailsModal}
-                >
-                  <div className="col-sm-8">
-                    <h5>05/11/2020</h5>
-                    <h4>Soler sumitLorem ipsum doler </h4>
-                  </div>
-                  <div className="col-8 col-sm-3 text-sm-right">
-                    {" "}
-                    <span className="status-badge ">Pending</span>{" "}
-                  </div>
-                  <div className="col-4 col-sm-1 text-right">
-                    {" "}
-                    <i className="fa fa-chevron-right"></i>{" "}
-                  </div>
-                </a>{" "}
-              </li>
-              <li className="shown">
-                {" "}
-                <a
-                  href="#"
-                  className="row align-items-center"
-                  onClick={requestsListingProps.showRequestsDetailsModal}
-                >
-                  <div className="col-sm-8">
-                    <h5>05/11/2020</h5>
-                    <h4>Soler sumitLorem ipsum doler </h4>
-                  </div>
-                  <div className="col-8 col-sm-3 text-sm-right">
-                    {" "}
-                    <span className="status-badge ">Cancelled</span>{" "}
-                  </div>
-                  <div className="col-4 col-sm-1 text-right">
-                    {" "}
-                    <i className="fa fa-chevron-right"></i>{" "}
-                  </div>
-                </a>{" "}
-              </li>
-              <li className="shown">
-                {" "}
-                <a
-                  href="#"
-                  className="row align-items-center"
-                  onClick={requestsListingProps.showRequestsDetailsModal}
-                >
-                  <div className="col-sm-8">
-                    <h5>05/11/2020</h5>
-                    <h4>Soler sumitLorem ipsum doler </h4>
-                  </div>
-                  <div className="col-8 col-sm-3 text-sm-right">
-                    {" "}
-                    <span className="status-badge ">Pending</span>{" "}
-                  </div>
-                  <div className="col-4 col-sm-1 text-right">
-                    {" "}
-                    <i className="fa fa-chevron-right"></i>{" "}
-                  </div>
-                </a>{" "}
-              </li>
-              <li className="hidden">
-                {" "}
-                <a
-                  href="#"
-                  className="row align-items-center"
-                  onClick={requestsListingProps.showRequestsDetailsModal}
-                >
-                  <div className="col-sm-8">
-                    <h5>05/11/2020</h5>
-                    <h4>Soler sumitLorem ipsum doler </h4>
-                  </div>
-                  <div className="col-8 col-sm-3 text-sm-right">
-                    {" "}
-                    <span className="status-badge ">Cancelled</span>{" "}
-                  </div>
-                  <div className="col-4 col-sm-1 text-right">
-                    {" "}
-                    <i className="fa fa-chevron-right"></i>{" "}
-                  </div>
-                </a>{" "}
-              </li>
-              <li className="hidden">
-                {" "}
-                <a
-                  href="#"
-                  className="row align-items-center"
-                  onClick={requestsListingProps.showRequestsDetailsModal}
-                >
-                  <div className="col-sm-8">
-                    <h5>05/11/2020</h5>
-                    <h4>Soler sumitLorem ipsum doler </h4>
-                  </div>
-                  <div className="col-8 col-sm-3 text-sm-right">
-                    {" "}
-                    <span className="status-badge ">Closed</span>{" "}
-                  </div>
-                  <div className="col-4 col-sm-1 text-right">
-                    {" "}
-                    <i className="fa fa-chevron-right"></i>{" "}
-                  </div>
-                </a>{" "}
-              </li>
-              <li className="hidden">
-                {" "}
-                <a
-                  href="#"
-                  className="row align-items-center"
-                  onClick={requestsListingProps.showRequestsDetailsModal}
-                >
-                  <div className="col-sm-8">
-                    <h5>05/11/2020</h5>
-                    <h4>Soler sumitLorem ipsum doler </h4>
-                  </div>
-                  <div className="col-8 col-sm-3 text-sm-right">
-                    {" "}
-                    <span className="status-badge ">Cancelled</span>{" "}
-                  </div>
-                  <div className="col-4 col-sm-1 text-right">
-                    {" "}
-                    <i className="fa fa-chevron-right"></i>{" "}
-                  </div>
-                </a>{" "}
-              </li>
+              {filteredData &&
+                filteredData.length > 0 &&
+                !!filteredData[0].requestSubject ?
+                filteredData.slice(0, offset).map((item, index) => renderItem(item, index)
+                ) : NoResult(local_Strings.NoDataToShow)}
             </ul>
           </div>
 
-          <div className="actionScrollButtons">
-            <a
-              id="moreButton"
-              onClick={showMoreRequestsListing}
-              className="d-block"
-            >
-              More <i className="fa fa-caret-down"></i>
-            </a>
-          </div>
+          <FilterMoreButtonControl showMore={data && filteredData && data.length > rowLimit &&
+            offset < filteredData.length} onClickMore={() => setOffset(offset + 5)} />
+          <LoadingOverlay
+            active={isLoading}
+            spinner={
+              <PuffLoader
+                size={Constant.SpnnerSize}
+                color={Constant.SpinnerColor}
+              />
+            }
+          />
         </Modal.Body>
       </Modal>
     </div>

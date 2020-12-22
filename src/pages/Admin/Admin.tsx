@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import AuthCustomHeader from "../components/header/AuthCustomHeader";
-import Footer from "../components/Footer";
-import ProductsAndOffersListing from "../pages/ProductsAndOffers/Listing";
-import NotificationsListing from "../pages/Notifications/Listing";
-import OffersListing from "../pages/Offers/Listing";
+import AuthCustomHeader from "../../components/header/AuthCustomHeader";
+import Footer from "../../components/Footer";
+import ProductsAndOffersListing from "../../components/ProductsAndOffers/Listing";
+import NotificationsListing from "../../components/Notifications/Listing";
+import OffersListing from "../../components/Offers/Listing";
 
 function Landing() {
   const [showLeftSection, setLeftSection] = useState({

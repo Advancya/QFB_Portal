@@ -6,6 +6,7 @@ import requestIcon from "../../images/request-icon.svg";
 import { Switch, Route, Link } from "react-router-dom";
 import Requests from "../requests/Requests";
 import Transactions from "../transactions/Transactions";
+import Inbox from "../Inbox/Inbox";
 import AuthOffersLanding from "../AuthOffers/AuthOffersLanding";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 
@@ -44,15 +45,16 @@ function Navigation() {
 
             <Transactions></Transactions>
             <AuthOffersLanding></AuthOffersLanding>
-
             <Requests></Requests>
             <li className="nav-item">
-              <Link className="" to="/">
-                <i className="fa fa-envelope"></i>
-              </Link>
-              <Link className="" to="/">
-                <i className="fa fa-bell unread"></i>
-              </Link>
+              <Inbox />              
+              <a
+                className=""
+                href="#"
+                onClick={() => {}}
+              >
+                <i className="fa fa-bell unread" />
+              </a>
             </li>
           </ul>
         </div>

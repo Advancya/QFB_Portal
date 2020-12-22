@@ -6,7 +6,7 @@ import * as helper from '../Helpers/helper';
 
 export type User = { username: string; password: string; otp: string};
 export interface IUserSettings { customerId: string; language: string; currency: string; otp: string };
-const initialSettingsData = { customerId: "", language: "en", currency: "QAR", otp: "SMS" };
+const initialSettingsData = { customerId: "1934", language: "en", currency: "QAR", otp: "SMS" };
 
 export const AuthContext = React.createContext<{
   userSettings: IUserSettings,
@@ -18,7 +18,7 @@ export const AuthContext = React.createContext<{
   changeUserSettings: (settings: IUserSettings) => void;
 }>({
   userSettings: initialSettingsData,
-  cif: "",
+  cif: initialSettingsData.customerId,
   login: (user) => {
     return new Promise((resolve, reject) => {
       return false;

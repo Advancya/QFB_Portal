@@ -4,9 +4,9 @@ import HomePage from "../pages/Homepage";
 import Landing from "../pages/Landing";
 import { ToastProvider } from 'react-toast-notifications'
 import { AuthContext } from "../providers/AuthProvider";
-import Admin from "../pages/Admin";
-import ContactUsListing from "../pages/ContactUs/Listing";
-import OfferSubscriptionsListing from "../pages/OfferSubscriptions/Listing";
+import Admin from "../pages/Admin/Admin";
+import ContactUsListing from "../pages/Admin/ContactUsListing";
+import OfferSubscriptionsListing from "../pages/Admin/OfferSubscriptionsListing";
 
 const PageNotFound = () => <div>Page not found</div>;
 

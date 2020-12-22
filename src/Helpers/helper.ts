@@ -1,5 +1,5 @@
 import moment from "moment";
-import { ICommonFilter, ITransactionDetail } from "./publicInterfaces"
+import { ICommonFilter, IRequestFilter, ITransactionDetail, IRequestDetail } from "./publicInterfaces"
 
 export interface ITransactionFilter {
   exposeFilter: boolean,
@@ -70,24 +70,6 @@ interface IOptionalCheck {
   value: boolean;
 }
 
-export interface IRequestDetail {
-  id: number;
-  requestCreateDate: string;
-  remarks: string;
-  requestStatus: string;
-  requestTypeId: string;
-  requestSubject: string;
-  requestSubjectAR?: string;
-  requestStatusAR?: string;
-}
-
-export interface IRequestFilter {
-  DateOption: string;
-  StartDate?: Date;
-  EndDate?: Date;
-  Status: string;
-  Type: string;
-}
 export interface INotificationListing {
   id: string;
   messageTitle: string;
@@ -605,7 +587,7 @@ export const prepareInvestmentHoldings2ndDrill = (
     values.push({
       y: Math.round((item.amount + Number.EPSILON) * 100) / 100,
       color: "#724B44",
-      name: moment(item.bookingDate).format("DD-MM-YYYY"),
+      name: moment(item.bookingDate).format("DD/MM/YYYY"),
     });
   });
 
@@ -658,3 +640,22 @@ export const prepareInvestmentHoldings2ndDrill = (
 
   return data;
 };
+
+export const b64toBlob = (b64Data: any, contentType = '', sliceSize = 512) => {
+  const byteCharacters = atob(b64Data);
+  const byteArrays = [];
+
+  for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+    const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+    const byteNumbers = new Array(slice.length);
+    for (let i = 0; i < slice.length; i++) {
+      byteNumbers[i] = slice.charCodeAt(i);
+    }
+
+    const byteArray = new Uint8Array(byteNumbers);
+    byteArrays.push(byteArray);
+  }
+
+  return new Blob(byteArrays, { type: contentType });
+}
