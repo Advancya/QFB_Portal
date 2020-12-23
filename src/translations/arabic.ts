@@ -601,6 +601,7 @@ const ar = {
   dummyDesc: "أبجد هوز دولور الجلوس امات، consectetur adipis.",
 
   otpErrorMessage: "الكود غير صحيح",
+  percentageLabel: "Percentage",
 };
 
 export default ar;

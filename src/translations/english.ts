@@ -504,7 +504,7 @@ const en = {
   MessageFilter_Read: "Read",
   MessageFilter_UnRead: "Unread",
   MessageFilter_All: "All Messages",
-  
+
   MyBeneficiariesAddNew: "Add Beneficiary",
   ProductsAndOffersAddNew: "Add New",
   ProductsAndOffersNameLabel: "Name ",
@@ -606,6 +606,7 @@ const en = {
   dummyDesc: "Lorem ipsum dolor sit amet, consectetur adipi.",
 
   otpErrorMessage: "Incorrect OTP code",
+  percentageLabel: "Percentage",
 };
 
 export default en;

@@ -35,8 +35,8 @@ async function authenticate(username: string, password: string) {
         client_secret: oidc.config.client_secret,
         scope: oidc.config.scope,
         grant_type: "password",
-        username: "100537",
-        password: "Mm@123123",
+        username: username,
+        password: password,
       }),
       requestOptions
     );

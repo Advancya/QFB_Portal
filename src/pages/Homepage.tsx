@@ -90,50 +90,57 @@ function HomePage() {
 
   useEffect(() => {
     let isMounted = true;
-    setLoading(true);
 
-    const requestOne = GetUserPortfolio(
-      currentContext.selectedCIF,
-      currentContext.userSettings.currency
-    );
-    const requestTwo = GetGuarantees(
-      currentContext.selectedCIF,
-      currentContext.userSettings.currency
-    );
-    const requestThree = GetInboxByCIF(
-      currentContext.selectedCIF
-    );
+    const initialLoadMethod = async () => {
+      setLoading(true);
 
-    axios
-      .all([requestOne, requestTwo, requestThree])
-      .then((responseData: any) => {
-        if (isMounted && responseData && responseData.length > 0) {
+      const requestOne = GetUserPortfolio(
+        currentContext.selectedCIF,
+        currentContext.userSettings.currency
+      );
+      const requestTwo = GetGuarantees(
+        currentContext.selectedCIF,
+        currentContext.userSettings.currency
+      );
+      const requestThree = GetInboxByCIF(
+        currentContext.selectedCIF
+      );
 
-          if (responseData[0] && responseData[0][0]) {
-            if (responseData[1].length > 0) {
-              setUserPortfolio({
-                ...responseData[0][0],
-                totalGuarantees: responseData[1][0].totalGurQAR,
-              });
-            } else {
-              setUserPortfolio(responseData[0][0]);
+      axios
+        .all([requestOne, requestTwo, requestThree])
+        .then((responseData: any) => {
+          if (isMounted && responseData && responseData.length > 0) {
+
+            if (responseData[0] && responseData[0][0]) {
+              if (responseData[1].length > 0) {
+                setUserPortfolio({
+                  ...responseData[0][0],
+                  totalGuarantees: responseData[1][0].totalGurQAR,
+                });
+              } else {
+                setUserPortfolio(responseData[0][0]);
+              }
             }
-          }
 
-          setInboxListing(responseData[2]);
-        }
-      })
-      .catch((e: any) => console.log(e))
-      .finally(() => setLoading(false));
+            setInboxListing(responseData[2]);
+          }
+        })
+        .catch((e: any) => console.log(e))
+        .finally(() => setLoading(false));
+    }
+
+    if (!!currentContext.selectedCIF) {
+      initialLoadMethod();
+    }
 
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, []);
+  }, [currentContext.selectedCIF]);
 
   const refresh = () => {
     console.log("refresh called");
-    
+
     setLoading(true);
     GetInboxByCIF(currentContext.selectedCIF)
       .then((responseData: IInboxDetail[]) => {

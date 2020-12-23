@@ -1,5 +1,5 @@
 import { GetSettingsByCIF } from "../services/cmsService";
-import { GetUserLocalData, SaveUserDataLocally } from "../Helpers/authHelper";
+import { IUserSettings, GetUserLocalData, SaveUserDataLocally } from "../Helpers/authHelper";
 import React, { useEffect, useState } from "react";
 import { authenticate } from "../services/authenticationService";
 import * as helper from '../Helpers/helper';
@@ -7,8 +7,7 @@ import { getUserRole } from "../services/apiServices";
 import Constant from "../constants/defaultData";
 
 export type User = { username: string; password: string; otp: string };
-export interface IUserSettings { customerId: string; language: string; currency: string; otp: string };
-const initialSettingsData = { customerId: "1934", language: "en", currency: "QAR", otp: "SMS" };
+const initialSettingsData = { customerId: "", language: "en", currency: "QAR", otp: "SMS" };
 interface IAppContext {
   userSettings: IUserSettings,
   userRole: string;
@@ -48,11 +47,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const userData = await GetUserLocalData();
       if (userData) {
         setUserSettings(userData);
-        const role = await getUserRole(userData.username || initialSettingsData.customerId);
+        const role = await getUserRole(userData.customerId || initialSettingsData.customerId);
         if (role !== undefined) {
           setUserRole(role.name);
           if (role.name === Constant.Customer) {
-            setselectedCIF(userData.username);
+            setselectedCIF(userData.customerId);
           } else {
             setselectedCIF(initialSettingsData.customerId);
           }
@@ -85,12 +84,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                 if (settings && settings.length > 0) {
                   const _userSettings = settings[0];
                   setUserSettings(_userSettings);
-                  await SaveUserDataLocally(_userSettings);
-                  console.log("user settings is saved on local storage");
-                  const role = await getUserRole(userData.username);
-                  if (role && role !== undefined) {
-                    setUserRole(role.name || "");
-                  }
+                  setselectedCIF(userData.username);
+                  await SaveUserDataLocally(_userSettings);                  
+
+                } else {                 
+                  const _userData = {...initialSettingsData, customerId: userData.username}; 
+                  setUserSettings(_userData);
+                  setselectedCIF(userData.username);
+                  await SaveUserDataLocally(_userData);                  
+                }
+
+                console.log("user settings is saved on local storage");
+                const role = await getUserRole(userData.username);
+                if (role && role !== undefined) {
+                  setUserRole(role.name || "");
                 }
               });
             return resutl;
@@ -102,7 +109,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           setselectedCIF(initialSettingsData.customerId);
           setUserRole("");
           setUserSettings(initialSettingsData);
-          await SaveUserDataLocally("");
+          await SaveUserDataLocally(initialSettingsData);
+          window.location.href = `/${language}`;
         },
         changeLanguage: setLanguage,
         changeUserSettings: setUserSettings,

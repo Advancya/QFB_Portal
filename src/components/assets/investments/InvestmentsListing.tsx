@@ -1,22 +1,91 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import investmentsIcon from "../../../images/invest-icon.svg";
+import { emptyInvestment, IInvestment } from "../../../Helpers/publicInterfaces";
+import moment from "moment";
+import { localStrings as local_Strings } from '../../../translations/localStrings';
+import { AuthContext } from "../../../providers/AuthProvider";
+import * as helper from "../../../Helpers/helper";
+import NoResult from "../../../shared/NoResult";
+import { GetInvestmentsListing } from "../../../services/cmsService";
+import { useToasts } from 'react-toast-notifications';
+import Constant from "../../../constants/defaultData";
+import LoadingOverlay from 'react-loading-overlay';
+import PuffLoader from "react-spinners/PuffLoader";
+import FilterMoreButtonControl from '../../../shared/FilterMoreButtonControl';
+import { PortfolioContext } from "../../../pages/Homepage";
 
 interface iInvestmentsListing {
   showInvestmentsListingModal: boolean;
   hideInvestmentsListingModal: () => void;
   showInvestmentsDetailsModal: () => void;
 }
-function InvestmentsListing(investmentsListingProps: iInvestmentsListing) {
-  const showMoreInvestmentsListing = () => {
-    console.log("retrieve more from server");
-  };
+function InvestmentsListing(props: iInvestmentsListing) {
+  const currentContext = useContext(AuthContext);
+  const userPortfolio = useContext(PortfolioContext);
+  local_Strings.setLanguage(currentContext.language);
+  const [isLoading, setLoading] = useState(false);
+  const rowLimit: number = Constant.RecordPerPage;
+  const [offset, setOffset] = useState<number>(rowLimit);
+  const [data, setData] = useState<IInvestment[]>([emptyInvestment]);
+
+  useEffect(() => {
+    let isMounted = true;
+    const initialLoadMethod = async () => {
+      setLoading(true);
+      GetInvestmentsListing(currentContext.selectedCIF)
+        .then((responseData: IInvestment[]) => {
+          if (isMounted && responseData && responseData.length > 0) {
+            setData(responseData);
+            if (responseData.length < rowLimit) {
+              setOffset(responseData.length);
+            }
+          }
+        })
+        .catch((e: any) => console.log(e))
+        .finally(() => setLoading(false));
+    }
+
+    if (!!currentContext.selectedCIF) {
+      initialLoadMethod();
+    }
+
+    return () => {
+      isMounted = false;
+    }; // use effect cleanup to set flag false, if unmounted
+  }, [currentContext.selectedCIF]);
+  
+  const renderItem = (item: IInvestment, index: number) => (
+    <li className="shown" key={index}>
+      <a
+        href="#"
+        className="row align-items-center"
+        onClick={props.showInvestmentsDetailsModal}
+      >
+        <div className="col-6 col-sm-4">
+          <h5>{local_Strings.InvestmentsListingAccountNumberLabel}</h5>
+          <h4>{item.subAssetID || ""}</h4>
+        </div>
+        <div className="col-6 col-sm-4">
+          <h5>{local_Strings.CashDetailsBalanceLabel}</h5>
+          <h4>{(item.nominalAmount || "0") + " " + item.securityCCY}</h4>
+        </div>
+        <div className="col-10 col-sm-3">
+          <h5>{local_Strings.percentageLabel}</h5>
+          <h4>{(item.profitRate || "")}</h4>
+        </div>
+        <div className="col-2 col-sm-1 caretArrow">
+          <i className="fa fa-chevron-right"></i>
+        </div>
+      </a>
+    </li>
+  );
 
   return (
     <div>
       <Modal
-        show={investmentsListingProps.showInvestmentsListingModal}
-        onHide={investmentsListingProps.hideInvestmentsListingModal}
+        show={props.showInvestmentsListingModal}
+        onHide={props.hideInvestmentsListingModal}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
@@ -29,14 +98,14 @@ function InvestmentsListing(investmentsListingProps: iInvestmentsListing) {
               <img src={investmentsIcon} className="img-fluid" />
             </div>
             <div className="ib-text">
-              <h4>Investments</h4>
-              <h5>3,150,000.00 QAR</h5>
+              <h4>{local_Strings.InvestmentsListingCash}</h4>
+              <h5>{(userPortfolio.totalInvestment || "0") + " " + (currentContext.userSettings.currency || "")}</h5>
             </div>
           </div>
           <button
             type="button"
             className="close"
-            onClick={investmentsListingProps.hideInvestmentsListingModal}
+            onClick={props.hideInvestmentsListingModal}
           >
             <span aria-hidden="true">×</span>
           </button>
@@ -44,136 +113,24 @@ function InvestmentsListing(investmentsListingProps: iInvestmentsListing) {
         <Modal.Body>
           <div className="box modal-box">
             <ul className="box-list" id="dataList">
-              <li className="shown">
-                <a
-                  href="#"
-                  className="row align-items-center"
-                  onClick={investmentsListingProps.showInvestmentsDetailsModal}
-                >
-                  <div className="col-6 col-sm-4">
-                    <h5>Investment No.</h5>
-                    <h4>1223245672802900</h4>
-                  </div>
-                  <div className="col-6 col-sm-4">
-                    <h5>Balance</h5>
-                    <h4>3,150,000.00 QAR</h4>
-                  </div>
-                  <div className="col-10 col-sm-3">
-                    <h5>Percentage</h5>
-                    <h4>2.2%</h4>
-                  </div>
-                  <div className="col-2 col-sm-1 caretArrow">
-                    <i className="fa fa-chevron-right"></i>
-                  </div>
-                </a>
-              </li>
-
-              <li className="shown">
-                <a
-                  href="#"
-                  className="row align-items-center"
-                  onClick={investmentsListingProps.showInvestmentsDetailsModal}
-                >
-                  <div className="col-6 col-sm-4">
-                    <h5>Investment No.</h5>
-                    <h4>1223245672802900</h4>
-                  </div>
-                  <div className="col-6 col-sm-4">
-                    <h5>Balance</h5>
-                    <h4>3,150,000.00 QAR</h4>
-                  </div>
-                  <div className="col-10 col-sm-3">
-                    <h5>Percentage</h5>
-                    <h4>2.2%</h4>
-                  </div>
-                  <div className="col-2 col-sm-1 caretArrow">
-                    <i className="fa fa-chevron-right"></i>
-                  </div>
-                </a>
-              </li>
-
-              <li className="shown">
-                <a
-                  href="#"
-                  className="row align-items-center"
-                  onClick={investmentsListingProps.showInvestmentsDetailsModal}
-                >
-                  <div className="col-6 col-sm-4">
-                    <h5>Investment No.</h5>
-                    <h4>1223245672802900</h4>
-                  </div>
-                  <div className="col-6 col-sm-4">
-                    <h5>Balance</h5>
-                    <h4>3,150,000.00 QAR</h4>
-                  </div>
-                  <div className="col-10 col-sm-3">
-                    <h5>Percentage</h5>
-                    <h4>2.2%</h4>
-                  </div>
-                  <div className="col-2 col-sm-1 caretArrow">
-                    <i className="fa fa-chevron-right"></i>
-                  </div>
-                </a>
-              </li>
-
-              <li className="shown">
-                <a
-                  href="#"
-                  className="row align-items-center"
-                  onClick={investmentsListingProps.showInvestmentsDetailsModal}
-                >
-                  <div className="col-6 col-sm-4">
-                    <h5>Investment No.</h5>
-                    <h4>1223245672802900</h4>
-                  </div>
-                  <div className="col-6 col-sm-4">
-                    <h5>Balance</h5>
-                    <h4>3,150,000.00 QAR</h4>
-                  </div>
-                  <div className="col-10 col-sm-3">
-                    <h5>Percentage</h5>
-                    <h4>2.2%</h4>
-                  </div>
-                  <div className="col-2 col-sm-1 caretArrow">
-                    <i className="fa fa-chevron-right"></i>
-                  </div>
-                </a>
-              </li>
-
-              <li className="shown">
-                <a
-                  href="#"
-                  className="row align-items-center"
-                  onClick={investmentsListingProps.showInvestmentsDetailsModal}
-                >
-                  <div className="col-6 col-sm-4">
-                    <h5>Investment No.</h5>
-                    <h4>1223245672802900</h4>
-                  </div>
-                  <div className="col-6 col-sm-4">
-                    <h5>Balance</h5>
-                    <h4>3,150,000.00 QAR</h4>
-                  </div>
-                  <div className="col-10 col-sm-3">
-                    <h5>Percentage</h5>
-                    <h4>2.2%</h4>
-                  </div>
-                  <div className="col-2 col-sm-1 caretArrow">
-                    <i className="fa fa-chevron-right"></i>
-                  </div>
-                </a>
-              </li>
+              {data &&
+                data.length > 0 &&
+                !!data[0].subAssetID ?
+                data.slice(0, offset).map((item, index) => renderItem(item, index)
+                ) : NoResult(local_Strings.InvestmentListing_NoData)}
             </ul>
           </div>
-          <div className="actionScrollButtons">
-            <a
-              id="moreButton"
-              onClick={showMoreInvestmentsListing}
-              className="d-block"
-            >
-              More <i className="fa fa-caret-down"></i>
-            </a>
-          </div>
+          <FilterMoreButtonControl showMore={data && data.length > rowLimit &&
+            offset < data.length} onClickMore={() => setOffset(offset + 5)} />
+          <LoadingOverlay
+            active={isLoading}
+            spinner={
+              <PuffLoader
+                size={Constant.SpnnerSize}
+                color={Constant.SpinnerColor}
+              />
+            }
+          />
         </Modal.Body>
       </Modal>
     </div>

@@ -19,7 +19,7 @@ interface ItemProps {
   //callmeBackLink: string;
 }
 
-interface CustomCarouselProps {}
+interface CustomCarouselProps { }
 interface RenderItemProps {
   item: ItemProps;
   index: number;
@@ -27,17 +27,30 @@ interface RenderItemProps {
 
 function RelationManger() {
   const [index, setIndex] = useState(0);
-  const auth = useContext(AuthContext);
+  const currentContext = useContext(AuthContext);
   const [carouselItems, setCarouselItems] = useState<ItemProps[]>([]);
   const handleSelect = (selectedIndex: any, e: any) => {
     setIndex(selectedIndex);
   };
 
   useEffect(() => {
-    GetUserWelcomeData(auth.selectedCIF).then((s) => {
-      setCarouselItems(s);
-    });
-  }, []);
+    let isMounted = true;
+    const initialLoadMethod = async () => {
+      GetUserWelcomeData(currentContext.selectedCIF).then((s) => {
+        if (isMounted) {
+          setCarouselItems(s);
+        }
+      });
+    }
+    if (!!currentContext.selectedCIF) {
+      initialLoadMethod();
+    }
+
+    return () => {
+      isMounted = false;
+    }; // use effect cleanup to set flag false, if unmounted
+
+  }, [currentContext.selectedCIF]);
 
   return (
     <Carousel

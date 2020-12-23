@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Formik } from "formik";
 import * as yup from "yup";
@@ -10,6 +10,8 @@ import { SendOTP, ValidateOTP } from "../services/cmsService";
 import { getUserRole } from "../services/apiServices";
 import Constant from "../constants/defaultData";
 import { useToasts } from 'react-toast-notifications';
+import LoadingOverlay from "react-loading-overlay";
+import PuffLoader from "react-spinners/PuffLoader";
 
 interface iPasswordResetOTP {
   otp: string;
@@ -21,7 +23,7 @@ interface IProps {
 const SubmitOTP: React.FC<IProps> = ({ userDetail }) => {
   const history = useHistory();
   const currentContext = useContext(AuthContext);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(false);
   local_Strings.setLanguage(currentContext.language);
   const initialValues: iPasswordResetOTP = {
     otp: "",
@@ -29,7 +31,7 @@ const SubmitOTP: React.FC<IProps> = ({ userDetail }) => {
   const loginFormValidationSchema = yup.object({
     otp: yup.string().required(local_Strings.GeneralValidation),
   });
-  const [showErrorMessage, setShowErrorMessage] = React.useState(false);
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
   const { addToast } = useToasts();
   const submitOTP = async (values: iPasswordResetOTP) => {
 
@@ -39,11 +41,14 @@ const SubmitOTP: React.FC<IProps> = ({ userDetail }) => {
     if (isValidateOTP) {
       const loginResponse = await currentContext.login({ ...userDetail, otp: values.otp });
       if (loginResponse) {
-        const role = await getUserRole(userDetail.username);
+        const role = await getUserRole(userDetail.username)
+          .finally(() => {
+            setLoading(false);
+          });
         if (role && role !== undefined) {
-          if (currentContext.userRole === Constant.Customer) {
+          if (role.name === Constant.Customer) {
             history.push(`/${currentContext.language}/Home`);
-          } else if (currentContext.userRole === Constant.Management) {
+          } else if (role.name === Constant.Management) {
             history.push(`/${currentContext.language}/Admin`);
           } else {
             addToast(local_Strings.GenericErrorMessage, {
@@ -53,24 +58,21 @@ const SubmitOTP: React.FC<IProps> = ({ userDetail }) => {
           }
         }
       } else {
+        setLoading(false);
         addToast(local_Strings.landingPageInvaildLoginMessage, {
           appearance: 'error',
           autoDismiss: true,
         });
       }
     } else {
+      setLoading(false);
       addToast(local_Strings.otpErrorMessage, {
         appearance: 'error',
         autoDismiss: true,
       });
       setShowErrorMessage(true);
     }
-    setLoading(false);
   };
-
-  useEffect(() => {
-
-  }, []);
 
   return (
     <div className="col-lg-4 col-container">
@@ -78,6 +80,15 @@ const SubmitOTP: React.FC<IProps> = ({ userDetail }) => {
         <div className="box-header">
           <h3>{local_Strings.LoginWithCredentialsTitle}</h3>
         </div>
+        <LoadingOverlay
+          active={isLoading}
+          spinner={
+            <PuffLoader
+              size={Constant.SpnnerSize}
+              color={Constant.SpinnerColor}
+            />
+          }
+        />
         <Formik
           initialValues={initialValues}
           validationSchema={loginFormValidationSchema}

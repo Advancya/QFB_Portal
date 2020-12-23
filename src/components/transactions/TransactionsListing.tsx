@@ -29,7 +29,7 @@ interface iTransactionsListing {
 function TransactionsListing(props: iTransactionsListing) {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(false);
   const rowLimit: number = Constant.RecordPerPage;
   const [offset, setOffset] = useState<number>(rowLimit);
   const [data, setData] = useState<ITransactionDetail[]>([emptyTransactionDetail]);
@@ -45,24 +45,31 @@ function TransactionsListing(props: iTransactionsListing) {
 
   useEffect(() => {
     let isMounted = true;
-
-    GetTransactionsByCIF(currentContext.selectedCIF)
-      .then((responseData: ITransactionDetail[]) => {
-        if (isMounted && responseData && responseData.length > 0) {
-          setData(responseData);
-          setFilteredData(responseData);
-          if (responseData.length < rowLimit) {
-            setOffset(responseData.length);
+    
+    const initialLoadMethod = async () => {
+      setLoading(true);
+      GetTransactionsByCIF(currentContext.selectedCIF)
+        .then((responseData: ITransactionDetail[]) => {
+          if (isMounted && responseData && responseData.length > 0) {
+            setData(responseData);
+            setFilteredData(responseData);
+            if (responseData.length < rowLimit) {
+              setOffset(responseData.length);
+            }
           }
-        }
-      })
-      .catch((e: any) => console.log(e))
-      .finally(() => setLoading(false));
+        })
+        .catch((e: any) => console.log(e))
+        .finally(() => setLoading(false));
+    }
+
+    if (!!currentContext.selectedCIF) {
+      initialLoadMethod();
+    }
 
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, []);
+  }, [currentContext.selectedCIF]);
 
   const renderItem = (item: ITransactionDetail, index: number) => (
     <li className="shown" key={index}>

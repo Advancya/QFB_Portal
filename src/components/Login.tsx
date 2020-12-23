@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { Formik } from "formik";
@@ -10,6 +10,9 @@ import * as helper from '../Helpers/helper';
 import { SendOTP } from "../services/cmsService";
 import { authenticate } from "../services/authenticationService";
 import { useToasts } from 'react-toast-notifications';
+import LoadingOverlay from "react-loading-overlay";
+import PuffLoader from "react-spinners/PuffLoader";
+import Constant from "../constants/defaultData";
 
 interface IProps {
   setUserCredentials: any;
@@ -20,7 +23,7 @@ const Login: React.FC<IProps> = (props) => {
 
   const history = useHistory();
   const auth = useContext(AuthContext);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(false);
   const initialValues: User = { username: "", password: "", otp: "" };
   local_Strings.setLanguage(auth.language);
   const { addToast } = useToasts();
@@ -52,6 +55,7 @@ const Login: React.FC<IProps> = (props) => {
           setLoading(false);
         });
     } else {
+      setLoading(false);
       addToast(local_Strings.landingPageInvaildLoginMessage, {
         appearance: 'error',
         autoDismiss: true,
@@ -59,16 +63,21 @@ const Login: React.FC<IProps> = (props) => {
     }
   };
 
-  useEffect(() => {
-
-  }, []);
-
   return (
     <div className="col-lg-4 col-container">
       <div className="box login-container">
         <div className="box-header">
           <h3>{local_Strings.LoginWithCredentialsTitle}</h3>
         </div>
+        <LoadingOverlay
+          active={isLoading}
+          spinner={
+            <PuffLoader
+              size={Constant.SpnnerSize}
+              color={Constant.SpinnerColor}
+            />
+          }
+        />
         <Formik
           initialValues={initialValues}
           validationSchema={loginFormValidationSchema}

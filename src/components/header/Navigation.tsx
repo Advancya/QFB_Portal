@@ -22,6 +22,8 @@ function Navigation() {
 
   useEffect(() => {
     let isMounted = true;
+
+    const initialLoadMethod = async () => {
     setLoading(true);
     GetUserWelcomeData(currentContext.selectedCIF)
       .then((responseData: any) => {
@@ -31,11 +33,14 @@ function Navigation() {
       })
       .catch((e: any) => console.log(e))
       .finally(() => setLoading(false));
-
+    }
+    if (!!currentContext.selectedCIF) {
+      initialLoadMethod();
+    }
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, []);
+  }, [currentContext.selectedCIF]);
 
 
   return (
@@ -53,7 +58,15 @@ function Navigation() {
         <Link to={`/${currentContext.language}/Home`} className="">
           {local_Strings.WelcomeScreenTitle + " " + (userInfo.customerShortName || "") + " "}
           <i className="fa fa-user-circle-o"></i>
-        </Link>
+        </Link>&nbsp;
+        <a
+          className="cursor-pointer"
+          href="#"
+          title="Click to logout"
+          onClick={currentContext.logout}
+        >
+          <i className="fa fa-sign-out" />
+        </a>
       </div>
       <nav className="navbar navbar-expand-md">
         <button

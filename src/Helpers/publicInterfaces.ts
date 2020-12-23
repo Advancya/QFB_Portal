@@ -266,3 +266,44 @@ export const emptyUserInfo = {
   rmEmail: "",
   customerShortName: "",
 }
+
+export interface IAccountBalance {
+  accountNumber: string;
+  balance: number;
+  currency: string;
+}
+
+export const emptyAccountBalance = {
+  accountNumber: "",
+  balance: 0,
+  currency: "",
+}
+
+export interface IDeposit {
+  contractNumber: string;
+  depositAmount: number;
+  interestRate?: string;
+  currency: string;
+}
+
+export const emptyDeposit = {
+  contractNumber: "",
+  depositAmount: 0,
+  interestRate: "",
+  currency: "",
+}
+
+export interface IInvestment {
+  subAssetID: string;
+  nominalAmount: number;
+  profitRate?: string;
+  securityCCY: string;
+}
+
+
+export const emptyInvestment = {
+  subAssetID: "",
+      nominalAmount: 0,
+      profitRate: "",
+      securityCCY: "",
+}

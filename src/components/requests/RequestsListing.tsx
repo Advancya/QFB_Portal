@@ -37,10 +37,10 @@ interface iRequestsListing {
 }
 
 function RequestsListing(props: iRequestsListing) {
-  
+
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(false);
   const rowLimit: number = Constant.RecordPerPage;
   const [offset, setOffset] = useState<number>(rowLimit);
   const [data, setData] = useState<IRequestDetail[]>([emptyRequestDetail]);
@@ -64,30 +64,38 @@ function RequestsListing(props: iRequestsListing) {
   useEffect(() => {
     let isMounted = true;
 
-    const requestOne = GetAllRequestTypes();
-    const requestTwo = GetRequestsByCIF(currentContext.selectedCIF);
-    axios
-      .all([requestOne, requestTwo])
-      .then((responseData: any) => {
-        if (responseData && responseData.length > 0 && isMounted) {
-          setRequestTypes(responseData[0] as IRequestType[]);
-          const requests = responseData[1] as IRequestDetail[];
-          
-          setData(requests);
-          setFilteredData(requests);
+    const initialLoadMethod = async () => {
+      setLoading(true);
+      const requestOne = GetAllRequestTypes();
+      const requestTwo = GetRequestsByCIF(currentContext.selectedCIF);
+      axios
+        .all([requestOne, requestTwo])
+        .then((responseData: any) => {
+          if (responseData && responseData.length > 0 && isMounted) {
+            setRequestTypes(responseData[0] as IRequestType[]);
+            const requests = responseData[1] as IRequestDetail[];
 
-          if (requests.length < rowLimit) {
-            setOffset(requests.length);
+            setData(requests);
+            setFilteredData(requests);
+
+            if (requests.length < rowLimit) {
+              setOffset(requests.length);
+            }
           }
-        }
-      })
-      .catch((e: any) => console.log(e))
-      .finally(() => setLoading(false));
+        })
+        .catch((e: any) => console.log(e))
+        .finally(() => setLoading(false));
+    }
+
+    if (!!currentContext.selectedCIF) {
+      initialLoadMethod();
+    }
 
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, []);
+  }, [currentContext.selectedCIF]);
+
 
   const renderItem = (item: IRequestDetail, index: number) => (
     <li className="shown" key={index}>
@@ -155,14 +163,14 @@ function RequestsListing(props: iRequestsListing) {
             <div className="ib-text d-flex align-items-center">
               <h4>{local_Strings.RequestListingTitle}</h4>
               {currentContext.userRole === Constant.Customer &&
-              <a
-                className="btnOutlineWhite"
-                href="#"
-                onClick={props.showNewRequestModal}
-                id="newRequestBtn"
-              >
-                <i className="fa fa-plus-circle"></i>{local_Strings.RequestListingAddButton}
-              </a>}
+                <a
+                  className="btnOutlineWhite"
+                  href="#"
+                  onClick={props.showNewRequestModal}
+                  id="newRequestBtn"
+                >
+                  <i className="fa fa-plus-circle"></i>{local_Strings.RequestListingAddButton}
+                </a>}
             </div>
           </div>
           <button
