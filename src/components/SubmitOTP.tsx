@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { Formik } from "formik";
 import * as yup from "yup";
@@ -8,6 +7,9 @@ import InvalidFieldError from '../shared/invalid-field-error';
 import { localStrings as local_Strings } from '../translations/localStrings';
 import * as helper from '../Helpers/helper';
 import { SendOTP, ValidateOTP } from "../services/cmsService";
+import { getUserRole } from "../services/apiServices";
+import Constant from "../constants/defaultData";
+import { useToasts } from 'react-toast-notifications';
 
 interface iPasswordResetOTP {
   otp: string;
@@ -18,9 +20,9 @@ interface IProps {
 
 const SubmitOTP: React.FC<IProps> = ({ userDetail }) => {
   const history = useHistory();
-  const auth = useContext(AuthContext);
+  const currentContext = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
-  local_Strings.setLanguage(auth.language);
+  local_Strings.setLanguage(currentContext.language);
   const initialValues: iPasswordResetOTP = {
     otp: "",
   };
@@ -28,20 +30,39 @@ const SubmitOTP: React.FC<IProps> = ({ userDetail }) => {
     otp: yup.string().required(local_Strings.GeneralValidation),
   });
   const [showErrorMessage, setShowErrorMessage] = React.useState(false);
-
+  const { addToast } = useToasts();
   const submitOTP = async (values: iPasswordResetOTP) => {
 
     setLoading(true);
     setShowErrorMessage(false);
-    const res = await ValidateOTP(userDetail.username, values.otp);
-    if (true) {
-      const x = await auth.login({ ...userDetail, otp: values.otp });
-      if (x) {
-        history.push(`/${auth.language}/Home`);
+    const isValidateOTP = await ValidateOTP(userDetail.username, values.otp);
+    if (isValidateOTP) {
+      const loginResponse = await currentContext.login({ ...userDetail, otp: values.otp });
+      if (loginResponse) {
+        const role = await getUserRole(userDetail.username);
+        if (role && role !== undefined) {
+          if (currentContext.userRole === Constant.Customer) {
+            history.push(`/${currentContext.language}/Home`);
+          } else if (currentContext.userRole === Constant.Management) {
+            history.push(`/${currentContext.language}/Admin`);
+          } else {
+            addToast(local_Strings.GenericErrorMessage, {
+              appearance: 'error',
+              autoDismiss: true,
+            });
+          }
+        }
       } else {
-        console.log("Error Login");
+        addToast(local_Strings.landingPageInvaildLoginMessage, {
+          appearance: 'error',
+          autoDismiss: true,
+        });
       }
     } else {
+      addToast(local_Strings.otpErrorMessage, {
+        appearance: 'error',
+        autoDismiss: true,
+      });
       setShowErrorMessage(true);
     }
     setLoading(false);
@@ -72,7 +93,7 @@ const SubmitOTP: React.FC<IProps> = ({ userDetail }) => {
           }) => (
             <div className="box-body" id="OtpBox">
               <div className="form-group">
-                <p>{local_Strings.PasswordResetOTPHint}</p>                
+                <p>{local_Strings.PasswordResetOTPHint}</p>
               </div>
               <div className="form-group">
                 <label>{local_Strings.PasswordResetOTPEnterOTP}</label>
@@ -102,7 +123,7 @@ const SubmitOTP: React.FC<IProps> = ({ userDetail }) => {
               </div>
             </div>
           )}
-        </Formik>        
+        </Formik>
       </div>
     </div>
   );

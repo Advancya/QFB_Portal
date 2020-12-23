@@ -46,7 +46,7 @@ function TransactionsListing(props: iTransactionsListing) {
   useEffect(() => {
     let isMounted = true;
 
-    GetTransactionsByCIF(currentContext.cif)
+    GetTransactionsByCIF(currentContext.selectedCIF)
       .then((responseData: ITransactionDetail[]) => {
         if (isMounted && responseData && responseData.length > 0) {
           setData(responseData);
@@ -106,14 +106,15 @@ function TransactionsListing(props: iTransactionsListing) {
             </div>
             <div className="ib-text d-flex align-items-center">
               <h4>{local_Strings.TransactionsListingTitle}</h4>
-              <a
-                className="btnOutlineWhite"
-                href="#"
-                onClick={props.showNewTransactionModal}
-                id="newTransactionBtn"
-              >
-                <i className="fa fa-plus-circle"></i> {local_Strings.TransactionsListingNewButton}
-              </a>
+              {currentContext.userRole === Constant.Customer &&
+                <a
+                  className="btnOutlineWhite"
+                  href="#"
+                  onClick={props.showNewTransactionModal}
+                  id="newTransactionBtn"
+                >
+                  <i className="fa fa-plus-circle"></i> {local_Strings.TransactionsListingNewButton}
+                </a>}
               <a
                 className="btnOutlineWhite bg-white color-gold"
                 href="#"

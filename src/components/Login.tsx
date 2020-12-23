@@ -8,6 +8,8 @@ import InvalidFieldError from '../shared/invalid-field-error';
 import { localStrings as local_Strings } from '../translations/localStrings';
 import * as helper from '../Helpers/helper';
 import { SendOTP } from "../services/cmsService";
+import { authenticate } from "../services/authenticationService";
+import { useToasts } from 'react-toast-notifications';
 
 interface IProps {
   setUserCredentials: any;
@@ -21,7 +23,7 @@ const Login: React.FC<IProps> = (props) => {
   const [loading, setLoading] = useState(false);
   const initialValues: User = { username: "", password: "", otp: "" };
   local_Strings.setLanguage(auth.language);
-
+  const { addToast } = useToasts();
   const loginFormValidationSchema = yup.object({
     username: yup.string().required("User name is required"),
     password: yup.string().required("Password is required"),
@@ -30,18 +32,31 @@ const Login: React.FC<IProps> = (props) => {
   const submitLogin = async (values: User) => {
 
     setLoading(true);
-    SendOTP(values.username)
-      .then((res) => {
-        props.setUserCredentials({
-          username: values.username,
-          password: values.password,
-          otp: "",
+    const isValidCredentials = await authenticate(
+      values.username,
+      values.password
+    );
+
+    if (isValidCredentials) {
+
+      SendOTP(values.username)
+        .then((res) => {
+          props.setUserCredentials({
+            username: values.username,
+            password: values.password,
+            otp: "",
+          });
+          props.showOTP(true);
+        })
+        .finally(() => {
+          setLoading(false);
         });
-        props.showOTP(true);
-      })
-      .finally(() => {
-        setLoading(false);
+    } else {
+      addToast(local_Strings.landingPageInvaildLoginMessage, {
+        appearance: 'error',
+        autoDismiss: true,
       });
+    }
   };
 
   useEffect(() => {
@@ -101,7 +116,7 @@ const Login: React.FC<IProps> = (props) => {
               </div>
             </div>
           )}
-        </Formik>        
+        </Formik>
       </div>
     </div>
   );

@@ -1,21 +1,57 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import holdingsIcon from "../../images/holdings-icon.svg";
-import transactionIcon from "../../images/transaction-icon.svg";
-import offerIcon from "../../images/offer-icon.svg";
-import requestIcon from "../../images/request-icon.svg";
-import { Switch, Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Requests from "../requests/Requests";
 import Transactions from "../transactions/Transactions";
 import Inbox from "../Inbox/Inbox";
 import AuthOffersLanding from "../AuthOffers/AuthOffersLanding";
+import { AuthContext } from "../../providers/AuthProvider";
 import { localStrings as local_Strings } from "../../translations/localStrings";
+import { emptyUserInfo, IUserInfo } from "../../Helpers/publicInterfaces";
+import { GetUserWelcomeData } from "../../services/cmsService";
+import LoadingOverlay from "react-loading-overlay";
+import PuffLoader from "react-spinners/PuffLoader";
+import Constant from "../../constants/defaultData";
 
 function Navigation() {
+
+  const currentContext = useContext(AuthContext);
+  local_Strings.setLanguage(currentContext.language);
+  const [userInfo, setUserInfo] = useState<IUserInfo>(emptyUserInfo);
+  const [isLoading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+    setLoading(true);
+    GetUserWelcomeData(currentContext.selectedCIF)
+      .then((responseData: any) => {
+        if (responseData && responseData.length > 0 && isMounted) {
+          setUserInfo(responseData[0] as IUserInfo);
+        }
+      })
+      .catch((e: any) => console.log(e))
+      .finally(() => setLoading(false));
+
+    return () => {
+      isMounted = false;
+    }; // use effect cleanup to set flag false, if unmounted
+  }, []);
+
+
   return (
     <div className="col-md-7">
+      <LoadingOverlay
+        active={isLoading}
+        spinner={
+          <PuffLoader
+            size={Constant.SpnnerSize}
+            color={Constant.SpinnerColor}
+          />
+        }
+      />
       <div className="welcomeText text-right">
-        <Link to="/" className="">
-          {local_Strings.navigationUserMessage}
+        <Link to={`/${currentContext.language}/Home`} className="">
+          {local_Strings.WelcomeScreenTitle + " " + (userInfo.customerShortName || "") + " "}
           <i className="fa fa-user-circle-o"></i>
         </Link>
       </div>
@@ -47,11 +83,11 @@ function Navigation() {
             <AuthOffersLanding></AuthOffersLanding>
             <Requests></Requests>
             <li className="nav-item">
-              <Inbox />              
+              <Inbox />
               <a
                 className=""
                 href="#"
-                onClick={() => {}}
+                onClick={() => { }}
               >
                 <i className="fa fa-bell unread" />
               </a>

@@ -65,7 +65,7 @@ function RequestsListing(props: iRequestsListing) {
     let isMounted = true;
 
     const requestOne = GetAllRequestTypes();
-    const requestTwo = GetRequestsByCIF(currentContext.cif);
+    const requestTwo = GetRequestsByCIF(currentContext.selectedCIF);
     axios
       .all([requestOne, requestTwo])
       .then((responseData: any) => {
@@ -90,7 +90,7 @@ function RequestsListing(props: iRequestsListing) {
   }, []);
 
   const renderItem = (item: IRequestDetail, index: number) => (
-    <li className="shown">
+    <li className="shown" key={index}>
       {" "}
       <a
         href="#"
@@ -154,6 +154,7 @@ function RequestsListing(props: iRequestsListing) {
             </div>
             <div className="ib-text d-flex align-items-center">
               <h4>{local_Strings.RequestListingTitle}</h4>
+              {currentContext.userRole === Constant.Customer &&
               <a
                 className="btnOutlineWhite"
                 href="#"
@@ -161,7 +162,7 @@ function RequestsListing(props: iRequestsListing) {
                 id="newRequestBtn"
               >
                 <i className="fa fa-plus-circle"></i>{local_Strings.RequestListingAddButton}
-              </a>
+              </a>}
             </div>
           </div>
           <button

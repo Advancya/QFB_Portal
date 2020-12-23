@@ -81,7 +81,7 @@ const en = {
 
   DrawerContentHomeLabel: "Home",
   DrawerContentSwitchLangLabel: "العربية",
-  WelcomeScreenTitle: "Relation Manager",
+  WelcomeScreenTitle: "Welcome",
   WelcomeScreenMsg:
     "Welcome {0} to QFB bank, we are glade to serve you and have you as a customer, we hope to satisfy all your needs..",
   WelcomeScreenPopUpTitle: "CALL ME BACK RREQUSET",

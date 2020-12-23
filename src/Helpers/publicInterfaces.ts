@@ -251,3 +251,18 @@ export interface IRequestFilter {
   Status: string;
   Type: string;
 }
+
+
+export interface IUserInfo {
+  name: string;
+  customerShortName: string;
+  telephone: string;
+  rmEmail: string;
+}
+
+export const emptyUserInfo = {
+  name: "",
+  telephone: "",
+  rmEmail: "",
+  customerShortName: "",
+}

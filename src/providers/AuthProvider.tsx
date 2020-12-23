@@ -3,29 +3,34 @@ import { GetUserLocalData, SaveUserDataLocally } from "../Helpers/authHelper";
 import React, { useEffect, useState } from "react";
 import { authenticate } from "../services/authenticationService";
 import * as helper from '../Helpers/helper';
+import { getUserRole } from "../services/apiServices";
+import Constant from "../constants/defaultData";
 
-export type User = { username: string; password: string; otp: string};
+export type User = { username: string; password: string; otp: string };
 export interface IUserSettings { customerId: string; language: string; currency: string; otp: string };
 const initialSettingsData = { customerId: "1934", language: "en", currency: "QAR", otp: "SMS" };
-
-export const AuthContext = React.createContext<{
+interface IAppContext {
   userSettings: IUserSettings,
-  cif: string;
+  userRole: string;
+  language: string;
+  selectedCIF: string;
   login: (user: User) => Promise<boolean>;
   logout: () => void;
-  language: string;
   changeLanguage: (language: string) => void;
   changeUserSettings: (settings: IUserSettings) => void;
-}>({
+}
+
+export const AuthContext = React.createContext<IAppContext>({
   userSettings: initialSettingsData,
-  cif: initialSettingsData.customerId,
+  userRole: "",
+  language: "en",
+  selectedCIF: initialSettingsData.customerId,
   login: (user) => {
     return new Promise((resolve, reject) => {
       return false;
     });
   },
   logout: () => { },
-  language: "en",
   changeLanguage: (language) => { },
   changeUserSettings: (settings) => { },
 });
@@ -33,18 +38,28 @@ export const AuthContext = React.createContext<{
 interface AuthProviderProps { }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [cif, setCif] = useState<string>(initialSettingsData.customerId);
   const [userSettings, setUserSettings] = useState<IUserSettings>(initialSettingsData);
   const [language, setLanguage] = useState(helper.getLanguage());
+  const [userRole, setUserRole] = useState<string>("");
+  const [selectedCIF, setselectedCIF] = useState<string>(initialSettingsData.customerId);
 
   useEffect(() => {
     const getUserData = async () => {
       const userData = await GetUserLocalData();
       if (userData) {
-        setCif(userData.customerId);
         setUserSettings(userData);
+        const role = await getUserRole(userData.username || initialSettingsData.customerId);
+        if (role !== undefined) {
+          setUserRole(role.name);
+          if (role.name === Constant.Customer) {
+            setselectedCIF(userData.username);
+          } else {
+            setselectedCIF(initialSettingsData.customerId);
+          }
+        }
       } else {
-        setCif(initialSettingsData.customerId);
+        setselectedCIF(initialSettingsData.customerId);
+        setUserRole("");
         setUserSettings(initialSettingsData);
       }
     };
@@ -55,7 +70,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     <AuthContext.Provider
       value={{
         userSettings,
-        cif,
+        userRole,
+        language,
+        selectedCIF,
         login: async (userData) => {
           const resutl = await authenticate(
             userData.username,
@@ -63,26 +80,30 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           );
 
           if (resutl) {
-            setCif(userData.username);
             await GetSettingsByCIF(userData.username)
               .then(async (settings: any) => {
                 if (settings && settings.length > 0) {
                   const _userSettings = settings[0];
-                  setUserSettings(_userSettings);                  
-                  await SaveUserDataLocally(_userSettings);    
+                  setUserSettings(_userSettings);
+                  await SaveUserDataLocally(_userSettings);
                   console.log("user settings is saved on local storage");
+                  const role = await getUserRole(userData.username);
+                  if (role && role !== undefined) {
+                    setUserRole(role.name || "");
+                  }
                 }
               });
-              return resutl;
+            return resutl;
           } else {
             return false;
           }
         },
         logout: async () => {
-          setCif("");
-          await SaveUserDataLocally("");     
+          setselectedCIF(initialSettingsData.customerId);
+          setUserRole("");
+          setUserSettings(initialSettingsData);
+          await SaveUserDataLocally("");
         },
-        language,
         changeLanguage: setLanguage,
         changeUserSettings: setUserSettings,
       }}

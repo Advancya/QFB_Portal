@@ -34,10 +34,10 @@ function RelationManger() {
   };
 
   useEffect(() => {
-    GetUserWelcomeData(auth.cif).then((s) => {
+    GetUserWelcomeData(auth.selectedCIF).then((s) => {
       setCarouselItems(s);
     });
-  }, [auth.cif]);
+  }, []);
 
   return (
     <Carousel

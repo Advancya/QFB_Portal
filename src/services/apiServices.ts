@@ -10,6 +10,17 @@ async function getUserProfile() {
   }
 }
 
+async function getUserRole(userId: string) {
+  try {
+    const response = await apiInstance.get(
+      `/api/User/GetuserRole?cif=${userId}`
+    );
+    return response.data;
+  } catch (error) {
+    return undefined;
+  }
+}
+
 async function GetCashListing(cif: string) {
   try {
     const response = await apiInstance.get(`/api/CashList?cif=${cif}`);
@@ -20,4 +31,4 @@ async function GetCashListing(cif: string) {
   }
 }
 
-export { getUserProfile, GetCashListing };
+export { getUserProfile, getUserRole, GetCashListing };

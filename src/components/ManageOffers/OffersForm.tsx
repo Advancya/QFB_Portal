@@ -54,7 +54,7 @@ function OffersForm(props: DetailsProps) {
 
     setLoading(true);
     const item = data.id > 0 ? values : {
-      cif: auth.cif,
+      cif: auth.selectedCIF,
       title: values.title,
       titleAr: values.titleAr,
       createdDate: moment().utc(true),

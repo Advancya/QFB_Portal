@@ -40,7 +40,7 @@ function InboxDetails(props: iInboxDetails) {
     let isMounted = true;
 
     const requestOne = GetInboxByCIFAndType(
-      currentContext.cif,
+      currentContext.selectedCIF,
       props.item.adviceType
     );
     const requestTwo = SetInboxItemAsRead({ ...props.item, isRead: true });

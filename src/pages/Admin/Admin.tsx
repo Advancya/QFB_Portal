@@ -3,7 +3,7 @@ import AuthCustomHeader from "../../components/header/AuthCustomHeader";
 import Footer from "../../components/Footer";
 import ProductsAndOffersListing from "../../components/ProductsAndOffers/Listing";
 import NotificationsListing from "../../components/Notifications/Listing";
-import OffersListing from "../../components/Offers/Listing";
+import OffersListing from "../../components/ManageOffers/Listing";
 
 function Landing() {
   const [showLeftSection, setLeftSection] = useState({

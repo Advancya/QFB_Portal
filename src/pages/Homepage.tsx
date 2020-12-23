@@ -93,15 +93,15 @@ function HomePage() {
     setLoading(true);
 
     const requestOne = GetUserPortfolio(
-      currentContext.cif,
+      currentContext.selectedCIF,
       currentContext.userSettings.currency
     );
     const requestTwo = GetGuarantees(
-      currentContext.cif,
+      currentContext.selectedCIF,
       currentContext.userSettings.currency
     );
     const requestThree = GetInboxByCIF(
-      currentContext.cif
+      currentContext.selectedCIF
     );
 
     axios
@@ -129,13 +129,13 @@ function HomePage() {
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [currentContext.cif]);
+  }, []);
 
   const refresh = () => {
     console.log("refresh called");
     
     setLoading(true);
-    GetInboxByCIF(currentContext.cif)
+    GetInboxByCIF(currentContext.selectedCIF)
       .then((responseData: IInboxDetail[]) => {
         if (responseData && responseData.length > 0) {
           setInboxListing(responseData);
