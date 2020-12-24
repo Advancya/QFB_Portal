@@ -38,7 +38,7 @@ interface AuthProviderProps { }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [userSettings, setUserSettings] = useState<IUserSettings>(initialSettingsData);
-  const [language, setLanguage] = useState(helper.getLanguage());
+  const [language, setLanguage] = useState(helper.getLanguage() || "en");
   const [userRole, setUserRole] = useState<string>("");
   const [selectedCIF, setselectedCIF] = useState<string>(initialSettingsData.customerId);
 

@@ -1,6 +1,5 @@
 import moment from "moment";
-import { ICommonFilter, IRequestFilter, ITransactionDetail, IRequestDetail } from "./publicInterfaces"
-
+import { ICommonFilter, ICommonFilter2, IRequestFilter, ITransactionDetail, IRequestDetail } from "./publicInterfaces"
 export interface ITransactionFilter {
   exposeFilter: boolean,
   DateOption: string,
@@ -12,17 +11,36 @@ export interface ITransactionFilter {
 }
 
 export interface ITransaction {
+  accountNo: string;
+  accountNumber?: string;
+  bookingDate: string;
+  installmentDate?: string;
+  extraDetails?: string;
+  amount: number;
+  transaction_Amount?: number;
+  balance?: number;
+  transactionsDetails: string;
+  transactionType: string;
+  transacitonType?: string;
+  descirption: string;
+  descriptions?: string;
+  trxDescirption: string;
+  paymentDetails?: string;
+}
 
-  accountNo: string,
-  bookingDate: string,
-  installmentDate?: string,
-  extraDetails?: string,
-  amount: number,
-  transactionsDetails: string,
-  transactionType: string,
-  transacitonType?: string,
-  descirption: string,
-  trxDescirption: string,
+
+export interface iRmRequests {
+  id: string;
+  requestCreateDate: string;
+  requestSubjectAR: string;
+  requestSubject: string;
+  requestStatusAR: string;
+  requestStatus: string;
+  customerName: string;
+  cif: string;
+  customerMobile: string;
+  type: string;
+  requestTypeId: string;
 }
 
 export const getLanguage = () => {
@@ -37,15 +55,6 @@ interface IChartItem {
 interface IColumn {
   Amount: number;
   AmounRecievedProfitt: number;
-}
-interface IInvestmentData {
-  name: string;
-  //drilldown: string,
-  color: string;
-  groupPadding: number;
-  pointPadding: number;
-  data: number[];
-  //xAxis: number,
 }
 
 declare global {
@@ -87,7 +96,7 @@ export interface IInboxFilter {
 
 export const filterTransactions = (
   transactions: ITransaction[],
-  filter: ITransactionFilter
+  filter: ICommonFilter2
 ) => {
   let filteredTransactions = [] as ITransaction[];
   switch (filter.DateOption) {
@@ -122,55 +131,82 @@ export const filterTransactions = (
       );
       break;
     default:
-      filteredTransactions = transactions;
+      filteredTransactions = transactions.filter(
+        (t) =>
+          moment(t.bookingDate ? t.bookingDate : t.installmentDate).toDate() >=
+          moment().subtract(3, "month").toDate()
+      );
       break;
   }
 
   if (
     filter.AmountOperator &&
     filter.AmountOperator !== "" &&
-    filter.Amount !== ""
+    !!filter.Amount
   ) {
     switch (filter.AmountOperator) {
       case "=":
-        filteredTransactions = filteredTransactions.filter(
-          (t) => t.amount === parseFloat(filter.Amount)
+        filteredTransactions = filteredTransactions.filter((t) =>
+          !!t.transaction_Amount
+            ? t.transaction_Amount === parseFloat(filter.Amount)
+            : t.amount === parseFloat(filter.Amount)
         );
         break;
       case ">=":
-        filteredTransactions = filteredTransactions.filter(
-          (t) => t.amount >= parseFloat(filter.Amount)
+        filteredTransactions = filteredTransactions.filter((t) =>
+          !!t.transaction_Amount
+            ? t.transaction_Amount >= parseFloat(filter.Amount)
+            : t.amount >= parseFloat(filter.Amount)
         );
         break;
       case ">":
-        filteredTransactions = filteredTransactions.filter(
-          (t) => t.amount > parseFloat(filter.Amount)
+        filteredTransactions = filteredTransactions.filter((t) =>
+          !!t.transaction_Amount
+            ? t.transaction_Amount > parseFloat(filter.Amount)
+            : t.amount > parseFloat(filter.Amount)
         );
         break;
       case "<=":
-        filteredTransactions = filteredTransactions.filter(
-          (t) => t.amount <= parseFloat(filter.Amount)
+        filteredTransactions = filteredTransactions.filter((t) =>
+          !!t.transaction_Amount
+            ? t.transaction_Amount <= parseFloat(filter.Amount)
+            : t.amount <= parseFloat(filter.Amount)
         );
         break;
       case "<":
-        filteredTransactions = filteredTransactions.filter(
-          (t) => t.amount < parseFloat(filter.Amount)
+        filteredTransactions = filteredTransactions.filter((t) =>
+          !!t.transaction_Amount
+            ? t.transaction_Amount < parseFloat(filter.Amount)
+            : t.amount < parseFloat(filter.Amount)
         );
         break;
     }
   }
 
   if (filter.OptionalCheck.length > 0 && filter.OptionalCheck[0].label !== "") {
-    const applyOptionalFilter =
+    const applyOptionalFilter = filter.OptionalCheck.length > 1 ?
       filter.OptionalCheck.some((a: IOptionalCheck) => a.value) &&
-      filter.OptionalCheck.some((b: IOptionalCheck) => !b.value);
+      filter.OptionalCheck.some((b: IOptionalCheck) => !b.value) : filter.OptionalCheck[0].value;
+
+    //console.log(applyOptionalFilter);
+
     filter.OptionalCheck.map((o: IOptionalCheck) => {
-      if (applyOptionalFilter && !o.value) {
+      if (applyOptionalFilter && o.value) {
+
+        console.log(o.label.toLowerCase());
+
         filteredTransactions = filteredTransactions.filter((t) =>
           t.transactionType
             ? String(t.transactionType).toLowerCase() !== o.label.toLowerCase()
-            : String(t.trxDescirption).toLowerCase() !== o.label.toLowerCase()
+            : !!t.transaction_Amount
+              ? o.label.toLowerCase() ===
+                ("debit" || "مدين")
+                ? t.transaction_Amount < 0
+                : t.transaction_Amount > 0
+              : String(t.trxDescirption).toLowerCase() !== o.label.toLowerCase()
         );
+      } else {
+        console.log("filter not applied on dynamic check boxes")
       }
     });
   }
@@ -215,7 +251,72 @@ export const filterRequests = (
       );
       break;
     default:
-      filteredRequests = transactions;
+      filteredRequests = transactions.filter(
+        (t) =>
+          moment(t.requestCreateDate).toDate() >=
+          moment().subtract(3, "month").toDate()
+      );
+      break;
+  }
+
+  if (filter.Status && filter.Status !== "0") {
+    filteredRequests = filteredRequests.filter(
+      (t) =>
+        String(t.requestStatus).toLowerCase() === filter.Status.toLowerCase()
+    );
+  }
+
+  if (filter.Type && filter.Type !== "0") {
+    filteredRequests = filteredRequests.filter(
+      (t) => String(t.requestTypeId) === String(filter.Type)
+    );
+  }
+
+  return filteredRequests;
+};
+
+export const filterRMRequests = (
+  transactions: iRmRequests[],
+  filter: IRequestFilter
+) => {
+  let filteredRequests = [] as iRmRequests[];
+  switch (filter.DateOption) {
+    case "1":
+      filteredRequests = transactions.filter(
+        (t) =>
+          moment(t.requestCreateDate).toDate() >=
+          moment().subtract(1, "week").toDate()
+      );
+      break;
+    case "2":
+      filteredRequests = transactions.filter(
+        (t) =>
+          moment(t.requestCreateDate).toDate() >=
+          moment().subtract(1, "month").toDate()
+      );
+      break;
+    case "3":
+      filteredRequests = transactions.filter(
+        (t) =>
+          moment(t.requestCreateDate).toDate() >=
+          moment().subtract(3, "month").toDate()
+      );
+      break;
+    case "4":
+      filteredRequests = transactions.filter(
+        (t) =>
+          moment(t.requestCreateDate).toDate() >=
+          moment(filter.StartDate).toDate() &&
+          moment(t.requestCreateDate).toDate() <=
+          moment(filter.EndDate).toDate()
+      );
+      break;
+    default:
+      filteredRequests = transactions.filter(
+        (t) =>
+          moment(t.requestCreateDate).toDate() >=
+          moment().subtract(3, "month").toDate()
+      );
       break;
   }
 
@@ -271,10 +372,15 @@ export const filterTransactionList = (
       );
       break;
     default:
-      filteredTransactions = transactions;
+      filteredTransactions = transactions.filter(
+        (t) =>
+          moment(t.transactionDate).toDate() >=
+          moment().subtract(3, "month").toDate()
+      );
       break;
   }
 
+  
   if (
     filter.AmountOperator &&
     filter.AmountOperator !== "" &&
@@ -297,7 +403,7 @@ export const filterTransactionList = (
         );
         break;
       case "<=":
-        filteredTransactions = filteredTransactions.filter(
+        filteredTransactions = transactions.filter(
           (t) => parseFloat(t.amount) <= parseFloat(filter.Amount)
         );
         break;

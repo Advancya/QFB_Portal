@@ -8,10 +8,12 @@ import DepositeRecievedProfit from "./DepositeRecievedProfit";
 import { AuthContext } from "../../../providers/AuthProvider";
 import { PortfolioContext } from "../../../pages/Homepage";
 import { localStrings as local_Strings } from "../../../translations/localStrings";
+import { emptyDeposit, IDeposit } from "../../../Helpers/publicInterfaces";
 
 function Deposite() {
   const currentContext = useContext(AuthContext);
   const userPortfolio = useContext(PortfolioContext);
+  const [depositNumber, setReferenceId] = useState<string>("");
 
   const [showDepositeListing, setShowDepositeListing] = useState(false);
 
@@ -25,11 +27,12 @@ function Deposite() {
   const [showDepositeDetails, setshowDepositeDetails] = useState(false);
 
   const handleCloseDepositeDetails = () => setshowDepositeDetails(false);
-  const handleShowDepositeDetails = () => {
+  const handleShowDepositeDetails = (depositNumber: string) => {
     handleCloseDepositeListing();
     setshowDepositeDetails(true);
-    //cashListingProps.hideCashListingModal;
+    setReferenceId(depositNumber);
   };
+
   const handleBackDepositeDetails = () => {
     setshowDepositeDetails(false);
 
@@ -74,18 +77,20 @@ function Deposite() {
         showDepositeListingModal={showDepositeListing}
         hideDepositeListingModal={handleCloseDepositeListing}
         showDepositeDetailsModal={handleShowDepositeDetails}
-      ></DepositeListing>
-      <DepositeDetails
-        showDepositeDetailsModal={showDepositeDetails}
-        hideDepositeDetailsModal={handleCloseDepositeDetails}
-        backDepositeListingModal={handleBackDepositeDetails}
-        showDepositeRecievedProfit={handleShowDepositeRecievedProfit}
-      ></DepositeDetails>
+      />
+      {depositNumber && !!depositNumber &&
+        <DepositeDetails
+          showDepositeDetailsModal={showDepositeDetails}
+          hideDepositeDetailsModal={handleCloseDepositeDetails}
+          backDepositeListingModal={handleBackDepositeDetails}
+          showDepositeRecievedProfit={handleShowDepositeRecievedProfit}
+          depositNumber={depositNumber}
+        />}
       <DepositeRecievedProfit
         showDepositeRecievedProfitModal={showDepositeRecievedProfit}
         hideDepositeRecievedProfitModal={handleCloseDepositeRecievedProfit}
         backDepositeRecievedProfitModal={handleBackDepositeRecievedProfit}
-      ></DepositeRecievedProfit>
+      />
     </div>
   );
 }

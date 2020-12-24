@@ -16,6 +16,9 @@ import axios from "axios";
 import { GetUserLocalData } from "../Helpers/authHelper";
 import { GetInboxByCIF, GetUserPortfolio, GetGuarantees } from "../services/cmsService";
 import { emptyInboxDetail, IInboxDetail } from "../Helpers/publicInterfaces";
+import LoadingOverlay from "react-loading-overlay";
+import PuffLoader from "react-spinners/PuffLoader";
+import Constant from "../constants/defaultData";
 
 export interface IUserPortfolio {
   customerCode: string;
@@ -86,7 +89,7 @@ function HomePage() {
   const [userPortfolio, setUserPortfolio] = useState<IUserPortfolio>(
     intialPortfolioData
   );
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -158,6 +161,15 @@ function HomePage() {
         <AuthCustomHeader />
         {/* <Breadcrumb pageName={""} /> */}
         <section id="main-section" className="main-section">
+          <LoadingOverlay
+            active={isLoading}
+            spinner={
+              <PuffLoader
+                size={Constant.SpnnerSize}
+                color={Constant.SpinnerColor}
+              />
+            }
+          />
           <div className="container-fluid">
             <div className="row">
               <div className="col-lg-9">

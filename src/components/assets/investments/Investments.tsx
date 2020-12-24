@@ -12,6 +12,7 @@ import { localStrings as local_Strings } from "../../../translations/localString
 function Investments() {
   const currentContext = useContext(AuthContext);
   const userPortfolio = useContext(PortfolioContext);
+  const [investmentNumber, setReferenceId] = useState<string>("");
 
   const [showInvestmentsListing, setShowInvestmentsListing] = useState(false);
 
@@ -25,10 +26,10 @@ function Investments() {
   const [showInvestmentsDetails, setshowInvestmentsDetails] = useState(false);
 
   const handleCloseInvestmentsDetails = () => setshowInvestmentsDetails(false);
-  const handleShowInvestmentsDetails = () => {
+  const handleShowInvestmentsDetails = (investmentNumber: string) => {
     handleCloseInvestmentsListing();
     setshowInvestmentsDetails(true);
-    //cashListingProps.hideCashListingModal;
+    setReferenceId(investmentNumber);
   };
   const handleBackInvestmentsDetails = () => {
     setshowInvestmentsDetails(false);
@@ -96,13 +97,15 @@ function Investments() {
         hideInvestmentsListingModal={handleCloseInvestmentsListing}
         showInvestmentsDetailsModal={handleShowInvestmentsDetails}
       ></InvestmentsListing>
-      <InvestmentsDetails
-        showInvestmentsDetailsModal={showInvestmentsDetails}
-        hideInvestmentsDetailsModal={handleCloseInvestmentsDetails}
-        backInvestmentsListingModal={handleBackInvestmentsDetails}
-        showInvestmentsRecievedProfit={handleShowInvestmentsRecievedProfit}
-        showInvestmentsBuyAndSell={handleShowInvestmentsBuyAndSell}
-      ></InvestmentsDetails>
+      {investmentNumber && !!investmentNumber &&
+        <InvestmentsDetails
+          showInvestmentsDetailsModal={showInvestmentsDetails}
+          hideInvestmentsDetailsModal={handleCloseInvestmentsDetails}
+          backInvestmentsListingModal={handleBackInvestmentsDetails}
+          showInvestmentsRecievedProfit={handleShowInvestmentsRecievedProfit}
+          showInvestmentsBuyAndSell={handleShowInvestmentsBuyAndSell}
+          investmentNumber={investmentNumber}
+        />}
       <InvestmentsRecievedProfit
         showInvestmentsRecievedProfitModal={showInvestmentsRecievedProfit}
         hideInvestmentsRecievedProfitModal={

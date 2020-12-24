@@ -18,8 +18,9 @@ import { PortfolioContext } from "../../../pages/Homepage";
 interface iDepositeListing {
   showDepositeListingModal: boolean;
   hideDepositeListingModal: () => void;
-  showDepositeDetailsModal: () => void;
+  showDepositeDetailsModal: (depositNumber: string) => void;
 }
+
 function DepositeListing(props: iDepositeListing) {
   const currentContext = useContext(AuthContext);
   const userPortfolio = useContext(PortfolioContext);
@@ -60,10 +61,10 @@ function DepositeListing(props: iDepositeListing) {
       <a
         href="#"
         className="row align-items-center"
-        onClick={props.showDepositeDetailsModal}
+        onClick={() => props.showDepositeDetailsModal(item.contractNumber)}
       >
         <div className="col-6 col-sm-4">
-          <h5>{local_Strings.DepositeListingAccountNumberLabel}</h5>
+          <h5>{local_Strings.DepositNo}</h5>
           <h4>{item.contractNumber || ""}</h4>
         </div>
         <div className="col-6 col-sm-4">

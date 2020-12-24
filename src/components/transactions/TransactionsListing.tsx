@@ -1,10 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import transactionIconColor from "../../images/transaction-icon-color.svg";
-import FilterDateControl from '../../shared/FilterDateControl';
-import FilterCustomDateControl from '../../shared/FilterCustomDateControl';
-import FilterAmountControl from '../../shared/FilterAmountControl';
-import FilterButtonControl from '../../shared/FilterButtonControl';
+import FilterCommonControl from '../../shared/FilterCommonControl';
 import FilterMoreButtonControl from '../../shared/FilterMoreButtonControl';
 import moment from "moment";
 import { localStrings as local_Strings } from '../../translations/localStrings';
@@ -34,18 +31,10 @@ function TransactionsListing(props: iTransactionsListing) {
   const [offset, setOffset] = useState<number>(rowLimit);
   const [data, setData] = useState<ITransactionDetail[]>([emptyTransactionDetail]);
   const [filteredData, setFilteredData] = useState<ITransactionDetail[]>([emptyTransactionDetail]);
-  const [filters, setFilter] = useState<ICommonFilter>({
-    filterApplied: false,
-    DateOption: "0",
-    StartDate: moment().add(-7, "days").toDate(),
-    EndDate: moment().toDate(),
-    AmountOperator: "",
-    Amount: "0",
-  });
 
   useEffect(() => {
     let isMounted = true;
-    
+
     const initialLoadMethod = async () => {
       setLoading(true);
       GetTransactionsByCIF(currentContext.selectedCIF)
@@ -141,49 +130,23 @@ function TransactionsListing(props: iTransactionsListing) {
           </button>
         </Modal.Header>
         <Modal.Body>
-          <form className="filter-box">
-            <div className="row headRow align-items-center">
-              <div className="col-sm-3">
-                <FilterDateControl value={filters.DateOption}
-                  onChange={(_value: string) => setFilter({ ...filters, DateOption: _value })} />
-              </div>
-              <div className="col-sm-4">
-                <FilterAmountControl AmountOperator={filters.AmountOperator} Amount={filters.Amount}
-                  onChangeOperator={(_value: string) => setFilter({ ...filters, AmountOperator: _value })}
-                  onChangeAmount={(_value: string) => setFilter({ ...filters, Amount: _value })} />
-              </div>
-
-              <div className="col-sm-3 offset-sm-2">
-                <FilterButtonControl
-                  clearFilter={() => {
-                    setFilter({
-                      filterApplied: false,
-                      DateOption: "0",
-                      Amount: "",
-                      AmountOperator: "0",
-                    });
-                    setFilteredData(data);
-                    setOffset(rowLimit);
-                  }}
-                  applyFilter={() => {
-                    setFilter({ ...filters, filterApplied: true });
-                    console.log(filters);
-                    const _filteredData = helper.filterTransactionList(
-                      data,
-                      filters
-                    );
-                    setFilteredData(_filteredData);
-                  }}
-                  showClearFilter={filters.filterApplied} />
-              </div>
-              <FilterCustomDateControl
-                onStartDateChange={(_value: string) => setFilter({ ...filters, StartDate: moment(_value).toDate() })}
-                onEndDateChange={(_value: string) => setFilter({ ...filters, EndDate: moment(_value).toDate() })}
-                StartDate={filters.StartDate}
-                EndDate={filters.EndDate}
-                showCustomDateFilter={filters.DateOption === "4"} />
-            </div>
-          </form>
+          <FilterCommonControl
+            clearFilter={() => {
+              setFilteredData(data);
+              if (data.length < rowLimit) {
+                setOffset(data.length);
+              } else {
+                setOffset(rowLimit);
+              }
+            }}
+            applyFilter={(filters: ICommonFilter) => {
+              console.log(filters);
+              const _filteredData = helper.filterTransactionList(
+                data,
+                filters
+              );
+              setFilteredData(_filteredData);
+            }} />
           <div className="box modal-box">
             <ul className="box-list" id="reqList">
               {filteredData &&

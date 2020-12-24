@@ -192,10 +192,10 @@ const ar = {
   NoDataToShow: "لا توجد بيانات لعرضها",
   OfferList_NoData: "لا تتوافر بيانات",
 
-  DepositNo: "رقم الإيداع | ",
-  AccountNo: "رقم الحساب | ",
-  InvestmentNo: "رقم الاستثمار | ",
-  LoanNo: "رقم المرفق | ",
+  DepositNo: "رقم الإيداع ",
+  AccountNo: "رقم الحساب ",
+  InvestmentNo: "رقم الاستثمار ",
+  LoanNo: "رقم المرفق ",
   Amount: "مُبَلِّغ",
   Description: "أَوْصاف",
   Cash: "السيولة النقدية",
@@ -204,8 +204,8 @@ const ar = {
   Loan: "قرض",
   BuyAndSellTransactions_Status_Buy: "Buy",
   BuyAndSellTransactions_Status_Sell: "Sell",
-  Debit: "مدين",
-  Credit: "ائتمان",
+  CashDetails_Filter_Debit: "مدين",
+  CashDetails_Filter_Credit: "ائتمان",
   HistoricalPayments_PastDueSettlement: "التسوية المتأخرة",
   HistoricalPayments_SettlemenOfPayment: "تسوية الدفع",
 
@@ -234,7 +234,7 @@ const ar = {
   TransactionScreenFilter_LT: "أقل من",
 
   BankGuarantee: "ضمان بنكي",
-  GuaranteeNo: "رقم الضمان | ",
+  GuaranteeNo: "رقم الضمان ",
   BankGuaranteeListing: "قائمة الضمان البنكي",
   BankGuaranteeDetails: "تفاصيل الضمان البنكي",
 
@@ -316,7 +316,7 @@ const ar = {
   TransactionTransferTypeLabel: "نوع التحويل",
 
   BeneficiariesListingTitle: "قائمة المستفيدون",
-  BeneficiariesListingIDLabel: "هوية المستفيدين | ",
+  BeneficiariesListingIDLabel: "هوية المستفيدين ",
   BeneficiariesListingCountrySample: "دولة قطر",
 
   NewBeneficiaryTitle: "إضافة مستفيد جديد",
@@ -361,7 +361,7 @@ const ar = {
 
   SearchText: "بحث",
   RMClientsRequestListingTitle: "طلب قائمة العملاء",
-  RMSampleAccount: "رقم العميل | ",
+  RMSampleAccount: "رقم العميل ",
   RMSampleTitle: "كشف حساب",
 
   RMClienPortfolioListingTitle: "قائمة محافظ العملاء",
@@ -385,8 +385,8 @@ const ar = {
   InboxMessageDetailsPreviousLabel: "البيانات السابقة",
 
   ProductsAndOffersListingTitle: "قائمة المنتجات والعروض",
-  ProductsAndOffersListingNumberLabel: "رقم المنتج |  ",
-  ProductsAndOffersListingNameLabel: "اسم المنتج | ",
+  ProductsAndOffersListingNumberLabel: "رقم المنتج  ",
+  ProductsAndOffersListingNameLabel: "اسم المنتج ",
   ProductsAndOffersDetailsTitle: "تفاصيل المنتج والعروض",
 
   ContactUsTite: "اتصل بنا",

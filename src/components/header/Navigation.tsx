@@ -9,30 +9,24 @@ import { AuthContext } from "../../providers/AuthProvider";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { emptyUserInfo, IUserInfo } from "../../Helpers/publicInterfaces";
 import { GetUserWelcomeData } from "../../services/cmsService";
-import LoadingOverlay from "react-loading-overlay";
-import PuffLoader from "react-spinners/PuffLoader";
-import Constant from "../../constants/defaultData";
 
 function Navigation() {
 
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
   const [userInfo, setUserInfo] = useState<IUserInfo>(emptyUserInfo);
-  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     let isMounted = true;
 
     const initialLoadMethod = async () => {
-    setLoading(true);
     GetUserWelcomeData(currentContext.selectedCIF)
       .then((responseData: any) => {
         if (responseData && responseData.length > 0 && isMounted) {
           setUserInfo(responseData[0] as IUserInfo);
         }
       })
-      .catch((e: any) => console.log(e))
-      .finally(() => setLoading(false));
+      .catch((e: any) => console.log(e));
     }
     if (!!currentContext.selectedCIF) {
       initialLoadMethod();
@@ -45,15 +39,7 @@ function Navigation() {
 
   return (
     <div className="col-md-7">
-      <LoadingOverlay
-        active={isLoading}
-        spinner={
-          <PuffLoader
-            size={Constant.SpnnerSize}
-            color={Constant.SpinnerColor}
-          />
-        }
-      />
+      
       <div className="welcomeText text-right">
         <Link to={`/${currentContext.language}/Home`} className="">
           {local_Strings.WelcomeScreenTitle + " " + (userInfo.customerShortName || "") + " "}

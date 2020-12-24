@@ -16,7 +16,6 @@ interface iTransactionsDetails {
 function TransactionsDetails(props: iTransactionsDetails) {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
-  const [isLoading, setLoading] = useState(true);
 
   return (
     <Modal

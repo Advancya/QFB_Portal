@@ -1,3 +1,4 @@
+import moment from "moment";
 export default interface iDDL {
   label: any;
   value: any;
@@ -215,6 +216,38 @@ export interface ICommonFilter {
   Amount: string;
 }
 
+
+export const emptyCommonFilter = {
+  filterApplied: false,
+  DateOption: "0",
+  StartDate: moment().add(-7, "days").toDate(),
+  EndDate: moment().toDate(),
+  AmountOperator: "",
+  Amount: "",
+}
+
+
+export interface ICommonFilter2 {
+  filterApplied: boolean;
+  DateOption: string;
+  StartDate?: Date;
+  EndDate?: Date;
+  AmountOperator: string;
+  Amount: string;
+  OptionalCheck: IKeyValuePair[];
+}
+
+
+export const emptyCommonFilter2 = {
+  filterApplied: false,
+  DateOption: "0",
+  StartDate: moment().add(-7, "days").toDate(),
+  EndDate: moment().toDate(),
+  AmountOperator: "",
+  Amount: "",
+  OptionalCheck: [{ label: "", value: false }, { label: "", value: false }]
+}
+
 export interface IRequestFilter {
   DateOption: string;
   StartDate?: Date;
@@ -293,6 +326,51 @@ export const emptyDeposit = {
   currency: "",
 }
 
+export interface IKeyValuePair {
+  label: string;
+  value: any;
+}
+export interface IDepositDetail {
+  DepositAmount: IKeyValuePair;
+  DepositContractNumber: IKeyValuePair;
+  Currency: IKeyValuePair;
+  StartDate: IKeyValuePair;
+  MaturityDate: IKeyValuePair;
+  ExpectedProfitRate: IKeyValuePair;
+  ProfitDistributionFrequency: IKeyValuePair;
+}
+
+export const emptyDepositDetail = {
+  DepositContractNumber: {
+    label: "",
+    value: "",
+  },
+  DepositAmount: {
+    label: "",
+    value: "",
+  },
+  Currency: {
+    label: "",
+    value: "",
+  },
+  StartDate: {
+    label: "",
+    value: "",
+  },
+  MaturityDate: {
+    label: "",
+    value: "",
+  },
+  ExpectedProfitRate: {
+    label: "",
+    value: "",
+  },
+  ProfitDistributionFrequency: {
+    label: "",
+    value: "",
+  }
+}
+
 export interface IInvestment {
   subAssetID: string;
   nominalAmount: number;
@@ -300,10 +378,153 @@ export interface IInvestment {
   securityCCY: string;
 }
 
-
 export const emptyInvestment = {
   subAssetID: "",
-      nominalAmount: 0,
-      profitRate: "",
-      securityCCY: "",
+  nominalAmount: 0,
+  profitRate: "",
+  securityCCY: "",
+}
+
+export interface IInvestmentDetail {
+  InvestmentAmount: IKeyValuePair;
+  InvestmentName: IKeyValuePair;
+  Currency: IKeyValuePair;
+  StartDate: IKeyValuePair;
+  Location: IKeyValuePair;
+  ExpectedProfitRate: IKeyValuePair;
+  ProfitDistributionFrequency: IKeyValuePair;
+}
+
+export const emptyInvestmentDetail = {
+  InvestmentAmount: {
+    label: "",
+    value: "",
+  },
+  InvestmentName: {
+    label: "",
+    value: "",
+  },
+  Currency: {
+    label: "",
+    value: "",
+  },
+  StartDate: {
+    label: "",
+    value: "",
+  },
+  Location: {
+    label: "",
+    value: "",
+  },
+  ExpectedProfitRate: {
+    label: "",
+    value: "",
+  },
+  ProfitDistributionFrequency: {
+    label: "",
+    value: "",
+  },
+}
+
+export interface ILoanItem {
+  ldReference: string;
+  productBalance: number;
+  profitRate?: string;
+  currency: string;
+}
+
+
+export const emptyLoanItem = {
+  ldReference: "",
+  productBalance: 0,
+  profitRate: "",
+  currency: "",
+}
+
+export interface IBankGuarantee {
+  id: string;
+  principalAmount: number;
+  currency: string;
+}
+
+export const emptyBankGuarantee = {
+  id: "",
+  principalAmount: 0,
+  currency: "",
+}
+
+export interface ITransaction {
+  accountNo: string;
+  accountNumber?: string;
+  bookingDate: string;
+  installmentDate?: string;
+  extraDetails?: string;
+  amount: number;
+  transaction_Amount?: number;
+  balance?: number;
+  transactionsDetails: string;
+  transactionType: string;
+  transacitonType?: string;
+  descirption: string;
+  descriptions?: string;
+  trxDescirption: string;
+  paymentDetails?: string;
+}
+
+
+export const emptyTransaction = {
+  accountNo: "",
+  bookingDate: "",
+  amount: 0,
+  transactionsDetails: "",
+  transactionType: "",
+  descirption: "",
+  trxDescirption: "",
+}
+
+export interface ITransactionAccordianDetail {
+  TransactionReference: IKeyValuePair;
+  InvestmentDescription: IKeyValuePair;
+  SecurityName: IKeyValuePair;
+  DepositReference: IKeyValuePair;
+  TransferReference: IKeyValuePair;
+  TransferDetails: IKeyValuePair;
+  BeneficiaryCustomer: IKeyValuePair;
+  BeneficiaryAccount: IKeyValuePair;
+}
+
+
+export const emptyTransactionAccordianDetail = {
+  TransactionReference: {
+    label: "",
+    value: "",
+  },
+  InvestmentDescription: {
+    label: "",
+    value: "",
+  },
+  SecurityName: {
+    label: "",
+    value: "",
+  },
+  DepositReference: {
+    label: "",
+    value: "",
+  },
+  TransferReference: {
+    label: "",
+    value: "",
+  },
+  TransferDetails: {
+    label: "",
+    value: "",
+  },
+  BeneficiaryCustomer: {
+    label: "",
+    value: "",
+  },
+  BeneficiaryAccount: {
+    label: "",
+    value: "",
+  },
 }

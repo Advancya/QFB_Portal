@@ -889,6 +889,19 @@ const GetAllRequestTypes = async () => {
   }
 };
 
+const GetCashTransactions = async (cif: string, accountNumber: string) => {
+  try {
+    const result = await apiInstance.get(
+      `/api/CashAccountTransactions?cif=${cif}&accid=${accountNumber}`
+    );
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
 export {
   GetStockData,
   ValidateRegisterData,
@@ -954,5 +967,6 @@ export {
   DeleteOfferById,
   UpdateOfferDetail,
   GetAllOfferSubscriptions,
-  GetAllRequestTypes
+  GetAllRequestTypes,
+  GetCashTransactions
 };

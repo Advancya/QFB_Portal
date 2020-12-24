@@ -130,7 +130,7 @@ const en = {
   CashDetailsBalanceLabel: "Balance",
   CashDetailsDescriptionLabel: "Description",
   CashDetailsAmountLabel: "Amount",
-  CurrentBalanceLabel: "Current Balance: ",
+  CurrentBalanceLabel: "Current Balance ",
   CashDetailsTransactionRefrence: "Transaction Reference",
   CashDetailsBeneficiaryName: "Beneficiary Name",
   CashDetailsBeneficiaryAccount: "Beneficiary Account",
@@ -142,7 +142,7 @@ const en = {
   DepositeListingTitle: "Deposite Account Listing",
   DepositeListingCash: "Deposite",
   DepositeListingCurrency: "QAR",
-  DepositeListingAccountNumberLabel: "Deposite No | ",
+  DepositeListingAccountNumberLabel: "Deposit No | ",
 
   DepositeDetailsRecieved: "Recieved Profit Transactions",
   DepositeDetailsFilter: "Filter",
@@ -191,10 +191,10 @@ const en = {
   NoDataToShow: "No Data to Show",
   OfferList_NoData: "No data available",
 
-  DepositNo: "Deposit No | ",
-  AccountNo: "Account No | ",
-  InvestmentNo: "Investment No | ",
-  LoanNo: "Facility No | ",
+  DepositNo: "Deposit No ",
+  AccountNo: "Account No ",
+  InvestmentNo: "Investment No ",
+  LoanNo: "Facility No ",
   Amount: "Amount",
   Description: "Description",
   Cash: "Cash",
@@ -203,8 +203,8 @@ const en = {
   Loan: "Facilities",
   BuyAndSellTransactions_Status_Buy: "Buy",
   BuyAndSellTransactions_Status_Sell: "Sell",
-  Debit: "Debit",
-  Credit: "Credit",
+  CashDetails_Filter_Debit: "Debit",
+  CashDetails_Filter_Credit: "Credit",
   HistoricalPayments_PastDueSettlement: "Past Due Settlement",
   HistoricalPayments_SettlemenOfPayment: "Payment of Installment",
 
@@ -234,7 +234,7 @@ const en = {
   TransactionScreenFilter_LT: "Less than",
 
   BankGuarantee: "Bank Guarantee",
-  GuaranteeNo: "Guarantee No | ",
+  GuaranteeNo: "Guarantee No ",
   BankGuaranteeListing: "Bank Guarantee Listing",
   BankGuaranteeDetails: "Bank Guarantee Details",
   InvestmentsDetailsTitle: "Investments Details",
@@ -315,7 +315,7 @@ const en = {
   TransactionOTPTitle: "Tranaction Confirmation",
 
   BeneficiariesListingTitle: "My Beneficiaries Listing",
-  BeneficiariesListingIDLabel: "Beneficiaries ID | ",
+  BeneficiariesListingIDLabel: "Beneficiaries ID ",
   BeneficiariesListingCountrySample: "Qatar",
 
   NewBeneficiaryTitle: "Add New Beneficiary",
@@ -363,7 +363,7 @@ const en = {
 
   SearchText: "Search",
   RMClientsRequestListingTitle: "Clients Request Listing",
-  RMSampleAccount: "CIF | ",
+  RMSampleAccount: "CIF ",
   RMSampleTitle: "Account Statement",
 
   RMClienPortfolioListingTitle: "Clients Portfolios Listing",
@@ -386,8 +386,8 @@ const en = {
   InboxMessageDetailsPreviousLabel: "Previous Statements",
 
   ProductsAndOffersListingTitle: "Product and Offers Listing",
-  ProductsAndOffersListingNumberLabel: "Product Number | ",
-  ProductsAndOffersListingNameLabel: "Product Name | ",
+  ProductsAndOffersListingNumberLabel: "Product Number ",
+  ProductsAndOffersListingNameLabel: "Product Name ",
   ProductsAndOffersDetailsTitle: "Product and Offers Details",
 
   ContactUsTite: "Contact Us",
