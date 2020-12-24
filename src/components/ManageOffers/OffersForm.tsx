@@ -53,7 +53,7 @@ function OffersForm(props: DetailsProps) {
   const submitTheRecord = async (values: IOfferDetail) => {
 
     setLoading(true);
-    const item = data.id > 0 ? values : {
+    const item = values.id > 0 ? values : {
       cif: auth.selectedCIF,
       title: values.title,
       titleAr: values.titleAr,
@@ -68,7 +68,7 @@ function OffersForm(props: DetailsProps) {
       offersSubscriptions: []
     };
 
-    const x = data.id > 0 ? await UpdateOfferDetail(item) : await AddNewOffer(item);
+    const x = values.id > 0 ? await UpdateOfferDetail(item) : await AddNewOffer(item);
     if (x) {
       addToast(local_Strings.OfferSavedMessage, {
         appearance: 'success',
@@ -258,98 +258,103 @@ function OffersForm(props: DetailsProps) {
                   <label className="mb-1 text-600">{local_Strings.OfferAttachment}</label>
                   {props.editable ?
                     <React.Fragment>
-                      <input type="file" multiple={false}
-                        id="customFileInput"
-                        lang={auth.language}
-                        className="custom-file-input"
-                        accept='application/pdf,.pdf'
-                        ref={fileInputRef}
-                        onBlur={handleBlur("fileName")}
-                        onChange={() => {
+                      <label className="file">
+                        <input type="file" multiple={false}
+                          id="file" aria-label="File browser example"
+                          lang={auth.language}
+                          className=""
+                          accept='application/pdf,.pdf'
+                          ref={fileInputRef}
+                          onBlur={handleBlur("fileName")}
+                          onChange={() => {
 
-                          const file = fileInputRef.current.files[0];
-                          const supportedExtensions = ['pdf'];
-                          if (file) {
-                            if (file.size <= 0) {
-                              addToast(file.name + local_Strings.isEmptyText, {
-                                appearance: 'error',
-                                autoDismiss: true,
-                              });
-                              fileInputRef.current.value = "";
-                            } else if (!supportedExtensions.includes(file.name.toLowerCase().split('.').pop())) {
-                              addToast(local_Strings.supportedFileTypeError.replace("{*}", file.name), {
-                                appearance: 'error',
-                                autoDismiss: true,
-                              });
-                              fileInputRef.current.value = "";
-                            } else if ((file.size / 1024 / 1024) > 10 ||
-                              (file.size / 1024 / 1024) > 10
-                            ) {
-                              addToast(local_Strings.moreThanLimit, {
-                                appearance: 'error',
-                                autoDismiss: true,
-                              });
-                              fileInputRef.current.value = "";
-                            } else {
-                              const reader = new FileReader();
-                              reader.onload = (e: any) => {
-                                const content = new TextDecoder().decode(Buffer.from(e.target.result));
-                                const fileContent = content.split(',').pop();
-                                setFieldValue("fileName", file.name);
-                                setFieldValue("fileContent", fileContent);
-                                const _calSize = (3 * ((fileContent ? fileContent.length : 1) / 4 / 1024 / 1024)).toFixed(4);
-                                setFileSize(Math.round((Number(_calSize) + Number.EPSILON) * 100) / 100);
+                            const file = fileInputRef.current.files[0];
+                            const supportedExtensions = ['pdf'];
+                            if (file) {
+                              if (file.size <= 0) {
+                                addToast(file.name + local_Strings.isEmptyText, {
+                                  appearance: 'error',
+                                  autoDismiss: true,
+                                });
+                                fileInputRef.current.value = "";
+                              } else if (!supportedExtensions.includes(file.name.toLowerCase().split('.').pop())) {
+                                addToast(local_Strings.supportedFileTypeError.replace("{*}", file.name), {
+                                  appearance: 'error',
+                                  autoDismiss: true,
+                                });
+                                fileInputRef.current.value = "";
+                              } else if ((file.size / 1024 / 1024) > 10 ||
+                                (file.size / 1024 / 1024) > 10
+                              ) {
+                                addToast(local_Strings.moreThanLimit, {
+                                  appearance: 'error',
+                                  autoDismiss: true,
+                                });
+                                fileInputRef.current.value = "";
+                              } else {
+                                const reader = new FileReader();
+                                reader.onload = (e: any) => {
+                                  const content = new TextDecoder().decode(Buffer.from(e.target.result));
+                                  const fileContent = content.split(',').pop();
+                                  
+                                  setFieldValue("fileName", file.name);
+                                  setFieldValue("fileContent", fileContent);
+
+                                  const _calSize = (3 * ((fileContent ? fileContent.length : 1) / 4 / 1024 / 1024)).toFixed(4);
+                                  setFileSize(Math.round((Number(_calSize) + Number.EPSILON) * 100) / 100);
+                                }
+                                reader.readAsDataURL(file);
+                                fileInputRef.current.value = "";
                               }
-                              reader.readAsDataURL(file);
-                              fileInputRef.current.value = "";
                             }
-                          }
-                        }} />
-                      <label className="custom-file-label" style={{ position: "relative" }}
-                        htmlFor="customFileInput">
-                        {local_Strings.OfferFileBrowseLabel}
+                          }} />
+
+                        <span className="file-custom">
+                          {local_Strings.OfferFileBrowseLabel}
+                        </span>
                       </label>
                     </React.Fragment> : null}
-                  {!!values.fileName &&
-                    <div className="row no-gutters align-items-center view-attachment">
-                      <div className="col-2 col-lg-2 text-center">
-                        <img alt="" src={pdfIcon}
-                          style={{ maxWidth: "75%" }} className="img-fluid" />
-                      </div>
-                      <div className="col-8 col-lg-9 cursor-pointer"
-                        onClick={() => {
 
-                          if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-                            window.navigator.msSaveOrOpenBlob(helper.b64toBlob(data.fileContent, mime.getType(data.fileName)), data.fileName);
-                          }
-                          else {
-                            const fileContent = `data:${mime.getType(data.fileName)};base64,${data.fileContent}`;
-                            const downloadLink = document.createElement("a") as HTMLAnchorElement;
-                            downloadLink.download = data.fileName;
-                            downloadLink.href = fileContent;
-                            downloadLink.click();
-                          }
-                        }}>
-                        <h5>{values.fileName}<br />
-                          <small>{local_Strings.sizeLabel}: {fileSize} MB</small></h5>
-                      </div>
-                      {props.editable &&
-                        <div className="col-2 col-lg-1 text-center">
-                          <button className="btnFileDelete" onClick={() => {
-                            setFieldValue("fileName", "");
-                            setFieldValue("fileContent", "");
-                            setData({
-                              ...data, fileName: "", fileContent: "",
-                            });
-                          }}
-                          >
-                            <i className="fa fa-trash-o"></i>
-                          </button>
-                        </div>
-                      }
-                    </div>}
                   {/* {touched.fileName && errors.fileName && InvalidFieldError(errors.fileName)} */}
                 </div>
+                {values.fileName && !!values.fileName ?
+                  <div className="row no-gutters align-items-center view-attachment">
+                    <div className="col-2 col-lg-2 text-center">
+                      <img alt="" src={pdfIcon}
+                        style={{ maxWidth: "75%" }} className="img-fluid" />
+                    </div>
+                    <div className="col-8 col-lg-9 cursor-pointer"
+                      onClick={() => {
+
+                        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                          window.navigator.msSaveOrOpenBlob(helper.b64toBlob(values.fileContent, mime.getType(values.fileName)), values.fileName);
+                        }
+                        else {
+                          const fileContent = `data:${mime.getType(values.fileName)};base64,${values.fileContent}`;
+                          const downloadLink = document.createElement("a") as HTMLAnchorElement;
+                          downloadLink.download = values.fileName;
+                          downloadLink.href = fileContent;
+                          downloadLink.click();
+                        }
+                      }}>
+                      <h5>{values.fileName}<br />
+                        <small>{local_Strings.sizeLabel}: {fileSize} MB</small></h5>
+                    </div>
+                    {props.editable &&
+                      <div className="col-2 col-lg-1 text-center">
+                        <button className="btnFileDelete" onClick={() => {
+                          setFieldValue("fileName", "");
+                          setFieldValue("fileContent", "");
+                          setData({
+                            ...data, fileName: "", fileContent: "",
+                          });
+                        }}
+                        >
+                          <i className="fa fa-trash-o"></i>
+                        </button>
+                      </div>
+                    }
+                  </div> : null}
                 {props.editable &&
                   <div className="form-group">
 
