@@ -34,6 +34,7 @@
     "react-confirm-alert": "^2.6.2",
     "react-datepicker": "^3.3.0",
     "react-dom": "^17.0.1",
+    "react-export-excel": "^0.5.3",
     "react-fontawesome": "^1.7.1",
     "react-helmet": "^6.1.0",
     "react-loading-overlay": "^1.0.1",
@@ -75,6 +76,7 @@
     ]
   },
   "devDependencies": {
+    "@types/file-saver": "^2.0.1",
     "@types/query-string": "^6.3.0",
     "@types/randomatic": "^3.1.0",
     "@types/react-toast-notifications": "^2.4.0",

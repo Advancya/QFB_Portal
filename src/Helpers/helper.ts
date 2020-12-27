@@ -1,5 +1,5 @@
 import moment from "moment";
-import { ICommonFilter, ICommonFilter2, IRequestFilter, ITransactionDetail, IRequestDetail } from "./publicInterfaces"
+import { ICommonFilter, IRequestFilter, ITransactionDetail, IRequestDetail } from "./publicInterfaces"
 export interface ITransactionFilter {
   exposeFilter: boolean,
   DateOption: string,
@@ -96,7 +96,7 @@ export interface IInboxFilter {
 
 export const filterTransactions = (
   transactions: ITransaction[],
-  filter: ICommonFilter2
+  filter: ICommonFilter
 ) => {
   let filteredTransactions = [] as ITransaction[];
   switch (filter.DateOption) {
@@ -510,7 +510,10 @@ export const transformingTransactionDetail = (
 
     outputJSONStr =
       outputJSONStr +
-      `"${uniquePropStr}": {"label": "${labelStr}", "value": "${valueStr}"},`;
+      `"${uniquePropStr}": {"label": "${labelStr}", "value": "${valueStr.replace(
+        ",",
+        ""
+      )}"},`;
   });
   outputJSONStr = outputJSONStr.slice(0, -1) + "}";
 

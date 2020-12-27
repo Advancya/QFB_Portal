@@ -10,7 +10,7 @@ import { localStrings as local_Strings } from "../../../translations/localString
 function Cash() {
   const currentContext = useContext(AuthContext);
   const userPortfolio = useContext(PortfolioContext);
-
+  const [params, setDetailScreenParams] = useState<{ accountNumber: string, balance: number }>({ accountNumber: "", balance: 0 });
   const [showCashListing, setShowCashListing] = useState(false);
 
   const handleCloseCashListing = () => {
@@ -23,10 +23,10 @@ function Cash() {
   const [showCashDetails, setshowCashDetails] = useState(false);
 
   const handleCloseCashDetails = () => setshowCashDetails(false);
-  const handleShowCashDetails = () => {
+  const handleShowCashDetails = (accountNumber: string, balance: number) => {
     handleCloseCashListing();
     setshowCashDetails(true);
-    //cashListingProps.hideCashListingModal;
+    setDetailScreenParams({ accountNumber, balance });
   };
   const handleBackCashDetails = () => {
     setshowCashDetails(false);
@@ -55,12 +55,15 @@ function Cash() {
         showCashListingModal={showCashListing}
         hideCashListingModal={handleCloseCashListing}
         showCashDetailsModal={handleShowCashDetails}
-      ></CashListing>
-      <CashDetails
-        showCashDetailsModal={showCashDetails}
-        hideCashDetailsModal={handleCloseCashDetails}
-        backCashListingModal={handleBackCashDetails}
-      ></CashDetails>
+      />
+      {!!params.accountNumber &&
+        <CashDetails
+          showCashDetailsModal={showCashDetails}
+          hideCashDetailsModal={handleCloseCashDetails}
+          backCashListingModal={handleBackCashDetails}
+          params={params}
+        />
+      }
     </div>
   );
 }

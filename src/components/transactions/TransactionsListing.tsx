@@ -130,23 +130,24 @@ function TransactionsListing(props: iTransactionsListing) {
           </button>
         </Modal.Header>
         <Modal.Body>
-          <FilterCommonControl
-            clearFilter={() => {
-              setFilteredData(data);
-              if (data.length < rowLimit) {
-                setOffset(data.length);
-              } else {
-                setOffset(rowLimit);
-              }
-            }}
-            applyFilter={(filters: ICommonFilter) => {
-              console.log(filters);
-              const _filteredData = helper.filterTransactionList(
-                data,
-                filters
-              );
-              setFilteredData(_filteredData);
-            }} />
+          {data && data.length > 0 && !!data[0].transactionDate &&
+            <FilterCommonControl
+              clearFilter={() => {
+                setFilteredData(data);
+                if (data.length < rowLimit) {
+                  setOffset(data.length);
+                } else {
+                  setOffset(rowLimit);
+                }
+              }}
+              applyFilter={(filters: ICommonFilter) => {
+                console.log(filters);
+                const _filteredData = helper.filterTransactionList(
+                  data,
+                  filters
+                );
+                setFilteredData(_filteredData);
+              }} />}
           <div className="box modal-box">
             <ul className="box-list" id="reqList">
               {filteredData &&

@@ -116,7 +116,6 @@ export const emptyOfferData = {
   offersSubscriptions: [""]
 };
 
-
 export interface IOfferSubscriptions {
   id: number;
   offerId: string
@@ -214,31 +213,11 @@ export interface ICommonFilter {
   EndDate?: Date;
   AmountOperator: string;
   Amount: string;
+  OptionalCheck?: IKeyValuePair[];
 }
 
 
 export const emptyCommonFilter = {
-  filterApplied: false,
-  DateOption: "0",
-  StartDate: moment().add(-7, "days").toDate(),
-  EndDate: moment().toDate(),
-  AmountOperator: "",
-  Amount: "",
-}
-
-
-export interface ICommonFilter2 {
-  filterApplied: boolean;
-  DateOption: string;
-  StartDate?: Date;
-  EndDate?: Date;
-  AmountOperator: string;
-  Amount: string;
-  OptionalCheck: IKeyValuePair[];
-}
-
-
-export const emptyCommonFilter2 = {
   filterApplied: false,
   DateOption: "0",
   StartDate: moment().add(-7, "days").toDate(),
@@ -527,4 +506,47 @@ export const emptyTransactionAccordianDetail = {
     label: "",
     value: "",
   },
+}
+
+export interface IDocumentDetail {
+  id: number;
+  documentName: string;
+  documentNameAr: string;
+  documentDate: string;
+  documentDescription: string;
+  documentDescriptionAr: string;
+  fileName: string;
+  fileContent: string;
+}
+
+export const emptyDocumentData = {
+  id: 0,
+  documentName: "",
+  documentNameAr: "",
+  documentDate: moment().format("MMMM DD, yyyy"),
+  documentDescription: "",
+  documentDescriptionAr: "",
+  fileName: "",
+  fileContent: ""
+};
+
+
+export interface ICustomer {
+  id: string;
+  shortName: string;
+  accountOfficer: string;
+  rnName: string;
+  mobile: string;
+  customerEmail: string;
+  isRegister: boolean;
+}
+
+export const emptyCustomer = {
+  "id": "",
+  "shortName": "",
+  "accountOfficer": "",
+  "rnName": "",
+  "mobile": "",
+  "customerEmail": "",
+  "isRegister": false
 }

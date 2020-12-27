@@ -2,13 +2,11 @@ import React, { useContext, useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import cashIcon from "../../../images/cash-icon.svg";
 import { emptyAccountBalance, IAccountBalance } from "../../../Helpers/publicInterfaces";
-import moment from "moment";
 import { localStrings as local_Strings } from '../../../translations/localStrings';
 import { AuthContext } from "../../../providers/AuthProvider";
 import * as helper from "../../../Helpers/helper";
 import NoResult from "../../../shared/NoResult";
 import { GetCashListing } from "../../../services/cmsService";
-import { useToasts } from 'react-toast-notifications';
 import Constant from "../../../constants/defaultData";
 import LoadingOverlay from 'react-loading-overlay';
 import PuffLoader from "react-spinners/PuffLoader";
@@ -18,7 +16,7 @@ import { PortfolioContext } from "../../../pages/Homepage";
 interface iCashListing {
   showCashListingModal: boolean;
   hideCashListingModal: () => void;
-  showCashDetailsModal: () => void;
+  showCashDetailsModal: (accountNumber: string, balance: number) => void;
 }
 
 function CashListing(props: iCashListing) {
@@ -62,13 +60,13 @@ function CashListing(props: iCashListing) {
       <a
         href="#"
         className="row align-items-center"
-        onClick={props.showCashDetailsModal}
+        onClick={() => props.showCashDetailsModal(item.accountNumber, item.balance)}
       >
         <div className="col-2 col-sm-1">
           <span className="curr-icon">{item.currency || currentContext.userSettings.currency}</span>
         </div>
         <div className="col-8 col-sm-4">
-          <h5>{local_Strings.CashListingCash}</h5>
+          <h5>{local_Strings.AccountNo}</h5>
           <h4>{item.accountNumber || ""}</h4>
         </div>
         <div className="col-8 offset-2 offset-sm-0 col-sm-6">

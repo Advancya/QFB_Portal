@@ -6,11 +6,11 @@ import FilterCustomDateControl from './FilterCustomDateControl';
 import FilterAmountControl from './FilterAmountControl';
 import FilterButtonControl from './FilterButtonControl';
 import FilterDropDownControl from './FilterDropDownControl';
-import { emptyCommonFilter2, ICommonFilter2 } from "../Helpers/publicInterfaces";
+import { emptyCommonFilter, ICommonFilter } from "../Helpers/publicInterfaces";
 import moment from "moment";
 
 interface IFilterCommonControl2Props {
-    applyFilter: (filters: ICommonFilter2) => void;
+    applyFilter: (filters: ICommonFilter) => void;
     clearFilter: () => void;
     CheckBoxTitle?: string;
     CheckBoxLabels?: string[];
@@ -20,7 +20,7 @@ const FilterCommonControl2: React.FC<IFilterCommonControl2Props> = (props) => {
 
     const auth = useContext(AuthContext);
     local_Strings.setLanguage(auth.language);
-    const [filters, setFilter] = useState<ICommonFilter2>(emptyCommonFilter2);
+    const [filters, setFilter] = useState<ICommonFilter>(emptyCommonFilter);
 
     return (
         <form className="filter-box">
@@ -37,7 +37,7 @@ const FilterCommonControl2: React.FC<IFilterCommonControl2Props> = (props) => {
                 <div className="col-sm-3">
                     <label>{props.CheckBoxTitle}</label>
                     <div className="form-row">
-                        <div className="custom-control custom-checkbox  custom-control-inline">
+                        <div className="custom-control custom-checkbox custom-control-inline">
                             <input
                                 type="checkbox"
                                 name="radioType"
@@ -58,7 +58,7 @@ const FilterCommonControl2: React.FC<IFilterCommonControl2Props> = (props) => {
                                     });
                                 }}
                             />
-                            <label className="custom-control-label">{props.CheckBoxLabels[0]}</label>
+                            <label className="custom-control-label" htmlFor="customCheck1">{props.CheckBoxLabels[0]}</label>
                         </div>
                         <div className="custom-control custom-checkbox custom-control-inline">
                             <input
@@ -81,14 +81,14 @@ const FilterCommonControl2: React.FC<IFilterCommonControl2Props> = (props) => {
                                     });
                                 }}
                             />
-                            <label className="custom-control-label">{props.CheckBoxLabels[1]}</label>
+                            <label className="custom-control-label" htmlFor="customCheck2">{props.CheckBoxLabels[1]}</label>
                         </div>
                     </div>
                 </div>
                 <div className="col-sm-2">
                     <FilterButtonControl
                         clearFilter={() => {
-                            setFilter(emptyCommonFilter2);
+                            setFilter(emptyCommonFilter);
                             props.clearFilter();
                         }}
                         applyFilter={() => {
