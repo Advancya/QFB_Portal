@@ -517,6 +517,7 @@ export interface IDocumentDetail {
   documentDescriptionAr: string;
   fileName: string;
   fileContent: string;
+  orderId: number
 }
 
 export const emptyDocumentData = {
@@ -527,7 +528,8 @@ export const emptyDocumentData = {
   documentDescription: "",
   documentDescriptionAr: "",
   fileName: "",
-  fileContent: ""
+  fileContent: "",
+  orderId: 0
 };
 
 

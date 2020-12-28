@@ -57,13 +57,22 @@ function ContactUsListing() {
         <ul className="box-list" id="dataList">
           <li className="shown">
             <div className="row">
-              <div className="col-6 col-sm-6">
+              <div className="col-2 col-sm-2">
+                <h6 className="mb-1 text-600">
+                  {local_Strings.ContactUsCreatedDateLabel}
+                </h6>
+              </div>
+              <div className="col-2 col-sm-2">
                 <h6 className="mb-1 text-600">
                   {local_Strings.ContactUsNameLabel}
                 </h6>
-
               </div>
-              <div className="col-2 col-sm-2">
+              <div className="col-3 col-sm-3">
+                <h6 className="mb-1 text-600">
+                  {local_Strings.ContactUsQueryLabel}
+                </h6>
+              </div>
+              <div className="col-1 col-sm-1">
                 <h6 className="mb-1 text-600">
                   {local_Strings.ContactUsMobileLabel}
                 </h6>
@@ -86,14 +95,26 @@ function ContactUsListing() {
 
               <li className="shown" key={index}>
                 <div className="row">
-                  <div className="col-6 col-sm-6">
-
+                  <div className="col-2 col-sm-2">
+                    <h6 className="mb-1">
+                      {item.createDate
+                        ? moment(item.createDate).format(
+                          "dddd DD MM YYYY"
+                        )
+                        : ""}
+                    </h6>
+                  </div>
+                  <div className="col-2 col-sm-2">
                     <h6 className="mb-1">
                       {item.name || ""}
                     </h6>
-
                   </div>
-                  <div className="col-2 col-sm-2">
+                  <div className="col-3 col-sm-3">
+                    <h6 className="mb-1">
+                      {item.query || ""}
+                    </h6>
+                  </div>
+                  <div className="col-1 col-sm-1">
                     <h6 className="mb-1">
                       {item.mobile || ""}
                     </h6>

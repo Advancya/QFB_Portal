@@ -393,11 +393,12 @@ const en = {
   ContactUsTite: "Contact Us",
   ContactUsSubmitButton: "Submit",
   ContactUsClearButton: "Clear",
+  ContactUsCreatedDateLabel: "Created Date",
   ContactUsNameLabel: "Name",
   ContactUsCountryLabel: "Country",
   ContactUsMobileLabel: "Mobile Number",
   ContactUsEmailAddressLabel: "Email Address",
-  ContactUsQueryLabel: "Query",
+  ContactUsQueryLabel: "Enquiry",
   SignupSuccessTitle: "Request Sent",
   SignupSuccessMessage:
     "Congratulations, you are now registered on QFB mobile APP.",
@@ -610,11 +611,13 @@ const en = {
   exportToExcel: " Export to Excel",
   documentName: "Document Name",
   documentNameAr: "Arabic Document Name",
+  documentPriority: "Display Priority",
   documentDate: "Document Date",
   documentShortDescription: "Short Description",
   documentShortDescriptionAr: "Arabic Short Description",
   documentDeletedMessage: "Document has been deleted successfully!",
   documentSavedMessage: "Document has been saved successfully!",
+  documentListingPriority: "Priority",
 };
 
 export default en;

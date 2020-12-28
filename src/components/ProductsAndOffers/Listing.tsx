@@ -154,7 +154,7 @@ function ProductsAndOffersListing() {
                 </div>
               </div>
             </div>
-            <LoadingOverlay
+            {/* <LoadingOverlay
               active={isLoading}
               spinner={
                 <PuffLoader
@@ -162,7 +162,7 @@ function ProductsAndOffersListing() {
                   color={Constant.SpinnerColor}
                 />
               }
-            />
+            /> */}
             <div className="box modal-box py-0 mb-4 scrollabel-modal-box">
               <ul className="box-list" id="dataList">
                 {filteredData &&

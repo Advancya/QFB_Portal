@@ -392,6 +392,7 @@ const ar = {
   ContactUsTite: "اتصل بنا",
   ContactUsSubmitButton: "إرسال",
   ContactUsClearButton: "مسح",
+  ContactUsCreatedDateLabel: "Created Date",
   ContactUsNameLabel: "الاسم",
   ContactUsCountryLabel: "البلد",
   ContactUsMobileLabel: "رقم الهاتف المحمول",
@@ -605,11 +606,13 @@ const ar = {
   exportToExcel: " تصدير إلى Excel ",
   documentName: "Document Name",
   documentNameAr: "Arabic Document Name",
+  documentPriority: "Display Priority",
   documentDate: "Document Date",
   documentShortDescription: "Short Description",
   documentShortDescriptionAr: "Arabic Short Description",  
   documentDeletedMessage: "Document has been deleted successfully!",
   documentSavedMessage: "Document has been saved successfully!",
+  documentListingPriority: "أفضلية",
 };
 
 export default ar;

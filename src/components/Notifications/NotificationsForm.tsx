@@ -20,6 +20,7 @@ import { useToasts } from 'react-toast-notifications';
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from 'react-loading-overlay';
 import PuffLoader from "react-spinners/PuffLoader";
+import { CustomerListContext } from "../../pages/Admin/Admin";
 
 interface DetailsProps {
   item?: INotificationsDetail
@@ -36,7 +37,7 @@ function NotificationsForm(props: DetailsProps) {
   };
   const auth = useContext(AuthContext);
   local_Strings.setLanguage(auth.language);
-  const [customerList, setCustomerList] = useState<ICustomer[]>([emptyCustomer]);
+  const customerList = useContext(CustomerListContext);
   const [selectedCustomer, setSelected] = useState([]);
   const [data, setData] = useState<INotificationsDetail>(emptyNotificationsDetail);
   const { addToast } = useToasts();
@@ -79,39 +80,6 @@ function NotificationsForm(props: DetailsProps) {
   };
 
   useEffect(() => {
-    let isMounted = true;
-    setLoading(true);
-
-    GetAllCustomerList()
-      .then((responseData: ICustomer[]) => {
-        if (responseData && responseData.length > 0 && isMounted) {
-
-          const _customers = responseData;
-          setCustomerList(_customers);
-
-          setTimeout(() => {
-            if (_customers.length > 0 && !!_customers[0].id) {
-              const _selectCustomers = _customers.filter((i) => i.id === props.item.customerId);
-              if (_selectCustomers.length > 0) {
-                setSelected([{
-                  "value": _selectCustomers[0].id,
-                  "label": _selectCustomers[0].shortName
-                }]);
-              }
-            }
-          }, 2000);
-        }
-      })
-      .catch((e: any) => console.log(e))
-      .finally(() => setLoading(false));
-
-    return () => {
-      isMounted = false;
-    }; // use effect cleanup to set flag false, if unmounted
-
-  }, []);
-
-  useEffect(() => {
 
     if (props.item && props.item.id > 0) {
       setData(props.item);
@@ -131,8 +99,6 @@ function NotificationsForm(props: DetailsProps) {
     }
 
   }, [props.item]);
-
-  //console.log(data);
 
   const options = customerList ? customerList.map((c) => ({
     "value": (c.id ? c.id : ""),

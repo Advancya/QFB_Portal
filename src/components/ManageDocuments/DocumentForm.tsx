@@ -20,8 +20,9 @@ import { useToasts } from 'react-toast-notifications';
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from 'react-loading-overlay';
 import PuffLoader from "react-spinners/PuffLoader";
-import fileIcon from "../../images/generic-file-icon.png";
+import fileIcon from "../../images/pdf.png";
 import * as helper from "../../Helpers/helper";
+import { saveAs } from 'file-saver';
 
 const mime = require('mime');
 
@@ -46,8 +47,11 @@ function DocumentForm(props: DetailsProps) {
   const formValidationSchema = yup.object({
     documentName: yup.string().nullable().required("Document Name is required"),
     documentNameAr: yup.string().nullable().required("Document Arabic Name is required"),
-    fileName: yup.string().nullable().required("Please upload a file. " + local_Strings.moreThanLimit),
+    fileName: yup.string().nullable().required("Please upload a PDF file. " + local_Strings.moreThanLimit),
     documentDate: yup.string().nullable().required("Document date is required"),
+    documentDescription: yup.string().required("Document Description is required"),
+    documentDescriptionAr: yup.string().required("Document Arabic Description is required"),
+    orderId: yup.number().nullable().required("Document Display Priority is required and accept only numbers"),
   });
 
   const submitTheRecord = async (values: IDocumentDetail) => {
@@ -57,8 +61,8 @@ function DocumentForm(props: DetailsProps) {
       documentName: values.documentName,
       documentNameAr: values.documentNameAr,
       documentDate: moment(values.documentDate).utc(true),
-      documentDescription: "",
-      documentDescriptionAr: "",
+      documentDescription: values.documentDescription,
+      documentDescriptionAr: values.documentDescriptionAr,
       fileName: values.fileName,
       fileContent: values.fileContent,
     };
@@ -199,24 +203,44 @@ function DocumentForm(props: DetailsProps) {
                   {touched.documentDate && errors.documentDate && InvalidFieldError(errors.documentDate)}
                 </div>
                 <div className="form-group">
+                  <label className="mb-1 text-600">{local_Strings.documentPriority}</label>
+                  <input type="text" className="form-control"
+                    readOnly={!props.editable}
+                    value={values.orderId || ""}
+                    pattern="[0-9]*" maxLength={6}
+                    onBlur={handleBlur("orderId")}
+                    style={{ width: 120 }}
+                    onChange={(e) => {
+                      if (e.currentTarget.validity.valid && e.currentTarget.value.length <= 6) {
+                        setFieldValue("orderId", parseInt(e.target.value.replace(/[^0-9]*/, '')));
+                      }
+                    }}
+                  />
+                  {touched.orderId && errors.orderId && InvalidFieldError(errors.orderId)}
+                </div>
+                <div className="form-group">
                   <label className="mb-1 text-600">{local_Strings.documentShortDescription}</label>
                   {props.editable ?
-                    <CKEditor
-                      editor={ClassicEditor}
-                      data={values.documentDescription || ""}
-                      onChange={(event: any, editor: any) => {
-                        const _text = editor.getData();
-                        setFieldValue("documentDescription", _text);
-                      }}
-                      config={{
-                        //plugins: [Base64UploadAdapter],
-                        toolbar: ['heading', '|', 'bold', 'italic', '|', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo'],
-                        allowedContent: true,
-                        extraAllowedContent: 'div(*)',
-                        language: "en",
-                        content: "en",
-                      }}
-                    /> : <span className="box-brief mb-3">
+                    <React.Fragment>
+                      <CKEditor
+                        editor={ClassicEditor}
+                        data={values.documentDescription || ""}
+                        onChange={(event: any, editor: any) => {
+                          const _text = editor.getData();
+                          setFieldValue("documentDescription", _text);
+                        }}
+                        config={{
+                          //plugins: [Base64UploadAdapter],
+                          toolbar: ['heading', '|', 'bold', 'italic', '|', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo'],
+                          allowedContent: true,
+                          extraAllowedContent: 'div(*)',
+                          language: "en",
+                          content: "en",
+                        }}
+                      />
+                      {touched.documentDescription && errors.documentDescription && InvalidFieldError(errors.documentDescription)}
+                    </React.Fragment>
+                    : <span className="box-brief mb-3">
                       <div
                         dangerouslySetInnerHTML={{
                           __html: values.documentDescription
@@ -226,22 +250,26 @@ function DocumentForm(props: DetailsProps) {
                 <div className="form-group">
                   <label className="mb-1 text-600">{local_Strings.documentShortDescriptionAr}</label>
                   {props.editable ?
-                    <CKEditor
-                      editor={ClassicEditor}
-                      data={values.documentDescriptionAr || ""}
-                      onChange={(event: any, editor: any) => {
-                        const _text = editor.getData();
-                        setFieldValue("documentDescriptionAr", _text);
-                      }}
-                      config={{
-                        //plugins: [Base64UploadAdapter],
-                        toolbar: ['heading', '|', 'bold', 'italic', '|', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo'],
-                        allowedContent: true,
-                        extraAllowedContent: 'div(*)',
-                        language: "ar",
-                        content: "ar",
-                      }}
-                    /> : <span className="box-brief mb-3">
+                    <React.Fragment>
+                      <CKEditor
+                        editor={ClassicEditor}
+                        data={values.documentDescriptionAr || ""}
+                        onChange={(event: any, editor: any) => {
+                          const _text = editor.getData();
+                          setFieldValue("documentDescriptionAr", _text);
+                        }}
+                        config={{
+                          //plugins: [Base64UploadAdapter],
+                          toolbar: ['heading', '|', 'bold', 'italic', '|', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo'],
+                          allowedContent: true,
+                          extraAllowedContent: 'div(*)',
+                          language: "ar",
+                          content: "ar",
+                        }}
+                      />
+                      {touched.documentDescriptionAr && errors.documentDescriptionAr && InvalidFieldError(errors.documentDescriptionAr)}
+                    </React.Fragment>
+                    : <span className="box-brief mb-3">
                       <div
                         dangerouslySetInnerHTML={{
                           __html: values.documentDescriptionAr
@@ -258,13 +286,13 @@ function DocumentForm(props: DetailsProps) {
                           id="file" aria-label="File browser example"
                           lang={auth.language}
                           className=""
-                          accept='.jpeg,.jpg,.png,.gif,.bmp,.svg,.txt,application/pdf,video/mp4,application/msword,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                          accept='application/pdf'
                           ref={fileInputRef}
                           onBlur={handleBlur("fileName")}
                           onChange={() => {
 
                             const file = fileInputRef.current.files[0];
-                            const supportedExtensions = ['jpeg', 'jpg', 'png', 'gif', 'bmp', 'svg', 'doc', 'docx', 'xls', 'xlsx', 'txt', 'mp4', 'pdf'];
+                            const supportedExtensions = ['pdf'];
                             if (file) {
                               if (file.size <= 0) {
                                 addToast(file.name + local_Strings.isEmptyText, {
@@ -320,17 +348,8 @@ function DocumentForm(props: DetailsProps) {
                     </div>
                     <div className="col-8 col-lg-9 cursor-pointer"
                       onClick={() => {
-
-                        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-                          window.navigator.msSaveOrOpenBlob(helper.b64toBlob(values.fileContent, mime.getType(values.fileName)), values.fileName);
-                        }
-                        else {
-                          const fileContent = `data:${mime.getType(values.fileName)};base64,${values.fileContent}`;
-                          const downloadLink = document.createElement("a") as HTMLAnchorElement;
-                          downloadLink.download = values.fileName;
-                          downloadLink.href = fileContent;
-                          downloadLink.click();
-                        }
+                        const blob = helper.b64toBlob(values.fileContent, mime.getType(values.fileName));
+                        saveAs(blob, values.fileName);
                       }}>
                       <h5>{values.fileName}<br />
                         <small>{local_Strings.sizeLabel}: {fileSize} MB</small></h5>
@@ -362,10 +381,14 @@ function DocumentForm(props: DetailsProps) {
                             appearance: 'error',
                             autoDismiss: true,
                           });
+                          validateForm(values);
                           handleBlur("documentName");
                           handleBlur("documentNameAr");
                           handleBlur("documentDate");
                           handleBlur("fileName");
+                          handleBlur("documentDescription");
+                          handleBlur("documentDescriptionAr");
+                          handleBlur("orderId");
                         }
                       }}>
                       {local_Strings.OfferSaveButton}</button>
@@ -377,7 +400,7 @@ function DocumentForm(props: DetailsProps) {
           )}
         </Formik>
       </Modal.Body>
-    </Modal>
+    </Modal >
   );
 }
 

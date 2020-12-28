@@ -48,9 +48,7 @@ function DocumentsListing() {
     GetAllDocuments()
       .then((responseData: IDocumentDetail[]) => {
         if (responseData) {
-          const _data = responseData.sort((a, b) =>
-            moment(b.documentDate).diff(moment(a.documentDate))
-          );
+          const _data = responseData.sort((a, b) => a.orderId - b.orderId);
 
           setData(_data);
           setFilteredData(_data);
@@ -79,7 +77,6 @@ function DocumentsListing() {
     }
     setLoading(false);
   };
-
 
   const downloadAttachment = (itemId: number) => {
     setLoading(true)
@@ -219,7 +216,17 @@ function DocumentsListing() {
                         className="row align-items-center"
                         onClick={() => downloadAttachment(item.id)}
                       >
-                        <div className="col-12 col-sm-12">
+                        <div className="col-2 col-sm-2">
+                          <div className="mb-1 d-flex align-items-center">
+                            <span className="mx-1 text-15 color-light-gold">
+                              {local_Strings.documentListingPriority}
+                            </span>
+                          </div>
+                          <h6 className="mb-1 text-600 align-items-center text-center">
+                            {item.orderId || "0"}
+                          </h6>
+                        </div>
+                        <div className="col-10 col-sm-10">
                           <div className="mb-1 d-flex align-items-center">
                             <img src={dateIcon} className="img-fluid" />
                             <span className="mx-1 text-15 color-light-gold">

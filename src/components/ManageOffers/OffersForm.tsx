@@ -15,7 +15,7 @@ import '@ckeditor/ckeditor5-build-classic/build/translations/ar.js';
 //import Base64UploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/base64uploadadapter';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-import { emptyCustomer, ICustomer, emptyOfferData, IOfferDetail } from "../../Helpers/publicInterfaces";
+import { emptyOfferData, IOfferDetail } from "../../Helpers/publicInterfaces";
 import { useToasts } from 'react-toast-notifications';
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from 'react-loading-overlay';
@@ -25,6 +25,7 @@ import * as helper from "../../Helpers/helper";
 import { saveAs } from 'file-saver';
 import MultiSelect from "react-multi-select-component";
 import axios from "axios";
+import { CustomerListContext } from "../../pages/Admin/Admin";
 const mime = require('mime');
 
 interface DetailsProps {
@@ -40,11 +41,11 @@ function OffersForm(props: DetailsProps) {
   const { addToast } = useToasts();
   const fileInputRef = createRef<any>();
   const auth = useContext(AuthContext);
+  const customerList = useContext(CustomerListContext);
   local_Strings.setLanguage(auth.language);
   const [data, setData] = useState<IOfferDetail>(emptyOfferData);
   const [fileSize, setFileSize] = useState<number>(0);
   const [isLoading, setLoading] = useState<boolean>(false);
-  const [customerList, setCustomerList] = useState<ICustomer[]>([emptyCustomer]);
   const [selectedCustomer, setSelected] = useState([]);
 
   const formValidationSchema = yup.object({
@@ -119,42 +120,9 @@ function OffersForm(props: DetailsProps) {
 
   useEffect(() => {
     let isMounted = true;
-    setLoading(true);
-
-    GetAllCustomerList()
-      .then((responseData: ICustomer[]) => {
-        if (responseData && responseData.length > 0 && isMounted) {
-
-          const _customers = responseData;
-          setCustomerList(_customers);
-
-          setTimeout(() => {
-            if (_customers.length > 0 && !!_customers[0].id) {
-              const _selectCustomers = _customers.filter((i) => i.id === data.cif);
-              if (_selectCustomers.length > 0) {
-                setSelected([{
-                  "value": _selectCustomers[0].id,
-                  "label": _selectCustomers[0].shortName
-                }]);
-              }
-            }
-          }, 2000);
-        }
-      })
-      .catch((e: any) => console.log(e))
-      .finally(() => setLoading(false));
-
-    return () => {
-      isMounted = false;
-    }; // use effect cleanup to set flag false, if unmounted
-
-  }, []);
-
-  useEffect(() => {
-    let isMounted = true;
     if (props.itemID && props.itemID > 0) {
 
-      //setLoading(true);
+      setLoading(true);
       GetOfferById(props.itemID)
         .then((responseData: any) => {
           if (responseData && responseData.length > 0 && isMounted) {
@@ -164,7 +132,7 @@ function OffersForm(props: DetailsProps) {
             setFileSize(Math.round((Number(_calSize) + Number.EPSILON) * 100) / 100);
 
             if (customerList.length > 0 && !!customerList[0].id) {
-              const _selectCustomers = customerList.filter((i) => i.id === data.cif);
+              const _selectCustomers = customerList.filter((i) => i.id === _item.cif);
               if (_selectCustomers.length > 0) {
                 setSelected([{
                   "value": _selectCustomers[0].id,
@@ -175,7 +143,7 @@ function OffersForm(props: DetailsProps) {
           }
         })
         .catch((e: any) => console.log(e))
-        //.finally(() => setLoading(false));
+        .finally(() => setLoading(false));
     } else {
       setData(emptyOfferData);
       setSelected([]);
