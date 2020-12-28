@@ -9,10 +9,9 @@ import * as helper from '../Helpers/helper';
 import { SendOTP, ValidateOTP } from "../services/cmsService";
 import { getUserRole } from "../services/apiServices";
 import Constant from "../constants/defaultData";
-import { useToasts } from 'react-toast-notifications';
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
-
+import Swal from 'sweetalert2';
 interface iPasswordResetOTP {
   otp: string;
 }
@@ -32,7 +31,6 @@ const SubmitOTP: React.FC<IProps> = ({ userDetail }) => {
     otp: yup.string().required(local_Strings.GeneralValidation),
   });
   const [showErrorMessage, setShowErrorMessage] = useState(false);
-  const { addToast } = useToasts();
   const submitOTP = async (values: iPasswordResetOTP) => {
 
     setLoading(true);
@@ -51,24 +49,35 @@ const SubmitOTP: React.FC<IProps> = ({ userDetail }) => {
           } else if (role.name === Constant.Management) {
             history.push(`/${currentContext.language}/Admin`);
           } else {
-            addToast(local_Strings.GenericErrorMessage, {
-              appearance: 'error',
-              autoDismiss: true,
+            Swal.fire({
+              position: 'top-end',
+              icon: 'error',
+              title: local_Strings.GenericErrorMessage,
+              showConfirmButton: false,
+              timer: Constant.AlertTimeout
             });
           }
         }
       } else {
         setLoading(false);
-        addToast(local_Strings.landingPageInvaildLoginMessage, {
-          appearance: 'error',
-          autoDismiss: true,
+        
+        Swal.fire({
+          position: 'top-end',
+          icon: 'error',
+          title: local_Strings.landingPageInvaildLoginMessage,
+          showConfirmButton: false,
+          timer: Constant.AlertTimeout
         });
       }
     } else {
       setLoading(false);
-      addToast(local_Strings.otpErrorMessage, {
-        appearance: 'error',
-        autoDismiss: true,
+      
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: local_Strings.otpErrorMessage,
+        showConfirmButton: false,
+        timer: Constant.AlertTimeout
       });
       setShowErrorMessage(true);
     }

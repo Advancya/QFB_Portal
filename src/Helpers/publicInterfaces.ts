@@ -12,6 +12,7 @@ export interface INotificationsDetail {
   id: number;
   customerId: string;
   customerName: string;
+  selectedCIFs: IKeyValuePair[];
   expiryDate: string;
   isRead: string;
   messageBody: string;
@@ -29,6 +30,7 @@ export const emptyNotificationsDetail = {
   id: 0,
   customerId: "",
   customerName: "",
+  selectedCIFs: [],
   expiryDate: "",
   isRead: "",
   messageBody: "",
@@ -87,6 +89,7 @@ export const emptyProductAndOffersData = {
 export interface IOfferDetail {
   id: number;
   cif: string;
+  selectedCIFs: IKeyValuePair[];
   title: string;
   titleAr: string;
   createdDate: string;
@@ -103,6 +106,7 @@ export interface IOfferDetail {
 export const emptyOfferData = {
   id: 0,
   cif: "",
+  selectedCIFs: [],
   title: "",
   titleAr: "",
   createdDate: "",
@@ -551,4 +555,41 @@ export const emptyCustomer = {
   "mobile": "",
   "customerEmail": "",
   "isRegister": false
+}
+
+
+export interface ILoanDetail {
+  OutstandingAmount: IKeyValuePair;
+  FacilityReference: IKeyValuePair;
+  Currency: IKeyValuePair;
+  StartDate: IKeyValuePair;
+  MaturityDate: IKeyValuePair;
+  ProfitRate: IKeyValuePair;
+}
+
+export const emptyLoanDetail = {
+  FacilityReference: {
+    label: "",
+    value: "",
+  },
+  OutstandingAmount: {
+    label: "",
+    value: "",
+  },
+  Currency: {
+    label: "",
+    value: "",
+  },
+  StartDate: {
+    label: "",
+    value: "",
+  },
+  MaturityDate: {
+    label: "",
+    value: "",
+  },
+  ProfitRate: {
+    label: "",
+    value: "",
+  },
 }

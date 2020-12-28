@@ -543,7 +543,7 @@ const en = {
   OfferArDescrLabel: "Arabic Description ",
   selectedOfferDetailsLabel: "Offer Details ",
   selectedOfferDetailsArLabel: "Arabic Offer Details ",
-  OfferAttachment: "Attachment",
+  OfferAttachment: "Attachment (PDF only)",
   OfferSaveButton: "Save",
   OfferDeleteButton: "Delete",
 

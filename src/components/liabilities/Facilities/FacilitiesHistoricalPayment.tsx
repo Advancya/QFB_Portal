@@ -6,9 +6,10 @@ interface iFacilitiesHistoricalPayment {
   showFacilitiesHistoricalPaymentModal: boolean;
   hideFacilitiesHistoricalPaymentModal: () => void;
   backFacilitiesHistoricalPaymentModal: () => void;
+  facilityNumber: string;
 }
 function FacilitiesHistoricalPayment(
-  facilitiesHistoricalPaymentProps: iFacilitiesHistoricalPayment
+  props: iFacilitiesHistoricalPayment
 ) {
   const [showClearFilter, setShowClearFilter] = useState(false);
   const [openTransactionInfo, setOpenTransactionInfo] = useState(false);
@@ -37,10 +38,10 @@ function FacilitiesHistoricalPayment(
   return (
     <Modal
       show={
-        facilitiesHistoricalPaymentProps.showFacilitiesHistoricalPaymentModal
+        props.showFacilitiesHistoricalPaymentModal
       }
       onHide={
-        facilitiesHistoricalPaymentProps.hideFacilitiesHistoricalPaymentModal
+        props.hideFacilitiesHistoricalPaymentModal
       }
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
@@ -55,7 +56,7 @@ function FacilitiesHistoricalPayment(
               <a
                 href="#"
                 onClick={
-                  facilitiesHistoricalPaymentProps.backFacilitiesHistoricalPaymentModal
+                  props.backFacilitiesHistoricalPaymentModal
                 }
                 className="backToAccountsList"
               >
@@ -76,7 +77,7 @@ function FacilitiesHistoricalPayment(
           type="button"
           className="close"
           onClick={
-            facilitiesHistoricalPaymentProps.hideFacilitiesHistoricalPaymentModal
+            props.hideFacilitiesHistoricalPaymentModal
           }
         >
           <span aria-hidden="true">×</span>

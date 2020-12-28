@@ -8,7 +8,6 @@ import { AuthContext } from "../../../providers/AuthProvider";
 import * as helper from "../../../Helpers/helper";
 import NoResult from "../../../shared/NoResult";
 import { GetBankGuaranteeListing } from "../../../services/cmsService";
-import { useToasts } from 'react-toast-notifications';
 import Constant from "../../../constants/defaultData";
 import LoadingOverlay from 'react-loading-overlay';
 import PuffLoader from "react-spinners/PuffLoader";

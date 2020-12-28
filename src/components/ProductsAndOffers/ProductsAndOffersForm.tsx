@@ -8,7 +8,6 @@ import moment from "moment";
 import { Formik } from "formik";
 import * as yup from "yup";
 import InvalidFieldError from '../../shared/invalid-field-error';
-import 'react-confirm-alert/src/react-confirm-alert.css';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import '@ckeditor/ckeditor5-build-classic/build/translations/ar.js';
@@ -16,10 +15,10 @@ import '@ckeditor/ckeditor5-build-classic/build/translations/ar.js';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { emptyProductAndOffersData, IProductAndOffersDetail } from "../../Helpers/publicInterfaces";
-import { useToasts } from 'react-toast-notifications';
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from 'react-loading-overlay';
 import PuffLoader from "react-spinners/PuffLoader";
+import Swal from 'sweetalert2';
 
 interface DetailsProps {
   item?: IProductAndOffersDetail
@@ -37,7 +36,6 @@ function ProductsAndOffersForm(props: DetailsProps) {
   const auth = useContext(AuthContext);
   local_Strings.setLanguage(auth.language);
   const [data, setData] = useState<IProductAndOffersDetail>(emptyProductAndOffersData);
-  const { addToast } = useToasts();
   const [isLoading, setLoading] = useState(false);
   const formValidationSchema = yup.object({
     name: yup.string().nullable().required("Name is required"),
@@ -59,16 +57,23 @@ function ProductsAndOffersForm(props: DetailsProps) {
 
     const x = data.id > 0 ? await UpdateProductsAndOffers(item) : await AddProductsAndOffers(item);
     if (x) {
-      addToast(local_Strings.ProductsAndOffersSavedMessage, {
-        appearance: 'success',
-        autoDismiss: true,
+      
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: local_Strings.ProductsAndOffersSavedMessage,
+        showConfirmButton: false,
+        timer: Constant.AlertTimeout
       });
       props.refreshList();
       props.OnHide();
     } else {
-      addToast(local_Strings.GenericErrorMessage, {
-        appearance: 'error',
-        autoDismiss: true,
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: local_Strings.GenericErrorMessage,
+        showConfirmButton: false,
+        timer: Constant.AlertTimeout
       });
     }
     setLoading(false);
@@ -76,7 +81,7 @@ function ProductsAndOffersForm(props: DetailsProps) {
 
   useEffect(() => {
     setData(props.item || emptyProductAndOffersData);
-  }, [props.item]);
+  }, [props.item, props.show]);
 
   //console.log(data);
 
@@ -140,7 +145,8 @@ function ProductsAndOffersForm(props: DetailsProps) {
             handleSubmit,
             errors,
             touched,
-            isValid
+            isValid,
+            validateForm
           }) => (
             <div className="box modal-box py-0 mb-0 scrollabel-modal-box">
               <div className="box-body">
@@ -230,16 +236,21 @@ function ProductsAndOffersForm(props: DetailsProps) {
 
                     <button className="btn btn-sm btn-primary mt-1" type="submit" style={{ float: "right", margin: 20 }}
                       onClick={(e) => {
+                        validateForm(values);
                         if (isValid) {
                           handleSubmit();
                         } else {
-                          addToast(local_Strings.formValidationMessage, {
-                            appearance: 'error',
-                            autoDismiss: true,
+                          
+                          Swal.fire({
+                            position: 'top-end',
+                            icon: 'error',
+                            title: local_Strings.formValidationMessage,
+                            showConfirmButton: false,
+                            timer: Constant.AlertTimeout
                           });
-                          handleBlur("name");
-                          handleBlur("nameAr");
-                          handleBlur("expiryDate");
+                          touched.name = true;
+                          touched.nameAr = true;
+                          touched.expiryDate = true;
                         }
                       }}>
                       {local_Strings.ProductsAndOffersSaveButton}</button>

@@ -1,6 +1,13 @@
-import React, { useState } from "react";
-import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
-import excelIcon from "../../../images/excel.svg";
+import React, { useContext, useEffect, useState } from "react";
+import { Modal } from "react-bootstrap";
+import { localStrings as local_Strings } from '../../../translations/localStrings';
+import { AuthContext } from "../../../providers/AuthProvider";
+import { emptyLoanDetail, ILoanDetail } from "../../../Helpers/publicInterfaces";
+import Constant from "../../../constants/defaultData";
+import LoadingOverlay from 'react-loading-overlay';
+import PuffLoader from "react-spinners/PuffLoader";
+import { GetFacilityDetails } from "../../../services/cmsService";
+import * as helper from "../../../Helpers/helper";
 
 interface iFacilitiesDetails {
   showFacilitiesDetailsModal: boolean;
@@ -8,12 +15,39 @@ interface iFacilitiesDetails {
   backFacilitiesListingModal: () => void;
   showFacilitiesOutstandingPayment: () => void;
   showFacilitiesHistoricalPayment: () => void;
+  facilityNumber: string;
 }
-function FacilitiesDetails(facilitiesDetailsProps: iFacilitiesDetails) {
+
+function FacilitiesDetails(props: iFacilitiesDetails) {
+  const currentContext = useContext(AuthContext);
+  local_Strings.setLanguage(currentContext.language);
+  const [isLoading, setLoading] = useState(false);
+  const [item, setDetail] = useState<ILoanDetail>(emptyLoanDetail);
+
+  useEffect(() => {
+    let isMounted = true;
+    setLoading(true);
+    GetFacilityDetails(currentContext.selectedCIF, props.facilityNumber)
+      .then((responseData: any) => {
+        if (responseData && responseData.length > 0 && isMounted) {
+          const _detail = helper.transformingStringToJSON(
+            responseData[0], currentContext.language
+          );
+          setDetail(_detail);
+        }
+      })
+      .catch((e: any) => console.log(e))
+      .finally(() => setLoading(false));
+
+    return () => {
+      isMounted = false;
+    }; // use effect cleanup to set flag false, if unmounted
+  }, []);
+
   return (
     <Modal
-      show={facilitiesDetailsProps.showFacilitiesDetailsModal}
-      onHide={facilitiesDetailsProps.hideFacilitiesDetailsModal}
+      show={props.showFacilitiesDetailsModal}
+      onHide={props.hideFacilitiesDetailsModal}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
@@ -25,7 +59,7 @@ function FacilitiesDetails(facilitiesDetailsProps: iFacilitiesDetails) {
           <div className="modal-header-text">
             <a
               href="#"
-              onClick={facilitiesDetailsProps.backFacilitiesListingModal}
+              onClick={props.backFacilitiesListingModal}
               className="backToAccountsList"
             >
               <i className="fa fa-chevron-left"></i>
@@ -39,7 +73,7 @@ function FacilitiesDetails(facilitiesDetailsProps: iFacilitiesDetails) {
         <button
           type="button"
           className="close"
-          onClick={facilitiesDetailsProps.hideFacilitiesDetailsModal}
+          onClick={props.hideFacilitiesDetailsModal}
         >
           <span aria-hidden="true">×</span>
         </button>
@@ -91,7 +125,7 @@ function FacilitiesDetails(facilitiesDetailsProps: iFacilitiesDetails) {
             <button
               id="viewBuySellTransaction"
               className="text-capitalize btn btn-primary maxSizeBtn mx-1"
-              onClick={facilitiesDetailsProps.showFacilitiesHistoricalPayment}
+              onClick={props.showFacilitiesHistoricalPayment}
             >
               View Historical Payments
             </button>
@@ -99,7 +133,7 @@ function FacilitiesDetails(facilitiesDetailsProps: iFacilitiesDetails) {
               id="viewReceivedTransaction"
               href="#"
               className="text-capitalize btn btn-primary maxSizeBtn mx-1"
-              onClick={facilitiesDetailsProps.showFacilitiesOutstandingPayment}
+              onClick={props.showFacilitiesOutstandingPayment}
             >
               View Outstanding Payments
             </a>

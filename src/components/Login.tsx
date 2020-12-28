@@ -9,11 +9,10 @@ import { localStrings as local_Strings } from '../translations/localStrings';
 import * as helper from '../Helpers/helper';
 import { SendOTP } from "../services/cmsService";
 import { authenticate } from "../services/authenticationService";
-import { useToasts } from 'react-toast-notifications';
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import Constant from "../constants/defaultData";
-
+import Swal from 'sweetalert2';
 interface IProps {
   setUserCredentials: any;
   showOTP: any;
@@ -26,7 +25,6 @@ const Login: React.FC<IProps> = (props) => {
   const [isLoading, setLoading] = useState(false);
   const initialValues: User = { username: "", password: "", otp: "" };
   local_Strings.setLanguage(auth.language);
-  const { addToast } = useToasts();
   const loginFormValidationSchema = yup.object({
     username: yup.string().required("User name is required"),
     password: yup.string().required("Password is required"),
@@ -56,9 +54,13 @@ const Login: React.FC<IProps> = (props) => {
         });
     } else {
       setLoading(false);
-      addToast(local_Strings.landingPageInvaildLoginMessage, {
-        appearance: 'error',
-        autoDismiss: true,
+      
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: local_Strings.landingPageInvaildLoginMessage,
+        showConfirmButton: false,
+        timer: Constant.AlertTimeout
       });
     }
   };
