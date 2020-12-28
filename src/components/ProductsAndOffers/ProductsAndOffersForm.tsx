@@ -66,7 +66,10 @@ function ProductsAndOffersForm(props: DetailsProps) {
       props.refreshList();
       props.OnHide();
     } else {
-      console.log("Error while updating record");
+      addToast(local_Strings.GenericErrorMessage, {
+        appearance: 'error',
+        autoDismiss: true,
+      });
     }
     setLoading(false);
   };
@@ -137,6 +140,7 @@ function ProductsAndOffersForm(props: DetailsProps) {
             handleSubmit,
             errors,
             touched,
+            isValid
           }) => (
             <div className="box modal-box py-0 mb-0 scrollabel-modal-box">
               <div className="box-body">
@@ -189,12 +193,12 @@ function ProductsAndOffersForm(props: DetailsProps) {
                       language: "en",
                       content: "en",
                     }}
-                  /> : <label className="box-brief mb-3">
+                  /> : <span className="box-brief mb-3">
                       <div
                         dangerouslySetInnerHTML={{
                           __html: values.details
                         }} />
-                    </label>}
+                    </span>}
                 </div>
                 <div className="form-group">
                   <label className="mb-1 text-600">{local_Strings.ProductsAndOffersArDescrLabel}</label>
@@ -214,18 +218,30 @@ function ProductsAndOffersForm(props: DetailsProps) {
                       language: "ar",
                       content: "ar",
                     }}
-                  /> : <label className="box-brief mb-3">
+                  /> : <span className="box-brief mb-3">
                       <div
                         dangerouslySetInnerHTML={{
                           __html: values.detailsAr
                         }} />
-                    </label>}
+                    </span>}
                 </div>
                 {props.editable &&
                   <div className="form-group">
 
                     <button className="btn btn-sm btn-primary mt-1" type="submit" style={{ float: "right", margin: 20 }}
-                      onClick={(e) => handleSubmit()}>
+                      onClick={(e) => {
+                        if (isValid) {
+                          handleSubmit();
+                        } else {
+                          addToast(local_Strings.formValidationMessage, {
+                            appearance: 'error',
+                            autoDismiss: true,
+                          });
+                          handleBlur("name");
+                          handleBlur("nameAr");
+                          handleBlur("expiryDate");
+                        }
+                      }}>
                       {local_Strings.ProductsAndOffersSaveButton}</button>
                   </div>
                 }

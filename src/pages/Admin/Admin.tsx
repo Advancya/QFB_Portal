@@ -4,12 +4,14 @@ import Footer from "../../components/Footer";
 import ProductsAndOffersListing from "../../components/ProductsAndOffers/Listing";
 import NotificationsListing from "../../components/Notifications/Listing";
 import OffersListing from "../../components/ManageOffers/Listing";
+import DocumentsListing from "../../components/ManageDocuments/Listing";
 
 function Landing() {
   const [showLeftSection, setLeftSection] = useState({
     ProductsAndOffers: true,
     Notifications: false,
     Offers: false,
+    Documents: false,
   });
 
   return (
@@ -25,6 +27,7 @@ function Landing() {
                 )}
                 {showLeftSection.Notifications && <NotificationsListing />}
                 {showLeftSection.Offers && <OffersListing />}
+                {showLeftSection.Documents && <DocumentsListing />}
               </div>
               <div className="col-lg-4 col-container flex-column loginSideBoxBoxes">
                 <div className="box pb-0 min-h-16">
@@ -41,6 +44,7 @@ function Landing() {
                             ProductsAndOffers: true,
                             Notifications: false,
                             Offers: false,
+                            Documents: false,
                           })
                         }
                       >
@@ -56,6 +60,7 @@ function Landing() {
                             ProductsAndOffers: false,
                             Notifications: true,
                             Offers: false,
+                            Documents: false,
                           })
                         }
                       >
@@ -71,10 +76,27 @@ function Landing() {
                             ProductsAndOffers: false,
                             Notifications: false,
                             Offers: true,
+                            Documents: false,
                           })
                         }
                       >
                         <h6 className="mb-1">Manage Offers</h6>
+                      </a>
+                    </li>
+                    <li className="shown">
+                      <a
+                        href="#"
+                        className="row align-items-center"
+                        onClick={() =>
+                          setLeftSection({
+                            ProductsAndOffers: false,
+                            Notifications: false,
+                            Offers: false,
+                            Documents: true,
+                          })
+                        }
+                      >
+                        <h6 className="mb-1">Manage Documents</h6>
                       </a>
                     </li>
                   </ul>

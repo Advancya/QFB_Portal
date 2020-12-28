@@ -345,7 +345,7 @@ const en = {
   BeneficiaryEditButton: "Edit",
 
   DocumentsListingTitle: "Documents Listing",
-  DocumentsDetailsTitle: "Documents Details",
+  DocumentsDetailsTitle: "Document Details",
   DocumentsDetailsDownloadButton: "Download",
   DocumentTitleSample: "Document Number one",
 
@@ -514,7 +514,7 @@ const en = {
   ProductsAndOffersArDescrLabel: "Arabic Description ",
   ProductsAndOffersSaveButton: "Save",
   ProductsAndOffersDeleteButton: "Delete",
-  ProductsAndOffersSavedMessage: "New Product has been saved successfully!",
+  ProductsAndOffersSavedMessage: "Product has been saved successfully!",
   ProductsAndOffersDeletedMessage: "A Product has been deleted successfully!",
 
   NotificationsAddNew: "Add New",
@@ -532,7 +532,7 @@ const en = {
   NotificationsDescrLabel: "Message Body ",
   NotificationsArDescrLabel: "Arabic Message Body ",
   NotificationsSaveButton: "Save",
-  NotificationsSavedMessage: "New Notification has been saved successfully!",
+  NotificationsSavedMessage: "Notification has been saved successfully!",
 
   OfferAddNew: "Add New",
   OfferNameLabel: "Title ",
@@ -552,7 +552,7 @@ const en = {
   supportedFileTypeError: "Selected file {*} is not supported.",
   formValidationMessage: "Please fill the needed fields before saving",
   sizeLabel: "Size",
-  OfferSavedMessage: "New Offer has been saved successfully!",
+  OfferSavedMessage: "Offer has been saved successfully!",
   OfferDeletedMessage: "An Offer has been deleted successfully!",
   searchPlaceholder: "Search",
   /***Web***/
@@ -607,6 +607,14 @@ const en = {
 
   otpErrorMessage: "Incorrect OTP code",
   percentageLabel: "Percentage",
+  exportToExcel: " Export to Excel",
+  documentName: "Document Name",
+  documentNameAr: "Arabic Document Name",
+  documentDate: "Document Date",
+  documentShortDescription: "Short Description",
+  documentShortDescriptionAr: "Arabic Short Description",
+  documentDeletedMessage: "Document has been deleted successfully!",
+  documentSavedMessage: "Document has been saved successfully!",
 };
 
 export default en;

@@ -10,6 +10,7 @@ import { GetOfferById } from "../../services/cmsService";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
+import { saveAs } from 'file-saver';
 
 const mime = require('mime');
 
@@ -50,18 +51,9 @@ function AuthOffersDetails(props: iAuthOffersDetails) {
   }, [props.itemID]);
 
   const downloadAttachment = () => {
-    //console.log(JSON.stringify(props.item, null, 2));
 
-    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-      window.navigator.msSaveOrOpenBlob(helper.b64toBlob(item.fileContent, mime.getType(item.fileName)), item.fileName);
-    }
-    else {
-      const fileContent = `data:${mime.getType(item.fileName)};base64,${item.fileContent}`;
-      const downloadLink = document.createElement("a") as HTMLAnchorElement;
-      downloadLink.download = item.fileName;
-      downloadLink.href = fileContent;
-      downloadLink.click();
-    }
+    const blob = helper.b64toBlob(item.fileContent, mime.getType(item.fileName));
+    saveAs(blob, item.fileName);
   }
 
   return (

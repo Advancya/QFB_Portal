@@ -1,43 +1,72 @@
-import React, { useState } from "react";
-import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
+import React, { useContext, useEffect, useState } from "react";
+import { Modal } from "react-bootstrap";
 import excelIcon from "../../../images/excel.svg";
+import FilterCommonControl from '../../../shared/FilterCommonControl';
+import TransactionListing from '../../../shared/TransactionListing';
+import moment from "moment";
+import { localStrings as local_Strings } from '../../../translations/localStrings';
+import { AuthContext } from "../../../providers/AuthProvider";
+import { emptyTransaction, ICommonFilter, ITransaction } from "../../../Helpers/publicInterfaces";
+import * as helper from "../../../Helpers/helper";
+import { GetDepositsReceivedProfit } from "../../../services/cmsService";
+import Constant from "../../../constants/defaultData";
+import LoadingOverlay from 'react-loading-overlay';
+import PuffLoader from "react-spinners/PuffLoader";
+import ReactExport from "react-export-excel";
+import { PortfolioContext } from "../../../pages/Homepage";
 
 interface iDepositeRecievedProfit {
   showDepositeRecievedProfitModal: boolean;
   hideDepositeRecievedProfitModal: () => void;
   backDepositeRecievedProfitModal: () => void;
+  depositNumber: string;
 }
+
 function DepositeRecievedProfit(
-  depositeRecievedProfitProps: iDepositeRecievedProfit
+  props: iDepositeRecievedProfit
 ) {
-  const [showClearFilter, setShowClearFilter] = useState(false);
-  const [openTransactionInfo, setOpenTransactionInfo] = useState(false);
+  const currentContext = useContext(AuthContext);
+  const userPortfolio = useContext(PortfolioContext);
+  local_Strings.setLanguage(currentContext.language);
+  const [isLoading, setLoading] = useState(false);
+  const [data, setData] = useState<ITransaction[]>([emptyTransaction]);
+  const [filteredData, setFilteredData] = useState<ITransaction[]>([emptyTransaction]);
+  const ExcelFile = ReactExport.ExcelFile;
+  const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+  const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
-  const applyFilter = () => {
-    setShowClearFilter(true);
-  };
+  useEffect(() => {
+    let isMounted = true;
 
-  const clearFilter = () => {
-    setShowClearFilter(false);
-  };
-  const showMoreDepositeRecievedProfit = () => {
-    console.log("retrieve more from server");
-  };
-  const exportToExcel = (tableId: string, anchorId: string) => {
-    console.log("exported");
-    var table = document.getElementById(tableId)!;
-    var html = table.outerHTML;
-    var url = "data:application/vnd.ms-excel," + escape(html); // Set your html table into url
-    var anchor = document.getElementById(anchorId)!;
-    anchor.setAttribute("href", url);
-    anchor.setAttribute("download", "qfb-statement.xls"); // Choose the file name
-    return false;
-  };
+    const initialLoadMethod = async () => {
+      setLoading(true);
+      GetDepositsReceivedProfit(currentContext.selectedCIF, props.depositNumber)
+        .then((responseData: ITransaction[]) => {
+          if (isMounted && responseData && responseData.length > 0) {
+            const _data = responseData.filter(
+              (d) => new Date(d.bookingDate) > moment().add(-3, "months").toDate()
+            )
+            setData(responseData);
+            setFilteredData(_data);
+          }
+        })
+        .catch((e: any) => console.log(e))
+        .finally(() => setLoading(false));
+    }
+
+    if (!!currentContext.selectedCIF) {
+      initialLoadMethod();
+    }
+
+    return () => {
+      isMounted = false;
+    }; // use effect cleanup to set flag false, if unmounted
+  }, [currentContext.selectedCIF]);
 
   return (
     <Modal
-      show={depositeRecievedProfitProps.showDepositeRecievedProfitModal}
-      onHide={depositeRecievedProfitProps.hideDepositeRecievedProfitModal}
+      show={props.showDepositeRecievedProfitModal}
+      onHide={props.hideDepositeRecievedProfitModal}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
@@ -51,7 +80,7 @@ function DepositeRecievedProfit(
               <a
                 href="#"
                 onClick={
-                  depositeRecievedProfitProps.backDepositeRecievedProfitModal
+                  props.backDepositeRecievedProfitModal
                 }
                 className="backToAccountsList"
               >
@@ -59,376 +88,65 @@ function DepositeRecievedProfit(
               </a>
             </div>
             <div className="col-4 col-sm-3">
-              <h5>Deposite No.</h5>
-              <h4>1223245672802900</h4>
+              <h5>{local_Strings.DepositeListingAccountNumberLabel}</h5>
+              <h4>{props.depositNumber}</h4>
             </div>
             <div className="col-4 col-sm-3">
-              <h5>Current Balance</h5>
-              <h4>3,150,000.00 QAR</h4>
+              <h5>{local_Strings.CurrentBalanceLabel}</h5>
+              <h4>{userPortfolio.totalDeposits || ""}</h4>
             </div>
           </div>
         </div>
         <button
           type="button"
           className="close"
-          onClick={depositeRecievedProfitProps.hideDepositeRecievedProfitModal}
+          onClick={props.hideDepositeRecievedProfitModal}
         >
           <span aria-hidden="true">×</span>
         </button>
       </Modal.Header>
       <Modal.Body>
-        <form className="filter-box">
-          <div className="row headRow align-items-center">
-            <div className="col-sm-3">
-              <label>Date</label>
-              <select className="form-control selectDateDD" id="">
-                <option value="0">Select Date</option>
-                <option value="1">Last Week</option>
-                <option value="2">Last Month</option>
-                <option value="3">Last 3 Months</option>
-                <option value="4">Custom Date</option>
-              </select>
-            </div>
-            <div className="col-sm-4">
-              <label>Amount</label>
-              <select
-                className="form-control w-50"
-                id="inlineFormCustomSelect2"
-              >
-                <option>Equal to</option>
-                <option value="1">More Than</option>
-                <option value="2">Less than</option>
-              </select>
-              <input
-                type="text"
-                className="form-control w-50"
-                placeholder="Amount"
-              />
-            </div>
-            <div className="col-sm-2">
-              <label>
-                <button
-                  id="resetFilter"
-                  type="reset"
-                  className={
-                    showClearFilter
-                      ? "resetBtn resetFilter"
-                      : "resetBtn resetFilter invisible"
-                  }
-                  onClick={clearFilter}
-                >
-                  Clear Filter <i className="fa fa-close"></i>
-                </button>
-              </label>
-              <button
-                id="applyFilter"
-                type="button"
-                className="btn btn-primary btn-sm btn-block applyFilter"
-                onClick={applyFilter}
-              >
-                Apply
-              </button>
-            </div>
-            <div className="col-sm-9 py-3 customDate d-none" id="">
-              <div className="row">
-                <div className="col-lg-4">
-                  <label>From</label>
-                  <input type="date" className="form-control" />
-                </div>
-                <div className="col-lg-4">
-                  <label>To</label>
-                  <input type="date" className="form-control" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </form>
+        {data && data.length > 0 && !!data[0].bookingDate &&
+          <FilterCommonControl
 
-        <div className="box table-box">
-          <Accordion
-            as="table"
-            className="table table-striped"
-            id="DepositeRecievedProfit"
-          >
-            <thead>
-              <tr>
-                <th colSpan={1}> Date </th>
-                <th colSpan={2}> Amount </th>
-                <th colSpan={3}> Description </th>
+            clearFilter={() => {
+              setFilteredData(data);
+            }}
 
-                <th className="text-right"> </th>
-              </tr>
-            </thead>
+            applyFilter={(filters: ICommonFilter) => {
+              console.log(filters);
+              const _filteredData = helper.filterTransactions(
+                data,
+                filters
+              );
+              setFilteredData(_filteredData);
+            }} />
+        }
 
-            <tbody>
-              <Accordion.Toggle as="tr" eventKey="0" className="clickRow">
-                <td colSpan={1}> 05/11/2020 </td>
-                <td colSpan={2}> 10,000,000.00 QAR </td>
-                <td colSpan={3}> FW20310S1RYC - C.C AC NO 000005660930053 </td>
+        <TransactionListing transactions={filteredData} showBalanceField={false} />
 
-                <td className="caretArrow">
-                  <i className="fa fa-caret-right color-gray "></i>
-                </td>
-              </Accordion.Toggle>
-              <tr>
-                <td colSpan={9} className="p-0">
-                  <Accordion.Collapse eventKey="0" className="collapseRow">
-                    <div className="px-3 py-2">
-                      <div className="item-row py-2">
-                        <div className="color-black">Deposite Reference</div>
-                        <div className="color-gray">FT12345</div>
-                      </div>
-                      <div className="item-row py-2">
-                        <div className="color-black">Beneficiary Name</div>
-                        <div className="color-gray">
-                          Ahmed Mohamed Ahmed Mohamed Ahmed
-                        </div>
-                      </div>
-                      <div className="item-row py-2">
-                        <div className="color-black">Beneficiary Account</div>
-                        <div className="color-gray">QAIBN12345678910</div>
-                      </div>
-                      <div className="item-row py-2">
-                        <div className="color-black">Deposite Details</div>
-                        <div className="color-gray">
-                          Purchase of property in London
-                        </div>
-                      </div>
-                    </div>
-                  </Accordion.Collapse>
-                </td>
-              </tr>
-            </tbody>
-
-            <tbody>
-              <Accordion.Toggle as="tr" eventKey="1" className="clickRow">
-                <td colSpan={1}> 05/11/2020 </td>
-                <td colSpan={2}> 10,000,000.00 QAR </td>
-                <td colSpan={3}> FW20310S1RYC - C.C AC NO 000005660930053 </td>
-
-                <td className="caretArrow">
-                  <i className="fa fa-caret-right color-gray "></i>
-                </td>
-              </Accordion.Toggle>
-
-              <tr>
-                <td colSpan={9} className="p-0">
-                  <Accordion.Collapse eventKey="1" className="collapseRow">
-                    <div className="px-3 py-2">
-                      <div className="item-row py-2">
-                        <div className="color-black">Deposite Reference</div>
-                        <div className="color-gray">FT12345</div>
-                      </div>
-                      <div className="item-row py-2">
-                        <div className="color-black">Beneficiary Name</div>
-                        <div className="color-gray">
-                          Ahmed Mohamed Ahmed Mohamed Ahmed
-                        </div>
-                      </div>
-                      <div className="item-row py-2">
-                        <div className="color-black">Beneficiary Account</div>
-                        <div className="color-gray">QAIBN12345678910</div>
-                      </div>
-                      <div className="item-row py-2">
-                        <div className="color-black">Deposite Details</div>
-                        <div className="color-gray">
-                          Purchase of property in London
-                        </div>
-                      </div>
-                    </div>
-                  </Accordion.Collapse>
-                </td>
-              </tr>
-            </tbody>
-
-            <tbody>
-              <Accordion.Toggle as="tr" eventKey="3" className="clickRow">
-                <td colSpan={1}> 05/11/2020 </td>
-                <td colSpan={2}> 10,000,000.00 QAR </td>
-                <td colSpan={3}> FW20310S1RYC - C.C AC NO 000005660930053 </td>
-
-                <td className="caretArrow">
-                  <i className="fa fa-caret-right color-gray "></i>
-                </td>
-              </Accordion.Toggle>
-              <tr>
-                <td colSpan={9} className="p-0">
-                  <Accordion.Collapse eventKey="3" className="collapseRow">
-                    <div className="px-3 py-2">
-                      <div className="item-row py-2">
-                        <div className="color-black">Deposite Reference</div>
-                        <div className="color-gray">FT12345</div>
-                      </div>
-                      <div className="item-row py-2">
-                        <div className="color-black">Beneficiary Name</div>
-                        <div className="color-gray">
-                          Ahmed Mohamed Ahmed Mohamed Ahmed
-                        </div>
-                      </div>
-                      <div className="item-row py-2">
-                        <div className="color-black">Beneficiary Account</div>
-                        <div className="color-gray">QAIBN12345678910</div>
-                      </div>
-                      <div className="item-row py-2">
-                        <div className="color-black">Deposite Details</div>
-                        <div className="color-gray">
-                          Purchase of property in London
-                        </div>
-                      </div>
-                    </div>
-                  </Accordion.Collapse>
-                </td>
-              </tr>
-            </tbody>
-
-            <tbody>
-              <Accordion.Toggle as="tr" eventKey="4" className="clickRow">
-                <td colSpan={1}> 05/11/2020 </td>
-                <td colSpan={2}> 10,000,000.00 QAR </td>
-                <td colSpan={3}> FW20310S1RYC - C.C AC NO 000005660930053 </td>
-
-                <td className="caretArrow">
-                  <i className="fa fa-caret-right color-gray "></i>
-                </td>
-              </Accordion.Toggle>
-
-              <tr>
-                <td colSpan={9} className="p-0">
-                  <Accordion.Collapse eventKey="4" className="collapseRow">
-                    <div className="px-3 py-2">
-                      <div className="item-row py-2">
-                        <div className="color-black">Deposite Reference</div>
-                        <div className="color-gray">FT12345</div>
-                      </div>
-                      <div className="item-row py-2">
-                        <div className="color-black">Beneficiary Name</div>
-                        <div className="color-gray">
-                          Ahmed Mohamed Ahmed Mohamed Ahmed
-                        </div>
-                      </div>
-                      <div className="item-row py-2">
-                        <div className="color-black">Beneficiary Account</div>
-                        <div className="color-gray">QAIBN12345678910</div>
-                      </div>
-                      <div className="item-row py-2">
-                        <div className="color-black">Deposite Details</div>
-                        <div className="color-gray">
-                          Purchase of property in London
-                        </div>
-                      </div>
-                    </div>
-                  </Accordion.Collapse>
-                </td>
-              </tr>
-            </tbody>
-
-            <tbody>
-              <Accordion.Toggle as="tr" eventKey="5" className="clickRow">
-                <td colSpan={1}> 05/11/2020 </td>
-                <td colSpan={2}> 10,000,000.00 QAR </td>
-                <td colSpan={3}> FW20310S1RYC - C.C AC NO 000005660930053 </td>
-
-                <td className="caretArrow">
-                  <i className="fa fa-caret-right color-gray "></i>
-                </td>
-              </Accordion.Toggle>
-              <tr>
-                <td colSpan={9} className="p-0">
-                  <Accordion.Collapse eventKey="5" className="collapseRow">
-                    <div className="px-3 py-2">
-                      <div className="item-row py-2">
-                        <div className="color-black">Deposite Reference</div>
-                        <div className="color-gray">FT12345</div>
-                      </div>
-                      <div className="item-row py-2">
-                        <div className="color-black">Beneficiary Name</div>
-                        <div className="color-gray">
-                          Ahmed Mohamed Ahmed Mohamed Ahmed
-                        </div>
-                      </div>
-                      <div className="item-row py-2">
-                        <div className="color-black">Beneficiary Account</div>
-                        <div className="color-gray">QAIBN12345678910</div>
-                      </div>
-                      <div className="item-row py-2">
-                        <div className="color-black">Deposite Details</div>
-                        <div className="color-gray">
-                          Purchase of property in London
-                        </div>
-                      </div>
-                    </div>
-                  </Accordion.Collapse>
-                </td>
-              </tr>
-            </tbody>
-
-            <tbody>
-              <Accordion.Toggle as="tr" eventKey="6" className="clickRow">
-                <td colSpan={1}> 05/11/2020 </td>
-                <td colSpan={2}> 10,000,000.00 QAR </td>
-                <td colSpan={3}> FW20310S1RYC - C.C AC NO 000005660930053 </td>
-
-                <td className="caretArrow">
-                  <i className="fa fa-caret-right color-gray "></i>
-                </td>
-              </Accordion.Toggle>
-
-              <tr>
-                <td colSpan={9} className="p-0">
-                  <Accordion.Collapse eventKey="6" className="collapseRow">
-                    <div className="px-3 py-2">
-                      <div className="item-row py-2">
-                        <div className="color-black">Deposite Reference</div>
-                        <div className="color-gray">FT12345</div>
-                      </div>
-                      <div className="item-row py-2">
-                        <div className="color-black">Beneficiary Name</div>
-                        <div className="color-gray">
-                          Ahmed Mohamed Ahmed Mohamed Ahmed
-                        </div>
-                      </div>
-                      <div className="item-row py-2">
-                        <div className="color-black">Beneficiary Account</div>
-                        <div className="color-gray">QAIBN12345678910</div>
-                      </div>
-                      <div className="item-row py-2">
-                        <div className="color-black">Deposite Details</div>
-                        <div className="color-gray">
-                          Purchase of property in London
-                        </div>
-                      </div>
-                    </div>
-                  </Accordion.Collapse>
-                </td>
-              </tr>
-            </tbody>
-          </Accordion>
-        </div>
-        <div className="actionScrollButtons">
-          <a
-            id="seeMoreRecords"
-            className="btn-block"
-            onClick={showMoreDepositeRecievedProfit}
-          >
-            More <i className="fa fa-caret-down"></i>
-          </a>
-          {/*  <!--<a id="seeLessRecords">Less <i className="fa fa-caret-up"></i></a>--> */}
-        </div>
-        <div className="exportExcel">
-          <a
-            href="#"
-            id="DepositeRecievedProfitdownloadLink"
-            className=""
-            onClick={() =>
-              exportToExcel(
-                "DepositeRecievedProfit",
-                "DepositeRecievedProfitdownloadLink"
-              )
-            }
-          >
-            <img src={excelIcon} className="img-fluid" /> Export to Excel
-          </a>
-        </div>
+        <LoadingOverlay
+          active={isLoading}
+          spinner={
+            <PuffLoader
+              size={Constant.SpnnerSize}
+              color={Constant.SpinnerColor}
+            />
+          }
+        />
+        {filteredData && filteredData.length > 0 && !!filteredData[0].accountNo &&
+          <div className="exportExcel">
+            <ExcelFile filename={local_Strings.ViewReceivedProfit}
+              element={<a href="#"><img src={excelIcon} className="img-fluid" />
+                {local_Strings.exportToExcel}</a>}>
+              <ExcelSheet data={filteredData} name={local_Strings.ViewReceivedProfit}>
+                <ExcelColumn label={local_Strings.AccountNo} value="accountNo" />
+                <ExcelColumn label={local_Strings.RequestListingFilterDate} value="bookingDate" />
+                <ExcelColumn label={local_Strings.Amount} value="amount" />
+                <ExcelColumn label={local_Strings.Description} value={"trxDescirption"} />
+              </ExcelSheet>
+            </ExcelFile>
+          </div>}
       </Modal.Body>
     </Modal>
   );

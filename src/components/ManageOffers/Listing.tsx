@@ -14,6 +14,7 @@ import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import Pagination from "../../shared/pagination";
+import NoResult from "../../shared/NoResult";
 
 function OffersListing() {
   const auth = useContext(AuthContext);
@@ -68,7 +69,10 @@ function OffersListing() {
       });
       refreshList();
     } else {
-      console.log("Error while updating record");
+      addToast(local_Strings.GenericErrorMessage, {
+        appearance: 'error',
+        autoDismiss: true,
+      });
     }
     setLoading(false);
   };
@@ -154,7 +158,7 @@ function OffersListing() {
             <div className="box modal-box py-0 mb-4 scrollabel-modal-box">
               <ul className="box-list" id="dataList">
                 {filteredData &&
-                  filteredData.length > 0 &&
+                  filteredData.length > 0 ?
                   filteredData.map((item, index) => (
                     <li className="shown" key={index}>
                       <a
@@ -169,7 +173,7 @@ function OffersListing() {
                               },
                               {
                                 label: local_Strings.cancelBtn,
-                                onClick: () => {},
+                                onClick: () => { },
                               },
                             ],
                           });
@@ -208,8 +212,8 @@ function OffersListing() {
                             <span className="mx-1 text-15 color-light-gold">
                               {item.createdDate
                                 ? moment(item.createdDate).format(
-                                    "dddd DD MM YYYY"
-                                  )
+                                  "dddd DD MM YYYY"
+                                )
                                 : ""}
                             </span>
                           </div>
@@ -226,7 +230,7 @@ function OffersListing() {
                         </div>
                       </a>
                     </li>
-                  ))}
+                  )) : NoResult(local_Strings.NoDataToShow)}
               </ul>
             </div>
             <OffersForm

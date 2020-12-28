@@ -602,6 +602,14 @@ const ar = {
 
   otpErrorMessage: "الكود غير صحيح",
   percentageLabel: "Percentage",
+  exportToExcel: " تصدير إلى Excel ",
+  documentName: "Document Name",
+  documentNameAr: "Arabic Document Name",
+  documentDate: "Document Date",
+  documentShortDescription: "Short Description",
+  documentShortDescriptionAr: "Arabic Short Description",  
+  documentDeletedMessage: "Document has been deleted successfully!",
+  documentSavedMessage: "Document has been saved successfully!",
 };
 
 export default ar;

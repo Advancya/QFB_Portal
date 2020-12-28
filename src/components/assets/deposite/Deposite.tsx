@@ -16,45 +16,8 @@ function Deposite() {
   const [depositNumber, setReferenceId] = useState<string>("");
 
   const [showDepositeListing, setShowDepositeListing] = useState(false);
-
-  const handleCloseDepositeListing = () => {
-    setShowDepositeListing(false);
-  };
-  const handleShowDepositeListing = () => {
-    setShowDepositeListing(true);
-  };
-
   const [showDepositeDetails, setshowDepositeDetails] = useState(false);
-
-  const handleCloseDepositeDetails = () => setshowDepositeDetails(false);
-  const handleShowDepositeDetails = (depositNumber: string) => {
-    handleCloseDepositeListing();
-    setshowDepositeDetails(true);
-    setReferenceId(depositNumber);
-  };
-
-  const handleBackDepositeDetails = () => {
-    setshowDepositeDetails(false);
-
-    setShowDepositeListing(true);
-  };
-
-  const [showDepositeRecievedProfit, setShowDepositeRecievedProfit] = useState(
-    false
-  );
-
-  const handleCloseDepositeRecievedProfit = () =>
-    setShowDepositeRecievedProfit(false);
-  const handleShowDepositeRecievedProfit = () => {
-    handleCloseDepositeDetails();
-    setShowDepositeRecievedProfit(true);
-    //cashListingProps.hideCashListingModal;
-  };
-  const handleBackDepositeRecievedProfit = () => {
-    setShowDepositeRecievedProfit(false);
-
-    setshowDepositeDetails(true);
-  };
+  const [showDepositeRecievedProfit, setShowDepositeRecievedProfit] = useState(false);
 
   return (
     <div className="col-lg-4">
@@ -63,7 +26,7 @@ function Deposite() {
           <div className="ib-icon">
             <img src={depositIcon} className="img-fluid" />
           </div>
-          <a href="#" className="ib-text" onClick={handleShowDepositeListing}>
+          <a href="#" className="ib-text" onClick={() => setShowDepositeListing(true)}>
             <h4>{local_Strings.PortfolioAssetsOption3}</h4>
             <h5>
               {(userPortfolio.totalDeposits || "0") +
@@ -75,22 +38,38 @@ function Deposite() {
       </div>
       <DepositeListing
         showDepositeListingModal={showDepositeListing}
-        hideDepositeListingModal={handleCloseDepositeListing}
-        showDepositeDetailsModal={handleShowDepositeDetails}
+        hideDepositeListingModal={() => setShowDepositeListing(false)}
+        showDepositeDetailsModal={(depositNumber: string) => {
+          setShowDepositeListing(false);
+          setshowDepositeDetails(true);
+          setReferenceId(depositNumber);
+        }}
       />
       {depositNumber && !!depositNumber &&
-        <DepositeDetails
-          showDepositeDetailsModal={showDepositeDetails}
-          hideDepositeDetailsModal={handleCloseDepositeDetails}
-          backDepositeListingModal={handleBackDepositeDetails}
-          showDepositeRecievedProfit={handleShowDepositeRecievedProfit}
-          depositNumber={depositNumber}
-        />}
-      <DepositeRecievedProfit
-        showDepositeRecievedProfitModal={showDepositeRecievedProfit}
-        hideDepositeRecievedProfitModal={handleCloseDepositeRecievedProfit}
-        backDepositeRecievedProfitModal={handleBackDepositeRecievedProfit}
-      />
+        <React.Fragment>
+          <DepositeDetails
+            showDepositeDetailsModal={showDepositeDetails}
+            hideDepositeDetailsModal={() => setshowDepositeDetails(false)}
+            backDepositeListingModal={() => {
+              setshowDepositeDetails(false);
+              setShowDepositeListing(true);
+            }}
+            showDepositeRecievedProfit={() => {
+              setshowDepositeDetails(false);
+              setShowDepositeRecievedProfit(true);
+            }}
+            depositNumber={depositNumber}
+          />
+          <DepositeRecievedProfit
+            showDepositeRecievedProfitModal={showDepositeRecievedProfit}
+            hideDepositeRecievedProfitModal={() => setShowDepositeRecievedProfit(false)}
+            backDepositeRecievedProfitModal={() => {
+              setShowDepositeRecievedProfit(false);
+              setshowDepositeDetails(true);
+            }}
+            depositNumber={depositNumber}
+          />
+        </React.Fragment>}
     </div>
   );
 }

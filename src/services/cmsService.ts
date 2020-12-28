@@ -902,6 +902,61 @@ const GetCashTransactions = async (cif: string, accountNumber: string) => {
   }
 };
 
+const GetAllDocuments = async () => {
+  try {
+    const result = await apiInstance.get(`/api/Documents/All`);
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+const GetDocumentById = async (id: number) => {
+  try {
+    const result = await apiInstance.get(`/api/Documents/GetById?id=${id}`);
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+const AddNewDocument = async (item: any) => {
+  try {
+    const result = await apiInstance.post(`/api/Documents/Add`, item);
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+const DeleteDocumentById = async (id: number) => {
+  try {
+    const result = await apiInstance.get(`/api/Documents/Delete?id=${id}`);
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+const UpdateDocumentDetail = async (item: any) => {
+  try {
+    const result = await apiInstance.post(`/api/Documents/Update`, item);
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
 export {
   GetStockData,
   ValidateRegisterData,
@@ -968,5 +1023,10 @@ export {
   UpdateOfferDetail,
   GetAllOfferSubscriptions,
   GetAllRequestTypes,
-  GetCashTransactions
+  GetCashTransactions,
+  GetAllDocuments,
+  GetDocumentById,
+  AddNewDocument,
+  DeleteDocumentById,
+  UpdateDocumentDetail
 };

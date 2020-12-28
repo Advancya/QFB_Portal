@@ -30,7 +30,7 @@ const FilterCustomDateControl: React.FC<IFilterCustomDateControlProps> = (props)
                     <label>{local_Strings.RequestFromLabel}</label>
                     <input type="date" className="form-control"
                         value={props.StartDate ? moment(props.StartDate).format("yyyy-MM-DD") : ""}
-                        min={moment().add(-3, "months").format("yyyy-MM-DD")} max={moment().format("yyyy-MM-DD")}
+                        min={moment().add(-6, "months").format("yyyy-MM-DD")} max={moment().format("yyyy-MM-DD")}
                         onChange={(e) => props.onStartDateChange(e.target.value)}
                     />
                 </div>
@@ -38,7 +38,7 @@ const FilterCustomDateControl: React.FC<IFilterCustomDateControlProps> = (props)
                     <label>{local_Strings.RequestToLabel}</label>
                     <input type="date" className="form-control"
                         value={props.EndDate ? moment(props.EndDate).format("yyyy-MM-DD") : ""}
-                        min={moment().add(-3, "months").format("yyyy-MM-DD")} max={moment().format("yyyy-MM-DD")}
+                        min={moment().add(-6, "months").format("yyyy-MM-DD")} max={moment().format("yyyy-MM-DD")}
                         onChange={(e) => props.onEndDateChange(e.target.value)}
                     />
                 </div>

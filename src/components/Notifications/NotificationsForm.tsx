@@ -15,7 +15,7 @@ import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import '@ckeditor/ckeditor5-build-classic/build/translations/ar.js';
 //import Base64UploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/base64uploadadapter';
-import { emptyNotificationsDetail, INotificationsDetail } from "../../Helpers/publicInterfaces";
+import { emptyCustomer, ICustomer, emptyNotificationsDetail, INotificationsDetail } from "../../Helpers/publicInterfaces";
 import { useToasts } from 'react-toast-notifications';
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from 'react-loading-overlay';
@@ -28,26 +28,6 @@ interface DetailsProps {
   OnHide: () => void;
   OnBack: () => void;
   refreshList: () => void;
-}
-
-interface ICustomer {
-  id: string;
-  shortName: string;
-  accountOfficer: string;
-  rnName: string;
-  mobile: string;
-  customerEmail: string;
-  isRegister: boolean;
-}
-
-const emptyCustomer = {
-  "id": "",
-  "shortName": "",
-  "accountOfficer": "",
-  "rnName": "",
-  "mobile": "",
-  "customerEmail": "",
-  "isRegister": false
 }
 
 function NotificationsForm(props: DetailsProps) {
@@ -90,7 +70,10 @@ function NotificationsForm(props: DetailsProps) {
       props.refreshList();
       props.OnHide();
     } else {
-      console.log("Error while updating record");
+      addToast(local_Strings.GenericErrorMessage, {
+        appearance: 'error',
+        autoDismiss: true,
+      });
     }
     setLoading(false);
   };
@@ -216,6 +199,7 @@ function NotificationsForm(props: DetailsProps) {
             handleSubmit,
             errors,
             touched,
+            isValid
           }) => (
             <div className="box modal-box py-0 mb-0 scrollabel-modal-box">
               <div className="box-body">
@@ -278,12 +262,12 @@ function NotificationsForm(props: DetailsProps) {
                       language: "en",
                       content: "en",
                     }}
-                  /> : <label className="box-brief mb-3">
+                  /> : <span className="box-brief mb-3">
                       <div
                         dangerouslySetInnerHTML={{
                           __html: values.messageBody
                         }} />
-                    </label>}
+                    </span>}
                 </div>
                 <div className="form-group">
                   <label className="mb-1 text-600">{local_Strings.NotificationsArDescrLabel}</label>
@@ -303,18 +287,31 @@ function NotificationsForm(props: DetailsProps) {
                       language: "ar",
                       content: "ar",
                     }}
-                  /> : <label className="box-brief mb-3">
+                  /> : <span className="box-brief mb-3">
                       <div
                         dangerouslySetInnerHTML={{
                           __html: values.messageBodyAr
                         }} />
-                    </label>}
+                    </span>}
                 </div>
                 {props.editable &&
                   <div className="form-group">
 
                     <button className="btn btn-sm btn-primary mt-1" type="submit" style={{ float: "right", margin: 20 }}
-                      onClick={(e) => handleSubmit()}>
+                      onClick={(e) => {
+                        if (isValid) {
+                          handleSubmit();
+                        } else {
+                          addToast(local_Strings.formValidationMessage, {
+                            appearance: 'error',
+                            autoDismiss: true,
+                          });
+                          handleBlur("cifs");
+                          handleBlur("messageTitle");
+                          handleBlur("messageTitleAr");
+                          handleBlur("expiryDate");
+                        }
+                      }}>
                       {local_Strings.NotificationsSaveButton}</button>
                   </div>
                 }
