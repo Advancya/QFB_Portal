@@ -15,11 +15,12 @@ import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import '@ckeditor/ckeditor5-build-classic/build/translations/ar.js';
 //import Base64UploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/base64uploadadapter';
-import { emptyNotificationsDetail, INotificationsDetail } from "../../Helpers/publicInterfaces";
-import { useToasts } from 'react-toast-notifications';
+import { emptyCustomer, ICustomer, emptyNotificationsDetail, INotificationsDetail } from "../../Helpers/publicInterfaces";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from 'react-loading-overlay';
 import PuffLoader from "react-spinners/PuffLoader";
+import { CustomerListContext } from "../../pages/Admin/Admin";
+import Swal from 'sweetalert2';
 
 interface DetailsProps {
   item?: INotificationsDetail
@@ -30,38 +31,18 @@ interface DetailsProps {
   refreshList: () => void;
 }
 
-interface ICustomer {
-  id: string;
-  shortName: string;
-  accountOfficer: string;
-  rnName: string;
-  mobile: string;
-  customerEmail: string;
-  isRegister: boolean;
-}
-
-const emptyCustomer = {
-  "id": "",
-  "shortName": "",
-  "accountOfficer": "",
-  "rnName": "",
-  "mobile": "",
-  "customerEmail": "",
-  "isRegister": false
-}
-
 function NotificationsForm(props: DetailsProps) {
   const showMoreNotificationsForm = () => {
     console.log("retrieve more from server");
   };
   const auth = useContext(AuthContext);
   local_Strings.setLanguage(auth.language);
-  const [customerList, setCustomerList] = useState<ICustomer[]>([emptyCustomer]);
-  const [selectedCustomer, setSelected] = useState([]);
+  const customerList = useContext(CustomerListContext);
   const [data, setData] = useState<INotificationsDetail>(emptyNotificationsDetail);
-  const { addToast } = useToasts();
   const [isLoading, setLoading] = useState(false);
+  const [showCustomerError, setCustomerError] = useState<boolean>(false);
   const formValidationSchema = yup.object({
+    selectedCIFs: yup.string().nullable().min(1).required("Select at least one customer"),
     messageTitle: yup.string().nullable().required("Subject is required"),
     messageTitleAr: yup.string().nullable().required("Arabic Subject is required"),
     expiryDate: yup.string().nullable().required("Expire date is required"),
@@ -71,7 +52,7 @@ function NotificationsForm(props: DetailsProps) {
 
     setLoading(true);
     const item = {
-      cif: selectedCustomer.length === customerList.length ? "" : selectedCustomer.flatMap(x => x["value"]).toString(),
+      cif: values.selectedCIFs.length === customerList.length ? "" : values.selectedCIFs.flatMap(x => x["value"]).toString(),
       title: values.messageTitle,
       titleAr: values.messageTitleAr,
       expiryData: moment(values.expiryDate).utc(true),
@@ -79,76 +60,51 @@ function NotificationsForm(props: DetailsProps) {
       messageAr: values.messageBodyAr,
     };
 
-    //console.log(selectedCustomer.length === customerList.length);
-    const x = selectedCustomer.length === customerList.length ? await SendNotificationsToAll(item) : await SendNotificationsToCIFs(item);
+    const x = values.selectedCIFs.length === customerList.length ? await SendNotificationsToAll(item) : await SendNotificationsToCIFs(item);
     if (x) {
-      addToast(local_Strings.NotificationsSavedMessage, {
-        appearance: 'success',
-        autoDismiss: true,
+
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: local_Strings.NotificationsSavedMessage,
+        showConfirmButton: false,
+        timer: Constant.AlertTimeout
       });
       props.refreshList();
       props.OnHide();
     } else {
-      console.log("Error while updating record");
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: local_Strings.GenericErrorMessage,
+        showConfirmButton: false,
+        timer: Constant.AlertTimeout
+      });
     }
     setLoading(false);
   };
 
   useEffect(() => {
-    let isMounted = true;
-    setLoading(true);
-
-    GetAllCustomerList()
-      .then((responseData: ICustomer[]) => {
-        if (responseData && responseData.length > 0 && isMounted) {
-
-          const _customers = responseData;
-          setCustomerList(_customers);
-
-          setTimeout(() => {
-            if (_customers.length > 0 && !!_customers[0].id) {
-              const _selectCustomers = _customers.filter((i) => i.id === props.item.customerId);
-              if (_selectCustomers.length > 0) {
-                setSelected([{
-                  "value": _selectCustomers[0].id,
-                  "label": _selectCustomers[0].shortName
-                }]);
-              }
-            }
-          }, 2000);
-        }
-      })
-      .catch((e: any) => console.log(e))
-      .finally(() => setLoading(false));
-
-    return () => {
-      isMounted = false;
-    }; // use effect cleanup to set flag false, if unmounted
-
-  }, []);
-
-  useEffect(() => {
 
     if (props.item && props.item.id > 0) {
-      setData(props.item);
+      //setData(props.item);
 
       if (customerList.length > 0 && !!customerList[0].id) {
         const _selectCustomers = customerList.filter((i) => i.id === props.item.customerId);
         if (_selectCustomers.length > 0) {
-          setSelected([{
-            "value": _selectCustomers[0].id,
-            "label": _selectCustomers[0].shortName
-          }]);
+          setData({
+            ...props.item, selectedCIFs: [{
+              "value": _selectCustomers[0].id,
+              "label": _selectCustomers[0].shortName
+            }]
+          });
         }
       }
     } else {
       setData(emptyNotificationsDetail);
-      setSelected([]);
     }
 
   }, [props.item]);
-
-  //console.log(data);
 
   const options = customerList ? customerList.map((c) => ({
     "value": (c.id ? c.id : ""),
@@ -215,18 +171,33 @@ function NotificationsForm(props: DetailsProps) {
             handleSubmit,
             errors,
             touched,
+            isValid,
+            validateForm
           }) => (
             <div className="box modal-box py-0 mb-0 scrollabel-modal-box">
               <div className="box-body">
                 <div className="form-group">
                   <label className="mb-1 text-600">{local_Strings.NotificationsCustomerNameLabel}</label>
-                  <MultiSelect
-                    options={options}
-                    value={selectedCustomer}
-                    onChange={setSelected}
-                    labelledBy={"Select"}
-                  />
-                  {touched.messageTitle && errors.messageTitle && InvalidFieldError(errors.messageTitle)}
+                  {props.editable ?
+                    <React.Fragment>
+                      <MultiSelect
+                        options={options}
+                        value={values.selectedCIFs && values.selectedCIFs.length > 0
+                          && values.selectedCIFs[0].value !== "0" ? values.selectedCIFs : null}
+                        onChange={(_item) => {
+                          setFieldValue("selectedCIFs", _item);
+                          handleBlur("selectedCIFs");
+                          if (_item.length !== 0) {
+                            setCustomerError(false);
+                          }
+                        }}
+                        labelledBy={"Select"}
+                      />
+                      {showCustomerError && InvalidFieldError("Select at least one customer")}
+                    </React.Fragment>
+                    : <span className="box-brief mb-3">
+                      {values.selectedCIFs && values.selectedCIFs.length > 0 ? values.selectedCIFs[0].label : ""}
+                    </span>}
                 </div>
                 <div className="form-group">
                   <label className="mb-1 text-600">{local_Strings.NotificationsNameLabel}</label>
@@ -277,12 +248,12 @@ function NotificationsForm(props: DetailsProps) {
                       language: "en",
                       content: "en",
                     }}
-                  /> : <label className="box-brief mb-3">
+                  /> : <span className="box-brief mb-3">
                       <div
                         dangerouslySetInnerHTML={{
                           __html: values.messageBody
                         }} />
-                    </label>}
+                    </span>}
                 </div>
                 <div className="form-group">
                   <label className="mb-1 text-600">{local_Strings.NotificationsArDescrLabel}</label>
@@ -302,18 +273,41 @@ function NotificationsForm(props: DetailsProps) {
                       language: "ar",
                       content: "ar",
                     }}
-                  /> : <label className="box-brief mb-3">
+                  /> : <span className="box-brief mb-3">
                       <div
                         dangerouslySetInnerHTML={{
                           __html: values.messageBodyAr
                         }} />
-                    </label>}
+                    </span>}
                 </div>
                 {props.editable &&
                   <div className="form-group">
 
                     <button className="btn btn-sm btn-primary mt-1" type="submit" style={{ float: "right", margin: 20 }}
-                      onClick={(e) => handleSubmit()}>
+                      onClick={(e) => {
+                        validateForm(values);
+                        if (isValid) {
+                          handleSubmit();
+                        } else {
+
+                          Swal.fire({
+                            position: 'top-end',
+                            icon: 'error',
+                            title: local_Strings.formValidationMessage,
+                            showConfirmButton: false,
+                            timer: Constant.AlertTimeout
+                          });
+                          handleBlur("selectedCIFs");
+                          touched.messageTitle = true;
+                          touched.messageTitleAr = true;
+                          touched.expiryDate = true;
+                          if (values.selectedCIFs.length === 0 || values.selectedCIFs[0].value === "0") {
+                            setCustomerError(true);
+                          } else {
+                            setCustomerError(false);
+                          }
+                        }
+                      }}>
                       {local_Strings.NotificationsSaveButton}</button>
                   </div>
                 }

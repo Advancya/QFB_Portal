@@ -14,7 +14,11 @@ import { AuthContext, User } from "../providers/AuthProvider";
 import { localStrings as local_Strings } from "../translations/localStrings";
 import axios from "axios";
 import { GetUserLocalData } from "../Helpers/authHelper";
-import { GetUserPortfolio, GetGuarantees } from "../services/cmsService";
+import { GetInboxByCIF, GetUserPortfolio, GetGuarantees } from "../services/cmsService";
+import { emptyInboxDetail, IInboxDetail } from "../Helpers/publicInterfaces";
+import LoadingOverlay from "react-loading-overlay";
+import PuffLoader from "react-spinners/PuffLoader";
+import Constant from "../constants/defaultData";
 
 export interface IUserPortfolio {
   customerCode: string;
@@ -46,101 +50,158 @@ export const PortfolioContext = createContext<IUserPortfolio>(
   intialPortfolioData
 );
 
+export interface IInboxProps {
+  messages: IInboxDetail[];
+  refresh: () => void;
+}
+
+export const InboxContext = createContext<IInboxProps>(
+  {
+    messages: [emptyInboxDetail],
+    refresh: () => { },
+  }
+);
+
 function HomePage() {
   const history = useHistory();
-  const auth = useContext(AuthContext);
-  local_Strings.setLanguage(auth.language);
   const currentContext = useContext(AuthContext);
+  local_Strings.setLanguage(currentContext.language);
+
+  const [messages, setInboxListing] = useState<IInboxDetail[]>([emptyInboxDetail]);
+  const [message, setMessageDetail] = useState<IInboxDetail>(emptyInboxDetail);
+
   const [showInboxDetails, setshowInboxDetails] = useState(false);
   const handleCloseInboxDetails = () => setshowInboxDetails(false);
-  const handleShowInboxDetails = () => {
+  const handleShowInboxDetails = (detail: IInboxDetail) => {
     setshowInboxDetails(true);
-    //inboxListingProps.hideInboxListingModal;
+    setMessageDetail(detail);
   };
   const handleBackInboxDetails = () => {
     setshowInboxDetails(false);
   };
-  auth.language === "en"
+  currentContext.language === "en"
     ? document.getElementsByTagName("html")[0].setAttribute("dir", "ltr")
     : document.getElementsByTagName("html")[0].setAttribute("dir", "rtl");
-  auth.language === "en"
+  currentContext.language === "en"
     ? document.getElementsByTagName("html")[0].setAttribute("lang", "en")
     : document.getElementsByTagName("html")[0].setAttribute("lang", "ar");
 
   const [userPortfolio, setUserPortfolio] = useState<IUserPortfolio>(
     intialPortfolioData
   );
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
-    setLoading(true);
 
-    const requestOne = GetUserPortfolio(
-      currentContext.cif,
-      currentContext.userSettings.currency
-    );
-    const requestTwo = GetGuarantees(
-      currentContext.cif,
-      currentContext.userSettings.currency
-    );
-    axios
-      .all([requestOne, requestTwo])
-      .then((responseData: any) => {
-        if (isMounted && responseData && responseData.length > 0) {
-          if (responseData[1].length > 0) {
-            setUserPortfolio({
-              ...responseData[0][0],
-              totalGuarantees: responseData[1][0].totalGurQAR,
-            });
-          } else {
-            setUserPortfolio(responseData[0][0]);
+    const initialLoadMethod = async () => {
+      setLoading(true);
+
+      const requestOne = GetUserPortfolio(
+        currentContext.selectedCIF,
+        currentContext.userSettings.currency
+      );
+      const requestTwo = GetGuarantees(
+        currentContext.selectedCIF,
+        currentContext.userSettings.currency
+      );
+      const requestThree = GetInboxByCIF(
+        currentContext.selectedCIF
+      );
+
+      axios
+        .all([requestOne, requestTwo, requestThree])
+        .then((responseData: any) => {
+          if (isMounted && responseData && responseData.length > 0) {
+
+            if (responseData[0] && responseData[0][0]) {
+              if (responseData[1].length > 0) {
+                setUserPortfolio({
+                  ...responseData[0][0],
+                  totalGuarantees: responseData[1][0].totalGurQAR,
+                });
+              } else {
+                setUserPortfolio(responseData[0][0]);
+              }
+            }
+
+            setInboxListing(responseData[2]);
           }
-        }
-      })
-      .catch((e: any) => console.log(e))
-      .finally(() => setLoading(false));
+        })
+        .catch((e: any) => console.log(e))
+        .finally(() => setLoading(false));
+    }
+
+    if (!!currentContext.selectedCIF) {
+      initialLoadMethod();
+    }
 
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, []);
+  }, [currentContext.selectedCIF]);
+
+  const refresh = () => {
+    console.log("refresh called");
+
+    setLoading(true);
+    GetInboxByCIF(currentContext.selectedCIF)
+      .then((responseData: IInboxDetail[]) => {
+        if (responseData && responseData.length > 0) {
+          setInboxListing(responseData);
+        }
+      })
+      .catch((e: any) => console.log(e))
+      .finally(() => setLoading(false));
+  }
 
   return (
     <div>
-      <AuthCustomHeader />
-      <Breadcrumb pageName={""} />
-      <section id="main-section" className="main-section">
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col-lg-9">
-              <PortfolioContext.Provider value={userPortfolio}>
-                <div className="main-container">
-                  <AssetsLanding />
-                  <div className="row">
-                    <LiabilitiesLanding />
-                    <TotalNetWorth />
+      <InboxContext.Provider value={{ messages, refresh }}>
+        <AuthCustomHeader />
+        {/* <Breadcrumb pageName={""} /> */}
+        <section id="main-section" className="main-section">
+          <LoadingOverlay
+            active={isLoading}
+            spinner={
+              <PuffLoader
+                size={Constant.SpnnerSize}
+                color={Constant.SpinnerColor}
+              />
+            }
+          />
+          <div className="container-fluid">
+            <div className="row">
+              <div className="col-lg-9">
+                <PortfolioContext.Provider value={userPortfolio}>
+                  <div className="main-container">
+                    <AssetsLanding />
+                    <div className="row">
+                      <LiabilitiesLanding />
+                      <TotalNetWorth />
+                    </div>
                   </div>
+                </PortfolioContext.Provider>
+              </div>
+              <div className="col-lg-3">
+                <div className="sidebar-container">
+                  <InboxLanding showInboxDetailsModal={handleShowInboxDetails} />
+                  <RelationManger />
                 </div>
-              </PortfolioContext.Provider>
-            </div>
-            <div className="col-lg-3">
-              <div className="sidebar-container">
-                <InboxLanding showInboxDetailsModal={handleShowInboxDetails} />
-                <RelationManger />
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <Footer />
-
-      <InboxDetails
-        showInboxDetailsModal={showInboxDetails}
-        hideInboxDetailsModal={handleCloseInboxDetails}
-        backInboxListingModal={handleBackInboxDetails}
-      ></InboxDetails>
+        <Footer />
+        {message && !!message.adviceDate &&
+          <InboxDetails
+            item={message}
+            showInboxDetailsModal={showInboxDetails}
+            hideInboxDetailsModal={handleCloseInboxDetails}
+            backInboxListingModal={handleBackInboxDetails}
+          />}
+      </InboxContext.Provider>
     </div>
   );
 }

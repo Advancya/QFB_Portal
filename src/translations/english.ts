@@ -81,7 +81,7 @@ const en = {
 
   DrawerContentHomeLabel: "Home",
   DrawerContentSwitchLangLabel: "العربية",
-  WelcomeScreenTitle: "Relation Manager",
+  WelcomeScreenTitle: "Welcome",
   WelcomeScreenMsg:
     "Welcome {0} to QFB bank, we are glade to serve you and have you as a customer, we hope to satisfy all your needs..",
   WelcomeScreenPopUpTitle: "CALL ME BACK RREQUSET",
@@ -130,19 +130,19 @@ const en = {
   CashDetailsBalanceLabel: "Balance",
   CashDetailsDescriptionLabel: "Description",
   CashDetailsAmountLabel: "Amount",
-  CurrentBalanceLabel: "Current Balance: ",
+  CurrentBalanceLabel: "Current Balance ",
   CashDetailsTransactionRefrence: "Transaction Reference",
   CashDetailsBeneficiaryName: "Beneficiary Name",
   CashDetailsBeneficiaryAccount: "Beneficiary Account",
   CashDetailsPaymentDetails: "Payment Details",
 
-  ScrollForMoreLabel: "Scroll for More",
+  ScrollForMoreLabel: "More",
   CaretIconRight: "caretright",
 
   DepositeListingTitle: "Deposite Account Listing",
   DepositeListingCash: "Deposite",
   DepositeListingCurrency: "QAR",
-  DepositeListingAccountNumberLabel: "Deposite No | ",
+  DepositeListingAccountNumberLabel: "Deposit No | ",
 
   DepositeDetailsRecieved: "Recieved Profit Transactions",
   DepositeDetailsFilter: "Filter",
@@ -191,10 +191,10 @@ const en = {
   NoDataToShow: "No Data to Show",
   OfferList_NoData: "No data available",
 
-  DepositNo: "Deposit No | ",
-  AccountNo: "Account No | ",
-  InvestmentNo: "Investment No | ",
-  LoanNo: "Facility No | ",
+  DepositNo: "Deposit No ",
+  AccountNo: "Account No ",
+  InvestmentNo: "Investment No ",
+  LoanNo: "Facility No ",
   Amount: "Amount",
   Description: "Description",
   Cash: "Cash",
@@ -203,8 +203,8 @@ const en = {
   Loan: "Facilities",
   BuyAndSellTransactions_Status_Buy: "Buy",
   BuyAndSellTransactions_Status_Sell: "Sell",
-  Debit: "Debit",
-  Credit: "Credit",
+  CashDetails_Filter_Debit: "Debit",
+  CashDetails_Filter_Credit: "Credit",
   HistoricalPayments_PastDueSettlement: "Past Due Settlement",
   HistoricalPayments_SettlemenOfPayment: "Payment of Installment",
 
@@ -234,7 +234,7 @@ const en = {
   TransactionScreenFilter_LT: "Less than",
 
   BankGuarantee: "Bank Guarantee",
-  GuaranteeNo: "Guarantee No | ",
+  GuaranteeNo: "Guarantee No ",
   BankGuaranteeListing: "Bank Guarantee Listing",
   BankGuaranteeDetails: "Bank Guarantee Details",
   InvestmentsDetailsTitle: "Investments Details",
@@ -262,7 +262,7 @@ const en = {
   OfferSelectCurrencyLabel: "Select Currency",
   OfferButton: "Submit",
 
-  RequestListingTitle: "Request Listing Page",
+  RequestListingTitle: "Requests",
   RequestListingAddButton: "New Request",
   RequestListingFilterButton: "Filter",
   RequestListingSampleStatus: "Closed",
@@ -315,7 +315,7 @@ const en = {
   TransactionOTPTitle: "Tranaction Confirmation",
 
   BeneficiariesListingTitle: "My Beneficiaries Listing",
-  BeneficiariesListingIDLabel: "Beneficiaries ID | ",
+  BeneficiariesListingIDLabel: "Beneficiaries ID ",
   BeneficiariesListingCountrySample: "Qatar",
 
   NewBeneficiaryTitle: "Add New Beneficiary",
@@ -345,7 +345,7 @@ const en = {
   BeneficiaryEditButton: "Edit",
 
   DocumentsListingTitle: "Documents Listing",
-  DocumentsDetailsTitle: "Documents Details",
+  DocumentsDetailsTitle: "Document Details",
   DocumentsDetailsDownloadButton: "Download",
   DocumentTitleSample: "Document Number one",
 
@@ -363,7 +363,7 @@ const en = {
 
   SearchText: "Search",
   RMClientsRequestListingTitle: "Clients Request Listing",
-  RMSampleAccount: "CIF | ",
+  RMSampleAccount: "CIF ",
   RMSampleTitle: "Account Statement",
 
   RMClienPortfolioListingTitle: "Clients Portfolios Listing",
@@ -386,18 +386,19 @@ const en = {
   InboxMessageDetailsPreviousLabel: "Previous Statements",
 
   ProductsAndOffersListingTitle: "Product and Offers Listing",
-  ProductsAndOffersListingNumberLabel: "Product Number | ",
-  ProductsAndOffersListingNameLabel: "Product Name | ",
+  ProductsAndOffersListingNumberLabel: "Product Number ",
+  ProductsAndOffersListingNameLabel: "Product Name ",
   ProductsAndOffersDetailsTitle: "Product and Offers Details",
 
   ContactUsTite: "Contact Us",
   ContactUsSubmitButton: "Submit",
   ContactUsClearButton: "Clear",
+  ContactUsCreatedDateLabel: "Created Date",
   ContactUsNameLabel: "Name",
   ContactUsCountryLabel: "Country",
   ContactUsMobileLabel: "Mobile Number",
   ContactUsEmailAddressLabel: "Email Address",
-  ContactUsQueryLabel: "Query",
+  ContactUsQueryLabel: "Enquiry",
   SignupSuccessTitle: "Request Sent",
   SignupSuccessMessage:
     "Congratulations, you are now registered on QFB mobile APP.",
@@ -501,9 +502,9 @@ const en = {
   RequestListingFilterStatusOption3: "In Progress",
   RequestListingFilterStatusOption4: "Cancelled",
 
-  MessageFilter_Read: "",
-  MessageFilter_UnRead: "",
-  MessageFilter_All: "",
+  MessageFilter_Read: "Read",
+  MessageFilter_UnRead: "Unread",
+  MessageFilter_All: "All Messages",
 
   MyBeneficiariesAddNew: "Add Beneficiary",
   ProductsAndOffersAddNew: "Add New",
@@ -514,7 +515,7 @@ const en = {
   ProductsAndOffersArDescrLabel: "Arabic Description ",
   ProductsAndOffersSaveButton: "Save",
   ProductsAndOffersDeleteButton: "Delete",
-  ProductsAndOffersSavedMessage: "New Product has been saved successfully!",
+  ProductsAndOffersSavedMessage: "Product has been saved successfully!",
   ProductsAndOffersDeletedMessage: "A Product has been deleted successfully!",
 
   NotificationsAddNew: "Add New",
@@ -532,7 +533,7 @@ const en = {
   NotificationsDescrLabel: "Message Body ",
   NotificationsArDescrLabel: "Arabic Message Body ",
   NotificationsSaveButton: "Save",
-  NotificationsSavedMessage: "New Notification has been saved successfully!",
+  NotificationsSavedMessage: "Notification has been saved successfully!",
 
   OfferAddNew: "Add New",
   OfferNameLabel: "Title ",
@@ -542,7 +543,7 @@ const en = {
   OfferArDescrLabel: "Arabic Description ",
   selectedOfferDetailsLabel: "Offer Details ",
   selectedOfferDetailsArLabel: "Arabic Offer Details ",
-  OfferAttachment: "Attachment",
+  OfferAttachment: "Attachment (PDF only)",
   OfferSaveButton: "Save",
   OfferDeleteButton: "Delete",
 
@@ -552,7 +553,7 @@ const en = {
   supportedFileTypeError: "Selected file {*} is not supported.",
   formValidationMessage: "Please fill the needed fields before saving",
   sizeLabel: "Size",
-  OfferSavedMessage: "New Offer has been saved successfully!",
+  OfferSavedMessage: "Offer has been saved successfully!",
   OfferDeletedMessage: "An Offer has been deleted successfully!",
   searchPlaceholder: "Search",
   /***Web***/
@@ -608,6 +609,19 @@ const en = {
   dummyDate: "Wednesday 22 Nov 2020",
   dummyContent:
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut",
+
+  otpErrorMessage: "Incorrect OTP code",
+  percentageLabel: "Percentage",
+  exportToExcel: " Export to Excel",
+  documentName: "Document Name",
+  documentNameAr: "Arabic Document Name",
+  documentPriority: "Display Priority",
+  documentDate: "Document Date",
+  documentShortDescription: "Short Description",
+  documentShortDescriptionAr: "Arabic Short Description",
+  documentDeletedMessage: "Document has been deleted successfully!",
+  documentSavedMessage: "Document has been saved successfully!",
+  documentListingPriority: "Priority",
 };
 
 export default en;

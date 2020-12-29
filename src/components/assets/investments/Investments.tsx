@@ -12,64 +12,16 @@ import { localStrings as local_Strings } from "../../../translations/localString
 function Investments() {
   const currentContext = useContext(AuthContext);
   const userPortfolio = useContext(PortfolioContext);
+  const [investmentNumber, setReferenceId] = useState<string>("");
 
   const [showInvestmentsListing, setShowInvestmentsListing] = useState(false);
-
-  const handleCloseInvestmentsListing = () => {
-    setShowInvestmentsListing(false);
-  };
-  const handleShowInvestmentsListing = () => {
-    setShowInvestmentsListing(true);
-  };
-
   const [showInvestmentsDetails, setshowInvestmentsDetails] = useState(false);
-
-  const handleCloseInvestmentsDetails = () => setshowInvestmentsDetails(false);
-  const handleShowInvestmentsDetails = () => {
-    handleCloseInvestmentsListing();
-    setshowInvestmentsDetails(true);
-    //cashListingProps.hideCashListingModal;
-  };
-  const handleBackInvestmentsDetails = () => {
-    setshowInvestmentsDetails(false);
-
-    setShowInvestmentsListing(true);
-  };
-
-  const [
-    showInvestmentsRecievedProfit,
-    setShowInvestmentsRecievedProfit,
+  const [showInvestmentsRecievedProfit, setShowInvestmentsRecievedProfit,
   ] = useState(false);
-
-  const handleCloseInvestmentsRecievedProfit = () =>
-    setShowInvestmentsRecievedProfit(false);
-  const handleShowInvestmentsRecievedProfit = () => {
-    handleCloseInvestmentsDetails();
-    setShowInvestmentsRecievedProfit(true);
-    //cashListingProps.hideCashListingModal;
-  };
-  const handleBackInvestmentsRecievedProfit = () => {
-    setShowInvestmentsRecievedProfit(false);
-
-    setshowInvestmentsDetails(true);
-  };
-
   const [showInvestmentsBuyAndSell, setShowInvestmentsBuyAndSell] = useState(
     false
   );
 
-  const handleCloseInvestmentsBuyAndSell = () =>
-    setShowInvestmentsRecievedProfit(false);
-  const handleShowInvestmentsBuyAndSell = () => {
-    handleCloseInvestmentsDetails();
-    setShowInvestmentsBuyAndSell(true);
-    //cashListingProps.hideCashListingModal;
-  };
-  const handleBackInvestmentsBuyAndSell = () => {
-    setShowInvestmentsBuyAndSell(false);
-
-    setshowInvestmentsDetails(true);
-  };
   return (
     <div className="col-lg-4">
       <div className="inner-box">
@@ -80,11 +32,11 @@ function Investments() {
           <a
             href="#"
             className="ib-text"
-            onClick={handleShowInvestmentsListing}
+            onClick={() => setShowInvestmentsListing(true)}
           >
             <h4>{local_Strings.PortfolioAssetsOption2}</h4>
             <h5>
-              {userPortfolio.totalInvestment +
+              {(userPortfolio.totalInvestment || "0") +
                 " " +
                 currentContext.userSettings.currency}
             </h5>
@@ -93,28 +45,54 @@ function Investments() {
       </div>
       <InvestmentsListing
         showInvestmentsListingModal={showInvestmentsListing}
-        hideInvestmentsListingModal={handleCloseInvestmentsListing}
-        showInvestmentsDetailsModal={handleShowInvestmentsDetails}
-      ></InvestmentsListing>
-      <InvestmentsDetails
-        showInvestmentsDetailsModal={showInvestmentsDetails}
-        hideInvestmentsDetailsModal={handleCloseInvestmentsDetails}
-        backInvestmentsListingModal={handleBackInvestmentsDetails}
-        showInvestmentsRecievedProfit={handleShowInvestmentsRecievedProfit}
-        showInvestmentsBuyAndSell={handleShowInvestmentsBuyAndSell}
-      ></InvestmentsDetails>
-      <InvestmentsRecievedProfit
-        showInvestmentsRecievedProfitModal={showInvestmentsRecievedProfit}
-        hideInvestmentsRecievedProfitModal={
-          handleCloseInvestmentsRecievedProfit
-        }
-        backInvestmentsRecievedProfitModal={handleBackInvestmentsRecievedProfit}
-      ></InvestmentsRecievedProfit>
-      <InvestmentsBuyAndSell
-        showInvestmentsBuyAndSellModal={showInvestmentsBuyAndSell}
-        hideInvestmentsBuyAndSellModal={handleCloseInvestmentsBuyAndSell}
-        backInvestmentsBuyAndSellModal={handleBackInvestmentsBuyAndSell}
-      ></InvestmentsBuyAndSell>
+        hideInvestmentsListingModal={() => setShowInvestmentsListing(false)}
+        showInvestmentsDetailsModal={(investmentNumber: string) => {
+          setShowInvestmentsListing(false);
+          setshowInvestmentsDetails(true);
+          setReferenceId(investmentNumber);
+        }}
+      />
+      {investmentNumber && !!investmentNumber &&
+        <React.Fragment>
+          <InvestmentsDetails
+            showInvestmentsDetailsModal={showInvestmentsDetails}
+            hideInvestmentsDetailsModal={() => {
+              setshowInvestmentsDetails(false);
+              setShowInvestmentsBuyAndSell(true);
+            }}
+            backInvestmentsListingModal={() => {
+              setshowInvestmentsDetails(false);
+              setShowInvestmentsListing(true);
+            }}
+            showInvestmentsRecievedProfit={() => {
+              setshowInvestmentsDetails(false);
+              setShowInvestmentsRecievedProfit(true);
+            }}
+            showInvestmentsBuyAndSell={() => {
+              setshowInvestmentsDetails(false);
+              setShowInvestmentsBuyAndSell(true);
+            }}
+            investmentNumber={investmentNumber}
+          />
+          <InvestmentsRecievedProfit
+            showInvestmentsRecievedProfitModal={showInvestmentsRecievedProfit}
+            hideInvestmentsRecievedProfitModal={() => setShowInvestmentsRecievedProfit(false)}
+            backInvestmentsRecievedProfitModal={() => {
+              setShowInvestmentsRecievedProfit(false);
+              setshowInvestmentsDetails(true);
+            }}
+            investmentNumber={investmentNumber}
+          />
+          <InvestmentsBuyAndSell
+            showInvestmentsBuyAndSellModal={showInvestmentsBuyAndSell}
+            hideInvestmentsBuyAndSellModal={() => setShowInvestmentsBuyAndSell(false)}
+            backInvestmentsBuyAndSellModal={() => {
+              setShowInvestmentsBuyAndSell(false);
+              setshowInvestmentsDetails(true);
+            }}
+            investmentNumber={investmentNumber}
+          />
+        </React.Fragment>}
     </div>
   );
 }

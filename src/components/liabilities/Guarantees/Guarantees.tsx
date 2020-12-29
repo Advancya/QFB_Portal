@@ -44,7 +44,7 @@ function Guarantees() {
           <a href="#" className="ib-text" onClick={handleShowGuaranteesListing}>
             <h4>{local_Strings.PortfolioLiabilitiesOption2}</h4>
             <h5>
-              {userPortfolio.totalGuarantees +
+              {(userPortfolio.totalGuarantees || "0") +
                 " " +
                 currentContext.userSettings.currency}
             </h5>
@@ -55,12 +55,12 @@ function Guarantees() {
         showGuaranteesListingModal={showGuaranteesListing}
         hideGuaranteesListingModal={handleCloseGuaranteesListing}
         showGuaranteesDetailsModal={handleShowGuaranteesDetails}
-      ></GuaranteesListing>
+      />
       <GuaranteesDetails
         showGuaranteesDetailsModal={showGuaranteesDetails}
         hideGuaranteesDetailsModal={handleCloseGuaranteesDetails}
         backGuaranteesListingModal={handleBackGuaranteesDetails}
-      ></GuaranteesDetails>
+      />
     </div>
   );
 }

@@ -7,9 +7,12 @@ import RequestsDetails from "./RequestsDetails";
 import NewRequest from "./NewRequest";
 import requestIcon from "../../images/request-icon.svg";
 import { localStrings as local_Strings } from "../../translations/localStrings";
+import { emptyRequestDetail, IRequestDetail } from "../../Helpers/publicInterfaces";
+
 
 function Requests() {
   const [showRequestsListing, setShowRequestsListing] = useState(false);
+  const [item, setDetail] = useState<IRequestDetail>(emptyRequestDetail);
 
   const handleCloseRequestsListing = () => {
     setShowRequestsListing(false);
@@ -21,10 +24,12 @@ function Requests() {
   const [showRequestsDetails, setshowRequestsDetails] = useState(false);
 
   const handleCloseRequestsDetails = () => setshowRequestsDetails(false);
-  const handleShowRequestsDetails = () => {
+  const handleShowRequestsDetails = (detail: IRequestDetail) => {
     handleCloseRequestsListing();
     setshowRequestsDetails(true);
+    setDetail(detail);
   };
+  
   const handleBackRequestsDetails = () => {
     setshowRequestsDetails(false);
 
@@ -59,18 +64,20 @@ function Requests() {
         hideRequestsListingModal={handleCloseRequestsListing}
         showRequestsDetailsModal={handleShowRequestsDetails}
         showNewRequestModal={handleShowNewRequest}
-      ></RequestsListing>
-      <RequestsDetails
-        showRequestsDetailsModal={showRequestsDetails}
-        hideRequestsDetailsModal={handleCloseRequestsDetails}
-        backRequestsListingModal={handleBackRequestsDetails}
-        showNewRequestModal={handleShowNewRequest}
-      ></RequestsDetails>
+      />
+      {item && !!item.requestCreateDate &&
+        <RequestsDetails
+          showRequestsDetailsModal={showRequestsDetails}
+          hideRequestsDetailsModal={handleCloseRequestsDetails}
+          backRequestsListingModal={handleBackRequestsDetails}
+          showNewRequestModal={handleShowNewRequest}
+          item={item}
+        />}
       <NewRequest
         showNewRequestModal={showNewRequest}
         hideNewRequestModal={handleCloseNewRequest}
         backNewRequestModal={handleBackNewRequest}
-      ></NewRequest>
+      />
     </div>
   );
 }

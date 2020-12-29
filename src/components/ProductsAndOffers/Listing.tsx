@@ -1,32 +1,39 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import dateIcon from "../../images/calendar-inactive.png";
-import Breadcrumb from "../../components/Breadcrumb";
-import { GetOfferAll, DeleteOfferById } from "../../services/cmsService";
+import Breadcrumb from "../Breadcrumb";
+import {
+  GetProductsAndOffersAll,
+  DeleteProductsAndOffers,
+} from "../../services/cmsService";
 import moment from "moment";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
-import OffersForm from "../../components/Offers/OffersForm";
-import { confirmAlert } from "react-confirm-alert";
-import { emptyOfferData, IOfferDetail } from "../../Helpers/publicInterfaces";
-import { useToasts } from "react-toast-notifications";
+import ProductsAndOffersForm from "./ProductsAndOffersForm";
+import {
+  emptyProductAndOffersData,
+  IProductAndOffersDetail,
+} from "../../Helpers/publicInterfaces";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import Pagination from "../../shared/pagination";
+import NoResult from "../../shared/NoResult";
+import Swal from 'sweetalert2';
 
-function OffersListing() {
+function ProductsAndOffersListing() {
   const auth = useContext(AuthContext);
   local_Strings.setLanguage(auth.language);
   const [showClearFilter, setShowClearFilter] = useState(false);
-  const [data, setData] = useState<IOfferDetail[]>([]);
-  const [filteredData, setFilteredData] = useState<IOfferDetail[]>([]);
+  const [data, setData] = useState<IProductAndOffersDetail[]>([]);
+  const [filteredData, setFilteredData] = useState<IProductAndOffersDetail[]>(
+    []
+  );
   const [isLoading, setLoading] = useState(true);
-  const { addToast } = useToasts();
   const [formAttributes, setFormAttributes] = useState({
     showForm: false,
     showEditable: false,
-    selectedItem: emptyOfferData,
+    selectedItem: emptyProductAndOffersData,
   });
 
   useEffect(() => {
@@ -41,8 +48,8 @@ function OffersListing() {
 
   const refreshList = () => {
     setLoading(true);
-    GetOfferAll()
-      .then((responseData: IOfferDetail[]) => {
+    GetProductsAndOffersAll()
+      .then((responseData: IProductAndOffersDetail[]) => {
         if (responseData) {
           const _data = responseData.sort((a, b) =>
             moment(b.createdDate).diff(moment(a.createdDate))
@@ -60,46 +67,56 @@ function OffersListing() {
 
   const deleteTheRecord = async (id: number) => {
     setLoading(true);
-    const x = await DeleteOfferById(id);
+    const x = await DeleteProductsAndOffers(id);
     if (x) {
-      addToast(local_Strings.OfferDeletedMessage, {
-        appearance: "success",
-        autoDismiss: true,
+      
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: local_Strings.ProductsAndOffersDeletedMessage,
+        showConfirmButton: false,
+        timer: Constant.AlertTimeout
       });
       refreshList();
     } else {
-      console.log("Error while updating record");
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: local_Strings.GenericErrorMessage,
+        showConfirmButton: false,
+        timer: Constant.AlertTimeout
+      });
     }
     setLoading(false);
   };
 
   return (
     <div>
-      <Breadcrumb pageName={local_Strings.OffersListingTitle} />
+      <Breadcrumb pageName={local_Strings.ProductsAndOffersListingTitle} />
       <div className="container-fluid">
         <div className="main-section">
           <div className="d-flex align-items-center my-3 justify-content-between">
             <div className="ib-text">
-              <h3 className="">{local_Strings.OffersListingTitle}</h3>
+              <h3>{local_Strings.ProductsAndOffersListingTitle}</h3>
             </div>
             <button
               type="button"
               className="btn btn-sm btn-primary"
               onClick={() =>
                 setFormAttributes({
-                  selectedItem: emptyOfferData,
+                  selectedItem: emptyProductAndOffersData,
                   showForm: true,
                   showEditable: true,
                 })
               }
             >
-              {local_Strings.OfferAddNew}
+              {local_Strings.ProductsAndOffersAddNew}
             </button>
           </div>
 
           <div className="card-header-search">
             <div className="row align-items-center">
-              <div className="col-md-12  mb-4">
+              <div className="col-md-12 mb-4">
                 <div className="field-group">
                   <div className="input-group">
                     <input
@@ -142,7 +159,7 @@ function OffersListing() {
                 </div>
               </div>
             </div>
-            <LoadingOverlay
+            {/* <LoadingOverlay
               active={isLoading}
               spinner={
                 <PuffLoader
@@ -150,33 +167,32 @@ function OffersListing() {
                   color={Constant.SpinnerColor}
                 />
               }
-            />
+            /> */}
             <div className="box modal-box py-0 mb-4 scrollabel-modal-box">
               <ul className="box-list" id="dataList">
                 {filteredData &&
-                  filteredData.length > 0 &&
+                  filteredData.length > 0 ?
                   filteredData.map((item, index) => (
                     <li className="shown" key={index}>
                       <a
                         onClick={() => {
-                          confirmAlert({
+                          Swal.fire({
                             title: local_Strings.deleteSure,
-                            message: local_Strings.deleteSureMessage,
-                            buttons: [
-                              {
-                                label: local_Strings.OfferDeleteButton,
-                                onClick: () => deleteTheRecord(item.id),
-                              },
-                              {
-                                label: local_Strings.cancelBtn,
-                                onClick: () => {},
-                              },
-                            ],
+                            text: local_Strings.deleteSureMessage,
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#6b4f44',
+                            confirmButtonText: local_Strings.OfferDeleteButton,
+                            cancelButtonText: local_Strings.cancelBtn
+                          }).then((result) => {
+                            if (result.isConfirmed) {
+                              deleteTheRecord(item.id);
+                            }
                           });
                         }}
                         style={{ cursor: "pointer", float: "right" }}
                       >
-                        {local_Strings.OfferDeleteButton}
+                        {local_Strings.ProductsAndOffersDeleteButton}
                       </a>
                       <a
                         onClick={() =>
@@ -214,23 +230,23 @@ function OffersListing() {
                             </span>
                           </div>
                           <h6 className="mb-1 text-600">
-                            {auth.language === "en" ? item.title : item.titleAr}
+                            {auth.language === "en" ? item.name : item.nameAr}
                           </h6>
                           <div className="text-15">
                             {local_Strings.NotificationsExpireLabel +
                               " " +
-                              (item.expireDate
-                                ? moment(item.expireDate).format("DD-MM-YYYY")
+                              (item.expiryDate
+                                ? moment(item.expiryDate).format("DD/MM/YYYY")
                                 : "")}
                           </div>
                         </div>
                       </a>
                     </li>
-                  ))}
+                  )) : NoResult(local_Strings.NoDataToShow)}
               </ul>
             </div>
-            <OffersForm
-              itemID={formAttributes.selectedItem.id}
+            <ProductsAndOffersForm
+              item={formAttributes.selectedItem}
               show={formAttributes.showForm}
               editable={formAttributes.showEditable}
               OnHide={() =>
@@ -258,9 +274,8 @@ function OffersListing() {
           )}
         </div>
       </div>
-
-      <OffersForm
-        itemID={formAttributes.selectedItem.id}
+      <ProductsAndOffersForm
+        item={formAttributes.selectedItem}
         show={formAttributes.showForm}
         editable={formAttributes.showEditable}
         OnHide={() =>
@@ -281,4 +296,4 @@ function OffersListing() {
   );
 }
 
-export default OffersListing;
+export default ProductsAndOffersListing;

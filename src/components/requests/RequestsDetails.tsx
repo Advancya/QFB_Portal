@@ -1,18 +1,27 @@
-import React, { useState } from "react";
-import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
-import excelIcon from "../../../images/excel.svg";
+import React, { useContext, useState } from "react";
+import { Modal } from "react-bootstrap";
+import { IRequestDetail } from "../../Helpers/publicInterfaces";
+import moment from "moment";
+import { localStrings as local_Strings } from '../../translations/localStrings';
+import { AuthContext } from "../../providers/AuthProvider";
 
 interface iRequestsDetails {
   showRequestsDetailsModal: boolean;
   hideRequestsDetailsModal: () => void;
   backRequestsListingModal: () => void;
   showNewRequestModal: () => void;
+  item: IRequestDetail;
 }
-function RequestsDetails(requestsDetailsProps: iRequestsDetails) {
+
+function RequestsDetails(props: iRequestsDetails) {
+
+  const currentContext = useContext(AuthContext);
+  local_Strings.setLanguage(currentContext.language);
+
   return (
     <Modal
-      show={requestsDetailsProps.showRequestsDetailsModal}
-      onHide={requestsDetailsProps.hideRequestsDetailsModal}
+      show={props.showRequestsDetailsModal}
+      onHide={props.hideRequestsDetailsModal}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
@@ -24,21 +33,21 @@ function RequestsDetails(requestsDetailsProps: iRequestsDetails) {
           <div className="modal-header-text">
             <a
               href="#"
-              onClick={requestsDetailsProps.backRequestsListingModal}
+              onClick={props.backRequestsListingModal}
               className="backToAccountsList"
             >
               <i className="fa fa-chevron-left"></i>
             </a>
           </div>
           <div className="ib-text">
-            <h4>Requests</h4>
+            <h4>{local_Strings.RequestDetailsTitle}</h4>
           </div>
         </div>
 
         <button
           type="button"
           className="close"
-          onClick={requestsDetailsProps.hideRequestsDetailsModal}
+          onClick={props.hideRequestsDetailsModal}
         >
           <span aria-hidden="true">×</span>
         </button>
@@ -49,12 +58,16 @@ function RequestsDetails(requestsDetailsProps: iRequestsDetails) {
             <li className="pb-3">
               <div className="row align-items-center">
                 <div className="col-sm-8">
-                  <h5 className="mb-2">05/11/2020</h5>
-                  <h4>Soler sumitLorem ipsum doler </h4>
+                  <h5 className="mb-2">{moment(props.item.requestCreateDate).format(
+                    "DD/MM/YYYY"
+                  )}</h5>
+                  <h4>{currentContext.language !== "ar" ? props.item.requestSubject : props.item.requestSubjectAR}</h4>
                 </div>
                 <div className="col-sm-4 text-sm-right">
                   {" "}
-                  <span className="status-badge ">Pending</span>{" "}
+                  <span className="status-badge ">
+                    {currentContext.language !== "ar" ? props.item.requestStatus : props.item.requestStatusAR}
+                  </span>{" "}
                 </div>
               </div>
             </li>

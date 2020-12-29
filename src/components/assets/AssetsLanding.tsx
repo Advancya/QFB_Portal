@@ -14,7 +14,7 @@ function AssetsLanding() {
     <div className="box min-h-16">
       <h3 className="mt-1">{local_Strings.PortfolioAssetsTitle}</h3>
       <h2 className="mb-2">
-        {userPortfolio.totalAssets + " "}
+        {(userPortfolio.totalAssets || "0") + " "}
         <small>{currentContext.userSettings.currency}</small>
       </h2>
 

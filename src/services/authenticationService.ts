@@ -31,9 +31,12 @@ async function authenticate(username: string, password: string) {
     const response = await identityInstance.post(
       "connect/token",
       queryString.stringify({
-        ...oidc.config,
-        username,
-        password,
+        client_id: oidc.config.client_id,
+        client_secret: oidc.config.client_secret,
+        scope: oidc.config.scope,
+        grant_type: "password",
+        username: username,
+        password: password,
       }),
       requestOptions
     );
@@ -67,7 +70,7 @@ async function generateRegistrationToken() {
       "connect/token",
       queryString.stringify({
         grant_type: "client_credentials",
-        client_id: oidc.config.client_id,
+        client_id: oidc.config.m_client_id,
         client_secret: oidc.config.client_secret,
         scope: oidc.config.scope,
       }),

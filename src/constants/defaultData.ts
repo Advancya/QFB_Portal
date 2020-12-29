@@ -5,9 +5,12 @@ export default {
   CustomerTermsAcceptanceStorageKey: "@storage_AcceptTermsStatusForCustomer",
   LoginDetailsStorageKey: "storage_LoginUsernameAndPassword",
   UserProfileDetailsStorageKey: "storage_UserPofileDetails",
-  RecordPerPage: 10,
+  RecordPerPage: 5,
   AccessTokenStorageKey: "storage_user_access_token",
   RefreshTokenStorageKey: "storage_user_refresh_token",
   SpinnerColor: "#6B4F44",
   SpnnerSize: 140,
+  Customer: "CUSTOMER",
+  Management: "MANAGEMENT",
+  AlertTimeout: 3000,
 };

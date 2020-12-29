@@ -1,22 +1,58 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import holdingsIcon from "../../images/holdings-icon.svg";
-import transactionIcon from "../../images/transaction-icon.svg";
-import offerIcon from "../../images/offer-icon.svg";
-import requestIcon from "../../images/request-icon.svg";
-import { Switch, Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Requests from "../requests/Requests";
 import Transactions from "../transactions/Transactions";
+import Inbox from "../Inbox/Inbox";
 import AuthOffersLanding from "../AuthOffers/AuthOffersLanding";
+import { AuthContext } from "../../providers/AuthProvider";
 import { localStrings as local_Strings } from "../../translations/localStrings";
+import { emptyUserInfo, IUserInfo } from "../../Helpers/publicInterfaces";
+import { GetUserWelcomeData } from "../../services/cmsService";
 
 function Navigation() {
+
+  const currentContext = useContext(AuthContext);
+  local_Strings.setLanguage(currentContext.language);
+  const [userInfo, setUserInfo] = useState<IUserInfo>(emptyUserInfo);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const initialLoadMethod = async () => {
+    GetUserWelcomeData(currentContext.selectedCIF)
+      .then((responseData: any) => {
+        if (responseData && responseData.length > 0 && isMounted) {
+          setUserInfo(responseData[0] as IUserInfo);
+        }
+      })
+      .catch((e: any) => console.log(e));
+    }
+    if (!!currentContext.selectedCIF) {
+      initialLoadMethod();
+    }
+    return () => {
+      isMounted = false;
+    }; // use effect cleanup to set flag false, if unmounted
+  }, [currentContext.selectedCIF]);
+
+
   return (
     <div className="col-md-7">
+      
       <div className="welcomeText text-right">
-        <Link to="/" className="">
-          {local_Strings.navigationUserMessage}
+        <Link to={`/${currentContext.language}/Home`} className="">
+          {local_Strings.WelcomeScreenTitle + " " + (userInfo.customerShortName || "") + " "}
           <i className="fa fa-user-circle-o"></i>
-        </Link>
+        </Link>&nbsp;
+        <a
+          className="cursor-pointer"
+          href="#"
+          title="Click to logout"
+          onClick={currentContext.logout}
+        >
+          <i className="fa fa-sign-out" />
+        </a>
       </div>
       <nav className="navbar navbar-expand-md">
         <button
@@ -44,15 +80,16 @@ function Navigation() {
 
             <Transactions></Transactions>
             <AuthOffersLanding></AuthOffersLanding>
-
             <Requests></Requests>
             <li className="nav-item">
-              <Link className="" to="/">
-                <i className="fa fa-envelope"></i>
-              </Link>
-              <Link className="" to="/">
-                <i className="fa fa-bell unread"></i>
-              </Link>
+              <Inbox />
+              <a
+                className=""
+                href="#"
+                onClick={() => { }}
+              >
+                <i className="fa fa-bell unread" />
+              </a>
             </li>
           </ul>
         </div>

@@ -6,9 +6,11 @@ interface iFacilitiesOutstandingPayment {
   showFacilitiesOutstandingPaymentModal: boolean;
   hideFacilitiesOutstandingPaymentModal: () => void;
   backFacilitiesOutstandingPaymentModal: () => void;
+  facilityNumber: string;
 }
+
 function FacilitiesOutstandingPayment(
-  facilitiesOutstandingPaymentProps: iFacilitiesOutstandingPayment
+  props: iFacilitiesOutstandingPayment
 ) {
   const [showClearFilter, setShowClearFilter] = useState(false);
   const [openTransactionInfo, setOpenTransactionInfo] = useState(false);
@@ -37,10 +39,10 @@ function FacilitiesOutstandingPayment(
   return (
     <Modal
       show={
-        facilitiesOutstandingPaymentProps.showFacilitiesOutstandingPaymentModal
+        props.showFacilitiesOutstandingPaymentModal
       }
       onHide={
-        facilitiesOutstandingPaymentProps.hideFacilitiesOutstandingPaymentModal
+        props.hideFacilitiesOutstandingPaymentModal
       }
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
@@ -55,7 +57,7 @@ function FacilitiesOutstandingPayment(
               <a
                 href="#"
                 onClick={
-                  facilitiesOutstandingPaymentProps.backFacilitiesOutstandingPaymentModal
+                  props.backFacilitiesOutstandingPaymentModal
                 }
                 className="backToAccountsList"
               >
@@ -76,7 +78,7 @@ function FacilitiesOutstandingPayment(
           type="button"
           className="close"
           onClick={
-            facilitiesOutstandingPaymentProps.hideFacilitiesOutstandingPaymentModal
+            props.hideFacilitiesOutstandingPaymentModal
           }
         >
           <span aria-hidden="true">×</span>

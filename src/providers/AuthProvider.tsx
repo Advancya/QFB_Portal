@@ -1,37 +1,35 @@
 import { GetSettingsByCIF } from "../services/cmsService";
-import { GetUserLocalData, SaveUserDataLocally } from "../Helpers/authHelper";
+import { IUserSettings, GetUserLocalData, SaveUserDataLocally } from "../Helpers/authHelper";
 import React, { useEffect, useState } from "react";
 import { authenticate } from "../services/authenticationService";
-import defaultData from "../constants/defaultData";
 import * as helper from '../Helpers/helper';
+import { getUserRole } from "../services/apiServices";
+import Constant from "../constants/defaultData";
 
-export type User = { username: string; password: string; };
-export interface IUserSettings { cif: string; language: string; currency: string; otp: string };
-const initialUserData = { username: "", password: "" };
-const initialSettingsData = { cif: "1934", language: "en", currency: "QAR", otp: "SMS" };
-
-export const AuthContext = React.createContext<{
-  //user: User;
+export type User = { username: string; password: string; otp: string };
+const initialSettingsData = { customerId: "", language: "en", currency: "QAR", otp: "SMS" };
+interface IAppContext {
   userSettings: IUserSettings,
-  isSignIn: boolean;
-  cif: string;
+  userRole: string;
+  language: string;
+  selectedCIF: string;
   login: (user: User) => Promise<boolean>;
   logout: () => void;
-  language: string;
   changeLanguage: (language: string) => void;
   changeUserSettings: (settings: IUserSettings) => void;
-}>({
-  //user: initialUserData,
+}
+
+export const AuthContext = React.createContext<IAppContext>({
   userSettings: initialSettingsData,
-  isSignIn: false,
-  cif: "",
+  userRole: "",
+  language: "en",
+  selectedCIF: initialSettingsData.customerId,
   login: (user) => {
     return new Promise((resolve, reject) => {
       return false;
     });
   },
   logout: () => { },
-  language: "en",
   changeLanguage: (language) => { },
   changeUserSettings: (settings) => { },
 });
@@ -39,26 +37,29 @@ export const AuthContext = React.createContext<{
 interface AuthProviderProps { }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [cif, setCif] = useState<string>(initialSettingsData.cif);
-  //const [user, setUser] = useState<User>(initialUserData);
   const [userSettings, setUserSettings] = useState<IUserSettings>(initialSettingsData);
-  const [isSignIn, setIsSignIn] = useState<boolean>(false);
-  const [language, setLanguage] = useState(helper.getLanguage());
+  const [language, setLanguage] = useState(helper.getLanguage() || "en");
+  const [userRole, setUserRole] = useState<string>("");
+  const [selectedCIF, setselectedCIF] = useState<string>(initialSettingsData.customerId);
 
   useEffect(() => {
     const getUserData = async () => {
-      const data = await GetUserLocalData();
-      if (data != null) {
-        const userData = JSON.parse(data);
-        //setUser(userData);
-        setCif(data.cif);
-        setUserSettings(data);
-        setIsSignIn(true);
+      const userData = await GetUserLocalData();
+      if (userData) {
+        setUserSettings(userData);
+        const role = await getUserRole(userData.customerId || initialSettingsData.customerId);
+        if (role !== undefined) {
+          setUserRole(role.name);
+          if (role.name === Constant.Customer) {
+            setselectedCIF(userData.customerId);
+          } else {
+            setselectedCIF(initialSettingsData.customerId);
+          }
+        }
       } else {
-        setCif(initialSettingsData.cif);
-        //setUser(initialUserData);
+        setselectedCIF(initialSettingsData.customerId);
+        setUserRole("");
         setUserSettings(initialSettingsData);
-        setIsSignIn(false);
       }
     };
     getUserData();
@@ -67,10 +68,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
-        //user,
         userSettings,
-        isSignIn,
-        cif,
+        userRole,
+        language,
+        selectedCIF,
         login: async (userData) => {
           const resutl = await authenticate(
             userData.username,
@@ -78,27 +79,39 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           );
 
           if (resutl) {
-            setCif(userData.username);
             await GetSettingsByCIF(userData.username)
               .then(async (settings: any) => {
                 if (settings && settings.length > 0) {
                   const _userSettings = settings[0];
-                  setUserSettings(_userSettings);                  
-                  await SaveUserDataLocally(_userSettings);    
-                  console.log("user settings is saved on local storage");
+                  setUserSettings(_userSettings);
+                  setselectedCIF(userData.username);
+                  await SaveUserDataLocally(_userSettings);                  
+
+                } else {                 
+                  const _userData = {...initialSettingsData, customerId: userData.username}; 
+                  setUserSettings(_userData);
+                  setselectedCIF(userData.username);
+                  await SaveUserDataLocally(_userData);                  
+                }
+
+                console.log("user settings is saved on local storage");
+                const role = await getUserRole(userData.username);
+                if (role && role !== undefined) {
+                  setUserRole(role.name || "");
                 }
               });
-              return resutl;
+            return resutl;
           } else {
             return false;
           }
         },
         logout: async () => {
-          setCif("");
-          //setUser(initialUserData);
-          await SaveUserDataLocally("");     
+          setselectedCIF(initialSettingsData.customerId);
+          setUserRole("");
+          setUserSettings(initialSettingsData);
+          await SaveUserDataLocally(initialSettingsData);
+          window.location.href = `/${language}`;
         },
-        language,
         changeLanguage: setLanguage,
         changeUserSettings: setUserSettings,
       }}

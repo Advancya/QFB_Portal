@@ -17,7 +17,7 @@ async function generateRegistrationToken() {
       "connect/token",
       queryString.stringify({
         grant_type: "client_credentials",
-        client_id: oidc.config.client_id,
+        client_id: oidc.config.m_client_id,
         client_secret: oidc.config.client_secret,
         scope: oidc.config.scope,
       }),
@@ -878,6 +878,85 @@ const GetAllOfferSubscriptions = async () => {
   }
 };
 
+const GetAllRequestTypes = async () => {
+  try {
+    const result = await apiInstance.get(`/api/RequestTypes`);
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+const GetCashTransactions = async (cif: string, accountNumber: string) => {
+  try {
+    const result = await apiInstance.get(
+      `/api/CashAccountTransactions?cif=${cif}&accid=${accountNumber}`
+    );
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+const GetAllDocuments = async () => {
+  try {
+    const result = await apiInstance.get(`/api/Documents/All`);
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+const GetDocumentById = async (id: number) => {
+  try {
+    const result = await apiInstance.get(`/api/Documents/GetById?id=${id}`);
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+const AddNewDocument = async (item: any) => {
+  try {
+    const result = await apiInstance.post(`/api/Documents/Add`, item);
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+const DeleteDocumentById = async (id: number) => {
+  try {
+    const result = await apiInstance.get(`/api/Documents/Delete?id=${id}`);
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+const UpdateDocumentDetail = async (item: any) => {
+  try {
+    const result = await apiInstance.post(`/api/Documents/Update`, item);
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
 export {
   GetStockData,
   ValidateRegisterData,
@@ -942,5 +1021,12 @@ export {
   AddNewOffer,
   DeleteOfferById,
   UpdateOfferDetail,
-  GetAllOfferSubscriptions
+  GetAllOfferSubscriptions,
+  GetAllRequestTypes,
+  GetCashTransactions,
+  GetAllDocuments,
+  GetDocumentById,
+  AddNewDocument,
+  DeleteDocumentById,
+  UpdateDocumentDetail
 };

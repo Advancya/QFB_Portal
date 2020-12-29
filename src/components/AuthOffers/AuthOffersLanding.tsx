@@ -8,15 +8,16 @@ import { AuthContext } from "../../providers/AuthProvider";
 import { Link } from "react-router-dom";
 import offerIcon from "../../images/offer-icon.svg";
 import AuthOfferRequest from "./AuthOfferRequest";
+import { emptyOfferData, IOfferDetail } from "../../Helpers/publicInterfaces";
 
 interface iAuthOffersLanding {
   showAuthOffersDetailsModal?: () => void;
 }
-function AuthOffersLanding(authOffersLandingProps: iAuthOffersLanding) {
+function AuthOffersLanding(props: iAuthOffersLanding) {
   const history = useHistory();
   const auth = useContext(AuthContext);
   local_Strings.setLanguage(auth.language);
-
+  const [itemID, setDetail] = useState<number>(0);
   const [showAuthOffersListing, setShowAuthOffersListing] = useState(false);
 
   const handleCloseAuthOffersListing = () => {
@@ -29,10 +30,10 @@ function AuthOffersLanding(authOffersLandingProps: iAuthOffersLanding) {
   const [showAuthOffersDetails, setshowAuthOffersDetails] = useState(false);
 
   const handleCloseAuthOffersDetails = () => setshowAuthOffersDetails(false);
-  const handleShowAuthOffersDetails = () => {
+  const handleShowAuthOffersDetails = (itemID: number) => {
     handleCloseAuthOffersListing();
     setshowAuthOffersDetails(true);
-    //authOffersListingProps.hideAuthOffersListingModal;
+    setDetail(itemID);
   };
   const handleBackAuthOffersDetails = () => {
     setshowAuthOffersDetails(false);
@@ -65,18 +66,20 @@ function AuthOffersLanding(authOffersLandingProps: iAuthOffersLanding) {
         showAuthOffersListingModal={showAuthOffersListing}
         hideAuthOffersListingModal={handleCloseAuthOffersListing}
         showAuthOffersDetailsModal={handleShowAuthOffersDetails}
-      ></AuthOffersListing>
+      />
+      {itemID > 0 &&
       <AuthOffersDetails
         showAuthOffersDetailsModal={showAuthOffersDetails}
         hideAuthOffersDetailsModal={handleCloseAuthOffersDetails}
         backAuthOffersDetailsModal={handleBackAuthOffersDetails}
         showAuthOfferRequestModal={handleShowAuthOfferRequest}
-      ></AuthOffersDetails>
+        itemID={itemID}
+      />}
       <AuthOfferRequest
         showAuthOfferRequestModal={showAuthOfferRequest}
         hideAuthOfferRequestModal={handleCloseAuthOfferRequest}
         backAuthOffersRequestModal={handleBackAuthOfferRequest}
-      ></AuthOfferRequest>
+      />
     </div>
   );
 }

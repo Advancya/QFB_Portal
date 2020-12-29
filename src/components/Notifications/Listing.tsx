@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import dateIcon from "../../images/calendar-inactive.png";
-import Breadcrumb from "../../components/Breadcrumb";
+import Breadcrumb from "../Breadcrumb";
 import { GetNotificationsAll } from "../../services/cmsService";
 import moment from "moment";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
-import NotificationsForm from "../../components/Notifications/NotificationsForm";
+import NotificationsForm from "./NotificationsForm";
 import {
   emptyNotificationsDetail,
   INotificationsDetail,
@@ -15,6 +15,7 @@ import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import Pagination from "../../shared/pagination";
+import NoResult from "../../shared/NoResult";
 
 function NotificationsListing() {
   const auth = useContext(AuthContext);
@@ -140,7 +141,7 @@ function NotificationsListing() {
             <div className="box modal-box py-0 mb-4 scrollabel-modal-box">
               <ul className="box-list" id="dataList">
                 {filteredData &&
-                  filteredData.length > 0 &&
+                  filteredData.length > 0 ?
                   filteredData.map((item, index) => (
                     <li className="shown" key={index}>
                       <a
@@ -172,13 +173,13 @@ function NotificationsListing() {
                             {local_Strings.NotificationsExpireLabel +
                               " " +
                               (item.expiryDate
-                                ? moment(item.expiryDate).format("DD-MM-YYYY")
+                                ? moment(item.expiryDate).format("DD/MM/YYYY")
                                 : "")}
                           </div>
                         </div>
                       </a>
                     </li>
-                  ))}
+                  )) : NoResult(local_Strings.NoDataToShow)}
               </ul>
             </div>
             <NotificationsForm

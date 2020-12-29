@@ -4,8 +4,8 @@ import React from "react";
 import defaultData from "../constants/defaultData";
 import { getUserProfile } from "../services/apiServices";
 
-
-async function SaveUserDataLocally(values: any) {
+export interface IUserSettings { customerId: string; language: string; currency: string; otp: string };
+async function SaveUserDataLocally(values: IUserSettings) {
 
   localStorage.setItem(defaultData.LoginDetailsStorageKey, JSON.stringify(values));
 
@@ -13,8 +13,8 @@ async function SaveUserDataLocally(values: any) {
 
 async function GetUserLocalData() {
   const data = localStorage.getItem(defaultData.LoginDetailsStorageKey);
-  
-  return data ? JSON.parse(data) : null;
+
+  return data ? JSON.parse(data) as IUserSettings : null;
 }
 
 export { SaveUserDataLocally, GetUserLocalData };

@@ -1,17 +1,3 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
 .input-validation-error {
   margin-top: 10px;
   border: 1px solid #ff0000;
@@ -66,14 +52,89 @@ code {
   width: 50%;
   margin: 15px 0px;
 }
-.paging-block {margin: 2rem 0 0 0;}
-.paging-block .page-link {border: 0; color: #6B4F44; }
-.paging-block .page-link:hover, .paging-block .page-item.active .page-link {
-    color: #FFF;
-    background-color: #6B4F44;
-	border-radius: 0.25rem;
+
+.paging-block {
+  margin: 2rem 0 0 0;
 }
+
+.paging-block .page-link {
+  border: 0;
+  color: #6B4F44;
+}
+
+.paging-block .page-link:hover,
 .paging-block .page-item.active .page-link {
-	background-color: #d8d8d8;
-	cursor: default;
+  color: #FFF;
+  background-color: #6B4F44;
+  border-radius: 0.25rem;
 }
+
+.paging-block .page-item.active .page-link {
+  background-color: #d8d8d8;
+  cursor: default;
+}
+
+.noResult {
+  text-align: left;
+  color: #000;
+  padding: 12px 0px 0px 20px;
+}
+
+/*
+ * File
+ */
+
+ .file {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  height: 2.5rem;
+}
+.file input {
+  min-width: 14rem;
+  margin: 0;
+  filter: alpha(opacity=0);
+  opacity: 0;
+}
+.file-custom {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 5;
+  height: 2.5rem;
+  padding: .5rem 1rem;
+  line-height: 1.5;
+  color: #555;
+  background-color: #fff;
+  border: .075rem solid #ddd;
+  border-radius: .25rem;
+  box-shadow: inset 0 .2rem .4rem rgba(0,0,0,.05);
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.file-custom:before {
+  position: absolute;
+  top: -.075rem;
+  right: -.075rem;
+  bottom: -.075rem;
+  z-index: 6;
+  display: block;
+  content: "Browse";
+  height: 2.5rem;
+  padding: .5rem 1rem;
+  line-height: 1.5;
+  color: #555;
+  background-color: #eee;
+  border: .075rem solid #ddd;
+  border-radius: 0 .25rem .25rem 0;
+}
+
+/* Focus */
+.file input:focus ~ .file-custom {
+  box-shadow: 0 0 0 .075rem #fff, 0 0 0 .2rem #0074d9;
+}
+

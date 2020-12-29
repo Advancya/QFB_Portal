@@ -137,7 +137,7 @@ const ar = {
   CashDetailsBeneficiaryAccount: "حساب المستفيد",
   CashDetailsPaymentDetails: "بيانات الدفع",
 
-  ScrollForMoreLabel: "انتقل إلى المزيد",
+  ScrollForMoreLabel: "أكثر",
   CaretIconRight: "caretleft",
 
   DepositeListingTitle: "قائمة حساب الإيداع",
@@ -192,10 +192,10 @@ const ar = {
   NoDataToShow: "لا توجد بيانات لعرضها",
   OfferList_NoData: "لا تتوافر بيانات",
 
-  DepositNo: "رقم الإيداع | ",
-  AccountNo: "رقم الحساب | ",
-  InvestmentNo: "رقم الاستثمار | ",
-  LoanNo: "رقم المرفق | ",
+  DepositNo: "رقم الإيداع ",
+  AccountNo: "رقم الحساب ",
+  InvestmentNo: "رقم الاستثمار ",
+  LoanNo: "رقم المرفق ",
   Amount: "مُبَلِّغ",
   Description: "أَوْصاف",
   Cash: "السيولة النقدية",
@@ -204,8 +204,8 @@ const ar = {
   Loan: "قرض",
   BuyAndSellTransactions_Status_Buy: "Buy",
   BuyAndSellTransactions_Status_Sell: "Sell",
-  Debit: "مدين",
-  Credit: "ائتمان",
+  CashDetails_Filter_Debit: "مدين",
+  CashDetails_Filter_Credit: "ائتمان",
   HistoricalPayments_PastDueSettlement: "التسوية المتأخرة",
   HistoricalPayments_SettlemenOfPayment: "تسوية الدفع",
 
@@ -218,6 +218,7 @@ const ar = {
   OutstandingPaymentsText: "المدفوعات المعلقة",
   ViewOutstandingPayments: "عرض المدفوعات المعلقة",
 
+  TransactionScreenFilter_None: "--SELECT--",
   TransactionScreenFilter_LastWeek: "الاسبوع الماضي",
   TransactionScreenFilter_LastMonth: "الشهر الماضي",
   TransactionScreenFilter_Last3Months: "آخر 3 أشهر",
@@ -233,7 +234,7 @@ const ar = {
   TransactionScreenFilter_LT: "أقل من",
 
   BankGuarantee: "ضمان بنكي",
-  GuaranteeNo: "رقم الضمان | ",
+  GuaranteeNo: "رقم الضمان ",
   BankGuaranteeListing: "قائمة الضمان البنكي",
   BankGuaranteeDetails: "تفاصيل الضمان البنكي",
 
@@ -315,7 +316,7 @@ const ar = {
   TransactionTransferTypeLabel: "نوع التحويل",
 
   BeneficiariesListingTitle: "قائمة المستفيدون",
-  BeneficiariesListingIDLabel: "هوية المستفيدين | ",
+  BeneficiariesListingIDLabel: "هوية المستفيدين ",
   BeneficiariesListingCountrySample: "دولة قطر",
 
   NewBeneficiaryTitle: "إضافة مستفيد جديد",
@@ -360,7 +361,7 @@ const ar = {
 
   SearchText: "بحث",
   RMClientsRequestListingTitle: "طلب قائمة العملاء",
-  RMSampleAccount: "رقم العميل | ",
+  RMSampleAccount: "رقم العميل ",
   RMSampleTitle: "كشف حساب",
 
   RMClienPortfolioListingTitle: "قائمة محافظ العملاء",
@@ -384,13 +385,14 @@ const ar = {
   InboxMessageDetailsPreviousLabel: "البيانات السابقة",
 
   ProductsAndOffersListingTitle: "قائمة المنتجات والعروض",
-  ProductsAndOffersListingNumberLabel: "رقم المنتج |  ",
-  ProductsAndOffersListingNameLabel: "اسم المنتج | ",
+  ProductsAndOffersListingNumberLabel: "رقم المنتج  ",
+  ProductsAndOffersListingNameLabel: "اسم المنتج ",
   ProductsAndOffersDetailsTitle: "تفاصيل المنتج والعروض",
 
   ContactUsTite: "اتصل بنا",
   ContactUsSubmitButton: "إرسال",
   ContactUsClearButton: "مسح",
+  ContactUsCreatedDateLabel: "Created Date",
   ContactUsNameLabel: "الاسم",
   ContactUsCountryLabel: "البلد",
   ContactUsMobileLabel: "رقم الهاتف المحمول",
@@ -497,6 +499,7 @@ const ar = {
   MessageFilter_Read: "مقروءة",
   MessageFilter_UnRead: "غير مقروءة",
   MessageFilter_All: "كل الرسائل",
+
   MyBeneficiariesAddNew: "اضافة مستفيد جديد",
   ProductsAndOffersAddNew: "اضافة جديد",
   ProductsAndOffersNameLabel: "Name ",
@@ -535,7 +538,7 @@ const ar = {
   OfferArDescrLabel: "Arabic Description ",
   selectedOfferDetailsLabel: "Offer Details ",
   selectedOfferDetailsArLabel: "Arabic Offer Details ",
-  OfferAttachment: "Attachment",
+  OfferAttachment: "Attachment (PDF only)",
   OfferSaveButton: "Save",
   OfferDeleteButton: "Delete",
 
@@ -601,6 +604,19 @@ const ar = {
   dummyDate: "الأربعاء 22 نوفمبر 2020",
   dummyContent:
     "أبجد هوز دولور الجلوس امات، consectetur adipiscing إيليت، سد القيام eiusmod tempor incididunt التحرير labore آخرون غير مؤلمة ماجنا aliqua. أوت ENIM إعلان قطرة veniam، quis nostrud exercitation ullamco رقة العمل احترازيا التحرير أبجد هوز دولور الجلوس امات، consectetur adipiscing إيليت، الحوار الاقتصادي الاستراتيجي تفعل tempor eiusmod incidunt ut labore et dolore magna aliqua. تمرين nostrud ullamco labouris nisi ut ",
+
+  otpErrorMessage: "الكود غير صحيح",
+  percentageLabel: "Percentage",
+  exportToExcel: " تصدير إلى Excel ",
+  documentName: "Document Name",
+  documentNameAr: "Arabic Document Name",
+  documentPriority: "Display Priority",
+  documentDate: "Document Date",
+  documentShortDescription: "Short Description",
+  documentShortDescriptionAr: "Arabic Short Description",
+  documentDeletedMessage: "Document has been deleted successfully!",
+  documentSavedMessage: "Document has been saved successfully!",
+  documentListingPriority: "أفضلية",
 };
 
 export default ar;

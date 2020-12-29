@@ -1,40 +1,34 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import dateIcon from "../../images/calendar-inactive.png";
-import Breadcrumb from "../../components/Breadcrumb";
-import {
-  GetProductsAndOffersAll,
-  DeleteProductsAndOffers,
-} from "../../services/cmsService";
+import Breadcrumb from "../Breadcrumb";
+import { GetAllDocuments, GetDocumentById, DeleteDocumentById } from "../../services/cmsService";
 import moment from "moment";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
-import ProductsAndOffersForm from "../../components/ProductsAndOffers/ProductsAndOffersForm";
-import { confirmAlert } from "react-confirm-alert";
-import {
-  emptyProductAndOffersData,
-  IProductAndOffersDetail,
-} from "../../Helpers/publicInterfaces";
-import { useToasts } from "react-toast-notifications";
+import DocumentForm from "./DocumentForm";
+import { emptyDocumentData, IDocumentDetail } from "../../Helpers/publicInterfaces";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import Pagination from "../../shared/pagination";
+import NoResult from "../../shared/NoResult";
+import { saveAs } from 'file-saver';
+import * as helper from "../../Helpers/helper";
+import Swal from 'sweetalert2';
+const mime = require('mime');
 
-function ProductsAndOffersListing() {
+function DocumentsListing() {
   const auth = useContext(AuthContext);
   local_Strings.setLanguage(auth.language);
   const [showClearFilter, setShowClearFilter] = useState(false);
-  const [data, setData] = useState<IProductAndOffersDetail[]>([]);
-  const [filteredData, setFilteredData] = useState<IProductAndOffersDetail[]>(
-    []
-  );
+  const [data, setData] = useState<IDocumentDetail[]>([]);
+  const [filteredData, setFilteredData] = useState<IDocumentDetail[]>([]);
   const [isLoading, setLoading] = useState(true);
-  const { addToast } = useToasts();
   const [formAttributes, setFormAttributes] = useState({
     showForm: false,
     showEditable: false,
-    selectedItem: emptyProductAndOffersData,
+    selectedItem: emptyDocumentData,
   });
 
   useEffect(() => {
@@ -49,12 +43,10 @@ function ProductsAndOffersListing() {
 
   const refreshList = () => {
     setLoading(true);
-    GetProductsAndOffersAll()
-      .then((responseData: IProductAndOffersDetail[]) => {
+    GetAllDocuments()
+      .then((responseData: IDocumentDetail[]) => {
         if (responseData) {
-          const _data = responseData.sort((a, b) =>
-            moment(b.createdDate).diff(moment(a.createdDate))
-          );
+          const _data = responseData.sort((a, b) => a.orderId - b.orderId);
 
           setData(_data);
           setFilteredData(_data);
@@ -68,46 +60,71 @@ function ProductsAndOffersListing() {
 
   const deleteTheRecord = async (id: number) => {
     setLoading(true);
-    const x = await DeleteProductsAndOffers(id);
+    const x = await DeleteDocumentById(id);
     if (x) {
-      addToast(local_Strings.ProductsAndOffersDeletedMessage, {
-        appearance: "success",
-        autoDismiss: true,
+
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: local_Strings.documentDeletedMessage,
+        showConfirmButton: false,
+        timer: Constant.AlertTimeout
       });
       refreshList();
     } else {
-      console.log("Error while updating record");
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: local_Strings.GenericErrorMessage,
+        showConfirmButton: false,
+        timer: Constant.AlertTimeout
+      });
     }
     setLoading(false);
   };
 
+  const downloadAttachment = (itemId: number) => {
+    setLoading(true)
+
+    GetDocumentById(itemId)
+      .then((responseData: any) => {
+        if (responseData && responseData.length > 0) {
+          const item = responseData[0] as IDocumentDetail;
+          const blob = helper.b64toBlob(item.fileContent, mime.getType(item.fileName));
+          saveAs(blob, item.fileName);
+        }
+      })
+      .catch((e: any) => console.log(e))
+      .finally(() => setLoading(false));
+  }
+
   return (
     <div>
-      <Breadcrumb pageName={local_Strings.ProductsAndOffersListingTitle} />
+      <Breadcrumb pageName={local_Strings.DocumentsListingTitle} />
       <div className="container-fluid">
         <div className="main-section">
           <div className="d-flex align-items-center my-3 justify-content-between">
             <div className="ib-text">
-              <h3>{local_Strings.ProductsAndOffersListingTitle}</h3>
+              <h3 className="">{local_Strings.DocumentsListingTitle}</h3>
             </div>
             <button
               type="button"
               className="btn btn-sm btn-primary"
               onClick={() =>
                 setFormAttributes({
-                  selectedItem: emptyProductAndOffersData,
+                  selectedItem: emptyDocumentData,
                   showForm: true,
                   showEditable: true,
                 })
               }
             >
-              {local_Strings.ProductsAndOffersAddNew}
+              {local_Strings.OfferAddNew}
             </button>
           </div>
 
           <div className="card-header-search">
             <div className="row align-items-center">
-              <div className="col-md-12 mb-4">
+              <div className="col-md-12  mb-4">
                 <div className="field-group">
                   <div className="input-group">
                     <input
@@ -162,30 +179,28 @@ function ProductsAndOffersListing() {
             <div className="box modal-box py-0 mb-4 scrollabel-modal-box">
               <ul className="box-list" id="dataList">
                 {filteredData &&
-                  filteredData.length > 0 &&
+                  filteredData.length > 0 ?
                   filteredData.map((item, index) => (
                     <li className="shown" key={index}>
                       <a
                         onClick={() => {
-                          confirmAlert({
+                          Swal.fire({
                             title: local_Strings.deleteSure,
-                            message: local_Strings.deleteSureMessage,
-                            buttons: [
-                              {
-                                label:
-                                  local_Strings.ProductsAndOffersDeleteButton,
-                                onClick: () => deleteTheRecord(item.id),
-                              },
-                              {
-                                label: local_Strings.cancelBtn,
-                                onClick: () => {},
-                              },
-                            ],
+                            text: local_Strings.deleteSureMessage,
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#6b4f44',
+                            confirmButtonText: local_Strings.OfferDeleteButton,
+                            cancelButtonText: local_Strings.cancelBtn
+                          }).then((result) => {
+                            if (result.isConfirmed) {
+                              deleteTheRecord(item.id);
+                            }
                           });
                         }}
                         style={{ cursor: "pointer", float: "right" }}
                       >
-                        {local_Strings.ProductsAndOffersDeleteButton}
+                        {local_Strings.OfferDeleteButton}
                       </a>
                       <a
                         onClick={() =>
@@ -203,43 +218,40 @@ function ProductsAndOffersListing() {
                       <a
                         href="#"
                         className="row align-items-center"
-                        onClick={() =>
-                          setFormAttributes({
-                            selectedItem: item,
-                            showForm: true,
-                            showEditable: false,
-                          })
-                        }
+                        onClick={() => downloadAttachment(item.id)}
                       >
-                        <div className="col-12 col-sm-12">
+                        <div className="col-2 col-sm-2">
+                          <div className="mb-1 d-flex align-items-center">
+                            <span className="mx-1 text-15 color-light-gold">
+                              {local_Strings.documentListingPriority}
+                            </span>
+                          </div>
+                          <h6 className="mb-1 text-600 align-items-center text-center">
+                            {item.orderId || "0"}
+                          </h6>
+                        </div>
+                        <div className="col-10 col-sm-10">
                           <div className="mb-1 d-flex align-items-center">
                             <img src={dateIcon} className="img-fluid" />
                             <span className="mx-1 text-15 color-light-gold">
-                              {item.createdDate
-                                ? moment(item.createdDate).format(
-                                    "dddd DD MM YYYY"
-                                  )
+                              {item.documentDate
+                                ? moment(item.documentDate).format(
+                                  "dddd DD MM YYYY"
+                                )
                                 : ""}
                             </span>
                           </div>
                           <h6 className="mb-1 text-600">
-                            {auth.language === "en" ? item.name : item.nameAr}
+                            {auth.language === "en" ? item.documentName : item.documentNameAr}
                           </h6>
-                          <div className="text-15">
-                            {local_Strings.NotificationsExpireLabel +
-                              " " +
-                              (item.expiryDate
-                                ? moment(item.expiryDate).format("DD-MM-YYYY")
-                                : "")}
-                          </div>
                         </div>
                       </a>
                     </li>
-                  ))}
+                  )) : NoResult(local_Strings.NoDataToShow)}
               </ul>
             </div>
-            <ProductsAndOffersForm
-              item={formAttributes.selectedItem}
+            <DocumentForm
+              itemID={formAttributes.selectedItem.id}
               show={formAttributes.showForm}
               editable={formAttributes.showEditable}
               OnHide={() =>
@@ -257,7 +269,7 @@ function ProductsAndOffersListing() {
               refreshList={() => refreshList()}
             />
           </div>
-          {data.length > 10 && (
+          {data && data.length > 10 && (
             <Pagination
               items={data as []}
               onChangePage={setFilteredData}
@@ -267,8 +279,9 @@ function ProductsAndOffersListing() {
           )}
         </div>
       </div>
-      <ProductsAndOffersForm
-        item={formAttributes.selectedItem}
+
+      <DocumentForm
+        itemID={formAttributes.selectedItem.id}
         show={formAttributes.showForm}
         editable={formAttributes.showEditable}
         OnHide={() =>
@@ -289,4 +302,4 @@ function ProductsAndOffersListing() {
   );
 }
 
-export default ProductsAndOffersListing;
+export default DocumentsListing;
