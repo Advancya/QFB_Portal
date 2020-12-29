@@ -15,6 +15,7 @@ import { AuthContext } from "../../providers/AuthProvider";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { useHistory } from "react-router-dom";
 import Swal from 'sweetalert2';
+import axios from "axios";
 
 export const CustomerListContext = createContext<ICustomer[]>(
   [emptyCustomer]
@@ -38,10 +39,39 @@ function Landing() {
 
     const initialLoadMethod = async () => {
       setLoading(true);
-      GetAllCustomerList()
-        .then((responseData: ICustomer[]) => {
+      const requestOne = await getUserRole(currentContext.selectedCIF);
+      const requestTwo = await GetAllCustomerList();
+      axios
+        .all([requestOne, requestTwo])
+        .then((responseData: any) => {
+
           if (responseData && responseData.length > 0 && isMounted) {
-            setCustomerList(responseData);
+
+            const role = responseData[0];
+            if (!(role && role !== undefined && (role.name === Constant.RM || role.name === Constant.Management))) {
+              let timerInterval: any;
+              Swal.fire({
+                title: 'Access Denied!',
+                icon: 'warning',
+                iconColor: "red",
+                html: 'Your are not authorize to accesss this admin section.',
+                timer: Constant.AlertTimeout,
+                timerProgressBar: true,
+                didOpen: () => {
+                  Swal.showLoading();
+                },
+                willClose: () => {
+                  clearInterval(timerInterval);
+                  history.push(`/${currentContext.language}/Home`);
+                }
+              }).then((result) => {
+                if (result.dismiss === Swal.DismissReason.timer) {
+                  history.push(`/${currentContext.language}/Home`);
+                }
+              });
+            }
+
+            setCustomerList(responseData[1]);
           }
         })
         .catch((e: any) => console.log(e))
@@ -56,38 +86,6 @@ function Landing() {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
 
-  }, []);
-
-  useEffect(() => {
-    const initialLoadMethod = async () => {
-      const role = await getUserRole(currentContext.selectedCIF);
-      if (!(role && role !== undefined && (role.name === Constant.RM || role.name === Constant.Management))) {
-        let timerInterval: any;
-        Swal.fire({
-          title: 'Access Denied!',
-          icon: 'warning',
-          iconColor: "red",
-          html: 'Your are not authorize to accesss this admin section.',
-          timer: Constant.AlertTimeout,
-          timerProgressBar: true,
-          didOpen: () => {
-            Swal.showLoading();
-          },
-          willClose: () => {
-            clearInterval(timerInterval);
-            history.push(`/${currentContext.language}/Home`);
-          }
-        }).then((result) => {
-          if (result.dismiss === Swal.DismissReason.timer) {
-            history.push(`/${currentContext.language}/Home`);
-          }
-        });
-      }
-    }
-
-    if (!!currentContext.selectedCIF) {
-      initialLoadMethod();
-    }
   }, [currentContext.selectedCIF]);
 
   return (
