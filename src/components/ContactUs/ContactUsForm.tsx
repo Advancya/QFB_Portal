@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, Col, Form, Modal } from "react-bootstrap";
 import callIcon from "../../images/call-icon.png";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import { localStrings as local_Strings } from "../../translations/localStrings";
 
 interface iContactUsForm {
   showContactUsFormModal: boolean;
@@ -74,7 +75,7 @@ function ContactUsForm(contactUsFormProps: iContactUsForm) {
               <img src={callIcon} className="img-fluid" />
             </div>
             <div className="ib-text">
-              <h4>Contact US</h4>
+              <h4>{local_Strings.ContactUsTite}</h4>
             </div>
           </div>
           <button
@@ -105,7 +106,9 @@ function ContactUsForm(contactUsFormProps: iContactUsForm) {
                     <Form.Row>
                       <Col md={6}>
                         <Form.Group controlId="formName">
-                          <Form.Label>Name</Form.Label>
+                          <Form.Label>
+                            {local_Strings.ContactUsNameLabel}
+                          </Form.Label>
                           <Form.Control
                             type="text"
                             placeholder="Mohamed Ahmed"
@@ -114,7 +117,9 @@ function ContactUsForm(contactUsFormProps: iContactUsForm) {
                       </Col>
                       <Col md={6}>
                         <Form.Group controlId="formCountry">
-                          <Form.Label>Country</Form.Label>
+                          <Form.Label>
+                            {local_Strings.ContactUsCountryLabel}
+                          </Form.Label>
                           <Form.Control as="select" placeholder="Country">
                             <option>Qatar</option>
                             <option>Egypt</option>
@@ -127,7 +132,9 @@ function ContactUsForm(contactUsFormProps: iContactUsForm) {
                     <Form.Row>
                       <Col md={6}>
                         <Form.Group controlId="formMobile">
-                          <Form.Label>Mobile</Form.Label>
+                          <Form.Label>
+                            {local_Strings.ContactUsMobileLabel}
+                          </Form.Label>
                           <Form.Control
                             type="number"
                             placeholder="+974 00000000"
@@ -136,7 +143,9 @@ function ContactUsForm(contactUsFormProps: iContactUsForm) {
                       </Col>
                       <Col md={6}>
                         <Form.Group controlId="formMobile">
-                          <Form.Label>Email address</Form.Label>
+                          <Form.Label>
+                            {local_Strings.ContactUsEmailAddressLabel}
+                          </Form.Label>
                           <Form.Control
                             type="email"
                             placeholder="test@test.com"
@@ -147,7 +156,9 @@ function ContactUsForm(contactUsFormProps: iContactUsForm) {
                     <Form.Row>
                       <Col md={12}>
                         <Form.Group controlId="forQuery">
-                          <Form.Label>Query</Form.Label>
+                          <Form.Label>
+                            {local_Strings.ContactUsQueryLabel}
+                          </Form.Label>
                           <Form.Control
                             as="textarea"
                             placeholder="We'll never share your email with anyone else. We'll never share your email with anyone else. We'll never share your email with anyone else. We'll never share your email with anyone else. We'll never share your email with anyone else. We'll never share your email with anyone else."
@@ -163,7 +174,7 @@ function ContactUsForm(contactUsFormProps: iContactUsForm) {
                 <div className="col-md-10"></div>
                 <div className="col-md-2">
                   <Button variant="primary" type="submit" className="w-100">
-                    Submit
+                    {local_Strings.ContactUsSubmitButton}
                   </Button>
                 </div>
               </div>

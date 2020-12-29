@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
 import dateIcon from "../../images/calendar-inactive.png";
+import { localStrings as local_Strings } from "../../translations/localStrings";
 
 interface iProductsAndOffersDetails {
   showProductsAndOffersDetailsModal: boolean;
@@ -39,7 +40,9 @@ function ProductsAndOffersDetails(
               </a>
             </div>
             <div className="ib-text">
-              <h4 id="newReqTxt">Product And offers Details</h4>
+              <h4 id="newReqTxt">
+                {local_Strings.ProductsAndOffersDetailsTitle}
+              </h4>
             </div>
           </div>
         </div>
@@ -61,41 +64,17 @@ function ProductsAndOffersDetails(
               <div className="row align-items-center py-2">
                 <div className="col-md-12 col-sm-12 ">
                   <div className="text-xs color-gray">
-                    Wednesday 22 Nov 2020
+                    {local_Strings.dummyDate}
                   </div>
                   <h6 className="mb-1 text-600 text-18 ">
-                    Statement 1234567890 (QAR)
+                    {local_Strings.dummyTitle}
                   </h6>
-                  <div className="color-gray">
-                    This is one line description text
-                  </div>
+                  <div className="color-gray">{local_Strings.dummyDesc}</div>
                 </div>
               </div>
             </li>
           </ul>
-          <div className="p-3 mb-5">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum. Sed ut
-            perspiciatis unde omnis iste natus error sit voluptatem accusantium
-            doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo
-            inventore veritatis et quasi architecto beatae vitae dicta sunt
-            explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur
-            aut odit aut fugit, sed quia consequuntur magni dolores eos qui
-            ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui
-            dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed
-            quia non numquam eius modi tempora incidunt ut labore et dolore
-            magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis
-            nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut
-            aliquid ex ea commodi consequatur? Quis autem vel eum iure
-            reprehenderit qui in ea voluptate velit esse quam nihil molestiae
-            consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla
-            pariatur.
-          </div>
+          <div className="p-3 mb-5">{local_Strings.dummyContent}</div>
         </div>
       </Modal.Body>
     </Modal>

@@ -572,6 +572,7 @@ const en = {
   productAndOffersLandingTitle: "PRODUCTS AND OFFERS",
   productAndOffersLandingInfo: "Click here to see our latest!",
   productAndOffersLandingButton: "See More",
+  productAndOffersListingLabel: "Product Number",
 
   contactUsLandingTitle: "For any inquiries contact us",
   contactUsLandingInfo: "Click here to get in touch for any query.",
@@ -604,6 +605,9 @@ const en = {
   landingMore: "View More",
   dummyTitle: "Title Goes Here",
   dummyDesc: "Lorem ipsum dolor sit amet, consectetur adipi.",
+  dummyDate: "Wednesday 22 Nov 2020",
+  dummyContent:
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut",
 };
 
 export default en;

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import dateIcon from "../../images/calendar-inactive.png";
 import productsIcon from "../../images/products-icon.png";
+import { localStrings as local_Strings } from "../../translations/localStrings";
 
 interface iProductsAndOffersListing {
   showProductsAndOffersListingModal: boolean;
@@ -30,7 +31,7 @@ function ProductsAndOffersListing(
               <img src={productsIcon} className="img-fluid" />
             </div>
             <div className="ib-text">
-              <h4>Products and Offers</h4>
+              <h4>{local_Strings.productAndOffersLandingTitle}</h4>
             </div>
           </div>
           <button
@@ -55,12 +56,13 @@ function ProductsAndOffersListing(
                   className="box login-container"
                 >
                   <div className="box-header bg-beige">
-                    <h3>Product Number | 123456789</h3>
+                    <h3>
+                      {local_Strings.productAndOffersListingLabel} | 123456789
+                    </h3>
                   </div>
                   <div className="box-body p-3">
                     <div className="box-brief mb-3">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                      sed do eiusmod tempor.
+                      {local_Strings.dummyDesc}
                     </div>
                     <div className="box-date">16/11/2020</div>
                   </div>
@@ -75,12 +77,13 @@ function ProductsAndOffersListing(
                   className="box login-container"
                 >
                   <div className="box-header bg-beige">
-                    <h3>Product Number | 123456789</h3>
+                    <h3>
+                      {local_Strings.productAndOffersListingLabel} | 123456789
+                    </h3>
                   </div>
                   <div className="box-body p-3">
                     <div className="box-brief mb-3">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                      sed do eiusmod tempor.
+                      {local_Strings.dummyDesc}
                     </div>
                     <div className="box-date">16/11/2020</div>
                   </div>
@@ -95,12 +98,13 @@ function ProductsAndOffersListing(
                   className="box login-container"
                 >
                   <div className="box-header bg-beige">
-                    <h3>Product Number | 123456789</h3>
+                    <h3>
+                      {local_Strings.productAndOffersListingLabel} | 123456789
+                    </h3>
                   </div>
                   <div className="box-body p-3">
                     <div className="box-brief mb-3">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                      sed do eiusmod tempor.
+                      {local_Strings.dummyDesc}
                     </div>
                     <div className="box-date">16/11/2020</div>
                   </div>
@@ -115,12 +119,13 @@ function ProductsAndOffersListing(
                   className="box login-container"
                 >
                   <div className="box-header bg-beige">
-                    <h3>Product Number | 123456789</h3>
+                    <h3>
+                      {local_Strings.productAndOffersListingLabel} | 123456789
+                    </h3>
                   </div>
                   <div className="box-body p-3">
                     <div className="box-brief mb-3">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                      sed do eiusmod tempor.
+                      {local_Strings.dummyDesc}
                     </div>
                     <div className="box-date">16/11/2020</div>
                   </div>
@@ -135,12 +140,13 @@ function ProductsAndOffersListing(
                   className="box login-container"
                 >
                   <div className="box-header bg-beige">
-                    <h3>Product Number | 123456789</h3>
+                    <h3>
+                      {local_Strings.productAndOffersListingLabel} | 123456789
+                    </h3>
                   </div>
                   <div className="box-body p-3">
                     <div className="box-brief mb-3">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                      sed do eiusmod tempor.
+                      {local_Strings.dummyDesc}
                     </div>
                     <div className="box-date">16/11/2020</div>
                   </div>
@@ -155,12 +161,13 @@ function ProductsAndOffersListing(
                   className="box login-container"
                 >
                   <div className="box-header bg-beige">
-                    <h3>Product Number | 123456789</h3>
+                    <h3>
+                      {local_Strings.productAndOffersListingLabel} | 123456789
+                    </h3>
                   </div>
                   <div className="box-body p-3">
                     <div className="box-brief mb-3">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                      sed do eiusmod tempor.
+                      {local_Strings.dummyDesc}
                     </div>
                     <div className="box-date">16/11/2020</div>
                   </div>
@@ -175,12 +182,13 @@ function ProductsAndOffersListing(
                   className="box login-container"
                 >
                   <div className="box-header bg-beige">
-                    <h3>Product Number | 123456789</h3>
+                    <h3>
+                      {local_Strings.productAndOffersListingLabel} | 123456789
+                    </h3>
                   </div>
                   <div className="box-body p-3">
                     <div className="box-brief mb-3">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                      sed do eiusmod tempor.
+                      {local_Strings.dummyDesc}
                     </div>
                     <div className="box-date">16/11/2020</div>
                   </div>
@@ -195,12 +203,13 @@ function ProductsAndOffersListing(
                   className="box login-container"
                 >
                   <div className="box-header bg-beige">
-                    <h3>Product Number | 123456789</h3>
+                    <h3>
+                      {local_Strings.productAndOffersListingLabel} | 123456789
+                    </h3>
                   </div>
                   <div className="box-body p-3">
                     <div className="box-brief mb-3">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                      sed do eiusmod tempor.
+                      {local_Strings.dummyDesc}
                     </div>
                     <div className="box-date">16/11/2020</div>
                   </div>
@@ -215,12 +224,13 @@ function ProductsAndOffersListing(
                   className="box login-container"
                 >
                   <div className="box-header bg-beige">
-                    <h3>Product Number | 123456789</h3>
+                    <h3>
+                      {local_Strings.productAndOffersListingLabel} | 123456789
+                    </h3>
                   </div>
                   <div className="box-body p-3">
                     <div className="box-brief mb-3">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                      sed do eiusmod tempor.
+                      {local_Strings.dummyDesc}
                     </div>
                     <div className="box-date">16/11/2020</div>
                   </div>
