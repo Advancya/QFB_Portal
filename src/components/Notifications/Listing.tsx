@@ -128,9 +128,7 @@ function NotificationsListing() {
                     />
                     <div className="input-group-append">
                       <span className="input-group-text" id="inputGroupPrepend">
-                        <div className="demandDateValue searchInputIcon">
-                          <i className="fa fa-search"></i>
-                        </div>
+                        <i className="fa fa-search"></i>
                       </span>
                     </div>
                   </div>
@@ -140,46 +138,46 @@ function NotificationsListing() {
 
             <div className="box modal-box py-0 mb-4 scrollabel-modal-box">
               <ul className="box-list" id="dataList">
-                {filteredData &&
-                  filteredData.length > 0 ?
-                  filteredData.map((item, index) => (
-                    <li className="shown" key={index}>
-                      <a
-                        href="#"
-                        className="row align-items-center"
-                        onClick={() =>
-                          setFormAttributes({
-                            selectedItem: item,
-                            showForm: true,
-                            showEditable: false,
-                          })
-                        }
-                      >
-                        <div className="col-12 col-sm-12">
-                          <div className="mb-1 d-flex align-items-center">
-                            <img src={dateIcon} className="img-fluid" />
-                            <span className="mx-1 text-15 color-light-gold">
-                              {item.messageSendDate
-                                ? moment(item.messageSendDate).format(
-                                    "dddd DD MM YYYY"
-                                  )
-                                : ""}
-                            </span>
+                {filteredData && filteredData.length > 0
+                  ? filteredData.map((item, index) => (
+                      <li className="shown" key={index}>
+                        <a
+                          href="#"
+                          className="row align-items-center"
+                          onClick={() =>
+                            setFormAttributes({
+                              selectedItem: item,
+                              showForm: true,
+                              showEditable: false,
+                            })
+                          }
+                        >
+                          <div className="col-12 col-sm-12">
+                            <div className="mb-1 d-flex align-items-center">
+                              <img src={dateIcon} className="img-fluid" />
+                              <span className="mx-1 text-15 color-light-gold">
+                                {item.messageSendDate
+                                  ? moment(item.messageSendDate).format(
+                                      "dddd DD MM YYYY"
+                                    )
+                                  : ""}
+                              </span>
+                            </div>
+                            <h6 className="mb-1 text-600">
+                              {item.messageTitle || item.messageSubTitle || ""}
+                            </h6>
+                            <div className="text-15">
+                              {local_Strings.NotificationsExpireLabel +
+                                " " +
+                                (item.expiryDate
+                                  ? moment(item.expiryDate).format("DD/MM/YYYY")
+                                  : "")}
+                            </div>
                           </div>
-                          <h6 className="mb-1 text-600">
-                            {item.messageTitle || item.messageSubTitle || ""}
-                          </h6>
-                          <div className="text-15">
-                            {local_Strings.NotificationsExpireLabel +
-                              " " +
-                              (item.expiryDate
-                                ? moment(item.expiryDate).format("DD/MM/YYYY")
-                                : "")}
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                  )) : NoResult(local_Strings.NoDataToShow)}
+                        </a>
+                      </li>
+                    ))
+                  : NoResult(local_Strings.NoDataToShow)}
               </ul>
             </div>
             <NotificationsForm
