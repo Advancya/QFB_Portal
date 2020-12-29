@@ -10,7 +10,7 @@ import InboxLanding from "../components/Inbox/InboxLanding";
 import InboxDetails from "../components/Inbox/InboxDetails";
 import InboxListing from "../components/Inbox/InboxListing";
 import { useHistory } from "react-router-dom";
-import { AuthContext, User } from "../providers/AuthProvider";
+import { AuthContext } from "../providers/AuthProvider";
 import { localStrings as local_Strings } from "../translations/localStrings";
 import axios from "axios";
 import { GetUserLocalData } from "../Helpers/authHelper";
@@ -134,6 +134,8 @@ function HomePage() {
 
     if (!!currentContext.selectedCIF) {
       initialLoadMethod();
+    } else {
+      //history.push(`/${currentContext.language}`);
     }
 
     return () => {
