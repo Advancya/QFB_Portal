@@ -3,7 +3,7 @@ import { Button, Modal } from "react-bootstrap";
 import Breadcrumb from "../../components/Breadcrumb";
 import { GetAllContactUs } from "../../services/cmsService";
 import moment from "moment";
-import { localStrings as local_Strings } from '../../translations/localStrings';
+import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
 import { emptyContactUs, IContactUs } from "../../Helpers/publicInterfaces";
 import CustomHeader from "../../components/header/CustomHeader";
@@ -30,109 +30,94 @@ function ContactUsListing() {
     GetAllContactUs()
       .then((responseData: IContactUs[]) => {
         if (responseData) {
-          setData(
-            responseData.sort((a, b) => b.name.localeCompare(a.name))
-          );
+          setData(responseData.sort((a, b) => b.name.localeCompare(a.name)));
         } else {
           setData([]);
         }
       })
       .catch((e: any) => console.log(e))
       .finally(() => setLoading(false));
-  }
-
+  };
 
   return (
     <div>
       <CustomHeader />
       <Breadcrumb pageName={""} />
-      <div className="d-flex align-items-center">
-        <div className="ib-text">
-          <h3 className="mb-2">{local_Strings.ContactUsTite}</h3>
+      <div className="main-section">
+        <div className="d-flex align-items-center my-3">
+          <div className="ib-text">
+            <h3 className="mb-2">{local_Strings.ContactUsTite}</h3>
+          </div>
         </div>
-      </div>
 
-
-      <div className="box modal-box py-0 mb-0 scrollabel-modal-box">
-        <ul className="box-list" id="dataList">
-          <li className="shown">
-            <div className="row">
-              <div className="col-2 col-sm-2">
-                <h6 className="mb-1 text-600">
-                  {local_Strings.ContactUsCreatedDateLabel}
-                </h6>
-              </div>
-              <div className="col-2 col-sm-2">
-                <h6 className="mb-1 text-600">
-                  {local_Strings.ContactUsNameLabel}
-                </h6>
-              </div>
-              <div className="col-3 col-sm-3">
-                <h6 className="mb-1 text-600">
-                  {local_Strings.ContactUsQueryLabel}
-                </h6>
-              </div>
-              <div className="col-1 col-sm-1">
-                <h6 className="mb-1 text-600">
-                  {local_Strings.ContactUsMobileLabel}
-                </h6>
-              </div>
-              <div className="col-2 col-sm-2">
-                <h6 className="mb-1 text-600">
-                  {local_Strings.ContactUsEmailAddressLabel}
-                </h6>
-              </div>
-              <div className="col-2 col-sm-2">
-                <h6 className="mb-1 text-600">
-                  {local_Strings.ContactUsCountryLabel}
-                </h6>
-              </div>
-            </div>
-          </li>
-          {
-            data && data.length > 0 &&
-            data.map((item, index) =>
-
-              <li className="shown" key={index}>
-                <div className="row">
-                  <div className="col-2 col-sm-2">
-                    <h6 className="mb-1">
-                      {item.createDate
-                        ? moment(item.createDate).format(
-                          "dddd DD MM YYYY"
-                        )
-                        : ""}
-                    </h6>
-                  </div>
-                  <div className="col-2 col-sm-2">
-                    <h6 className="mb-1">
-                      {item.name || ""}
-                    </h6>
-                  </div>
-                  <div className="col-3 col-sm-3">
-                    <h6 className="mb-1">
-                      {item.query || ""}
-                    </h6>
-                  </div>
-                  <div className="col-1 col-sm-1">
-                    <h6 className="mb-1">
-                      {item.mobile || ""}
-                    </h6>
-                  </div>
-                  <div className="col-2 col-sm-2">
-                    <h6 className="mb-1">
-                      {item.email || ""}
-                    </h6>
-                  </div>
-                  <div className="col-2 col-sm-2">
-                    <h6 className="mb-1">
-                      {item.country || ""}
-                    </h6>
-                  </div>
+        <div className="box modal-box py-0 mb-0 scrollabel-modal-box">
+          <ul className="box-list" id="dataList">
+            <li className="shown">
+              <div className="row">
+                <div className="col-2 col-sm-2">
+                  <h6 className="mb-1 text-600">
+                    {local_Strings.ContactUsCreatedDateLabel}
+                  </h6>
                 </div>
-              </li>
-            )}
-        </ul>
+                <div className="col-2 col-sm-2">
+                  <h6 className="mb-1 text-600">
+                    {local_Strings.ContactUsNameLabel}
+                  </h6>
+                </div>
+                <div className="col-3 col-sm-3">
+                  <h6 className="mb-1 text-600">
+                    {local_Strings.ContactUsQueryLabel}
+                  </h6>
+                </div>
+                <div className="col-1 col-sm-1">
+                  <h6 className="mb-1 text-600">
+                    {local_Strings.ContactUsMobileLabel}
+                  </h6>
+                </div>
+                <div className="col-2 col-sm-2">
+                  <h6 className="mb-1 text-600">
+                    {local_Strings.ContactUsEmailAddressLabel}
+                  </h6>
+                </div>
+                <div className="col-2 col-sm-2">
+                  <h6 className="mb-1 text-600">
+                    {local_Strings.ContactUsCountryLabel}
+                  </h6>
+                </div>
+              </div>
+            </li>
+            {data &&
+              data.length > 0 &&
+              data.map((item, index) => (
+                <li className="shown" key={index}>
+                  <div className="row">
+                    <div className="col-2 col-sm-2">
+                      <h6 className="mb-1">
+                        {item.createDate
+                          ? moment(item.createDate).format("dddd DD MM YYYY")
+                          : ""}
+                      </h6>
+                    </div>
+                    <div className="col-2 col-sm-2">
+                      <h6 className="mb-1">{item.name || ""}</h6>
+                    </div>
+                    <div className="col-3 col-sm-3">
+                      <h6 className="mb-1">{item.query || ""}</h6>
+                    </div>
+                    <div className="col-1 col-sm-1">
+                      <h6 className="mb-1">{item.mobile || ""}</h6>
+                    </div>
+                    <div className="col-2 col-sm-2">
+                      <h6 className="mb-1 text-break">{item.email || ""}</h6>
+                    </div>
+                    <div className="col-2 col-sm-2">
+                      <h6 className="mb-1">{item.country || ""}</h6>
+                    </div>
+                  </div>
+                </li>
+              ))}
+          </ul>
+        </div>
       </div>
       <Footer />
     </div>
