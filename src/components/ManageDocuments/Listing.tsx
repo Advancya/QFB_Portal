@@ -7,9 +7,7 @@ import moment from "moment";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
 import DocumentForm from "./DocumentForm";
-import { confirmAlert } from "react-confirm-alert";
 import { emptyDocumentData, IDocumentDetail } from "../../Helpers/publicInterfaces";
-import { useToasts } from "react-toast-notifications";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
@@ -17,6 +15,7 @@ import Pagination from "../../shared/pagination";
 import NoResult from "../../shared/NoResult";
 import { saveAs } from 'file-saver';
 import * as helper from "../../Helpers/helper";
+import Swal from 'sweetalert2';
 const mime = require('mime');
 
 function DocumentsListing() {
@@ -26,7 +25,6 @@ function DocumentsListing() {
   const [data, setData] = useState<IDocumentDetail[]>([]);
   const [filteredData, setFilteredData] = useState<IDocumentDetail[]>([]);
   const [isLoading, setLoading] = useState(true);
-  const { addToast } = useToasts();
   const [formAttributes, setFormAttributes] = useState({
     showForm: false,
     showEditable: false,
@@ -64,15 +62,22 @@ function DocumentsListing() {
     setLoading(true);
     const x = await DeleteDocumentById(id);
     if (x) {
-      addToast(local_Strings.documentDeletedMessage, {
-        appearance: "success",
-        autoDismiss: true,
+
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: local_Strings.documentDeletedMessage,
+        showConfirmButton: false,
+        timer: Constant.AlertTimeout
       });
       refreshList();
     } else {
-      addToast(local_Strings.GenericErrorMessage, {
-        appearance: 'error',
-        autoDismiss: true,
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: local_Strings.GenericErrorMessage,
+        showConfirmButton: false,
+        timer: Constant.AlertTimeout
       });
     }
     setLoading(false);
@@ -179,19 +184,18 @@ function DocumentsListing() {
                     <li className="shown" key={index}>
                       <a
                         onClick={() => {
-                          confirmAlert({
+                          Swal.fire({
                             title: local_Strings.deleteSure,
-                            message: local_Strings.deleteSureMessage,
-                            buttons: [
-                              {
-                                label: local_Strings.OfferDeleteButton,
-                                onClick: () => deleteTheRecord(item.id),
-                              },
-                              {
-                                label: local_Strings.cancelBtn,
-                                onClick: () => { },
-                              },
-                            ],
+                            text: local_Strings.deleteSureMessage,
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#6b4f44',
+                            confirmButtonText: local_Strings.OfferDeleteButton,
+                            cancelButtonText: local_Strings.cancelBtn
+                          }).then((result) => {
+                            if (result.isConfirmed) {
+                              deleteTheRecord(item.id);
+                            }
                           });
                         }}
                         style={{ cursor: "pointer", float: "right" }}

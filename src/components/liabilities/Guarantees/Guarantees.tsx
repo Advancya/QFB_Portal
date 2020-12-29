@@ -55,12 +55,12 @@ function Guarantees() {
         showGuaranteesListingModal={showGuaranteesListing}
         hideGuaranteesListingModal={handleCloseGuaranteesListing}
         showGuaranteesDetailsModal={handleShowGuaranteesDetails}
-      ></GuaranteesListing>
+      />
       <GuaranteesDetails
         showGuaranteesDetailsModal={showGuaranteesDetails}
         hideGuaranteesDetailsModal={handleCloseGuaranteesDetails}
         backGuaranteesListingModal={handleBackGuaranteesDetails}
-      ></GuaranteesDetails>
+      />
     </div>
   );
 }

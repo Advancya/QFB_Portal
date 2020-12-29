@@ -10,17 +10,16 @@ import moment from "moment";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
 import ProductsAndOffersForm from "./ProductsAndOffersForm";
-import { confirmAlert } from "react-confirm-alert";
 import {
   emptyProductAndOffersData,
   IProductAndOffersDetail,
 } from "../../Helpers/publicInterfaces";
-import { useToasts } from "react-toast-notifications";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import Pagination from "../../shared/pagination";
 import NoResult from "../../shared/NoResult";
+import Swal from 'sweetalert2';
 
 function ProductsAndOffersListing() {
   const auth = useContext(AuthContext);
@@ -31,7 +30,6 @@ function ProductsAndOffersListing() {
     []
   );
   const [isLoading, setLoading] = useState(true);
-  const { addToast } = useToasts();
   const [formAttributes, setFormAttributes] = useState({
     showForm: false,
     showEditable: false,
@@ -71,15 +69,22 @@ function ProductsAndOffersListing() {
     setLoading(true);
     const x = await DeleteProductsAndOffers(id);
     if (x) {
-      addToast(local_Strings.ProductsAndOffersDeletedMessage, {
-        appearance: "success",
-        autoDismiss: true,
+      
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: local_Strings.ProductsAndOffersDeletedMessage,
+        showConfirmButton: false,
+        timer: Constant.AlertTimeout
       });
       refreshList();
     } else {
-      addToast(local_Strings.GenericErrorMessage, {
-        appearance: 'error',
-        autoDismiss: true,
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: local_Strings.GenericErrorMessage,
+        showConfirmButton: false,
+        timer: Constant.AlertTimeout
       });
     }
     setLoading(false);
@@ -171,20 +176,18 @@ function ProductsAndOffersListing() {
                     <li className="shown" key={index}>
                       <a
                         onClick={() => {
-                          confirmAlert({
+                          Swal.fire({
                             title: local_Strings.deleteSure,
-                            message: local_Strings.deleteSureMessage,
-                            buttons: [
-                              {
-                                label:
-                                  local_Strings.ProductsAndOffersDeleteButton,
-                                onClick: () => deleteTheRecord(item.id),
-                              },
-                              {
-                                label: local_Strings.cancelBtn,
-                                onClick: () => {},
-                              },
-                            ],
+                            text: local_Strings.deleteSureMessage,
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#6b4f44',
+                            confirmButtonText: local_Strings.OfferDeleteButton,
+                            cancelButtonText: local_Strings.cancelBtn
+                          }).then((result) => {
+                            if (result.isConfirmed) {
+                              deleteTheRecord(item.id);
+                            }
                           });
                         }}
                         style={{ cursor: "pointer", float: "right" }}

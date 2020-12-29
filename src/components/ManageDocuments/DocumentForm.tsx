@@ -8,7 +8,6 @@ import moment from "moment";
 import { Formik } from "formik";
 import * as yup from "yup";
 import InvalidFieldError from '../../shared/invalid-field-error';
-import 'react-confirm-alert/src/react-confirm-alert.css';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import '@ckeditor/ckeditor5-build-classic/build/translations/ar.js';
@@ -16,13 +15,13 @@ import '@ckeditor/ckeditor5-build-classic/build/translations/ar.js';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { emptyDocumentData, IDocumentDetail } from "../../Helpers/publicInterfaces";
-import { useToasts } from 'react-toast-notifications';
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from 'react-loading-overlay';
 import PuffLoader from "react-spinners/PuffLoader";
 import fileIcon from "../../images/pdf.png";
 import * as helper from "../../Helpers/helper";
 import { saveAs } from 'file-saver';
+import Swal from 'sweetalert2';
 
 const mime = require('mime');
 
@@ -36,7 +35,6 @@ interface DetailsProps {
 }
 
 function DocumentForm(props: DetailsProps) {
-  const { addToast } = useToasts();
   const fileInputRef = createRef<any>();
   const auth = useContext(AuthContext);
   local_Strings.setLanguage(auth.language);
@@ -51,7 +49,7 @@ function DocumentForm(props: DetailsProps) {
     documentDate: yup.string().nullable().required("Document date is required"),
     documentDescription: yup.string().required("Document Description is required"),
     documentDescriptionAr: yup.string().required("Document Arabic Description is required"),
-    orderId: yup.number().nullable().required("Document Display Priority is required and accept only numbers"),
+    orderId: yup.number().nullable().moreThan(0, "Document Display Priority is required and must be number only."),
   });
 
   const submitTheRecord = async (values: IDocumentDetail) => {
@@ -65,18 +63,22 @@ function DocumentForm(props: DetailsProps) {
       documentDescriptionAr: values.documentDescriptionAr,
       fileName: values.fileName,
       fileContent: values.fileContent,
+      orderId: values.orderId
     };
 
     const x = values.id > 0 ? await UpdateDocumentDetail(item) : await AddNewDocument(item);
     if (x) {
-      addToast(local_Strings.documentSavedMessage, {
-        appearance: 'success',
-        autoDismiss: true,
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: local_Strings.documentSavedMessage,
+        showConfirmButton: false,
+        timer: Constant.AlertTimeout
       });
       props.refreshList();
       props.OnHide();
     } else {
-      console.log("Error while updating record");
+      Swal.fire('Oops...', local_Strings.GenericErrorMessage, 'error');
     }
     setLoading(false);
   };
@@ -104,7 +106,7 @@ function DocumentForm(props: DetailsProps) {
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [props.itemID]);
+  }, [props.itemID, props.show]);
 
   return (
     <Modal
@@ -211,8 +213,9 @@ function DocumentForm(props: DetailsProps) {
                     onBlur={handleBlur("orderId")}
                     style={{ width: 120 }}
                     onChange={(e) => {
+                      
                       if (e.currentTarget.validity.valid && e.currentTarget.value.length <= 6) {
-                        setFieldValue("orderId", parseInt(e.target.value.replace(/[^0-9]*/, '')));
+                        setFieldValue("orderId", !!e.currentTarget.value ? parseInt(e.target.value.replace(/[^0-9]*/, '')) : 0);
                       }
                     }}
                   />
@@ -294,24 +297,35 @@ function DocumentForm(props: DetailsProps) {
                             const file = fileInputRef.current.files[0];
                             const supportedExtensions = ['pdf'];
                             if (file) {
-                              if (file.size <= 0) {
-                                addToast(file.name + local_Strings.isEmptyText, {
-                                  appearance: 'error',
-                                  autoDismiss: true,
+                              if (file.size <= 0) {                                
+                                Swal.fire({
+                                  position: 'top-end',
+                                  icon: 'error',
+                                  title: file.name + local_Strings.isEmptyText,
+                                  showConfirmButton: false,
+                                  timer: Constant.AlertTimeout
                                 });
                                 fileInputRef.current.value = "";
                               } else if (!supportedExtensions.includes(file.name.toLowerCase().split('.').pop())) {
-                                addToast(local_Strings.supportedFileTypeError.replace("{*}", file.name), {
-                                  appearance: 'error',
-                                  autoDismiss: true,
+                                
+                                Swal.fire({
+                                  position: 'top-end',
+                                  icon: 'error',
+                                  title: local_Strings.supportedFileTypeError.replace("{*}", file.name),
+                                  showConfirmButton: false,
+                                  timer: Constant.AlertTimeout
                                 });
                                 fileInputRef.current.value = "";
                               } else if ((file.size / 1024 / 1024) > 10 ||
                                 (file.size / 1024 / 1024) > 10
                               ) {
-                                addToast(local_Strings.moreThanLimit, {
-                                  appearance: 'error',
-                                  autoDismiss: true,
+                                
+                                Swal.fire({
+                                  position: 'top-end',
+                                  icon: 'error',
+                                  title: local_Strings.moreThanLimit,
+                                  showConfirmButton: false,
+                                  timer: Constant.AlertTimeout
                                 });
                                 fileInputRef.current.value = "";
                               } else {
@@ -374,21 +388,26 @@ function DocumentForm(props: DetailsProps) {
 
                     <button className="btn btn-sm btn-primary mt-1" type="submit" style={{ float: "right", margin: 20 }}
                       onClick={(e) => {
+                        validateForm(values);
+                        
                         if (isValid) {
                           handleSubmit();
                         } else {
-                          addToast(local_Strings.formValidationMessage, {
-                            appearance: 'error',
-                            autoDismiss: true,
+                          
+                          Swal.fire({
+                            position: 'top-end',
+                            icon: 'error',
+                            title: local_Strings.formValidationMessage,
+                            showConfirmButton: false,
+                            timer: Constant.AlertTimeout
                           });
-                          validateForm(values);
-                          handleBlur("documentName");
-                          handleBlur("documentNameAr");
-                          handleBlur("documentDate");
-                          handleBlur("fileName");
-                          handleBlur("documentDescription");
-                          handleBlur("documentDescriptionAr");
-                          handleBlur("orderId");
+                          touched.documentName = true;
+                          touched.documentNameAr = true;
+                          touched.documentDate = true;
+                          touched.fileName = true;
+                          touched.documentDescription = true;
+                          touched.documentDescriptionAr = true;
+                          touched.orderId = true;
                         }
                       }}>
                       {local_Strings.OfferSaveButton}</button>

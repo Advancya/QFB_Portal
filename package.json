@@ -31,7 +31,6 @@
     "randomatic": "^3.1.1",
     "react": "^17.0.1",
     "react-bootstrap": "^1.4.0",
-    "react-confirm-alert": "^2.6.2",
     "react-datepicker": "^3.3.0",
     "react-dom": "^17.0.1",
     "react-export-excel": "^0.5.3",
@@ -45,8 +44,8 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.1",
     "react-spinners": "^0.9.0",
-    "react-toast-notifications": "^2.4.0",
     "rss-parser": "^3.9.0",
+    "sweetalert2": "^10.12.6",
     "typescript": "^4.1.2",
     "web-vitals": "^0.2.4",
     "yup": "^0.29.3"
@@ -79,7 +78,6 @@
     "@types/file-saver": "^2.0.1",
     "@types/query-string": "^6.3.0",
     "@types/randomatic": "^3.1.0",
-    "@types/react-toast-notifications": "^2.4.0",
     "@types/yup": "^0.29.9"
   }
 }

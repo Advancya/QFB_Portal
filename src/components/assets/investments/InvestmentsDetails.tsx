@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
-import excelIcon from "../../../images/excel.svg";
 import moment from "moment";
 import { localStrings as local_Strings } from '../../../translations/localStrings';
 import { AuthContext } from "../../../providers/AuthProvider";

@@ -12,65 +12,18 @@ import { localStrings as local_Strings } from "../../../translations/localString
 function Facilities() {
   const currentContext = useContext(AuthContext);
   const userPortfolio = useContext(PortfolioContext);
-
+  const [facilityNumber, setReferenceId] = useState<string>("");
   const [showFacilitiesListing, setShowFacilitiesListing] = useState(false);
-
-  const handleCloseFacilitiesListing = () => {
-    setShowFacilitiesListing(false);
-  };
-  const handleShowFacilitiesListing = () => {
-    setShowFacilitiesListing(true);
-  };
-
   const [showFacilitiesDetails, setshowFacilitiesDetails] = useState(false);
-
-  const handleCloseFacilitiesDetails = () => setshowFacilitiesDetails(false);
-  const handleShowFacilitiesDetails = () => {
-    handleCloseFacilitiesListing();
-    setshowFacilitiesDetails(true);
-    //cashListingProps.hideCashListingModal;
-  };
-  const handleBackFacilitiesDetails = () => {
-    setshowFacilitiesDetails(false);
-
-    setShowFacilitiesListing(true);
-  };
-
   const [
     showFacilitiesOutstandingPayment,
     setShowFacilitiesOutstandingPayment,
   ] = useState(false);
-
-  const handleCloseFacilitiesOutstandingPayment = () =>
-    setShowFacilitiesOutstandingPayment(false);
-  const handleShowFacilitiesOutstandingPayment = () => {
-    handleCloseFacilitiesDetails();
-    setShowFacilitiesOutstandingPayment(true);
-    //cashListingProps.hideCashListingModal;
-  };
-  const handleBackFacilitiesOutstandingPayment = () => {
-    setShowFacilitiesOutstandingPayment(false);
-
-    setshowFacilitiesDetails(true);
-  };
-
   const [
     showFacilitiesHistoricalPayment,
     setShowFacilitiesHistoricalPayment,
   ] = useState(false);
 
-  const handleCloseFacilitiesHistoricalPayment = () =>
-    setShowFacilitiesOutstandingPayment(false);
-  const handleShowFacilitiesHistoricalPayment = () => {
-    handleCloseFacilitiesDetails();
-    setShowFacilitiesHistoricalPayment(true);
-    //cashListingProps.hideCashListingModal;
-  };
-  const handleBackFacilitiesHistoricalPayment = () => {
-    setShowFacilitiesHistoricalPayment(false);
-
-    setshowFacilitiesDetails(true);
-  };
   return (
     <div>
       <div className="inner-box">
@@ -78,7 +31,7 @@ function Facilities() {
           <div className="ib-icon">
             <img src={facilitiesIcon} className="img-fluid" />
           </div>
-          <a href="#" className="ib-text" onClick={handleShowFacilitiesListing}>
+          <a href="#" className="ib-text" onClick={() => setShowFacilitiesListing(true)}>
             <h4>{local_Strings.PortfolioLiabilitiesOption1}</h4>
             <h5>
               {(userPortfolio.totalLoans || "0") +
@@ -91,36 +44,55 @@ function Facilities() {
 
       <FacilitiesListing
         showFacilitiesListingModal={showFacilitiesListing}
-        hideFacilitiesListingModal={handleCloseFacilitiesListing}
-        showFacilitiesDetailsModal={handleShowFacilitiesDetails}
-      ></FacilitiesListing>
-      <FacilitiesDetails
-        showFacilitiesDetailsModal={showFacilitiesDetails}
-        hideFacilitiesDetailsModal={handleCloseFacilitiesDetails}
-        backFacilitiesListingModal={handleBackFacilitiesDetails}
-        showFacilitiesOutstandingPayment={
-          handleShowFacilitiesOutstandingPayment
+        hideFacilitiesListingModal={() =>
+          setShowFacilitiesListing(false)
         }
-        showFacilitiesHistoricalPayment={handleShowFacilitiesHistoricalPayment}
-      ></FacilitiesDetails>
-      <FacilitiesOutstandingPayment
-        showFacilitiesOutstandingPaymentModal={showFacilitiesOutstandingPayment}
-        hideFacilitiesOutstandingPaymentModal={
-          handleCloseFacilitiesOutstandingPayment
-        }
-        backFacilitiesOutstandingPaymentModal={
-          handleBackFacilitiesOutstandingPayment
-        }
-      ></FacilitiesOutstandingPayment>
-      <FacilitiesHistoricalPayment
-        showFacilitiesHistoricalPaymentModal={showFacilitiesHistoricalPayment}
-        hideFacilitiesHistoricalPaymentModal={
-          handleCloseFacilitiesHistoricalPayment
-        }
-        backFacilitiesHistoricalPaymentModal={
-          handleBackFacilitiesHistoricalPayment
-        }
-      ></FacilitiesHistoricalPayment>
+        showFacilitiesDetailsModal={(facilityNumber: string) => {
+          setShowFacilitiesListing(false);
+          setshowFacilitiesDetails(true);
+          setReferenceId(facilityNumber);
+        }}
+      />
+      {facilityNumber && !!facilityNumber &&
+        <React.Fragment>
+          <FacilitiesDetails
+            showFacilitiesDetailsModal={showFacilitiesDetails}
+            hideFacilitiesDetailsModal={() => setshowFacilitiesDetails(false)}
+            backFacilitiesListingModal={() => {
+              setshowFacilitiesDetails(false);
+              setShowFacilitiesListing(true);
+            }}
+            showFacilitiesOutstandingPayment={() => {
+              setshowFacilitiesDetails(false);
+              setShowFacilitiesOutstandingPayment(true);
+            }}
+            showFacilitiesHistoricalPayment={() => {
+              setshowFacilitiesDetails(false);
+              setShowFacilitiesHistoricalPayment(true);
+            }}
+            facilityNumber={facilityNumber}
+          />
+          <FacilitiesOutstandingPayment
+            showFacilitiesOutstandingPaymentModal={showFacilitiesOutstandingPayment}
+            hideFacilitiesOutstandingPaymentModal={() =>
+              setShowFacilitiesOutstandingPayment(false)
+            }
+            backFacilitiesOutstandingPaymentModal={() => {
+              setShowFacilitiesOutstandingPayment(false);
+              setshowFacilitiesDetails(true);
+            }}
+            facilityNumber={facilityNumber}
+          />
+          <FacilitiesHistoricalPayment
+            showFacilitiesHistoricalPaymentModal={showFacilitiesHistoricalPayment}
+            hideFacilitiesHistoricalPaymentModal={() =>
+              setShowFacilitiesOutstandingPayment(false)}
+            backFacilitiesHistoricalPaymentModal={() =>
+              setShowFacilitiesHistoricalPayment(false)
+            }
+            facilityNumber={facilityNumber}
+          />
+        </React.Fragment>}
     </div>
   );
 }

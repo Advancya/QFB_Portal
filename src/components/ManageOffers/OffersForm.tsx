@@ -3,12 +3,11 @@ import { Modal } from "react-bootstrap";
 import dateIcon from "../../images/calendar-inactive.png";
 import { localStrings as local_Strings } from '../../translations/localStrings';
 import { AuthContext } from "../../providers/AuthProvider";
-import { GetAllCustomerList, AddNewOffer, GetOfferById, UpdateOfferDetail } from "../../services/cmsService";
+import { AddNewOffer, GetOfferById, UpdateOfferDetail } from "../../services/cmsService";
 import moment from "moment";
 import { Formik } from "formik";
 import * as yup from "yup";
 import InvalidFieldError from '../../shared/invalid-field-error';
-import 'react-confirm-alert/src/react-confirm-alert.css';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import '@ckeditor/ckeditor5-build-classic/build/translations/ar.js';
@@ -16,7 +15,6 @@ import '@ckeditor/ckeditor5-build-classic/build/translations/ar.js';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { emptyOfferData, IOfferDetail } from "../../Helpers/publicInterfaces";
-import { useToasts } from 'react-toast-notifications';
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from 'react-loading-overlay';
 import PuffLoader from "react-spinners/PuffLoader";
@@ -26,6 +24,7 @@ import { saveAs } from 'file-saver';
 import MultiSelect from "react-multi-select-component";
 import axios from "axios";
 import { CustomerListContext } from "../../pages/Admin/Admin";
+import Swal from 'sweetalert2';
 const mime = require('mime');
 
 interface DetailsProps {
@@ -38,7 +37,6 @@ interface DetailsProps {
 }
 
 function OffersForm(props: DetailsProps) {
-  const { addToast } = useToasts();
   const fileInputRef = createRef<any>();
   const auth = useContext(AuthContext);
   const customerList = useContext(CustomerListContext);
@@ -46,10 +44,10 @@ function OffersForm(props: DetailsProps) {
   const [data, setData] = useState<IOfferDetail>(emptyOfferData);
   const [fileSize, setFileSize] = useState<number>(0);
   const [isLoading, setLoading] = useState<boolean>(false);
-  const [selectedCustomer, setSelected] = useState([]);
+  const [showCustomerError, setCustomerError] = useState<boolean>(false);
 
   const formValidationSchema = yup.object({
-    cifs: yup.string().nullable().min(1).required("Select at least one customer"),
+    selectedCIFs: yup.string().nullable().min(1).required("Select at least one customer"),
     title: yup.string().nullable().required("Title is required"),
     titleAr: yup.string().nullable().required("Arabic title is required"),
     //fileName: yup.string().nullable().required("Please upload a PDF file. " + local_Strings.moreThanLimit),
@@ -61,9 +59,9 @@ function OffersForm(props: DetailsProps) {
     setLoading(true);
 
     const requests = [];
-    selectedCustomer.forEach(element => {
+    values.selectedCIFs.forEach(element => {
       const item = {
-        cif: element["value"],
+        cif: element.value,
         title: values.title,
         titleAr: values.titleAr,
         createdDate: moment().utc(true),
@@ -82,16 +80,23 @@ function OffersForm(props: DetailsProps) {
     axios
       .all(requests)
       .then(() => {
-        addToast(local_Strings.OfferSavedMessage, {
-          appearance: 'success',
-          autoDismiss: true,
+
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: local_Strings.OfferSavedMessage,
+          showConfirmButton: false,
+          timer: Constant.AlertTimeout
         });
         props.refreshList();
         props.OnHide();
       })
-      .catch((e: any) => addToast(local_Strings.GenericErrorMessage, {
-        appearance: 'error',
-        autoDismiss: true,
+      .catch((e: any) => Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: local_Strings.GenericErrorMessage,
+        showConfirmButton: false,
+        timer: Constant.AlertTimeout
       }))
       .finally(() => {
         setLoading(false);
@@ -103,16 +108,22 @@ function OffersForm(props: DetailsProps) {
     setLoading(true);
     const x = await UpdateOfferDetail(values);
     if (x) {
-      addToast(local_Strings.OfferSavedMessage, {
-        appearance: 'success',
-        autoDismiss: true,
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: local_Strings.OfferSavedMessage,
+        showConfirmButton: false,
+        timer: Constant.AlertTimeout
       });
       props.refreshList();
       props.OnHide();
     } else {
-      addToast(local_Strings.GenericErrorMessage, {
-        appearance: 'error',
-        autoDismiss: true,
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: local_Strings.GenericErrorMessage,
+        showConfirmButton: false,
+        timer: Constant.AlertTimeout
       });
     }
     setLoading(false);
@@ -120,8 +131,7 @@ function OffersForm(props: DetailsProps) {
 
   useEffect(() => {
     let isMounted = true;
-    if (props.itemID && props.itemID > 0) {
-
+    const initialLoadMethod = async () => {
       setLoading(true);
       GetOfferById(props.itemID)
         .then((responseData: any) => {
@@ -134,25 +144,30 @@ function OffersForm(props: DetailsProps) {
             if (customerList.length > 0 && !!customerList[0].id) {
               const _selectCustomers = customerList.filter((i) => i.id === _item.cif);
               if (_selectCustomers.length > 0) {
-                setSelected([{
-                  "value": _selectCustomers[0].id,
-                  "label": _selectCustomers[0].shortName
-                }]);
+                setData({
+                  ..._item, selectedCIFs: [{
+                    "value": _selectCustomers[0].id,
+                    "label": _selectCustomers[0].shortName
+                  }]
+                });
               }
             }
           }
         })
         .catch((e: any) => console.log(e))
         .finally(() => setLoading(false));
+    }
+
+    if (props.show && props.itemID && props.itemID > 0) {
+      initialLoadMethod();
     } else {
       setData(emptyOfferData);
-      setSelected([]);
     }
 
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [props.itemID]);
+  }, [props.itemID, props.show]);
 
   const options = customerList && customerList.length > 0 ? customerList.map((c) => ({
     "value": (c.id ? c.id : ""),
@@ -204,7 +219,7 @@ function OffersForm(props: DetailsProps) {
           />}
         />
         <Formik
-          initialValues={{ ...data, cifs: selectedCustomer }}
+          initialValues={data}
           validationSchema={formValidationSchema}
           onSubmit={(values) => values.id > 0 ? updateRecord(values) : submitTheRecord(values)}
           enableReinitialize={true}
@@ -226,17 +241,29 @@ function OffersForm(props: DetailsProps) {
               <div className="box-body">
                 <div className="form-group">
                   <label className="mb-1 text-600">{local_Strings.NotificationsCustomerNameLabel}</label>
-                  <MultiSelect
-                    hasSelectAll={false}
-                    options={options}
-                    value={selectedCustomer}
-                    onChange={setSelected}
-                    labelledBy={"Select"}
-                    disabled={values.id > 0}
-                    disableSearch={values.id > 0}
-                    
-                  />
-                  {touched.cifs && errors.cifs && InvalidFieldError(errors.cifs.toString())}
+                  {props.editable && values.id === 0 ?
+                    <React.Fragment>
+                      <MultiSelect
+                        hasSelectAll={false}
+                        options={options}
+                        value={values.selectedCIFs && values.selectedCIFs.length > 0
+                          && values.selectedCIFs[0].value !== "0" ? values.selectedCIFs : null}
+                        onChange={(_item) => {
+                          setFieldValue("selectedCIFs", _item);
+                          handleBlur("selectedCIFs");
+                          if (_item.length !== 0) {
+                            setCustomerError(false);
+                          }
+                        }}
+                        labelledBy={"Select"}
+                        disabled={values.id > 0}
+                        disableSearch={values.id > 0}
+                      />
+                      {showCustomerError && InvalidFieldError("Select at least one customer")}
+                    </React.Fragment>
+                    : <span className="box-brief mb-3">
+                      {values.selectedCIFs && values.selectedCIFs.length > 0 ? values.selectedCIFs[0].label : ""}
+                    </span>}
                 </div>
                 <div className="form-group">
                   <label className="mb-1 text-600">{local_Strings.OfferNameLabel}</label>
@@ -338,23 +365,34 @@ function OffersForm(props: DetailsProps) {
                             const supportedExtensions = ['pdf'];
                             if (file) {
                               if (file.size <= 0) {
-                                addToast(file.name + local_Strings.isEmptyText, {
-                                  appearance: 'error',
-                                  autoDismiss: true,
+                                Swal.fire({
+                                  position: 'top-end',
+                                  icon: 'error',
+                                  title: file.name + local_Strings.isEmptyText,
+                                  showConfirmButton: false,
+                                  timer: Constant.AlertTimeout
                                 });
                                 fileInputRef.current.value = "";
                               } else if (!supportedExtensions.includes(file.name.toLowerCase().split('.').pop())) {
-                                addToast(local_Strings.supportedFileTypeError.replace("{*}", file.name), {
-                                  appearance: 'error',
-                                  autoDismiss: true,
+
+                                Swal.fire({
+                                  position: 'top-end',
+                                  icon: 'error',
+                                  title: local_Strings.supportedFileTypeError.replace("{*}", file.name),
+                                  showConfirmButton: false,
+                                  timer: Constant.AlertTimeout
                                 });
                                 fileInputRef.current.value = "";
                               } else if ((file.size / 1024 / 1024) > 10 ||
                                 (file.size / 1024 / 1024) > 10
                               ) {
-                                addToast(local_Strings.moreThanLimit, {
-                                  appearance: 'error',
-                                  autoDismiss: true,
+
+                                Swal.fire({
+                                  position: 'top-end',
+                                  icon: 'error',
+                                  title: local_Strings.moreThanLimit,
+                                  showConfirmButton: false,
+                                  timer: Constant.AlertTimeout
                                 });
                                 fileInputRef.current.value = "";
                               } else {
@@ -402,9 +440,6 @@ function OffersForm(props: DetailsProps) {
                         <button className="btnFileDelete" onClick={() => {
                           setFieldValue("fileName", "");
                           setFieldValue("fileContent", "");
-                          setData({
-                            ...data, fileName: "", fileContent: "",
-                          });
                         }}
                         >
                           <i className="fa fa-trash-o"></i>
@@ -417,16 +452,28 @@ function OffersForm(props: DetailsProps) {
 
                     <button className="btn btn-sm btn-primary mt-1" type="submit" style={{ float: "right", margin: 20 }}
                       onClick={(e) => {
+
+                        validateForm(values);
                         if (isValid) {
                           handleSubmit();
                         } else {
-                          addToast(local_Strings.formValidationMessage, {
-                            appearance: 'error',
-                            autoDismiss: true,
+                          Swal.fire({
+                            position: 'top-end',
+                            icon: 'error',
+                            title: local_Strings.formValidationMessage,
+                            showConfirmButton: false,
+                            timer: Constant.AlertTimeout
                           });
-                          handleBlur("title");
-                          handleBlur("titleAr");
-                          handleBlur("expireDate");
+                          if (values.selectedCIFs.length === 0 || values.selectedCIFs[0].value === "0") {
+                            setCustomerError(true);
+                          } else {
+                            setCustomerError(false);
+                          }
+                          handleBlur("selectedCIFs");
+                          touched.title = true;
+                          touched.titleAr = true;
+                          touched.expireDate = true;
+                          
                         }
                       }}>
                       {local_Strings.OfferSaveButton}</button>
