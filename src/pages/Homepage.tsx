@@ -117,7 +117,8 @@ function HomePage() {
 
             if (responseData[0] && responseData[0][0]) {
               let _userPortfolio = responseData[0][0] as IUserPortfolio;
-              _userPortfolio = {..._userPortfolio,
+              _userPortfolio = {
+                ..._userPortfolio,
                 totalAssets: helper.ConvertToQfbNumberFormat(_userPortfolio.totalAssets),
                 totalCash: helper.ConvertToQfbNumberFormat(_userPortfolio.totalCash),
                 totalDeposits: helper.ConvertToQfbNumberFormat(_userPortfolio.totalDeposits),
@@ -125,8 +126,9 @@ function HomePage() {
                 totalLoans: helper.ConvertToQfbNumberFormat(_userPortfolio.totalLoans),
                 networth: helper.ConvertToQfbNumberFormat(_userPortfolio.networth),
                 totalLiabilities: helper.ConvertToQfbNumberFormat(_userPortfolio.totalLiabilities),
+                totalGuarantees: ""
               };
-              
+
               if (responseData[1].length > 0) {
                 setUserPortfolio({
                   ..._userPortfolio,
@@ -172,22 +174,23 @@ function HomePage() {
   return (
     <div>
       <InboxContext.Provider value={{ messages, refresh }}>
-        <AuthCustomHeader />
-        {/* <Breadcrumb pageName={""} /> */}
-        <section id="main-section" className="main-section">
-          <LoadingOverlay
-            active={isLoading}
-            spinner={
-              <PuffLoader
-                size={Constant.SpnnerSize}
-                color={Constant.SpinnerColor}
-              />
-            }
-          />
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-lg-9">
-                <PortfolioContext.Provider value={userPortfolio}>
+        <PortfolioContext.Provider value={userPortfolio}>
+          <AuthCustomHeader />
+          {/* <Breadcrumb pageName={""} /> */}
+          <section id="main-section" className="main-section">
+            <LoadingOverlay
+              active={isLoading}
+              spinner={
+                <PuffLoader
+                  size={Constant.SpnnerSize}
+                  color={Constant.SpinnerColor}
+                />
+              }
+            />
+            <div className="container-fluid">
+              <div className="row">
+                <div className="col-lg-9">
+
                   <div className="main-container">
                     <AssetsLanding />
                     <div className="row">
@@ -195,26 +198,27 @@ function HomePage() {
                       <TotalNetWorth />
                     </div>
                   </div>
-                </PortfolioContext.Provider>
-              </div>
-              <div className="col-lg-3">
-                <div className="sidebar-container">
-                  <InboxLanding showInboxDetailsModal={handleShowInboxDetails} />
-                  <RelationManger />
+
+                </div>
+                <div className="col-lg-3">
+                  <div className="sidebar-container">
+                    <InboxLanding showInboxDetailsModal={handleShowInboxDetails} />
+                    <RelationManger />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <Footer />
-        {message && !!message.adviceDate &&
-          <InboxDetails
-            item={message}
-            showInboxDetailsModal={showInboxDetails}
-            hideInboxDetailsModal={handleCloseInboxDetails}
-            backInboxListingModal={handleBackInboxDetails}
-          />}
+          <Footer />
+          {message && !!message.adviceDate &&
+            <InboxDetails
+              item={message}
+              showInboxDetailsModal={showInboxDetails}
+              hideInboxDetailsModal={handleCloseInboxDetails}
+              backInboxListingModal={handleBackInboxDetails}
+            />}
+        </PortfolioContext.Provider>
       </InboxContext.Provider>
     </div>
   );

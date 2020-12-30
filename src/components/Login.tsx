@@ -21,10 +21,10 @@ interface IProps {
 const Login: React.FC<IProps> = (props) => {
 
   const history = useHistory();
-  const auth = useContext(AuthContext);
+  const currentContext = useContext(AuthContext);
   const [isLoading, setLoading] = useState(false);
   const initialValues: User = { username: "", password: "", otp: "" };
-  local_Strings.setLanguage(auth.language);
+  local_Strings.setLanguage(currentContext.language);
   const loginFormValidationSchema = yup.object({
     username: yup.string().required("User name is required"),
     password: yup.string().required("Password is required"),

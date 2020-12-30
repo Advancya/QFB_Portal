@@ -11,12 +11,12 @@ const PageNotFound = () => <div>Page not found</div>;
 
 const RoutingMap = () => {
 
-  const auth = useContext(AuthContext);
+  const currentContext = useContext(AuthContext);
 
   return (
     <Switch>
       <Route exact path="/">
-        {auth.language === "en" ?
+        {currentContext.language === "en" ?
           <Redirect to="/en" /> : <Redirect to="/ar" />}
       </Route>
       <Route exact={true} path={["/en", "/ar", "/en/", "/ar/"]}>

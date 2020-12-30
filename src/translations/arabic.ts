@@ -269,6 +269,7 @@ const ar = {
   ViewHistoricalPayments: "عرض المدفوعات السابقه",
   OutstandingPaymentsText: " المدفوعات المستحقة",
   ViewOutstandingPayments: "عرض المدفوعات المستحقة",
+  BuyAndSellTransactionsText: "عرض عمليات البيع والشراء",
 
   TransactionScreenFilter_None: "اختر",
   TransactionScreenFilter_LastWeek: "الاسبوع الماضي",

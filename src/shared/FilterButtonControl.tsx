@@ -10,8 +10,8 @@ interface IFilterButtonControlProps {
 
 const FilterButtonControl: React.FC<IFilterButtonControlProps> = (props) => {
 
-    const auth = useContext(AuthContext);
-    local_Strings.setLanguage(auth.language);
+    const currentContext = useContext(AuthContext);
+    local_Strings.setLanguage(currentContext.language);
 
     return (
         <React.Fragment>

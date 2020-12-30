@@ -15,8 +15,8 @@ interface IFilterCommonControlProps {
 
 const FilterCommonControl: React.FC<IFilterCommonControlProps> = (props) => {
 
-    const auth = useContext(AuthContext);
-    local_Strings.setLanguage(auth.language);
+    const currentContext = useContext(AuthContext);
+    local_Strings.setLanguage(currentContext.language);
     const [filters, setFilter] = useState<ICommonFilter>(emptyCommonFilter);
 
     return (

@@ -14,8 +14,8 @@ import Footer from "../../components/Footer";
 import dateIcon from "../../images/calendar-inactive.png";
 
 function OfferSubscriptionsListing() {
-  const auth = useContext(AuthContext);
-  local_Strings.setLanguage(auth.language);
+  const currentContext = useContext(AuthContext);
+  local_Strings.setLanguage(currentContext.language);
   const [showClearFilter, setShowClearFilter] = useState(false);
   const [data, setData] = useState<IOfferSubscriptions[]>([]);
   const [isLoading, setLoading] = useState(true);

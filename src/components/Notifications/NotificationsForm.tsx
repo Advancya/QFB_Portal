@@ -35,8 +35,8 @@ function NotificationsForm(props: DetailsProps) {
   const showMoreNotificationsForm = () => {
     console.log("retrieve more from server");
   };
-  const auth = useContext(AuthContext);
-  local_Strings.setLanguage(auth.language);
+  const currentContext = useContext(AuthContext);
+  local_Strings.setLanguage(currentContext.language);
   const customerList = useContext(CustomerListContext);
   const [data, setData] = useState<INotificationsDetail>(emptyNotificationsDetail);
   const [isLoading, setLoading] = useState(false);

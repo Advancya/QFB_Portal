@@ -264,8 +264,9 @@ const en = {
   OutstandingPayments_SettlemenOfPayment: "Payment of Facility",
   ReceivedProfitText: "Profit Received",
   ViewReceivedProfit: "View Received Profit",
-  ViewReceivedProfitTransactions: "View Received Profit Transactions",
+  ViewReceivedProfitTransactions: "View Received Profit Transactions to date",
   BuyAndSellText: "Buy & Sell",
+  BuyAndSellTransactionsText: "Buy & Sell Transactions",
   ViewBuySellTransactions: "View Buy & Sell Transactions",
   HistoricalPaymentsText: "Historical Payment",
   ViewHistoricalPayments: "View Historical Payment",
@@ -423,7 +424,7 @@ const en = {
     "View all portofolio's of your clients here",
 
   ConfirmationDone: "Done",
-  RecievedProfit: "Recieved Profit",
+  RecievedProfit: "Profit Recieved",
 
   SearchText: "Search",
   RMClientsRequestListingTitle: "Clients Request Listing",
@@ -769,6 +770,17 @@ const en = {
   documentDeletedMessage: "Document has been deleted successfully!",
   documentSavedMessage: "Document has been saved successfully!",
   documentListingPriority: "Priority",
+  
+  TotalCash: "Total Cash",
+  TotalInvestments: "Total Investments",
+  TotalDeposits: "Total Deposits",
+  TotalLoans: "Total Loans",
+  BankGurantees: "Bank Gurantees",
+  Networth: "Networth",
+  TotalAssets: "Total Assets",
+  TotalLiabilities: "Total Liabilities",
+  TotalBalances: "Total Balances",
+  NetAverageRate: "Net Average Rate",
 };
 
 export default en;

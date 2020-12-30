@@ -87,13 +87,8 @@ function DepositeRecievedProfit(
                 <i className="fa fa-chevron-left"></i>
               </a>
             </div>
-            <div className="col-4 col-sm-3">
-              <h5>{local_Strings.DepositeListingAccountNumberLabel}</h5>
-              <h4>{props.depositNumber}</h4>
-            </div>
-            <div className="col-4 col-sm-3">
-              <h5>{local_Strings.CurrentBalanceLabel}</h5>
-              <h4>{userPortfolio.totalDeposits || ""}</h4>
+            <div className="ib-text">
+              <h4>{local_Strings.InvestmentsDetailsRecievedProfit}</h4>
             </div>
           </div>
         </div>
@@ -122,7 +117,11 @@ function DepositeRecievedProfit(
               setFilteredData(_filteredData);
             }} />
         }
-
+        <div className="col-12 col-sm-12">
+          <h5>{local_Strings.Deposit + ": " + props.depositNumber + " " +
+            local_Strings.RecievedProfit + " (" + currentContext.userSettings.currency + ")"}
+          </h5>
+        </div>
         <TransactionListing transactions={filteredData} showBalanceField={false} />
 
         <LoadingOverlay

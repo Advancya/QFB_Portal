@@ -9,8 +9,8 @@ interface IFilterDateControlProps {
 
 const FilterDateControl: React.FC<IFilterDateControlProps> = (props) => {
 
-    const auth = useContext(AuthContext);
-    local_Strings.setLanguage(auth.language);
+    const currentContext = useContext(AuthContext);
+    local_Strings.setLanguage(currentContext.language);
 
     return (
         <React.Fragment>

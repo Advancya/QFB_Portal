@@ -11,8 +11,8 @@ interface IPaginationProps {
 
 const Pagination = (props: IPaginationProps) => {
 
-    const auth = useContext(AuthContext);
-    local_Strings.setLanguage(auth.language);
+    const currentContext = useContext(AuthContext);
+    local_Strings.setLanguage(currentContext.language);
     const [pager, setPaging] = useState({
         totalItems: [],
         currentPage: 0,

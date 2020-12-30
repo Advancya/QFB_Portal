@@ -18,8 +18,8 @@ import Pagination from "../../shared/pagination";
 import NoResult from "../../shared/NoResult";
 
 function NotificationsListing() {
-  const auth = useContext(AuthContext);
-  local_Strings.setLanguage(auth.language);
+  const currentContext = useContext(AuthContext);
+  local_Strings.setLanguage(currentContext.language);
   const [showClearFilter, setShowClearFilter] = useState(false);
   const [data, setData] = useState<INotificationsDetail[]>([]);
   const [filteredData, setFilteredData] = useState<INotificationsDetail[]>([]);
