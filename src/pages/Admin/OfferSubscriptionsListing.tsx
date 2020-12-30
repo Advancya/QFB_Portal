@@ -3,9 +3,12 @@ import { Button, Modal } from "react-bootstrap";
 import Breadcrumb from "../../components/Breadcrumb";
 import { GetAllOfferSubscriptions } from "../../services/cmsService";
 import moment from "moment";
-import { localStrings as local_Strings } from '../../translations/localStrings';
+import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
-import { emptyOfferSubscriptions, IOfferSubscriptions } from "../../Helpers/publicInterfaces";
+import {
+  emptyOfferSubscriptions,
+  IOfferSubscriptions,
+} from "../../Helpers/publicInterfaces";
 import CustomHeader from "../../components/header/CustomHeader";
 import Footer from "../../components/Footer";
 import dateIcon from "../../images/calendar-inactive.png";
@@ -32,7 +35,9 @@ function OfferSubscriptionsListing() {
       .then((responseData: IOfferSubscriptions[]) => {
         if (responseData) {
           setData(
-            responseData.sort((a, b) => moment(b.subscriptionDate).diff(moment(a.subscriptionDate)))
+            responseData.sort((a, b) =>
+              moment(b.subscriptionDate).diff(moment(a.subscriptionDate))
+            )
           );
         } else {
           setData([]);
@@ -40,8 +45,7 @@ function OfferSubscriptionsListing() {
       })
       .catch((e: any) => console.log(e))
       .finally(() => setLoading(false));
-  }
-
+  };
 
   return (
     <div>
@@ -61,7 +65,6 @@ function OfferSubscriptionsListing() {
                 <h6 className="mb-1 text-600">
                   {local_Strings.OfferSubscriptionsDateLabel}
                 </h6>
-
               </div>
               <div className="col-2 col-sm-4">
                 <h6 className="mb-1 text-600">
@@ -85,46 +88,38 @@ function OfferSubscriptionsListing() {
               </div>
             </div>
           </li>
-          {
-            data && data.length > 0 &&
-            data.map((item, index) =>
-
+          {data &&
+            data.length > 0 &&
+            data.map((item, index) => (
               <li className="shown" key={index}>
                 <div className="row">
                   <div className="col-6 col-sm-2">
-
                     <h6 className="mb-1">
                       <img src={dateIcon} className="img-fluid" />
                       <span className="mx-1 text-15 color-light-gold">
                         {item.subscriptionDate
-                          ? moment(item.subscriptionDate).format("dddd DD MM YYYY")
+                          ? moment(item.subscriptionDate).format(
+                              "dddd DD MM YYYY"
+                            )
                           : ""}
                       </span>
                     </h6>
                   </div>
                   <div className="col-2 col-sm-4">
-                    <h6 className="mb-1">
-                      {item.subscriptionRequest || ""}
-                    </h6>
+                    <h6 className="mb-1">{item.subscriptionRequest || ""}</h6>
                   </div>
                   <div className="col-2 col-sm-2">
-                    <h6 className="mb-1">
-                      {item.offer || ""}
-                    </h6>
+                    <h6 className="mb-1">{item.offer || ""}</h6>
                   </div>
                   <div className="col-2 col-sm-2">
-                    <h6 className="mb-1">
-                      {item.subscriptionAmount || ""}
-                    </h6>
+                    <h6 className="mb-1">{item.subscriptionAmount || ""}</h6>
                   </div>
                   <div className="col-2 col-sm-2">
-                    <h6 className="mb-1">
-                      {item.currency || ""}
-                    </h6>
+                    <h6 className="mb-1">{item.currency || ""}</h6>
                   </div>
                 </div>
               </li>
-            )}
+            ))}
         </ul>
       </div>
       <Footer />
