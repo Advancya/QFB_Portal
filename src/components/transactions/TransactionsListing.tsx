@@ -69,7 +69,7 @@ function TransactionsListing(props: iTransactionsListing) {
         <div className="col-sm-8">
           <h5>{!!item.transactionDate ? moment(item.transactionDate).format("DD/MM/YYYY") : ""}</h5>
           <h4>{(currentContext.language === "ar" ? item.requestSubjectAR : item.requestSubject)
-            + " (" + item.amount + " " + (item.currency || currentContext.userSettings.currency) + ")"}</h4>
+            + " (" + helper.ConvertToQfbNumberFormat(item.amount) + " " + (item.currency || currentContext.userSettings.currency) + ")"}</h4>
         </div>
         <div className="col-8 col-sm-3 text-sm-right">
           <span className="status-badge ">

@@ -19,31 +19,32 @@ import { emptyInboxDetail, IInboxDetail } from "../Helpers/publicInterfaces";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import Constant from "../constants/defaultData";
+import * as helper from "../Helpers/helper";
 
 export interface IUserPortfolio {
   customerCode: string;
   customerName: string;
-  totalAssets: number;
-  totalCash: number;
-  totalDeposits: number;
-  totalInvestment: number;
-  totalLoans: number;
-  networth: number;
-  totalLiabilities: number;
-  totalGuarantees: number;
+  totalAssets: string;
+  totalCash: string;
+  totalDeposits: string;
+  totalInvestment: string;
+  totalLoans: string;
+  networth: string;
+  totalLiabilities: string;
+  totalGuarantees: string;
 }
 
 const intialPortfolioData = {
   customerCode: "",
   customerName: "",
-  totalAssets: 0,
-  totalCash: 0,
-  totalDeposits: 0,
-  totalInvestment: 0,
-  totalLoans: 0,
-  networth: 0,
-  totalLiabilities: 0,
-  totalGuarantees: 0,
+  totalAssets: "",
+  totalCash: "",
+  totalDeposits: "",
+  totalInvestment: "",
+  totalLoans: "",
+  networth: "",
+  totalLiabilities: "",
+  totalGuarantees: "",
 };
 
 export const PortfolioContext = createContext<IUserPortfolio>(
@@ -115,13 +116,24 @@ function HomePage() {
           if (isMounted && responseData && responseData.length > 0) {
 
             if (responseData[0] && responseData[0][0]) {
+              let _userPortfolio = responseData[0][0] as IUserPortfolio;
+              _userPortfolio = {..._userPortfolio,
+                totalAssets: helper.ConvertToQfbNumberFormat(_userPortfolio.totalAssets),
+                totalCash: helper.ConvertToQfbNumberFormat(_userPortfolio.totalCash),
+                totalDeposits: helper.ConvertToQfbNumberFormat(_userPortfolio.totalDeposits),
+                totalInvestment: helper.ConvertToQfbNumberFormat(_userPortfolio.totalInvestment),
+                totalLoans: helper.ConvertToQfbNumberFormat(_userPortfolio.totalLoans),
+                networth: helper.ConvertToQfbNumberFormat(_userPortfolio.networth),
+                totalLiabilities: helper.ConvertToQfbNumberFormat(_userPortfolio.totalLiabilities),
+              };
+              
               if (responseData[1].length > 0) {
                 setUserPortfolio({
-                  ...responseData[0][0],
-                  totalGuarantees: responseData[1][0].totalGurQAR,
+                  ..._userPortfolio,
+                  totalGuarantees: helper.ConvertToQfbNumberFormat(responseData[1][0].totalGurQAR),
                 });
               } else {
-                setUserPortfolio(responseData[0][0]);
+                setUserPortfolio(_userPortfolio);
               }
             }
 

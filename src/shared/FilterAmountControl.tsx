@@ -16,7 +16,7 @@ const FilterAmountControl: React.FC<IFilterAmountControlProps> = (props) => {
 
     return (
         <React.Fragment>
-            <label>{local_Strings.TransactionScreenFilter_Amount}</label>
+            <label>{local_Strings.TransactionAmountLabel}</label>
             <select
                 className="form-control w-50"
                 value={props.AmountOperator || "0"}

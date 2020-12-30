@@ -196,14 +196,15 @@ export const filterTransactions = (
         console.log(o.label.toLowerCase());
 
         filteredTransactions = filteredTransactions.filter((t) =>
-          t.transactionType
-            ? String(t.transactionType).toLowerCase() !== o.label.toLowerCase()
+          (t.transactionType || t.transacitonType)
+            ? (String(t.transactionType).toLowerCase() === o.label.toLowerCase() || 
+            String(t.transacitonType).toLowerCase() === o.label.toLowerCase())
             : !!t.transaction_Amount
               ? o.label.toLowerCase() ===
                 ("debit" || "مدين")
                 ? t.transaction_Amount < 0
                 : t.transaction_Amount > 0
-              : String(t.trxDescirption).toLowerCase() !== o.label.toLowerCase()
+              : String(t.trxDescirption).toLowerCase() === o.label.toLowerCase()
         );
       } else {
         console.log("filter not applied on dynamic check boxes")
@@ -591,7 +592,7 @@ export const prepareInvestmentHoldings1stDrill = (
   for (var i = 0; i < 2; i++) {
     let data: any = [];
     chartData.map((item: any) => {
-      i == 0
+      i === 0
         ? data.push({
           y: item.nominalAmount || item.investmentAmount,
           key: item.subAssetId,
@@ -679,9 +680,9 @@ export const prepareInvestmentHoldings2ndDrill = (
       return false;
     }
     // entry.data probably isn't an array; make it one for consistency
-    if (!Array.isArray(entry.amount)) {
-      entry.amount = entry.amount;
-    }
+    // if (!Array.isArray(entry.amount)) {
+    //   entry.amount = entry.amount;
+    // }
     // Remember that we've seen it
     seen[entry.bookingDate] = entry;
 
@@ -767,4 +768,20 @@ export const b64toBlob = (b64Data: any, contentType = '', sliceSize = 512) => {
   }
 
   return new Blob(byteArrays, { type: contentType });
+}
+
+
+export const ConvertToQfbNumberFormat = (amount: any) => {
+  try {
+    let number = Number(parseInt(!!amount ? amount : "0").toFixed(2)).toLocaleString(
+      "en",
+      {
+        minimumFractionDigits: 0,
+      }
+    );
+
+    return (number === "NaN" || number === "NaN") ? amount : number;
+  } catch (err) {
+    return amount;
+  }
 }

@@ -51,14 +51,14 @@ const FilterCommonControl2: React.FC<IFilterCommonControl2Props> = (props) => {
                                 onChange={(_value) => {
                                     const OptionalCheck = [...filters.OptionalCheck];
                                     OptionalCheck[0].label = props.CheckBoxLabels[0];
-                                    OptionalCheck[0].value = _value;
+                                    OptionalCheck[0].value = _value.target.checked;
 
                                     setFilter({
                                         ...filters, OptionalCheck
                                     });
                                 }}
                             />
-                            <label className="custom-control-label" htmlFor="customCheck1">{props.CheckBoxLabels[0]}</label>
+                            <label className="custom-control-label" htmlFor="customCheck1" style={{textTransform: "none"}}>{props.CheckBoxLabels[0]}</label>
                         </div>
                         <div className="custom-control custom-checkbox custom-control-inline">
                             <input
@@ -74,14 +74,14 @@ const FilterCommonControl2: React.FC<IFilterCommonControl2Props> = (props) => {
                                 onChange={(_value) => {
                                     const OptionalCheck = [...filters.OptionalCheck];
                                     OptionalCheck[1].label = props.CheckBoxLabels[1];
-                                    OptionalCheck[1].value = _value;
+                                    OptionalCheck[1].value = _value.target.checked;
 
                                     setFilter({
                                         ...filters, OptionalCheck
                                     });
                                 }}
                             />
-                            <label className="custom-control-label" htmlFor="customCheck2">{props.CheckBoxLabels[1]}</label>
+                            <label className="custom-control-label" htmlFor="customCheck2" style={{textTransform: "none"}}>{props.CheckBoxLabels[1]}</label>
                         </div>
                     </div>
                 </div>

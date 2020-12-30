@@ -68,7 +68,7 @@ function DepositeListing(props: iDepositeListing) {
         </div>
         <div className="col-6 col-sm-4">
           <h5>{local_Strings.CashDetailsBalanceLabel}</h5>
-          <h4>{item.depositAmount || ""}{item.currency || ""}</h4>
+          <h4>{helper.ConvertToQfbNumberFormat(item.depositAmount)}{item.currency || ""}</h4>
         </div>
         <div className="col-10 col-sm-3">
           <h5>{local_Strings.percentageLabel}</h5>

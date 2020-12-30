@@ -61,7 +61,7 @@ function DepositeRecievedProfit(
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [currentContext.selectedCIF]);
+  }, [props.depositNumber]);
 
   return (
     <Modal
