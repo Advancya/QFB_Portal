@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import holdingsIcon from "../../images/holdings-icon.svg";
 import { Link } from "react-router-dom";
 import Requests from "../requests/Requests";
 import Transactions from "../transactions/Transactions";
@@ -9,6 +8,7 @@ import { AuthContext } from "../../providers/AuthProvider";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { emptyUserInfo, IUserInfo } from "../../Helpers/publicInterfaces";
 import { GetUserWelcomeData } from "../../services/cmsService";
+import HoldingsLanding from "../HoldingsLanding";
 
 function Navigation() {
 
@@ -71,13 +71,7 @@ function Navigation() {
           id="navbarNavDropdown"
         >
           <ul className="navbar-nav">
-            <li className="nav-item active">
-              <Link className="nav-link" to="/">
-                <img src={holdingsIcon} className="images-fluid" />
-                {local_Strings.navigationItem1}
-              </Link>
-            </li>
-
+            <HoldingsLanding />
             <Transactions></Transactions>
             <AuthOffersLanding></AuthOffersLanding>
             <Requests></Requests>

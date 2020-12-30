@@ -620,6 +620,17 @@ const ar = {
   documentDeletedMessage: "Document has been deleted successfully!",
   documentSavedMessage: "Document has been saved successfully!",
   documentListingPriority: "أفضلية",
+  
+  TotalCash: "مجموع المبالغ النقدية",
+  TotalInvestments: "إجمالي الاستثمارات",
+  TotalDeposits: "إجمالي الودائع",
+  TotalLoans: "إجمالي القروض",
+  BankGurantees: "الضمانات البنكية",
+  Networth: "صافي القيمة",
+  TotalAssets: "إجمالي الأصول",
+  TotalLiabilities: "اجمالي المطلوبات",
+  TotalBalances: "إجمالي الأرصدة",
+  NetAverageRate: "معدل صافي المتوسط",
 };
 
 export default ar;

@@ -1,5 +1,7 @@
 import moment from "moment";
-import { ICommonFilter, IRequestFilter, ITransactionDetail, IRequestDetail } from "./publicInterfaces"
+import { ICommonFilter, IRequestFilter, ITransactionDetail, IRequestDetail } from "./publicInterfaces";
+import { localStrings as local_Strings } from '../translations/localStrings';
+
 export interface ITransactionFilter {
   exposeFilter: boolean,
   DateOption: string,
@@ -27,7 +29,6 @@ export interface ITransaction {
   trxDescirption: string;
   paymentDetails?: string;
 }
-
 
 export interface iRmRequests {
   id: string;
@@ -743,6 +744,87 @@ export const prepareInvestmentHoldings2ndDrill = (
         },
         //pointPadding: 0.2,
         showInLegend: false,
+      },
+    },
+    series: series,
+  };
+
+  return data;
+};
+
+export const prepareTotalNetWorth = (
+  chartData: any,
+  rtl = false
+) => {
+  local_Strings.setLanguage(rtl ? "ar" : "en");
+
+  let sdata = [
+    {
+      name: local_Strings.TotalCash,
+      y: !!chartData.totalCash ? parseFloat(chartData.totalCash) : 0,
+      amount: chartData.totalCash.toLocaleString(),
+      color: "#493026",
+    },
+    {
+      name: local_Strings.TotalInvestments,
+      y: !!chartData.totalInvestment ? parseFloat(chartData.totalInvestment) : 0,
+      amount: chartData.totalInvestment.toLocaleString(),
+      color: "#6C544B",
+    },
+    {
+      name: local_Strings.TotalDeposits,
+      y: !!chartData.totalDeposits ? parseFloat(chartData.totalDeposits) : 0,
+      amount: chartData.totalDeposits.toLocaleString(),
+      color: "#97877F",
+    },
+    {
+      name: local_Strings.TotalLoans,
+      y: !!chartData.totalLoans ? parseFloat(chartData.totalLoans) : 0,
+      amount: chartData.totalLoans.toLocaleString(),
+      color: "#CBC4C1",
+    },
+    {
+      name: local_Strings.BankGurantees,
+      y: !!chartData.totalGuarantees ? parseFloat(chartData.totalGuarantees) : 0,
+      amount: chartData.totalGuarantees.toLocaleString(),
+      color: "#A79A94",
+    }
+  ];
+
+  let series = [
+    {
+      name: "",
+      data: sdata,
+    },
+  ];
+
+  let data = {
+    chart: {
+      type: "pie",
+    },
+    title: {
+      text: "",
+    },
+    tooltip: {
+      enabled: false,
+    },
+    credits: {
+      enabled: false,
+    },
+    legend: {
+      rtl: rtl,
+    },
+    plotOptions: {
+      pie: {
+        allowPointSelect: false,
+        cursor: "pointer",
+        enableMouseTracking: false,
+        dataLabels: {
+          enabled: true,
+          format: `{point.amount:.f}`,
+          useHTML: true,
+        },
+        showInLegend: true,
       },
     },
     series: series,
