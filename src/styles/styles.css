@@ -137,6 +137,11 @@ html {
   background-color: #fbfcff
 }
 
+.hintStep {
+  color: #6c7279;
+  font-size: 0.875rem;
+}
+
 .alternate-row-bg>div:nth-child(2n+0) {
   background-color: rgb(227 219 216);
 }
@@ -207,6 +212,10 @@ html {
 
 .color-grey {
   color: #6c7279;
+}
+
+.color-grey h2 {
+  color: #000;
 }
 
 .color-black {

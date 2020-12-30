@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import CustomHeader from "./components/header/CustomHeader";
 import Footer from "./components/Footer";
 import Login from "./components/Login";
-import Register from "./components/Register";
+import RegisterLanding from "./components/Register/RegisterLanding";
 import AppBox from "./components/AppBox";
 import ProductsAndOffers from "./components/ProductsAndOffers/ProductsAndOffersLanding";
 import ContactUsLanding from "./components/ContactUs/ContactUsLanding";
@@ -16,6 +16,8 @@ function App() {
     showproductsAndOffersDetails,
     setshowproductsAndOffersDetails,
   ] = useState(false);
+  const [showRegisterStep1, setShowRegisterStep1] = useState(false);
+
   const [showContactUslanding, setshowContactUslanding] = useState(false);
 
   const handleCloseproductsAndOffersDetails = () =>
@@ -33,6 +35,9 @@ function App() {
   const handleBackproductsAndOffersDetails = () => {
     setshowproductsAndOffersDetails(false);
   };
+  const handleShowRegisterStep1 = () => {
+    setShowRegisterStep1(true);
+  };
 
   return (
     <div>
@@ -43,7 +48,9 @@ function App() {
             <div className="row">
               <Login setUserCredentials={() => {}} showOTP={() => {}} />
               <div className="col-lg-4 col-container flex-column">
-                <Register />
+                <RegisterLanding
+                  showRegisterStep1Modal={handleShowRegisterStep1}
+                />
                 <AppBox />
               </div>
               <div className="col-lg-4 col-container flex-column loginSideBoxBoxes">

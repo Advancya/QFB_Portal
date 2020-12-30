@@ -3,7 +3,7 @@ import CustomHeader from "../components/header/CustomHeader";
 import Footer from "../components/Footer";
 import Login from "../components/Login";
 import SubmitOTP from "../components/SubmitOTP";
-import Register from "../components/Register";
+import RegisterLanding from "../components/Register/RegisterLanding";
 import AppBox from "../components/AppBox";
 import ProductsAndOffers from "../components/ProductsAndOffers/ProductsAndOffersLanding";
 import ContactUsLanding from "../components/ContactUs/ContactUsLanding";
@@ -22,6 +22,7 @@ function Landing() {
     showproductsAndOffersDetails,
     setshowproductsAndOffersDetails,
   ] = useState(false);
+  const [showRegisterStep1, setShowRegisterStep1] = useState(false);
   const [showContactUslanding, setshowContactUslanding] = useState(false);
 
   const handleShowproductsAndOffersDetails = () => {
@@ -29,6 +30,9 @@ function Landing() {
   };
   const handleShowcontactUsLanding = () => {
     setshowContactUslanding(true);
+  };
+  const handleShowRegisterStep1 = () => {
+    setShowRegisterStep1(true);
   };
   const [loginData, setUserDetail] = useState<User>(initialUserData);
   const [showValidateOTP, setOTPSubmissionRequired] = useState<boolean>(false);
@@ -46,11 +50,18 @@ function Landing() {
         <div id="main-section" className="main-section pt-4">
           <div className="container-fluid">
             <div className="row">
-              {showValidateOTP ?
+              {showValidateOTP ? (
                 <SubmitOTP userDetail={loginData} />
-                : <Login setUserCredentials={setUserDetail} showOTP={setOTPSubmissionRequired} />}
+              ) : (
+                <Login
+                  setUserCredentials={setUserDetail}
+                  showOTP={setOTPSubmissionRequired}
+                />
+              )}
               <div className="col-lg-4 col-container flex-column">
-                <Register />
+                <RegisterLanding
+                  showRegisterStep1Modal={handleShowRegisterStep1}
+                />
                 <AppBox />
               </div>
               <div className="col-lg-4 col-container flex-column loginSideBoxBoxes">
