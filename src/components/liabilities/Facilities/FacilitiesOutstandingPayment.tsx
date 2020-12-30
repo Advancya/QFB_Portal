@@ -43,8 +43,11 @@ function FacilitiesOutstandingPayment(
       GetViewOutstandingPayments(currentContext.selectedCIF, props.facilityNumber)
         .then((responseData: ITransaction[]) => {
           if (isMounted && responseData && responseData.length > 0) {
+            const _data = responseData.filter(
+              (d) => new Date(d.installmentDate) > moment().add(-3, "months").toDate()
+            )
             setData(responseData);
-            setFilteredData(responseData);
+            setFilteredData(_data);
           }
         })
         .catch((e: any) => console.log(e))
@@ -114,7 +117,7 @@ function FacilitiesOutstandingPayment(
             ]}
             clearFilter={() => {
               const _data = data.filter(
-                (d) => new Date(d.bookingDate) > moment().add(-3, "months").toDate()
+                (d) => new Date(d.installmentDate ? d.installmentDate : "") > moment().add(-3, "months").toDate()
               )
               setFilteredData(_data);
             }}
