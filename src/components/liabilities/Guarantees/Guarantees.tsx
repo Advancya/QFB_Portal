@@ -10,7 +10,7 @@ import { localStrings as local_Strings } from "../../../translations/localString
 function Guarantees() {
   const currentContext = useContext(AuthContext);
   const userPortfolio = useContext(PortfolioContext);
-
+  const [params, setReferenceId] = useState({gurRef: "", balance: 0});
   const [showGuaranteesListing, setShowGuaranteesListing] = useState(false);
 
   const handleCloseGuaranteesListing = () => {
@@ -54,13 +54,19 @@ function Guarantees() {
       <GuaranteesListing
         showGuaranteesListingModal={showGuaranteesListing}
         hideGuaranteesListingModal={handleCloseGuaranteesListing}
-        showGuaranteesDetailsModal={handleShowGuaranteesDetails}
+        showGuaranteesDetailsModal={(gurRef: string, balance: number) => {
+          handleCloseGuaranteesListing();
+          setshowGuaranteesDetails(true);
+          setReferenceId({gurRef, balance});
+        }}
       />
-      <GuaranteesDetails
-        showGuaranteesDetailsModal={showGuaranteesDetails}
-        hideGuaranteesDetailsModal={handleCloseGuaranteesDetails}
-        backGuaranteesListingModal={handleBackGuaranteesDetails}
-      />
+      {params && !!params.gurRef &&
+        <GuaranteesDetails
+          showGuaranteesDetailsModal={showGuaranteesDetails}
+          hideGuaranteesDetailsModal={handleCloseGuaranteesDetails}
+          backGuaranteesListingModal={handleBackGuaranteesDetails}
+          params={params}
+        />}
     </div>
   );
 }

@@ -207,6 +207,8 @@ const en = {
   CashDetails_Filter_Credit: "Credit",
   HistoricalPayments_PastDueSettlement: "Past Due Settlement",
   HistoricalPayments_SettlemenOfPayment: "Payment of Installment",
+  OutstandingPayments_PastDueSettlement: "Past Due Payment",
+  OutstandingPayments_SettlemenOfPayment: "Payment of Facility",
 
   ReceivedProfitText: "Profit Received",
   ViewReceivedProfit: "View Received Profit",
@@ -216,7 +218,7 @@ const en = {
   HistoricalPaymentsText: "Historical Payment",
   ViewHistoricalPayments: "View Historical Payment",
   OutstandingPaymentsText: "Outstanding Payment",
-  ViewOutstandingPayments: "View Outstanding",
+  ViewOutstandingPayments: "View Outstanding Payment",
 
   TransactionScreenFilter_None: "--SELECT--",
   TransactionScreenFilter_LastWeek: "Last week",

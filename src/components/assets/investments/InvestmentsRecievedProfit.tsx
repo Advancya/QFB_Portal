@@ -60,7 +60,7 @@ function InvestmentsRecievedProfit(
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [currentContext.selectedCIF]);
+  }, [props.investmentNumber]);
 
   return (
     <Modal

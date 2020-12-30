@@ -46,7 +46,7 @@ const SubmitOTP: React.FC<IProps> = ({ userDetail }) => {
         if (role && role !== undefined) {
           if (role.name === Constant.Customer) {
             history.push(`/${currentContext.language}/Home`);
-          } else if (role.name === Constant.Management) {
+          } else if (role.name === Constant.RM || role.name === Constant.Management) {
             history.push(`/${currentContext.language}/Admin`);
           } else {
             Swal.fire({

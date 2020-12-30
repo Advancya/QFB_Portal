@@ -593,3 +593,36 @@ export const emptyLoanDetail = {
     value: "",
   },
 }
+
+export interface IBankGuaranteeDetail {
+  GuaranteeAmount: IKeyValuePair;
+  BankGuaranteeReference: IKeyValuePair;
+  Currency: IKeyValuePair;
+  StartDate: IKeyValuePair;
+  MaturityDate: IKeyValuePair;
+}
+
+export const emptyGuaranteeDetail = {
+  BankGuaranteeReference: {
+    label: "",
+    value: "",
+  },
+  GuaranteeAmount: {
+    label: "",
+    value: "",
+  },
+  Currency: {
+    label: "",
+    value: "",
+  },
+  StartDate: {
+    label: "",
+    value: "",
+  },
+  MaturityDate: {
+    label: "",
+    value: "",
+  },
+}
+
+

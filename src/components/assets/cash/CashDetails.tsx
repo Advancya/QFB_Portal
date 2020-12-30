@@ -57,7 +57,7 @@ function CashDetails(props: iCashDetails) {
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [currentContext.selectedCIF]);
+  }, [props.params.accountNumber]);
 
   return (
     <Modal

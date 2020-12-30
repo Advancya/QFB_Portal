@@ -69,7 +69,7 @@ function FacilitiesListing(props: iFacilitiesListing) {
         </div>
         <div className="col-6 col-sm-4">
           <h5>{local_Strings.CashDetailsBalanceLabel}</h5>
-          <h4>{(item.productBalance || "0") + " " + item.currency}</h4>
+          <h4>{helper.ConvertToQfbNumberFormat(item.productBalance) + " " + item.currency}</h4>
         </div>
         <div className="col-10 col-sm-3">
           <h5>{local_Strings.percentageLabel}</h5>

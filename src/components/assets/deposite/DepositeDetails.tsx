@@ -43,7 +43,7 @@ function DepositeDetails(props: iDepositeDetails) {
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, []);
+  }, [props.depositNumber]);
 
   return (
     <Modal

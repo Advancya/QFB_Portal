@@ -207,7 +207,9 @@ const ar = {
   CashDetails_Filter_Debit: "مدين",
   CashDetails_Filter_Credit: "ائتمان",
   HistoricalPayments_PastDueSettlement: "التسوية المتأخرة",
-  HistoricalPayments_SettlemenOfPayment: "تسوية الدفع",
+  HistoricalPayments_SettlemenOfPayment: "تسوية الدفع",  
+  OutstandingPayments_PastDueSettlement: "Past Due Payment",
+  OutstandingPayments_SettlemenOfPayment: "Payment of Facility",
 
   ReceivedProfitText: "حصل على ربح",
   ViewReceivedProfitTransactionsToDate: "عرض معاملات الأرباح المستلمة",

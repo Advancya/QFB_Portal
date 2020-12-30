@@ -14,6 +14,7 @@ import * as helper from "../Helpers/helper";
 interface ITransactionListingProps {
     transactions: ITransaction[];
     showBalanceField?: boolean;
+    descriptionLabel?: string;
 }
 
 const TransactionListing: React.FC<ITransactionListingProps> = (props) => {
@@ -60,9 +61,11 @@ const TransactionListing: React.FC<ITransactionListingProps> = (props) => {
                         <td colSpan={2} className="text-right">
                             {(item.balance || "0") + " " + currentContext.userSettings.currency}
                         </td> : null}
-                    <td className="caretArrow">
-                        <i className={(isCollapsible ? "fa fa-caret-down" : "fa fa-caret-right") + " color-gray"}></i>
-                    </td>
+                    {transactionsDetails &&
+                        <td className="caretArrow">
+                            <i className={(isCollapsible ? "fa fa-caret-down" : "fa fa-caret-right") + " color-gray"}></i>
+                        </td>
+                    }
                 </Accordion.Toggle>
                 {transactionsDetails && isCollapsible &&
                     <tr>
@@ -130,7 +133,7 @@ const TransactionListing: React.FC<ITransactionListingProps> = (props) => {
                         <tr>
                             <th colSpan={1}>{local_Strings.RequestListingFilterDate} </th>
                             <th colSpan={2}>{local_Strings.Amount} </th>
-                            <th colSpan={3}>{local_Strings.Description} </th>
+                            <th colSpan={3}>{!!props.descriptionLabel ? props.descriptionLabel : local_Strings.Description} </th>
                             {props.showBalanceField &&
                                 <th colSpan={2} className="text-right">
                                     {local_Strings.CashDetailsBalanceLabel}

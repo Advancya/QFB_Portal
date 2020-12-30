@@ -87,7 +87,7 @@ function NotificationsForm(props: DetailsProps) {
   useEffect(() => {
 
     if (props.item && props.item.id > 0) {
-      //setData(props.item);
+
 
       if (customerList.length > 0 && !!customerList[0].id) {
         const _selectCustomers = customerList.filter((i) => i.id === props.item.customerId);
@@ -98,6 +98,8 @@ function NotificationsForm(props: DetailsProps) {
               "label": _selectCustomers[0].shortName
             }]
           });
+        } else {
+          setData(props.item);
         }
       }
     } else {
@@ -177,7 +179,7 @@ function NotificationsForm(props: DetailsProps) {
             <div className="box modal-box py-0 mb-0 scrollabel-modal-box">
               <div className="box-body">
                 <div className="form-group">
-                  <label className="mb-1 text-600">{local_Strings.NotificationsCustomerNameLabel}</label>
+                  <label className="mb-1 text-600">{values.selectedCIFs && values.selectedCIFs.length > 0 ? local_Strings.NotificationsCustomerNameLabel: ""}</label>
                   {props.editable ?
                     <React.Fragment>
                       <MultiSelect
