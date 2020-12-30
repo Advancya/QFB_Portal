@@ -16,8 +16,8 @@ import NoResult from "../../shared/NoResult";
 import Swal from 'sweetalert2';
 
 function OffersListing() {
-  const auth = useContext(AuthContext);
-  local_Strings.setLanguage(auth.language);
+  const currentContext = useContext(AuthContext);
+  local_Strings.setLanguage(currentContext.language);
   const [showClearFilter, setShowClearFilter] = useState(false);
   const [data, setData] = useState<IOfferDetail[]>([]);
   const [filteredData, setFilteredData] = useState<IOfferDetail[]>([]);
@@ -222,7 +222,7 @@ function OffersListing() {
                             </span>
                           </div>
                           <h6 className="mb-1 text-600">
-                            {auth.language === "en" ? item.title : item.titleAr}
+                            {currentContext.language === "en" ? item.title : item.titleAr}
                           </h6>
                           <div className="text-15">
                             {local_Strings.NotificationsExpireLabel +

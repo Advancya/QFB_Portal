@@ -1,24 +1,29 @@
-import React, { useState } from "react";
-import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
-import dateIcon from "../../images/calendar-inactive.png";
+import React, { useContext, useState } from "react";
+import { Modal } from "react-bootstrap";
 import { localStrings as local_Strings } from "../../translations/localStrings";
+import {
+  IProductAndOffersDetail,
+} from "../../Helpers/publicInterfaces";
+import { AuthContext } from "../../providers/AuthProvider";
+import moment from "moment";
 
 interface iProductsAndOffersDetails {
   showProductsAndOffersDetailsModal: boolean;
   hideProductsAndOffersDetailsModal: () => void;
   backProductsAndOffersListingModal: () => void;
+  item: IProductAndOffersDetail;
 }
+
 function ProductsAndOffersDetails(
-  productsAndOffersDetailsProps: iProductsAndOffersDetails
+  props: iProductsAndOffersDetails
 ) {
-  const showMoreProductsAndOffersDetails = () => {
-    console.log("retrieve more from server");
-  };
+  const currentContext = useContext(AuthContext);
+  local_Strings.setLanguage(currentContext.language);
 
   return (
     <Modal
-      show={productsAndOffersDetailsProps.showProductsAndOffersDetailsModal}
-      onHide={productsAndOffersDetailsProps.hideProductsAndOffersDetailsModal}
+      show={props.showProductsAndOffersDetailsModal}
+      onHide={props.hideProductsAndOffersDetailsModal}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
@@ -26,32 +31,29 @@ function ProductsAndOffersDetails(
       dialogClassName="myModal"
     >
       <Modal.Header>
-        <div className="modal-header-text">
-          <div className="d-flex align-items-center">
-            <div className="ib-icon">
-              <a
-                href="#"
-                onClick={
-                  productsAndOffersDetailsProps.backProductsAndOffersListingModal
-                }
-                className="backToAccountsList"
-              >
-                <i className="fa fa-chevron-left"></i>
-              </a>
-            </div>
-            <div className="ib-text">
-              <h4 id="newReqTxt">
-                {local_Strings.ProductsAndOffersDetailsTitle}
-              </h4>
-            </div>
+        <div className="d-flex align-items-center">
+          <div className="modal-header-text">
+            <a
+              href="#"
+              onClick={
+                props.backProductsAndOffersListingModal
+              }
+              className="backToAccountsList"
+            >
+              <i className="fa fa-chevron-left"></i>
+            </a>
+          </div>
+          <div className="ib-text">
+            <h4 id="newReqTxt">
+              {local_Strings.ProductsAndOffersDetailsTitle}
+            </h4>
           </div>
         </div>
-
         <button
           type="button"
           className="close"
           onClick={
-            productsAndOffersDetailsProps.hideProductsAndOffersDetailsModal
+            props.hideProductsAndOffersDetailsModal
           }
         >
           <span aria-hidden="true">×</span>
@@ -64,17 +66,23 @@ function ProductsAndOffersDetails(
               <div className="row align-items-center py-2">
                 <div className="col-md-12 col-sm-12 ">
                   <div className="text-xs color-gray">
-                    {local_Strings.dummyDate}
+                    {props.item.createdDate
+                      ? moment(props.item.createdDate).format(
+                        "dddd DD MM YYYY"
+                      )
+                      : ""}
                   </div>
                   <h6 className="mb-1 text-600 text-18 ">
-                    {local_Strings.dummyTitle}
+                    {currentContext.language === "en" ? props.item.name : props.item.nameAr}
                   </h6>
-                  <div className="color-gray">{local_Strings.dummyDesc}</div>
+                  <div className="color-gray"
+                    dangerouslySetInnerHTML={{
+                      __html: currentContext.language === "en" ? props.item.details : props.item.detailsAr
+                    }} />
                 </div>
               </div>
             </li>
           </ul>
-          <div className="p-3 mb-5">{local_Strings.dummyContent}</div>
         </div>
       </Modal.Body>
     </Modal>

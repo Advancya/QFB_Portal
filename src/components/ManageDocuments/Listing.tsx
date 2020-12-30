@@ -19,8 +19,8 @@ import Swal from 'sweetalert2';
 const mime = require('mime');
 
 function DocumentsListing() {
-  const auth = useContext(AuthContext);
-  local_Strings.setLanguage(auth.language);
+  const currentContext = useContext(AuthContext);
+  local_Strings.setLanguage(currentContext.language);
   const [showClearFilter, setShowClearFilter] = useState(false);
   const [data, setData] = useState<IDocumentDetail[]>([]);
   const [filteredData, setFilteredData] = useState<IDocumentDetail[]>([]);
@@ -242,7 +242,7 @@ function DocumentsListing() {
                             </span>
                           </div>
                           <h6 className="mb-1 text-600">
-                            {auth.language === "en" ? item.documentName : item.documentNameAr}
+                            {currentContext.language === "en" ? item.documentName : item.documentNameAr}
                           </h6>
                         </div>
                       </a>

@@ -17,8 +17,8 @@ interface IFilterDropDownControlProps {
 
 const FilterDropDownControl: React.FC<IFilterDropDownControlProps> = (props) => {
 
-    const auth = useContext(AuthContext);
-    local_Strings.setLanguage(auth.language);
+    const currentContext = useContext(AuthContext);
+    local_Strings.setLanguage(currentContext.language);
 
     return (
         <React.Fragment>

@@ -10,8 +10,8 @@ import CustomHeader from "../../components/header/CustomHeader";
 import Footer from "../../components/Footer";
 
 function ContactUsListing() {
-  const auth = useContext(AuthContext);
-  local_Strings.setLanguage(auth.language);
+  const currentContext = useContext(AuthContext);
+  local_Strings.setLanguage(currentContext.language);
   const [showClearFilter, setShowClearFilter] = useState(false);
   const [data, setData] = useState<IContactUs[]>([]);
   const [isLoading, setLoading] = useState(true);

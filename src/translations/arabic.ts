@@ -214,6 +214,7 @@ const ar = {
   ReceivedProfitText: "حصل على ربح",
   ViewReceivedProfitTransactionsToDate: "عرض معاملات الأرباح المستلمة",
   BuyAndSellText: "البيع والشراء",
+  BuyAndSellTransactionsText: "عرض عمليات البيع والشراء",
   ViewBuySellTransactions: "عرض عمليات البيع والشراء",
   HistoricalPaymentsText: "المدفوعات التاريخية",
   ViewHistoricalPayments: "عرض المدفوعات التاريخية",

@@ -22,8 +22,8 @@ import NoResult from "../../shared/NoResult";
 import Swal from 'sweetalert2';
 
 function ProductsAndOffersListing() {
-  const auth = useContext(AuthContext);
-  local_Strings.setLanguage(auth.language);
+  const currentContext = useContext(AuthContext);
+  local_Strings.setLanguage(currentContext.language);
   const [showClearFilter, setShowClearFilter] = useState(false);
   const [data, setData] = useState<IProductAndOffersDetail[]>([]);
   const [filteredData, setFilteredData] = useState<IProductAndOffersDetail[]>(
@@ -50,7 +50,7 @@ function ProductsAndOffersListing() {
     setLoading(true);
     GetProductsAndOffersAll()
       .then((responseData: IProductAndOffersDetail[]) => {
-        if (responseData) {
+        if (responseData && responseData.length > 0) {
           const _data = responseData.sort((a, b) =>
             moment(b.createdDate).diff(moment(a.createdDate))
           );
@@ -230,7 +230,7 @@ function ProductsAndOffersListing() {
                             </span>
                           </div>
                           <h6 className="mb-1 text-600">
-                            {auth.language === "en" ? item.name : item.nameAr}
+                            {currentContext.language === "en" ? item.name : item.nameAr}
                           </h6>
                           <div className="text-15">
                             {local_Strings.NotificationsExpireLabel +

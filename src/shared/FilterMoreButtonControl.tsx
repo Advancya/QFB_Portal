@@ -9,8 +9,8 @@ interface IFilterMoreButtonControlProps {
 
 const FilterMoreButtonControl: React.FC<IFilterMoreButtonControlProps> = (props) => {
 
-    const auth = useContext(AuthContext);
-    local_Strings.setLanguage(auth.language);
+    const currentContext = useContext(AuthContext);
+    local_Strings.setLanguage(currentContext.language);
 
     return props.showMore ? (
         <div className="actionScrollButtons">

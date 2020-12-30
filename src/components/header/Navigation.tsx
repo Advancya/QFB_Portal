@@ -20,13 +20,13 @@ function Navigation() {
     let isMounted = true;
 
     const initialLoadMethod = async () => {
-    GetUserWelcomeData(currentContext.selectedCIF)
-      .then((responseData: any) => {
-        if (responseData && responseData.length > 0 && isMounted) {
-          setUserInfo(responseData[0] as IUserInfo);
-        }
-      })
-      .catch((e: any) => console.log(e));
+      GetUserWelcomeData(currentContext.selectedCIF)
+        .then((responseData: any) => {
+          if (responseData && responseData.length > 0 && isMounted) {
+            setUserInfo(responseData[0] as IUserInfo);
+          }
+        })
+        .catch((e: any) => console.log(e));
     }
     if (!!currentContext.selectedCIF) {
       initialLoadMethod();
@@ -39,7 +39,7 @@ function Navigation() {
 
   return (
     <div className="col-md-7">
-      
+
       <div className="welcomeText text-right">
         <Link to={`/${currentContext.language}/Home`} className="">
           {local_Strings.WelcomeScreenTitle + " " + (userInfo.customerShortName || "") + " "}
@@ -83,13 +83,9 @@ function Navigation() {
             <Requests></Requests>
             <li className="nav-item">
               <Inbox />
-              <a
-                className=""
-                href="#"
-                onClick={() => { }}
-              >
+              <Link to={`/${currentContext.language}/OfferSubscriptions`}>
                 <i className="fa fa-bell unread" />
-              </a>
+              </Link>
             </li>
           </ul>
         </div>

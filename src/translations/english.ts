@@ -212,8 +212,9 @@ const en = {
 
   ReceivedProfitText: "Profit Received",
   ViewReceivedProfit: "View Received Profit",
-  ViewReceivedProfitTransactions: "View Received Profit Transactions",
+  ViewReceivedProfitTransactions: "View Received Profit Transactions to date",
   BuyAndSellText: "Buy & Sell",
+  BuyAndSellTransactionsText: "Buy & Sell Transactions",
   ViewBuySellTransactions: "View Buy & Sell Transactions",
   HistoricalPaymentsText: "Historical Payment",
   ViewHistoricalPayments: "View Historical Payment",
@@ -361,7 +362,7 @@ const en = {
     "View all portofolio's of your clients here",
 
   ConfirmationDone: "Done",
-  RecievedProfit: "Recieved Profit",
+  RecievedProfit: "Profit Recieved",
 
   SearchText: "Search",
   RMClientsRequestListingTitle: "Clients Request Listing",

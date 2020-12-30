@@ -33,8 +33,8 @@ function ProductsAndOffersForm(props: DetailsProps) {
   const showMoreProductsAndOffersForm = () => {
     console.log("retrieve more from server");
   };
-  const auth = useContext(AuthContext);
-  local_Strings.setLanguage(auth.language);
+  const currentContext = useContext(AuthContext);
+  local_Strings.setLanguage(currentContext.language);
   const [data, setData] = useState<IProductAndOffersDetail>(emptyProductAndOffersData);
   const [isLoading, setLoading] = useState(false);
   const formValidationSchema = yup.object({
