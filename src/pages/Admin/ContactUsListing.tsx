@@ -30,7 +30,11 @@ function ContactUsListing() {
     GetAllContactUs()
       .then((responseData: IContactUs[]) => {
         if (responseData) {
-          setData(responseData.sort((a, b) => b.name.localeCompare(a.name)));
+          const _data = responseData.sort((a, b) =>
+            moment(b.createDate).diff(moment(a.createDate))
+          );
+
+          setData(_data);
         } else {
           setData([]);
         }

@@ -60,7 +60,7 @@ function ProductsAndOffersListing(
 
 
   const renderItem = (item: IProductAndOffersDetail, index: number) => (
-    <div className="col-md-6 col-lg-4 col-container">
+    <div className="col-md-6 col-lg-4 col-container" key={index}>
       <a
         href="#"
         onClick={() => props.showProductsAndOffersDetailsModal(item)}

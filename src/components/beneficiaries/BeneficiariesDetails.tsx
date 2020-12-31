@@ -7,14 +7,16 @@ interface iBeneficiariesDetails {
   hideBeneficiariesDetailsModal: () => void;
   backBeneficiariesDetailsgModal: () => void;
   showNewBeneficiaryModal: () => void;
+  itemId: number
 }
+
 function BeneficiariesDetails(
-  beneficiariesDetailsProps: iBeneficiariesDetails
+  props: iBeneficiariesDetails
 ) {
   return (
     <Modal
-      show={beneficiariesDetailsProps.showBeneficiariesDetailsModal}
-      onHide={beneficiariesDetailsProps.hideBeneficiariesDetailsModal}
+      show={props.showBeneficiariesDetailsModal}
+      onHide={props.hideBeneficiariesDetailsModal}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
@@ -26,7 +28,7 @@ function BeneficiariesDetails(
           <div className="modal-header-text">
             <a
               href="#"
-              onClick={beneficiariesDetailsProps.backBeneficiariesDetailsgModal}
+              onClick={props.backBeneficiariesDetailsgModal}
               className="backToAccountsList"
             >
               <i className="fa fa-chevron-left"></i>
@@ -40,7 +42,7 @@ function BeneficiariesDetails(
         <button
           type="button"
           className="close"
-          onClick={beneficiariesDetailsProps.hideBeneficiariesDetailsModal}
+          onClick={props.hideBeneficiariesDetailsModal}
         >
           <span aria-hidden="true">×</span>
         </button>

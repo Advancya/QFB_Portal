@@ -626,3 +626,39 @@ export const emptyGuaranteeDetail = {
 }
 
 
+export interface IBeneficiaryDetail {
+  id: number;
+  cif: string;
+  createDate: string;
+  typeId: string;
+  beneficiaryId: string;
+  nickname: string;
+  qfbaccount: string;
+  currency: string;
+  beneficiaryBank: string;
+  bankSwiftCode: string;
+  beneficiaryFullName: string;
+  iban: string;
+  beneficiaryAddress: string;
+  beneficiaryAccountNumber: string;
+  beneficiaryStreetNumber: string;
+  city: string;
+  country: string;
+  beneficiaryBankCity: string;
+  beneficiaryBankAddress: string;
+  intermediaryBank: string;
+  foreignCurrency: string;
+  routingNumber: string;
+}
+
+
+export const emptyBeneficiaryDetail = {
+  "id": "",
+  "shortName": "",
+  "accountOfficer": "",
+  "rnName": "",
+  "mobile": "",
+  "customerEmail": "",
+  "isRegister": false
+}
+

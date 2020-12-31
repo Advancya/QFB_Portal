@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import * as helper from "../../Helpers/helper";
 import { AuthContext } from "../../providers/AuthProvider";
 import { localStrings as local_Strings } from "../../translations/localStrings";
+import DocumentListing from "../Documents/DocumentListing";
 
 function ToolBarRight() {
   const history = useHistory();
@@ -14,7 +15,7 @@ function ToolBarRight() {
     <div className="col-md-9">
       <div className="topRight text-right">
         <Link to="/HomePage1"> {local_Strings.topBarRightItem1}</Link>
-        <Link to="/HomePage2"> {local_Strings.topBarRightItem2}</Link>
+        <DocumentListing />
         <Link to={`/${currentContext.language}/OfferSubscriptions`}>
           {local_Strings.topBarRightItem3}
         </Link>

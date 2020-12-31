@@ -28,7 +28,6 @@ const mime = require("mime");
 function DocumentsListing() {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
-  const [showClearFilter, setShowClearFilter] = useState(false);
   const [data, setData] = useState<IDocumentDetail[]>([]);
   const [filteredData, setFilteredData] = useState<IDocumentDetail[]>([]);
   const [isLoading, setLoading] = useState(true);
@@ -46,7 +45,7 @@ function DocumentsListing() {
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, []);
+  }, [currentContext.selectedCIF]);
 
   const refreshList = () => {
     setLoading(true);
