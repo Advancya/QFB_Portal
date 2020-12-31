@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Modal } from "react-bootstrap";
+import { Modal, Tab, Tabs } from "react-bootstrap";
 import moment from "moment";
-import { localStrings as local_Strings } from '../translations/localStrings';
+import { localStrings as local_Strings } from "../translations/localStrings";
 import { AuthContext } from "../providers/AuthProvider";
 import * as helper from "../Helpers/helper";
 import {
@@ -10,7 +10,7 @@ import {
   GetClosedHoldings_2ndDrill_Investment,
   GetLiveHoldings_1stDrill_Deposit,
   GetLiveHoldings_1stDrill_Investment,
-  GetLiveHoldings_2ndDrill_Investment
+  GetLiveHoldings_2ndDrill_Investment,
 } from "../services/cmsService";
 import Constant from "../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
@@ -32,7 +32,7 @@ const initial_1stDrillInvestmentData = {
   invRecievedProfit: 0,
   subAssetId: "",
   secDescirption: "",
-}
+};
 
 interface IClosedHoldings_2ndDrill_Investment {
   amount: number;
@@ -44,7 +44,7 @@ const initial_2ndDrillInvestmentData = {
   amount: 0,
   bookingDate: "",
   subAssetTypeDesc: "",
-}
+};
 
 function HoldingsLanding() {
   const currentContext = useContext(AuthContext);
@@ -238,7 +238,27 @@ function HoldingsLanding() {
         </Modal.Header>
         <Modal.Body>
           <div className="box modal-box py-0 mb-0 scrollabel-modal-box">
-            <PieChart highcharts={Highcharts} options={chart_data} />
+            <Tabs
+              defaultActiveKey="home"
+              className="m-4 nav-pills"
+              id="uncontrolled-tab-example"
+            >
+              <Tab
+                eventKey="home"
+                className="m-4"
+                title={local_Strings.LiveHoldingTab}
+              >
+                <PieChart highcharts={Highcharts} options={chart_data} />
+              </Tab>
+              <Tab
+                eventKey="profile"
+                className="m-4"
+                title={local_Strings.ExitediveHoldingTab}
+              >
+                <PieChart highcharts={Highcharts} options={chart_data} />
+              </Tab>
+            </Tabs>
+
             <LoadingOverlay
               active={isLoading}
               spinner={
@@ -252,7 +272,6 @@ function HoldingsLanding() {
         </Modal.Body>
       </Modal>
     </React.Fragment>
-
   );
 }
 

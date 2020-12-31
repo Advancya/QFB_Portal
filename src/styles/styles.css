@@ -41,6 +41,27 @@ html[dir="ltr"], [dir="ltr"] {
   text-align: left;
 }
 
+.nav-pills {
+  justify-content: center;
+  border-bottom: 0;
+}
+
+.nav-pills .nav-link {
+  padding: 10px 0;
+  border-radius: 10px;
+  background-color: #f6f1ee;
+  color: #6b4f44;
+  min-width: 200px;
+  text-align: center;
+  margin: 0 10px;
+  font-weight: bold;
+}
+
+.nav-pills .nav-link.active {
+  background-color: #6b4f44;
+  color: #ffffff;
+}
+
 ::-webkit-scrollbar {
   width: 10px;
 }
