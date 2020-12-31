@@ -1,23 +1,26 @@
-import React, { useContext } from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import React, { useContext } from "react";
+import { Switch, Route, Redirect } from "react-router-dom";
 import HomePage from "../pages/Homepage";
 import Landing from "../pages/Landing";
 import { AuthContext } from "../providers/AuthProvider";
 import Admin from "../pages/Admin/Admin";
 import ContactUsListing from "../pages/Admin/ContactUsListing";
 import OfferSubscriptionsListing from "../pages/Admin/OfferSubscriptionsListing";
+import RMLanding from "../pages/RM/RMLanding";
 
 const PageNotFound = () => <div>Page not found</div>;
 
 const RoutingMap = () => {
-
   const currentContext = useContext(AuthContext);
 
   return (
     <Switch>
       <Route exact path="/">
-        {currentContext.language === "en" ?
-          <Redirect to="/en" /> : <Redirect to="/ar" />}
+        {currentContext.language === "en" ? (
+          <Redirect to="/en" />
+        ) : (
+          <Redirect to="/ar" />
+        )}
       </Route>
       <Route exact={true} path={["/en", "/ar", "/en/", "/ar/"]}>
         <Landing />
@@ -34,9 +37,12 @@ const RoutingMap = () => {
       <Route path={["/en/Admin", "/ar/Admin"]}>
         <Admin />
       </Route>
+      <Route path={["/en/RMLanding", "/ar/RMLanding"]}>
+        <RMLanding />
+      </Route>
       <Route component={PageNotFound} />
     </Switch>
   );
-}
+};
 
 export default RoutingMap;
