@@ -15,6 +15,8 @@ import { emptyTransactionDetail, ITransactionDetail } from "../../Helpers/public
 function Transactions() {
   const [showTransactionsListing, setShowTransactionsListing] = useState(false);
   const [item, setDetail] = useState<ITransactionDetail>(emptyTransactionDetail);
+  const [beneficiaryId, setBeneficiaryId] = useState<number>();
+
   const handleCloseTransactionsListing = () => {
     setShowTransactionsListing(false);
   };
@@ -139,12 +141,14 @@ function Transactions() {
         backBeneficiariesListingModal={handleBackBeneficiariesListing}
         showNewBeneficiaryModal={handleShowNewBeneficiary}
       />
-      <BeneficiariesDetails
-        showBeneficiariesDetailsModal={showBeneficiariesDetails}
-        hideBeneficiariesDetailsModal={handleCloseBeneficiariesDetails}
-        backBeneficiariesDetailsgModal={handleBackBeneficiariesDetails}
-        showNewBeneficiaryModal={handleShowNewBeneficiary}
-      />
+      {beneficiaryId && beneficiaryId > 0 &&
+        <BeneficiariesDetails
+          showBeneficiariesDetailsModal={showBeneficiariesDetails}
+          hideBeneficiariesDetailsModal={handleCloseBeneficiariesDetails}
+          backBeneficiariesDetailsgModal={handleBackBeneficiariesDetails}
+          showNewBeneficiaryModal={handleShowNewBeneficiary}
+          itemId={beneficiaryId}
+        />}
       <NewBeneficiary
         showNewBeneficiaryModal={showNewBeneficiary}
         hideNewBeneficiaryModal={handleCloseNewBeneficiary}

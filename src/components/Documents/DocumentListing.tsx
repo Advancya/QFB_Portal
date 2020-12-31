@@ -4,45 +4,44 @@ import moment from "moment";
 import { localStrings as local_Strings } from '../../translations/localStrings';
 import { AuthContext } from "../../providers/AuthProvider";
 import {
-  GetBeneficiaryByCIF,
+  GetAllDocuments,
 } from "../../services/cmsService";
 import {
-  emptyBeneficiaryDetail, IBeneficiaryDetail,
+  IDocumentDetail,
 } from "../../Helpers/publicInterfaces";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import NoResult from "../../shared/NoResult";
+import dateIcon from "../../images/calendar-inactive.png";
 import FilterMoreButtonControl from '../../shared/FilterMoreButtonControl';
+import DocumentDetails from "./DocumentDetails";
 
-interface iBeneficiariesListing {
-  showBeneficiariesListingModal: boolean;
-  hideBeneficiariesListingModal: () => void;
-  showBeneficiariesDetailsModal: (itemId: number) => void;
-  showNewBeneficiaryModal: () => void;
-  backBeneficiariesListingModal: () => void;
-}
-function BeneficiariesListing(
-  props: iBeneficiariesListing
-) {
+const mime = require("mime");
 
+function DocumentListing() {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
-  const [isLoading, setLoading] = useState(false);
-  const [data, setData] = useState<IBeneficiaryDetail[]>([]);
+  const [isLoading, setLoading] = useState(false);  
+  const [data, setData] = useState<IDocumentDetail[]>([]);
   const rowLimit: number = Constant.RecordPerPage;
   const [offset, setOffset] = useState<number>(rowLimit);
+  const [openDocumentListing, showDocumentListing] = useState(false);
+  const [openDocumentDetails, showDocumentDetails] = useState(false);
+  const [itemId, setItemId] = useState<number>();
 
   useEffect(() => {
     let isMounted = true;
 
     setLoading(true);
-    GetBeneficiaryByCIF(currentContext.selectedCIF)
-      .then((responseData: IBeneficiaryDetail[]) => {
+    GetAllDocuments()
+      .then((responseData: IDocumentDetail[]) => {
         if (isMounted && responseData && responseData.length > 0) {
-          setData(responseData);
-          if (responseData.length < rowLimit) {
-            setOffset(responseData.length);
+          const _data = responseData.sort((a, b) => a.orderId - b.orderId);
+
+          setData(_data);
+          if (_data.length < rowLimit) {
+            setOffset(_data.length);
           }
         } else {
           setData([]);
@@ -56,34 +55,50 @@ function BeneficiariesListing(
     }; // use effect cleanup to set flag false, if unmounted
   }, [currentContext.selectedCIF]);
 
-  const renderItem = (item: IBeneficiaryDetail, index: number) => (
+  const renderItem = (item: IDocumentDetail, index: number) => (
     <li className="shown" key={index}>
       <a
         href="#"
         className="row align-items-center"
-        onClick={() => props.showBeneficiariesDetailsModal(item.id)}
+        onClick={() => {
+          setItemId(item.id);
+          showDocumentDetails(true);
+          showDocumentListing(false);
+        }}
       >
-        <div className="col-sm-8">
-          <h4>{local_Strings.BeneficiaryIDLabel + " | " + item.beneficiaryId}</h4>
-          <h5>{local_Strings.BeneficiaryFullNameLabel +
-            " | " +
-            item.beneficiaryFullName}</h5>
-        </div>
-        <div className="col-8 col-sm-3 text-sm-right">
-          <span className="status-badge ">{item.country || ""}</span>
-        </div>
-        <div className="col-4 col-sm-1 text-right">
-          <i className="fa fa-chevron-right"></i>
+        <div className="col-10 col-sm-10">
+          <div className="mb-1 d-flex align-items-center">
+            <img src={dateIcon} className="img-fluid" />
+            <span className="mx-1 text-15 color-light-gold">
+              {item.documentDate
+                ? moment(item.documentDate).format(
+                  "dddd DD MM YYYY"
+                )
+                : ""}
+            </span>
+          </div>
+          <h6 className="mb-1 text-600">
+            {currentContext.language === "en"
+              ? item.documentName
+              : item.documentNameAr}
+          </h6>
         </div>
       </a>
     </li>
   );
 
   return (
-    <div>
+    <React.Fragment>
+      <a
+        className=""
+        href="#"
+        onClick={() => showDocumentListing(!openDocumentListing)}
+      >
+        {local_Strings.topBarRightItem2}
+      </a>
       <Modal
-        show={props.showBeneficiariesListingModal}
-        onHide={props.hideBeneficiariesListingModal}
+        show={openDocumentListing}
+        onHide={() => showDocumentListing(false)}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
@@ -91,40 +106,24 @@ function BeneficiariesListing(
         dialogClassName="myModal"
       >
         <Modal.Header>
-          <div className="d-flex align-items-center">
-            <div className="modal-header-text">
-              <a
-                href="#"
-                onClick={
-                  props.backBeneficiariesListingModal
-                }
-                className="backToAccountsList"
-              >
-                <i className="fa fa-chevron-left"></i>
-              </a>
-            </div>
-            <div className="ib-text d-flex align-items-center">
-              <h4>Beneficiaries</h4>
-              <a
-                className="btnOutlineWhite"
-                href="#"
-                onClick={props.showNewBeneficiaryModal}
-                id="newBeneficiaryBtn"
-              >
-                <i className="fa fa-plus-circle"></i> New Beneficiaries
-              </a>
+          <div className="modal-header-text">
+            <div className="d-flex align-items-center">
+              <div className="ib-text">
+                <h4 id="newReqTxt">{local_Strings.DocumentsListingTitle}</h4>
+              </div>
             </div>
           </div>
+
           <button
             type="button"
             className="close"
-            onClick={props.hideBeneficiariesListingModal}
+            onClick={() => showDocumentListing(false)}
           >
             <span aria-hidden="true">×</span>
           </button>
         </Modal.Header>
         <Modal.Body>
-          <div className="box modal-box">
+          <div className="box modal-box py-0 mb-4 scrollabel-modal-box">
             <LoadingOverlay
               active={isLoading}
               spinner={
@@ -144,13 +143,25 @@ function BeneficiariesListing(
                 : NoResult(local_Strings.NoDataToShow)}
             </ul>
           </div>
-
           <FilterMoreButtonControl showMore={data && data.length > rowLimit &&
             offset < data.length} onClickMore={() => setOffset(offset + 5)} />
         </Modal.Body>
       </Modal>
-    </div>
+      {itemId && itemId > 0 &&
+        <DocumentDetails
+          showDocumentDetailsModal={openDocumentDetails}
+          hideDocumentDetailsModal={() => {
+            showDocumentDetails(false);
+            showDocumentListing(false);
+          }}
+          backDocumentDetailsModal={() => {
+            showDocumentDetails(false);
+            showDocumentListing(true);
+          }}
+          itemId={itemId}
+        />}
+    </React.Fragment>
   );
 }
 
-export default BeneficiariesListing;
+export default DocumentListing;

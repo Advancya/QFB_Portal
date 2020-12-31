@@ -1,93 +1,60 @@
 import React, { useState } from "react";
-
-import depositIcon from "../../../images/deposit-icon.svg";
-import { Button, Modal } from "react-bootstrap";
 import BeneficiariesListing from "./BeneficiariesListing";
 import BeneficiariesDetails from "./BeneficiariesDetails";
 import NewBeneficiary from "./NewBeneficiaries";
 interface iBeneficiaries {
   showBeneficiariesListingModal?: () => void;
 }
-function Beneficiaries(beneficiariesProps: iBeneficiaries) {
-  ///benfeciaries
+function Beneficiaries(props: iBeneficiaries) {
   const [showBeneficiariesListing, setShowBeneficiariesListing] = useState(
     false
   );
-
-  const handleCloseBeneficiariesListing = () => {
-    setShowBeneficiariesListing(false);
-  };
-  const handleShowBeneficiariesListing = () => {
-    //handleCloseTransactionsListing();
-    setShowBeneficiariesListing(true);
-  };
-  const handleBackBeneficiariesListing = () => {
-    handleCloseBeneficiariesListing();
-
-    // handleShowTransactionsListing();
-  };
-
   const [showBeneficiariesDetails, setshowBeneficiariesDetails] = useState(
     false
   );
-
-  const handleCloseBeneficiariesDetails = () =>
-    setshowBeneficiariesDetails(false);
-  const handleShowBeneficiariesDetails = () => {
-    handleCloseBeneficiariesListing();
-    setshowBeneficiariesDetails(true);
-  };
-  const handleBackBeneficiariesDetails = () => {
-    setshowBeneficiariesDetails(false);
-
-    handleShowBeneficiariesListing();
-  };
-
   const [showNewBeneficiary, setShowNewBeneficiary] = useState(false);
-
-  const handleCloseNewBeneficiary = () => {
-    setShowNewBeneficiary(false);
-  };
-  const handleShowNewBeneficiary = () => {
-    handleCloseBeneficiariesListing();
-    setShowNewBeneficiary(true);
-  };
-  const handleBackNewBeneficiary = () => {
-    setShowNewBeneficiary(false);
-
-    handleShowBeneficiariesListing();
-  };
+  const [itemId, setItemId] = useState<number>();
 
   return (
     <div>
-      {/*   <a
-        className="btnOutlineWhite bg-white color-gold"
-        href="#"
-        onClick={handleShowBeneficiariesListing}
-        id="newBeneficiaryBtn"
-      >
-        Beneficiaries
-        
-      </a> */}
 
       <BeneficiariesListing
         showBeneficiariesListingModal={showBeneficiariesListing}
-        hideBeneficiariesListingModal={handleCloseBeneficiariesListing}
-        showBeneficiariesDetailsModal={handleShowBeneficiariesDetails}
-        backBeneficiariesListingModal={handleBackBeneficiariesListing}
-        showNewBeneficiaryModal={handleShowNewBeneficiary}
-      ></BeneficiariesListing>
-      <BeneficiariesDetails
-        showBeneficiariesDetailsModal={showBeneficiariesDetails}
-        hideBeneficiariesDetailsModal={handleCloseBeneficiariesDetails}
-        backBeneficiariesDetailsgModal={handleBackBeneficiariesDetails}
-        showNewBeneficiaryModal={handleShowNewBeneficiary}
-      ></BeneficiariesDetails>
+        hideBeneficiariesListingModal={() => setShowBeneficiariesListing(false)}
+        showBeneficiariesDetailsModal={(itemId: number) => {
+          setShowBeneficiariesListing(false);
+          setshowBeneficiariesDetails(true);
+          setItemId(itemId);
+        }}
+        backBeneficiariesListingModal={() => setShowBeneficiariesListing(false)}
+        showNewBeneficiaryModal={() => {
+          setShowBeneficiariesListing(false);
+          setShowNewBeneficiary(true);
+        }}
+      />
+      {itemId && itemId > 0 &&
+        <BeneficiariesDetails
+          showBeneficiariesDetailsModal={showBeneficiariesDetails}
+          hideBeneficiariesDetailsModal={() => setshowBeneficiariesDetails(false)}
+          backBeneficiariesDetailsgModal={() => {
+            setshowBeneficiariesDetails(false);
+            setShowBeneficiariesListing(true);
+          }}
+          showNewBeneficiaryModal={() => {
+            setShowBeneficiariesListing(false);
+            setShowNewBeneficiary(true);
+          }}
+          itemId={itemId}
+        />
+      }
       <NewBeneficiary
         showNewBeneficiaryModal={showNewBeneficiary}
-        hideNewBeneficiaryModal={handleCloseNewBeneficiary}
-        backNewBeneficiaryModal={handleBackNewBeneficiary}
-      ></NewBeneficiary>
+        hideNewBeneficiaryModal={() => setShowNewBeneficiary(false)}
+        backNewBeneficiaryModal={() => {
+          setShowNewBeneficiary(false);
+          setShowBeneficiariesListing(true);
+        }}
+      />
     </div>
   );
 }
