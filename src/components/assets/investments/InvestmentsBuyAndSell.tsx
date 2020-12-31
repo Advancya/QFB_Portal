@@ -61,7 +61,7 @@ function InvestmentsBuyAndSell(
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [currentContext.selectedCIF]);
+  }, [props.investmentNumber]);
 
   return (
     <Modal
@@ -87,13 +87,8 @@ function InvestmentsBuyAndSell(
                 <i className="fa fa-chevron-left"></i>
               </a>
             </div>
-            <div className="col-4 col-sm-3">
-              <h5>Investment Buy and Sell.</h5>
-              <h4>1223245672802900</h4>
-            </div>
-            <div className="col-4 col-sm-3">
-              <h5>Current Balance</h5>
-              <h4>3,150,000.00 QAR</h4>
+            <div className="ib-text">
+              <h4>{local_Strings.BuyAndSellTransactionsText}</h4>
             </div>
           </div>
         </div>
@@ -114,7 +109,10 @@ function InvestmentsBuyAndSell(
               local_Strings.BuyAndSellTransactions_Status_Sell,
             ]}
             clearFilter={() => {
-              setFilteredData(data);
+              const _data = data.filter(
+                (d) => new Date(d.bookingDate) > moment().add(-3, "months").toDate()
+              )
+              setFilteredData(_data);
             }}
 
             applyFilter={(filters: ICommonFilter) => {
@@ -126,8 +124,13 @@ function InvestmentsBuyAndSell(
               setFilteredData(_filteredData);
             }} />
         }
-
-        <TransactionListing transactions={filteredData} showBalanceField={false} />
+        <div className="col-12 col-sm-12">
+          <h5>{local_Strings.Investment + ": " + props.investmentNumber + " " +
+            local_Strings.BuyAndSellText + " (" + currentContext.userSettings.currency + ")"}
+          </h5>
+        </div>
+        <TransactionListing transactions={filteredData} showBalanceField={false}
+          descriptionLabel={local_Strings.RequestTypeLabel} />
 
         <LoadingOverlay
           active={isLoading}

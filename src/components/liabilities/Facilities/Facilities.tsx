@@ -34,7 +34,7 @@ function Facilities() {
           <a href="#" className="ib-text" onClick={() => setShowFacilitiesListing(true)}>
             <h4>{local_Strings.PortfolioLiabilitiesOption1}</h4>
             <h5>
-              {(userPortfolio.totalLoans || "0") +
+              {(userPortfolio.totalLoans || 0)}{
                 " " +
                 currentContext.userSettings.currency}
             </h5>
@@ -86,10 +86,11 @@ function Facilities() {
           <FacilitiesHistoricalPayment
             showFacilitiesHistoricalPaymentModal={showFacilitiesHistoricalPayment}
             hideFacilitiesHistoricalPaymentModal={() =>
-              setShowFacilitiesOutstandingPayment(false)}
-            backFacilitiesHistoricalPaymentModal={() =>
-              setShowFacilitiesHistoricalPayment(false)
-            }
+              setShowFacilitiesHistoricalPayment(false)}
+            backFacilitiesHistoricalPaymentModal={() => {
+              setShowFacilitiesHistoricalPayment(false);
+              setshowFacilitiesDetails(true);
+            }}
             facilityNumber={facilityNumber}
           />
         </React.Fragment>}

@@ -57,7 +57,7 @@ function CashDetails(props: iCashDetails) {
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [currentContext.selectedCIF]);
+  }, [props.params.accountNumber]);
 
   return (
     <Modal
@@ -107,7 +107,10 @@ function CashDetails(props: iCashDetails) {
               local_Strings.CashDetails_Filter_Debit, local_Strings.CashDetails_Filter_Credit
             ]}
             clearFilter={() => {
-              setFilteredData(data);
+              const _data = data.filter(
+                (d) => new Date(d.bookingDate) > moment().add(-3, "months").toDate()
+              )
+              setFilteredData(_data);
             }}
             applyFilter={(filters: ICommonFilter) => {
               console.log(filters);

@@ -1,5 +1,7 @@
 import moment from "moment";
-import { ICommonFilter, IRequestFilter, ITransactionDetail, IRequestDetail } from "./publicInterfaces"
+import { ICommonFilter, IRequestFilter, ITransactionDetail, IRequestDetail } from "./publicInterfaces";
+import { localStrings as local_Strings } from '../translations/localStrings';
+
 export interface ITransactionFilter {
   exposeFilter: boolean,
   DateOption: string,
@@ -27,7 +29,6 @@ export interface ITransaction {
   trxDescirption: string;
   paymentDetails?: string;
 }
-
 
 export interface iRmRequests {
   id: string;
@@ -196,14 +197,15 @@ export const filterTransactions = (
         console.log(o.label.toLowerCase());
 
         filteredTransactions = filteredTransactions.filter((t) =>
-          t.transactionType
-            ? String(t.transactionType).toLowerCase() !== o.label.toLowerCase()
+          (t.transactionType || t.transacitonType)
+            ? (String(t.transactionType).toLowerCase() === o.label.toLowerCase() || 
+            String(t.transacitonType).toLowerCase() === o.label.toLowerCase())
             : !!t.transaction_Amount
               ? o.label.toLowerCase() ===
                 ("debit" || "مدين")
                 ? t.transaction_Amount < 0
                 : t.transaction_Amount > 0
-              : String(t.trxDescirption).toLowerCase() !== o.label.toLowerCase()
+              : String(t.trxDescirption).toLowerCase() === o.label.toLowerCase()
         );
       } else {
         console.log("filter not applied on dynamic check boxes")
@@ -591,7 +593,7 @@ export const prepareInvestmentHoldings1stDrill = (
   for (var i = 0; i < 2; i++) {
     let data: any = [];
     chartData.map((item: any) => {
-      i == 0
+      i === 0
         ? data.push({
           y: item.nominalAmount || item.investmentAmount,
           key: item.subAssetId,
@@ -679,9 +681,9 @@ export const prepareInvestmentHoldings2ndDrill = (
       return false;
     }
     // entry.data probably isn't an array; make it one for consistency
-    if (!Array.isArray(entry.amount)) {
-      entry.amount = entry.amount;
-    }
+    // if (!Array.isArray(entry.amount)) {
+    //   entry.amount = entry.amount;
+    // }
     // Remember that we've seen it
     seen[entry.bookingDate] = entry;
 
@@ -750,6 +752,87 @@ export const prepareInvestmentHoldings2ndDrill = (
   return data;
 };
 
+export const prepareTotalNetWorth = (
+  chartData: any,
+  rtl = false
+) => {
+  local_Strings.setLanguage(rtl ? "ar" : "en");
+
+  let sdata = [
+    {
+      name: local_Strings.TotalCash,
+      y: !!chartData.totalCash ? parseFloat(chartData.totalCash) : 0,
+      amount: chartData.totalCash.toLocaleString(),
+      color: "#493026",
+    },
+    {
+      name: local_Strings.TotalInvestments,
+      y: !!chartData.totalInvestment ? parseFloat(chartData.totalInvestment) : 0,
+      amount: chartData.totalInvestment.toLocaleString(),
+      color: "#6C544B",
+    },
+    {
+      name: local_Strings.TotalDeposits,
+      y: !!chartData.totalDeposits ? parseFloat(chartData.totalDeposits) : 0,
+      amount: chartData.totalDeposits.toLocaleString(),
+      color: "#97877F",
+    },
+    {
+      name: local_Strings.TotalLoans,
+      y: !!chartData.totalLoans ? parseFloat(chartData.totalLoans) : 0,
+      amount: chartData.totalLoans.toLocaleString(),
+      color: "#CBC4C1",
+    },
+    {
+      name: local_Strings.BankGurantees,
+      y: !!chartData.totalGuarantees ? parseFloat(chartData.totalGuarantees) : 0,
+      amount: chartData.totalGuarantees.toLocaleString(),
+      color: "#A79A94",
+    }
+  ];
+
+  let series = [
+    {
+      name: "",
+      data: sdata,
+    },
+  ];
+
+  let data = {
+    chart: {
+      type: "pie",
+    },
+    title: {
+      text: "",
+    },
+    tooltip: {
+      enabled: false,
+    },
+    credits: {
+      enabled: false,
+    },
+    legend: {
+      rtl: rtl,
+    },
+    plotOptions: {
+      pie: {
+        allowPointSelect: false,
+        cursor: "pointer",
+        enableMouseTracking: false,
+        dataLabels: {
+          enabled: true,
+          format: `{point.amount:.f}`,
+          useHTML: true,
+        },
+        showInLegend: true,
+      },
+    },
+    series: series,
+  };
+
+  return data;
+};
+
 export const b64toBlob = (b64Data: any, contentType = '', sliceSize = 512) => {
   const byteCharacters = atob(b64Data);
   const byteArrays = [];
@@ -767,4 +850,20 @@ export const b64toBlob = (b64Data: any, contentType = '', sliceSize = 512) => {
   }
 
   return new Blob(byteArrays, { type: contentType });
+}
+
+
+export const ConvertToQfbNumberFormat = (amount: any) => {
+  try {
+    let number = Number(parseInt(!!amount ? amount : "0").toFixed(2)).toLocaleString(
+      "en",
+      {
+        minimumFractionDigits: 0,
+      }
+    );
+
+    return (number === "NaN" || number === "NaN") ? amount : number;
+  } catch (err) {
+    return amount;
+  }
 }

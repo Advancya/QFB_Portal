@@ -36,8 +36,8 @@ interface DetailsProps {
 
 function DocumentForm(props: DetailsProps) {
   const fileInputRef = createRef<any>();
-  const auth = useContext(AuthContext);
-  local_Strings.setLanguage(auth.language);
+  const currentContext = useContext(AuthContext);
+  local_Strings.setLanguage(currentContext.language);
   const [data, setData] = useState<IDocumentDetail>(emptyDocumentData);
   const [fileSize, setFileSize] = useState<number>(0);
   const [isLoading, setLoading] = useState<boolean>(false);
@@ -287,7 +287,7 @@ function DocumentForm(props: DetailsProps) {
                       <label className="file">
                         <input type="file" multiple={false}
                           id="file" aria-label="File browser example"
-                          lang={auth.language}
+                          lang={currentContext.language}
                           className=""
                           accept='application/pdf'
                           ref={fileInputRef}

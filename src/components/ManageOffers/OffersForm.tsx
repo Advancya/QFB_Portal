@@ -38,9 +38,9 @@ interface DetailsProps {
 
 function OffersForm(props: DetailsProps) {
   const fileInputRef = createRef<any>();
-  const auth = useContext(AuthContext);
+  const currentContext = useContext(AuthContext);
   const customerList = useContext(CustomerListContext);
-  local_Strings.setLanguage(auth.language);
+  local_Strings.setLanguage(currentContext.language);
   const [data, setData] = useState<IOfferDetail>(emptyOfferData);
   const [fileSize, setFileSize] = useState<number>(0);
   const [isLoading, setLoading] = useState<boolean>(false);
@@ -354,7 +354,7 @@ function OffersForm(props: DetailsProps) {
                       <label className="file">
                         <input type="file" multiple={false}
                           id="file" aria-label="File browser example"
-                          lang={auth.language}
+                          lang={currentContext.language}
                           className=""
                           accept='application/pdf,.pdf'
                           ref={fileInputRef}

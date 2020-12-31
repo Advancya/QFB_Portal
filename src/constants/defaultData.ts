@@ -12,5 +12,6 @@ export default {
   SpnnerSize: 140,
   Customer: "CUSTOMER",
   Management: "MANAGEMENT",
+  RM: "RM",
   AlertTimeout: 3000,
 };

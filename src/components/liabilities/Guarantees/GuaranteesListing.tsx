@@ -17,7 +17,7 @@ import { PortfolioContext } from "../../../pages/Homepage";
 interface iGuaranteesListing {
   showGuaranteesListingModal: boolean;
   hideGuaranteesListingModal: () => void;
-  showGuaranteesDetailsModal: () => void;
+  showGuaranteesDetailsModal: (facilityNumber: string, balance: number) => void;
 }
 
 function GuaranteesListing(props: iGuaranteesListing) {
@@ -61,7 +61,7 @@ function GuaranteesListing(props: iGuaranteesListing) {
       <a
         href="#"
         className="row align-items-center"
-        onClick={props.showGuaranteesDetailsModal}
+        onClick={() => props.showGuaranteesDetailsModal(item.id, item.principalAmount)}
       >
         <div className="col-2 col-sm-1">
           <span className="curr-icon">{item.currency || currentContext.userSettings.currency}</span>
@@ -72,7 +72,7 @@ function GuaranteesListing(props: iGuaranteesListing) {
         </div>
         <div className="col-8 offset-2 offset-sm-0 col-sm-6">
           <h5>{local_Strings.CashDetailsBalanceLabel}</h5>
-          <h4>{(item.principalAmount || "0") + " " + item.currency}</h4>
+          <h4>{helper.ConvertToQfbNumberFormat(item.principalAmount) + " " + item.currency}</h4>
         </div>
         <div className="col-2 col-sm-1 text-right">
           <i className="fa fa-chevron-right"></i>

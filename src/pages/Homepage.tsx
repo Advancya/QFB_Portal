@@ -10,7 +10,7 @@ import InboxLanding from "../components/Inbox/InboxLanding";
 import InboxDetails from "../components/Inbox/InboxDetails";
 import InboxListing from "../components/Inbox/InboxListing";
 import { useHistory } from "react-router-dom";
-import { AuthContext, User } from "../providers/AuthProvider";
+import { AuthContext } from "../providers/AuthProvider";
 import { localStrings as local_Strings } from "../translations/localStrings";
 import axios from "axios";
 import { GetUserLocalData } from "../Helpers/authHelper";
@@ -19,31 +19,32 @@ import { emptyInboxDetail, IInboxDetail } from "../Helpers/publicInterfaces";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import Constant from "../constants/defaultData";
+import * as helper from "../Helpers/helper";
 
 export interface IUserPortfolio {
   customerCode: string;
   customerName: string;
-  totalAssets: number;
-  totalCash: number;
-  totalDeposits: number;
-  totalInvestment: number;
-  totalLoans: number;
-  networth: number;
-  totalLiabilities: number;
-  totalGuarantees: number;
+  totalAssets: string;
+  totalCash: string;
+  totalDeposits: string;
+  totalInvestment: string;
+  totalLoans: string;
+  networth: string;
+  totalLiabilities: string;
+  totalGuarantees: string;
 }
 
 const intialPortfolioData = {
   customerCode: "",
   customerName: "",
-  totalAssets: 0,
-  totalCash: 0,
-  totalDeposits: 0,
-  totalInvestment: 0,
-  totalLoans: 0,
-  networth: 0,
-  totalLiabilities: 0,
-  totalGuarantees: 0,
+  totalAssets: "",
+  totalCash: "",
+  totalDeposits: "",
+  totalInvestment: "",
+  totalLoans: "",
+  networth: "",
+  totalLiabilities: "",
+  totalGuarantees: "",
 };
 
 export const PortfolioContext = createContext<IUserPortfolio>(
@@ -115,13 +116,26 @@ function HomePage() {
           if (isMounted && responseData && responseData.length > 0) {
 
             if (responseData[0] && responseData[0][0]) {
+              let _userPortfolio = responseData[0][0] as IUserPortfolio;
+              _userPortfolio = {
+                ..._userPortfolio,
+                totalAssets: helper.ConvertToQfbNumberFormat(_userPortfolio.totalAssets),
+                totalCash: helper.ConvertToQfbNumberFormat(_userPortfolio.totalCash),
+                totalDeposits: helper.ConvertToQfbNumberFormat(_userPortfolio.totalDeposits),
+                totalInvestment: helper.ConvertToQfbNumberFormat(_userPortfolio.totalInvestment),
+                totalLoans: helper.ConvertToQfbNumberFormat(_userPortfolio.totalLoans),
+                networth: helper.ConvertToQfbNumberFormat(_userPortfolio.networth),
+                totalLiabilities: helper.ConvertToQfbNumberFormat(_userPortfolio.totalLiabilities),
+                totalGuarantees: ""
+              };
+
               if (responseData[1].length > 0) {
                 setUserPortfolio({
-                  ...responseData[0][0],
-                  totalGuarantees: responseData[1][0].totalGurQAR,
+                  ..._userPortfolio,
+                  totalGuarantees: helper.ConvertToQfbNumberFormat(responseData[1][0].totalGurQAR),
                 });
               } else {
-                setUserPortfolio(responseData[0][0]);
+                setUserPortfolio(_userPortfolio);
               }
             }
 
@@ -134,6 +148,8 @@ function HomePage() {
 
     if (!!currentContext.selectedCIF) {
       initialLoadMethod();
+    } else {
+      //history.push(`/${currentContext.language}`);
     }
 
     return () => {
@@ -158,22 +174,23 @@ function HomePage() {
   return (
     <div>
       <InboxContext.Provider value={{ messages, refresh }}>
-        <AuthCustomHeader />
-        {/* <Breadcrumb pageName={""} /> */}
-        <section id="main-section" className="main-section">
-          <LoadingOverlay
-            active={isLoading}
-            spinner={
-              <PuffLoader
-                size={Constant.SpnnerSize}
-                color={Constant.SpinnerColor}
-              />
-            }
-          />
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-lg-9">
-                <PortfolioContext.Provider value={userPortfolio}>
+        <PortfolioContext.Provider value={userPortfolio}>
+          <AuthCustomHeader />
+          {/* <Breadcrumb pageName={""} /> */}
+          <section id="main-section" className="main-section">
+            <LoadingOverlay
+              active={isLoading}
+              spinner={
+                <PuffLoader
+                  size={Constant.SpnnerSize}
+                  color={Constant.SpinnerColor}
+                />
+              }
+            />
+            <div className="container-fluid">
+              <div className="row">
+                <div className="col-lg-9">
+
                   <div className="main-container">
                     <AssetsLanding />
                     <div className="row">
@@ -181,26 +198,27 @@ function HomePage() {
                       <TotalNetWorth />
                     </div>
                   </div>
-                </PortfolioContext.Provider>
-              </div>
-              <div className="col-lg-3">
-                <div className="sidebar-container">
-                  <InboxLanding showInboxDetailsModal={handleShowInboxDetails} />
-                  <RelationManger />
+
+                </div>
+                <div className="col-lg-3">
+                  <div className="sidebar-container">
+                    <InboxLanding showInboxDetailsModal={handleShowInboxDetails} />
+                    <RelationManger />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <Footer />
-        {message && !!message.adviceDate &&
-          <InboxDetails
-            item={message}
-            showInboxDetailsModal={showInboxDetails}
-            hideInboxDetailsModal={handleCloseInboxDetails}
-            backInboxListingModal={handleBackInboxDetails}
-          />}
+          <Footer />
+          {message && !!message.adviceDate &&
+            <InboxDetails
+              item={message}
+              showInboxDetailsModal={showInboxDetails}
+              hideInboxDetailsModal={handleCloseInboxDetails}
+              backInboxListingModal={handleBackInboxDetails}
+            />}
+        </PortfolioContext.Provider>
       </InboxContext.Provider>
     </div>
   );

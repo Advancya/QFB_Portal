@@ -5,8 +5,8 @@ import { localStrings as local_Strings } from "../translations/localStrings";
 
 function Breadcrumb({ pageName }) {
   const location = useLocation();
-  const auth = useContext(AuthContext);
-  local_Strings.setLanguage(auth.language);
+  const currentContext = useContext(AuthContext);
+  local_Strings.setLanguage(currentContext.language);
 
   return (
     <div id="breadcrumb-section" className="breadcrumb-section">
@@ -17,7 +17,7 @@ function Breadcrumb({ pageName }) {
               <Link to="/">{local_Strings.FooterItem1}</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
-              {location.pathname.replace(`/${auth.language}/`, "")}
+              {location.pathname.replace(`/${currentContext.language}/`, "")}
             </li>
             {!!pageName && (
               <li className="breadcrumb-item active" aria-current="page">

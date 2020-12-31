@@ -42,7 +42,7 @@ function FacilitiesDetails(props: iFacilitiesDetails) {
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, []);
+  }, [props.facilityNumber]);
 
   return (
     <Modal
@@ -66,7 +66,7 @@ function FacilitiesDetails(props: iFacilitiesDetails) {
             </a>
           </div>
           <div className="ib-text">
-            <h4>Facilities</h4>
+            <h4>{local_Strings.LoanDetail}</h4>
           </div>
         </div>
 
@@ -80,20 +80,29 @@ function FacilitiesDetails(props: iFacilitiesDetails) {
       </Modal.Header>
       <Modal.Body>
         <div className="box modal-box">
+          <LoadingOverlay
+            active={isLoading}
+            spinner={
+              <PuffLoader
+                size={Constant.SpnnerSize}
+                color={Constant.SpinnerColor}
+              />
+            }
+          />
           <ul className="box-list" id="investmentModalDetails">
             <li className="pb-3 px-4">
               <div className="row align-items-center">
                 <div className="col-sm-8">
-                  <h3 className="text-capitalize">Facility</h3>
-                  <h3 className="text-sm">300,000,000</h3>
+                  <h3 className="text-capitalize">{local_Strings.LoanNo  + " | " + props.facilityNumber}</h3>
+                  <h3 className="text-sm">{item.OutstandingAmount.value || "0"}</h3>
                 </div>
                 <div className="col-sm-4 text-sm-right">
                   <strong className="status-badge status-badge-lg color-black text-xs">
-                    QAR
+                    {item.Currency.value || ""}
                   </strong>
                   <br />
                   <strong className="status-badge status-badge-lg">
-                    2.2 %
+                    {item.ProfitRate.value || ""}
                   </strong>
                 </div>
               </div>
@@ -101,24 +110,28 @@ function FacilitiesDetails(props: iFacilitiesDetails) {
           </ul>
           <div className="px-4">
             <div className="formGrp">
-              <label>Name</label>
-              <p>Lorem Ipsum Dolor Sit</p>
+              <label>{item.FacilityReference.label}</label>
+              <p>{item.FacilityReference.value || ""}</p>
             </div>
             <div className="formGrp">
-              <label>Location</label>
-              <p>Lorem Ipsum Dolor Sit</p>
+              <label>{item.Currency.label}</label>
+              <p>{item.Currency.value || ""}</p>
             </div>
             <div className="formGrp">
-              <label>Start Date</label>
-              <p>22/11/2020</p>
+              <label>{item.OutstandingAmount.label}</label>
+              <p>{item.OutstandingAmount.value || ""}</p>
             </div>
             <div className="formGrp">
-              <label>Expected Profit Rate</label>
-              <p>100,000</p>
+              <label>{item.StartDate.label}</label>
+              <p>{item.StartDate.value || ""}</p>
             </div>
             <div className="formGrp">
-              <label>Profit Distribution Term</label>
-              <p>100,000</p>
+              <label>{item.MaturityDate.label}</label>
+              <p>{item.MaturityDate.value || ""}</p>
+            </div>
+            <div className="formGrp">
+              <label>{item.ProfitRate.label}</label>
+              <p>{item.ProfitRate.value || ""}</p>
             </div>
           </div>
           <div className="text-right px-4">
@@ -127,7 +140,7 @@ function FacilitiesDetails(props: iFacilitiesDetails) {
               className="text-capitalize btn btn-primary maxSizeBtn mx-1"
               onClick={props.showFacilitiesHistoricalPayment}
             >
-              View Historical Payments
+              {local_Strings.ViewHistoricalPayments}
             </button>
             <a
               id="viewReceivedTransaction"
@@ -135,7 +148,7 @@ function FacilitiesDetails(props: iFacilitiesDetails) {
               className="text-capitalize btn btn-primary maxSizeBtn mx-1"
               onClick={props.showFacilitiesOutstandingPayment}
             >
-              View Outstanding Payments
+              {local_Strings.ViewOutstandingPayments}
             </a>
           </div>
         </div>

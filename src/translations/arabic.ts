@@ -207,11 +207,14 @@ const ar = {
   CashDetails_Filter_Debit: "مدين",
   CashDetails_Filter_Credit: "ائتمان",
   HistoricalPayments_PastDueSettlement: "التسوية المتأخرة",
-  HistoricalPayments_SettlemenOfPayment: "تسوية الدفع",
+  HistoricalPayments_SettlemenOfPayment: "تسوية الدفع",  
+  OutstandingPayments_PastDueSettlement: "Past Due Payment",
+  OutstandingPayments_SettlemenOfPayment: "Payment of Facility",
 
   ReceivedProfitText: "حصل على ربح",
   ViewReceivedProfitTransactionsToDate: "عرض معاملات الأرباح المستلمة",
   BuyAndSellText: "البيع والشراء",
+  BuyAndSellTransactionsText: "عرض عمليات البيع والشراء",
   ViewBuySellTransactions: "عرض عمليات البيع والشراء",
   HistoricalPaymentsText: "المدفوعات التاريخية",
   ViewHistoricalPayments: "عرض المدفوعات التاريخية",
@@ -499,7 +502,7 @@ const ar = {
   MessageFilter_Read: "مقروءة",
   MessageFilter_UnRead: "غير مقروءة",
   MessageFilter_All: "كل الرسائل",
-  
+
   MyBeneficiariesAddNew: "اضافة مستفيد جديد",
   ProductsAndOffersAddNew: "اضافة جديد",
   ProductsAndOffersNameLabel: "Name ",
@@ -568,6 +571,7 @@ const ar = {
   productAndOffersLandingTitle: "المنتجات والعروض",
   productAndOffersLandingInfo: "انقر هنا لمشاهدة أحدث ما لدينا!",
   productAndOffersLandingButton: "شاهد المزيد",
+  productAndOffersListingLabel: "رقم المنتج",
 
   contactUsLandingTitle: "لأية استفسارات اتصل بنا",
   contactUsLandingInfo: "انقر هنا للاتصال بأي استفسار.",
@@ -600,6 +604,9 @@ const ar = {
   landingMore: "عرض المزيد",
   dummyTitle: "العنوان يذهب هنا",
   dummyDesc: "أبجد هوز دولور الجلوس امات، consectetur adipis.",
+  dummyDate: "الأربعاء 22 نوفمبر 2020",
+  dummyContent:
+    "أبجد هوز دولور الجلوس امات، consectetur adipiscing إيليت، سد القيام eiusmod tempor incididunt التحرير labore آخرون غير مؤلمة ماجنا aliqua. أوت ENIM إعلان قطرة veniam، quis nostrud exercitation ullamco رقة العمل احترازيا التحرير أبجد هوز دولور الجلوس امات، consectetur adipiscing إيليت، الحوار الاقتصادي الاستراتيجي تفعل tempor eiusmod incidunt ut labore et dolore magna aliqua. تمرين nostrud ullamco labouris nisi ut ",
 
   otpErrorMessage: "الكود غير صحيح",
   percentageLabel: "Percentage",
@@ -609,10 +616,21 @@ const ar = {
   documentPriority: "Display Priority",
   documentDate: "Document Date",
   documentShortDescription: "Short Description",
-  documentShortDescriptionAr: "Arabic Short Description",  
+  documentShortDescriptionAr: "Arabic Short Description",
   documentDeletedMessage: "Document has been deleted successfully!",
   documentSavedMessage: "Document has been saved successfully!",
   documentListingPriority: "أفضلية",
+  
+  TotalCash: "مجموع المبالغ النقدية",
+  TotalInvestments: "إجمالي الاستثمارات",
+  TotalDeposits: "إجمالي الودائع",
+  TotalLoans: "إجمالي القروض",
+  BankGurantees: "الضمانات البنكية",
+  Networth: "صافي القيمة",
+  TotalAssets: "إجمالي الأصول",
+  TotalLiabilities: "اجمالي المطلوبات",
+  TotalBalances: "إجمالي الأرصدة",
+  NetAverageRate: "معدل صافي المتوسط",
 };
 
 export default ar;

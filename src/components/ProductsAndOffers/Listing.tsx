@@ -19,11 +19,11 @@ import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import Pagination from "../../shared/pagination";
 import NoResult from "../../shared/NoResult";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 
 function ProductsAndOffersListing() {
-  const auth = useContext(AuthContext);
-  local_Strings.setLanguage(auth.language);
+  const currentContext = useContext(AuthContext);
+  local_Strings.setLanguage(currentContext.language);
   const [showClearFilter, setShowClearFilter] = useState(false);
   const [data, setData] = useState<IProductAndOffersDetail[]>([]);
   const [filteredData, setFilteredData] = useState<IProductAndOffersDetail[]>(
@@ -50,7 +50,7 @@ function ProductsAndOffersListing() {
     setLoading(true);
     GetProductsAndOffersAll()
       .then((responseData: IProductAndOffersDetail[]) => {
-        if (responseData) {
+        if (responseData && responseData.length > 0) {
           const _data = responseData.sort((a, b) =>
             moment(b.createdDate).diff(moment(a.createdDate))
           );
@@ -69,22 +69,21 @@ function ProductsAndOffersListing() {
     setLoading(true);
     const x = await DeleteProductsAndOffers(id);
     if (x) {
-      
       Swal.fire({
-        position: 'top-end',
-        icon: 'success',
+        position: "top-end",
+        icon: "success",
         title: local_Strings.ProductsAndOffersDeletedMessage,
         showConfirmButton: false,
-        timer: Constant.AlertTimeout
+        timer: Constant.AlertTimeout,
       });
       refreshList();
     } else {
       Swal.fire({
-        position: 'top-end',
-        icon: 'error',
+        position: "top-end",
+        icon: "error",
         title: local_Strings.GenericErrorMessage,
         showConfirmButton: false,
-        timer: Constant.AlertTimeout
+        timer: Constant.AlertTimeout,
       });
     }
     setLoading(false);
@@ -150,9 +149,7 @@ function ProductsAndOffersListing() {
                     />
                     <div className="input-group-append">
                       <span className="input-group-text" id="inputGroupPrepend">
-                        <div className="demandDateValue searchInputIcon">
-                          <i className="fa fa-search"></i>
-                        </div>
+                        <i className="fa fa-search"></i>
                       </span>
                     </div>
                   </div>
@@ -170,79 +167,80 @@ function ProductsAndOffersListing() {
             /> */}
             <div className="box modal-box py-0 mb-4 scrollabel-modal-box">
               <ul className="box-list" id="dataList">
-                {filteredData &&
-                  filteredData.length > 0 ?
-                  filteredData.map((item, index) => (
-                    <li className="shown" key={index}>
-                      <a
-                        onClick={() => {
-                          Swal.fire({
-                            title: local_Strings.deleteSure,
-                            text: local_Strings.deleteSureMessage,
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonColor: '#6b4f44',
-                            confirmButtonText: local_Strings.OfferDeleteButton,
-                            cancelButtonText: local_Strings.cancelBtn
-                          }).then((result) => {
-                            if (result.isConfirmed) {
-                              deleteTheRecord(item.id);
-                            }
-                          });
-                        }}
-                        style={{ cursor: "pointer", float: "right" }}
-                      >
-                        {local_Strings.ProductsAndOffersDeleteButton}
-                      </a>
-                      <a
-                        onClick={() =>
-                          setFormAttributes({
-                            selectedItem: item,
-                            showForm: true,
-                            showEditable: true,
-                          })
-                        }
-                        style={{ cursor: "pointer", float: "right" }}
-                      >
-                        {local_Strings.BeneficiaryEditButton}
-                      </a>
+                {filteredData && filteredData.length > 0
+                  ? filteredData.map((item, index) => (
+                      <li className="shown" key={index}>
+                        <a
+                          onClick={() => {
+                            Swal.fire({
+                              title: local_Strings.deleteSure,
+                              text: local_Strings.deleteSureMessage,
+                              icon: "warning",
+                              showCancelButton: true,
+                              confirmButtonColor: "#6b4f44",
+                              confirmButtonText:
+                                local_Strings.OfferDeleteButton,
+                              cancelButtonText: local_Strings.cancelBtn,
+                            }).then((result) => {
+                              if (result.isConfirmed) {
+                                deleteTheRecord(item.id);
+                              }
+                            });
+                          }}
+                          style={{ cursor: "pointer", float: "right" }}
+                        >
+                          {local_Strings.ProductsAndOffersDeleteButton}
+                        </a>
+                        <a
+                          onClick={() =>
+                            setFormAttributes({
+                              selectedItem: item,
+                              showForm: true,
+                              showEditable: true,
+                            })
+                          }
+                          style={{ cursor: "pointer", float: "right" }}
+                        >
+                          {local_Strings.BeneficiaryEditButton}
+                        </a>
 
-                      <a
-                        href="#"
-                        className="row align-items-center"
-                        onClick={() =>
-                          setFormAttributes({
-                            selectedItem: item,
-                            showForm: true,
-                            showEditable: false,
-                          })
-                        }
-                      >
-                        <div className="col-12 col-sm-12">
-                          <div className="mb-1 d-flex align-items-center">
-                            <img src={dateIcon} className="img-fluid" />
-                            <span className="mx-1 text-15 color-light-gold">
-                              {item.createdDate
-                                ? moment(item.createdDate).format(
-                                    "dddd DD MM YYYY"
-                                  )
-                                : ""}
-                            </span>
+                        <a
+                          href="#"
+                          className="row align-items-center"
+                          onClick={() =>
+                            setFormAttributes({
+                              selectedItem: item,
+                              showForm: true,
+                              showEditable: false,
+                            })
+                          }
+                        >
+                          <div className="col-12 col-sm-12">
+                            <div className="mb-1 d-flex align-items-center">
+                              <img src={dateIcon} className="img-fluid" />
+                              <span className="mx-1 text-15 color-light-gold">
+                                {item.createdDate
+                                  ? moment(item.createdDate).format(
+                                      "dddd DD MM YYYY"
+                                    )
+                                  : ""}
+                              </span>
+                            </div>
+                            <h6 className="mb-1 text-600">
+                              {currentContext.language === "en" ? item.name : item.nameAr}
+                            </h6>
+                            <div className="text-15">
+                              {local_Strings.NotificationsExpireLabel +
+                                " " +
+                                (item.expiryDate
+                                  ? moment(item.expiryDate).format("DD/MM/YYYY")
+                                  : "")}
+                            </div>
                           </div>
-                          <h6 className="mb-1 text-600">
-                            {auth.language === "en" ? item.name : item.nameAr}
-                          </h6>
-                          <div className="text-15">
-                            {local_Strings.NotificationsExpireLabel +
-                              " " +
-                              (item.expiryDate
-                                ? moment(item.expiryDate).format("DD/MM/YYYY")
-                                : "")}
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                  )) : NoResult(local_Strings.NoDataToShow)}
+                        </a>
+                      </li>
+                    ))
+                  : NoResult(local_Strings.NoDataToShow)}
               </ul>
             </div>
             <ProductsAndOffersForm

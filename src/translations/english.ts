@@ -207,16 +207,19 @@ const en = {
   CashDetails_Filter_Credit: "Credit",
   HistoricalPayments_PastDueSettlement: "Past Due Settlement",
   HistoricalPayments_SettlemenOfPayment: "Payment of Installment",
+  OutstandingPayments_PastDueSettlement: "Past Due Payment",
+  OutstandingPayments_SettlemenOfPayment: "Payment of Facility",
 
   ReceivedProfitText: "Profit Received",
   ViewReceivedProfit: "View Received Profit",
-  ViewReceivedProfitTransactions: "View Received Profit Transactions",
+  ViewReceivedProfitTransactions: "View Received Profit Transactions to date",
   BuyAndSellText: "Buy & Sell",
+  BuyAndSellTransactionsText: "Buy & Sell Transactions",
   ViewBuySellTransactions: "View Buy & Sell Transactions",
   HistoricalPaymentsText: "Historical Payment",
   ViewHistoricalPayments: "View Historical Payment",
   OutstandingPaymentsText: "Outstanding Payment",
-  ViewOutstandingPayments: "View Outstanding",
+  ViewOutstandingPayments: "View Outstanding Payment",
 
   TransactionScreenFilter_None: "--SELECT--",
   TransactionScreenFilter_LastWeek: "Last week",
@@ -359,7 +362,7 @@ const en = {
     "View all portofolio's of your clients here",
 
   ConfirmationDone: "Done",
-  RecievedProfit: "Recieved Profit",
+  RecievedProfit: "Profit Recieved",
 
   SearchText: "Search",
   RMClientsRequestListingTitle: "Clients Request Listing",
@@ -573,6 +576,7 @@ const en = {
   productAndOffersLandingTitle: "PRODUCTS AND OFFERS",
   productAndOffersLandingInfo: "Click here to see our latest!",
   productAndOffersLandingButton: "See More",
+  productAndOffersListingLabel: "Product Number",
 
   contactUsLandingTitle: "For any inquiries contact us",
   contactUsLandingInfo: "Click here to get in touch for any query.",
@@ -605,6 +609,9 @@ const en = {
   landingMore: "View More",
   dummyTitle: "Title Goes Here",
   dummyDesc: "Lorem ipsum dolor sit amet, consectetur adipi.",
+  dummyDate: "Wednesday 22 Nov 2020",
+  dummyContent:
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut",
 
   otpErrorMessage: "Incorrect OTP code",
   percentageLabel: "Percentage",
@@ -618,6 +625,17 @@ const en = {
   documentDeletedMessage: "Document has been deleted successfully!",
   documentSavedMessage: "Document has been saved successfully!",
   documentListingPriority: "Priority",
+  
+  TotalCash: "Total Cash",
+  TotalInvestments: "Total Investments",
+  TotalDeposits: "Total Deposits",
+  TotalLoans: "Total Loans",
+  BankGurantees: "Bank Gurantees",
+  Networth: "Networth",
+  TotalAssets: "Total Assets",
+  TotalLiabilities: "Total Liabilities",
+  TotalBalances: "Total Balances",
+  NetAverageRate: "Net Average Rate",
 };
 
 export default en;

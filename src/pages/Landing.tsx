@@ -15,8 +15,8 @@ import { localStrings as local_Strings } from "../translations/localStrings";
 const initialUserData = { username: "", password: "", otp: "" };
 function Landing() {
   const history = useHistory();
-  const auth = useContext(AuthContext);
-  local_Strings.setLanguage(auth.language);
+  const currentContext = useContext(AuthContext);
+  local_Strings.setLanguage(currentContext.language);
 
   const [
     showproductsAndOffersDetails,
@@ -32,10 +32,10 @@ function Landing() {
   };
   const [loginData, setUserDetail] = useState<User>(initialUserData);
   const [showValidateOTP, setOTPSubmissionRequired] = useState<boolean>(false);
-  auth.language === "en"
+  currentContext.language === "en"
     ? document.getElementsByTagName("html")[0].setAttribute("dir", "ltr")
     : document.getElementsByTagName("html")[0].setAttribute("dir", "rtl");
-  auth.language === "en"
+  currentContext.language === "en"
     ? document.getElementsByTagName("html")[0].setAttribute("lang", "en")
     : document.getElementsByTagName("html")[0].setAttribute("lang", "ar");
 

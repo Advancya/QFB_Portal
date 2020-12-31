@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { useContext, createContext, useEffect, useState } from "react";
 import AuthCustomHeader from "../../components/header/AuthCustomHeader";
 import Footer from "../../components/Footer";
 import ProductsAndOffersListing from "../../components/ProductsAndOffers/Listing";
@@ -9,13 +9,21 @@ import { emptyCustomer, ICustomer } from "../../Helpers/publicInterfaces";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from 'react-loading-overlay';
 import PuffLoader from "react-spinners/PuffLoader";
+import { getUserRole } from "../../services/apiServices";
 import { GetAllCustomerList } from "../../services/cmsService";
+import { AuthContext } from "../../providers/AuthProvider";
+import { localStrings as local_Strings } from "../../translations/localStrings";
+import { useHistory } from "react-router-dom";
+import Swal from 'sweetalert2';
+import axios from "axios";
 
 export const CustomerListContext = createContext<ICustomer[]>(
   [emptyCustomer]
 );
 
 function Landing() {
+  const currentContext = useContext(AuthContext);
+  local_Strings.setLanguage(currentContext.language);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [customerList, setCustomerList] = useState<ICustomer[]>([emptyCustomer]);
   const [showLeftSection, setLeftSection] = useState({
@@ -24,25 +32,61 @@ function Landing() {
     Offers: false,
     Documents: false,
   });
+  const history = useHistory();
 
   useEffect(() => {
     let isMounted = true;
-    setLoading(true);
 
-    GetAllCustomerList()
-      .then((responseData: ICustomer[]) => {
-        if (responseData && responseData.length > 0 && isMounted) {
-          setCustomerList(responseData);
-        }
-      })
-      .catch((e: any) => console.log(e))
-      .finally(() => setLoading(false));
+    const initialLoadMethod = async () => {
+      setLoading(true);
+      const requestOne = await getUserRole(currentContext.selectedCIF);
+      const requestTwo = await GetAllCustomerList();
+      axios
+        .all([requestOne, requestTwo])
+        .then((responseData: any) => {
+
+          if (responseData && responseData.length > 0 && isMounted) {
+
+            const role = responseData[0];
+            if (!(role && role !== undefined && (role.name === Constant.RM || role.name === Constant.Management))) {
+              let timerInterval: any;
+              Swal.fire({
+                title: 'Access Denied!',
+                icon: 'warning',
+                iconColor: "red",
+                html: 'Your are not authorize to accesss this admin section.',
+                timer: Constant.AlertTimeout,
+                timerProgressBar: true,
+                didOpen: () => {
+                  Swal.showLoading();
+                },
+                willClose: () => {
+                  clearInterval(timerInterval);
+                  history.push(`/${currentContext.language}/Home`);
+                }
+              }).then((result) => {
+                if (result.dismiss === Swal.DismissReason.timer) {
+                  history.push(`/${currentContext.language}/Home`);
+                }
+              });
+            }
+
+            setCustomerList(responseData[1]);
+          }
+        })
+        .catch((e: any) => console.log(e))
+        .finally(() => setLoading(false));
+    }
+
+    if (!!currentContext.selectedCIF) {
+      initialLoadMethod();
+    }
 
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
 
-  }, []);
+  }, [currentContext.selectedCIF]);
 
   return (
     <div>

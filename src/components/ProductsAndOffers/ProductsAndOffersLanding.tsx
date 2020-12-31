@@ -4,7 +4,10 @@ import ProductsAndOffersDetails from "./ProductsAndOffersDetails";
 import ProductsAndOffersListing from "./ProductsAndOffersListing";
 import { useHistory } from "react-router-dom";
 import { localStrings as local_Strings } from "../../translations/localStrings";
-
+import {
+  emptyProductAndOffersData,
+  IProductAndOffersDetail,
+} from "../../Helpers/publicInterfaces";
 import { AuthContext } from "../../providers/AuthProvider";
 import { Link } from "react-router-dom";
 
@@ -15,38 +18,18 @@ function ProductsAndOffersLanding(
   productsAndOffersLandingProps: iProductsAndOffersLanding
 ) {
   const history = useHistory();
-  const auth = useContext(AuthContext);
-  local_Strings.setLanguage(auth.language);
-
+  const currentContext = useContext(AuthContext);
+  local_Strings.setLanguage(currentContext.language);
+  const [item, setItemDetail] = useState<IProductAndOffersDetail>(emptyProductAndOffersData);
   const [
     showProductsAndOffersListing,
     setShowProductsAndOffersListing,
   ] = useState(false);
-
-  const handleCloseProductsAndOffersListing = () => {
-    setShowProductsAndOffersListing(false);
-  };
-  const handleShowProductsAndOffersListing = () => {
-    setShowProductsAndOffersListing(true);
-  };
-
   const [
     showProductsAndOffersDetails,
     setshowProductsAndOffersDetails,
   ] = useState(false);
 
-  const handleCloseProductsAndOffersDetails = () =>
-    setshowProductsAndOffersDetails(false);
-  const handleShowProductsAndOffersDetails = () => {
-    handleCloseProductsAndOffersListing();
-    setshowProductsAndOffersDetails(true);
-    //productsAndOffersListingProps.hideProductsAndOffersListingModal;
-  };
-  const handleBackProductsAndOffersDetails = () => {
-    setshowProductsAndOffersDetails(false);
-
-    setShowProductsAndOffersListing(true);
-  };
   return (
     <div className="inner-box box mt-0 mb-3">
       <div className="d-flex py-2">
@@ -58,7 +41,7 @@ function ProductsAndOffersLanding(
           <p>{local_Strings.productAndOffersLandingInfo}</p>
           <a
             href="#"
-            onClick={handleShowProductsAndOffersListing}
+            onClick={() => setShowProductsAndOffersListing(true)}
             className="btn btn-sm btn-primary mt-1"
           >
             {local_Strings.productAndOffersLandingButton}
@@ -67,14 +50,26 @@ function ProductsAndOffersLanding(
       </div>
       <ProductsAndOffersListing
         showProductsAndOffersListingModal={showProductsAndOffersListing}
-        hideProductsAndOffersListingModal={handleCloseProductsAndOffersListing}
-        showProductsAndOffersDetailsModal={handleShowProductsAndOffersDetails}
-      ></ProductsAndOffersListing>
-      <ProductsAndOffersDetails
-        showProductsAndOffersDetailsModal={showProductsAndOffersDetails}
-        hideProductsAndOffersDetailsModal={handleCloseProductsAndOffersDetails}
-        backProductsAndOffersListingModal={handleBackProductsAndOffersDetails}
-      ></ProductsAndOffersDetails>
+        hideProductsAndOffersListingModal={() => {
+          setShowProductsAndOffersListing(false)
+        }}
+        showProductsAndOffersDetailsModal={(_item: IProductAndOffersDetail) => {
+          setShowProductsAndOffersListing(false);
+          setshowProductsAndOffersDetails(true);
+          setItemDetail(_item);
+        }}
+      />
+      {item && item.id > 0 ?
+        <ProductsAndOffersDetails
+          item={item}
+          showProductsAndOffersDetailsModal={showProductsAndOffersDetails}
+          hideProductsAndOffersDetailsModal={() => setshowProductsAndOffersDetails(false)}
+          backProductsAndOffersListingModal={() => {
+            setshowProductsAndOffersDetails(false);
+            setShowProductsAndOffersListing(true);
+          }}
+        />
+        : null}
     </div>
   );
 }

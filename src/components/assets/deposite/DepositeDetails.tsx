@@ -43,7 +43,7 @@ function DepositeDetails(props: iDepositeDetails) {
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, []);
+  }, [props.depositNumber]);
 
   return (
     <Modal
@@ -134,7 +134,7 @@ function DepositeDetails(props: iDepositeDetails) {
               className="text-capitalize btn btn-primary maxSizeBtn mx-1"
               onClick={props.showDepositeRecievedProfit}
             >
-              {local_Strings.ViewReceivedProfit}
+              {local_Strings.ViewReceivedProfitTransactions}
             </a>
           </div>
         </div>

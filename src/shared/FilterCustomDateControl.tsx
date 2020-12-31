@@ -13,8 +13,8 @@ interface IFilterCustomDateControlProps {
 
 const FilterCustomDateControl: React.FC<IFilterCustomDateControlProps> = (props) => {
 
-    const auth = useContext(AuthContext);
-    local_Strings.setLanguage(auth.language);
+    const currentContext = useContext(AuthContext);
+    local_Strings.setLanguage(currentContext.language);
 
     return (
         <div

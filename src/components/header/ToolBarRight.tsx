@@ -7,18 +7,18 @@ import { localStrings as local_Strings } from "../../translations/localStrings";
 
 function ToolBarRight() {
   const history = useHistory();
-  const auth = useContext(AuthContext);
-  local_Strings.setLanguage(auth.language);
+  const currentContext = useContext(AuthContext);
+  local_Strings.setLanguage(currentContext.language);
 
   return (
     <div className="col-md-9">
       <div className="topRight text-right">
         <Link to="/HomePage1"> {local_Strings.topBarRightItem1}</Link>
         <Link to="/HomePage2"> {local_Strings.topBarRightItem2}</Link>
-        <Link to={`/${auth.language}/OfferSubscriptions`}>
+        <Link to={`/${currentContext.language}/OfferSubscriptions`}>
           {local_Strings.topBarRightItem3}
         </Link>
-        <Link to={`/${auth.language}/ContactUs`}>
+        <Link to={`/${currentContext.language}/ContactUs`}>
           {local_Strings.topBarRightItem4}
         </Link>
       </div>

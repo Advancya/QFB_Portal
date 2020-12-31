@@ -48,13 +48,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (userData) {
         setUserSettings(userData);
         const role = await getUserRole(userData.customerId || initialSettingsData.customerId);
-        if (role !== undefined) {
-          setUserRole(role.name);
-          if (role.name === Constant.Customer) {
-            setselectedCIF(userData.customerId);
-          } else {
-            setselectedCIF(initialSettingsData.customerId);
-          }
+        if (role && role !== undefined) {
+          setselectedCIF(userData.customerId);
+          setUserRole(role.name);          
+        } else {
+          setselectedCIF(initialSettingsData.customerId);
         }
       } else {
         setselectedCIF(initialSettingsData.customerId);
