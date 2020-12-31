@@ -770,17 +770,6 @@ const en = {
   documentDeletedMessage: "Document has been deleted successfully!",
   documentSavedMessage: "Document has been saved successfully!",
   documentListingPriority: "Priority",
-  
-  TotalCash: "Total Cash",
-  TotalInvestments: "Total Investments",
-  TotalDeposits: "Total Deposits",
-  TotalLoans: "Total Loans",
-  BankGurantees: "Bank Gurantees",
-  Networth: "Networth",
-  TotalAssets: "Total Assets",
-  TotalLiabilities: "Total Liabilities",
-  TotalBalances: "Total Balances",
-  NetAverageRate: "Net Average Rate",
 };
 
 export default en;

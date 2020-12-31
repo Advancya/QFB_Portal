@@ -1,9 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { localStrings as local_Strings } from "../../translations/localStrings";
-import {
-  IProductAndOffersDetail,
-} from "../../Helpers/publicInterfaces";
+import { IProductAndOffersDetail } from "../../Helpers/publicInterfaces";
 import { AuthContext } from "../../providers/AuthProvider";
 import moment from "moment";
 
@@ -14,9 +12,7 @@ interface iProductsAndOffersDetails {
   item: IProductAndOffersDetail;
 }
 
-function ProductsAndOffersDetails(
-  props: iProductsAndOffersDetails
-) {
+function ProductsAndOffersDetails(props: iProductsAndOffersDetails) {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
 
@@ -35,9 +31,7 @@ function ProductsAndOffersDetails(
           <div className="modal-header-text">
             <a
               href="#"
-              onClick={
-                props.backProductsAndOffersListingModal
-              }
+              onClick={props.backProductsAndOffersListingModal}
               className="backToAccountsList"
             >
               <i className="fa fa-chevron-left"></i>
@@ -52,9 +46,7 @@ function ProductsAndOffersDetails(
         <button
           type="button"
           className="close"
-          onClick={
-            props.hideProductsAndOffersDetailsModal
-          }
+          onClick={props.hideProductsAndOffersDetailsModal}
         >
           <span aria-hidden="true">×</span>
         </button>
@@ -67,22 +59,27 @@ function ProductsAndOffersDetails(
                 <div className="col-md-12 col-sm-12 ">
                   <div className="text-xs color-gray">
                     {props.item.createdDate
-                      ? moment(props.item.createdDate).format(
-                        "dddd DD MM YYYY"
-                      )
+                      ? moment(props.item.createdDate).format("dddd DD MM YYYY")
                       : ""}
                   </div>
                   <h6 className="mb-1 text-600 text-18 ">
-                    {currentContext.language === "en" ? props.item.name : props.item.nameAr}
+                    {currentContext.language === "en"
+                      ? props.item.name
+                      : props.item.nameAr}
                   </h6>
-                  <div className="color-gray"
-                    dangerouslySetInnerHTML={{
-                      __html: currentContext.language === "en" ? props.item.details : props.item.detailsAr
-                    }} />
                 </div>
               </div>
             </li>
           </ul>
+          <div
+            className="color-gray p-3 mb-5"
+            dangerouslySetInnerHTML={{
+              __html:
+                currentContext.language === "en"
+                  ? props.item.details
+                  : props.item.detailsAr,
+            }}
+          />
         </div>
       </Modal.Body>
     </Modal>

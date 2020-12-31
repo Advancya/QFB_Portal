@@ -84,6 +84,7 @@ function RegisterStep2(registerStep2Props: iRegisterStep2) {
               </div>
             </div>
             <div className="text-xs">{local_Strings.registerStep2Label3}</div>
+
             <div className="text-right p-3">
               <button
                 id="applyReqBtn"
