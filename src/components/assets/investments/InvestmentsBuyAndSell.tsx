@@ -109,7 +109,10 @@ function InvestmentsBuyAndSell(
               local_Strings.BuyAndSellTransactions_Status_Sell,
             ]}
             clearFilter={() => {
-              setFilteredData(data);
+              const _data = data.filter(
+                (d) => new Date(d.bookingDate) > moment().add(-3, "months").toDate()
+              )
+              setFilteredData(_data);
             }}
 
             applyFilter={(filters: ICommonFilter) => {
