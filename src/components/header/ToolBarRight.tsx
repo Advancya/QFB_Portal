@@ -5,6 +5,8 @@ import * as helper from "../../Helpers/helper";
 import { AuthContext } from "../../providers/AuthProvider";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import DocumentListing from "../Documents/DocumentListing";
+import SettingsAnchor from "../Settings/SettingsAnchor";
+import SettingsLanding from "../Settings/SettingsLanding";
 
 function ToolBarRight() {
   const history = useHistory();
@@ -17,8 +19,9 @@ function ToolBarRight() {
         <Link to="/HomePage1"> {local_Strings.topBarRightItem1}</Link>
         <DocumentListing />
         <Link to={`/${currentContext.language}/OfferSubscriptions`}>
-          {local_Strings.topBarRightItem3}
+          Offers Subscriptions
         </Link>
+        <SettingsAnchor></SettingsAnchor>
         <Link to={`/${currentContext.language}/ContactUs`}>
           {local_Strings.topBarRightItem4}
         </Link>

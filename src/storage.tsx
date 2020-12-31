@@ -3,7 +3,7 @@ import React from "react";
 import CustomHeader from "./components/header/CustomHeader";
 import Footer from "./components/Footer";
 import Login from "./components/Login";
-import Register from "./components/Register";
+import Register from "./components/Register/RegisterLanding";
 import AppBox from "./components/AppBox";
 import ProductsAndOffers from "./components/ProductsAndOffers/ProductsAndOffersLanding";
 import ContactUsLanding from "./components/ContactUs/ContactUsLanding";
