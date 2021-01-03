@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { IRequestDetail } from "../../Helpers/publicInterfaces";
 import moment from "moment";
-import { localStrings as local_Strings } from '../../translations/localStrings';
+import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
 
 interface iRequestsDetails {
@@ -14,7 +14,6 @@ interface iRequestsDetails {
 }
 
 function RequestsDetails(props: iRequestsDetails) {
-
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
 
@@ -52,21 +51,28 @@ function RequestsDetails(props: iRequestsDetails) {
           <span aria-hidden="true">×</span>
         </button>
       </Modal.Header>
+
       <Modal.Body>
         <div className="box modal-box">
           <ul className="box-list" id="reqList1">
             <li className="pb-3">
               <div className="row align-items-center">
                 <div className="col-sm-8">
-                  <h5 className="mb-2">{moment(props.item.requestCreateDate).format(
-                    "DD/MM/YYYY"
-                  )}</h5>
-                  <h4>{currentContext.language !== "ar" ? props.item.requestSubject : props.item.requestSubjectAR}</h4>
+                  <h5 className="mb-2">
+                    {moment(props.item.requestCreateDate).format("DD/MM/YYYY")}
+                  </h5>
+                  <h4>
+                    {currentContext.language !== "ar"
+                      ? props.item.requestSubject
+                      : props.item.requestSubjectAR}
+                  </h4>
                 </div>
                 <div className="col-sm-4 text-sm-right">
                   {" "}
                   <span className="status-badge ">
-                    {currentContext.language !== "ar" ? props.item.requestStatus : props.item.requestStatusAR}
+                    {currentContext.language !== "ar"
+                      ? props.item.requestStatus
+                      : props.item.requestStatusAR}
                   </span>{" "}
                 </div>
               </div>

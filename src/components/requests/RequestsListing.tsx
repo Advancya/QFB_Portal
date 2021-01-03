@@ -1,24 +1,28 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import requestIcon from "../../images/request-icon-color.svg";
-import FilterDateControl from '../../shared/FilterDateControl';
-import FilterCustomDateControl from '../../shared/FilterCustomDateControl';
-import FilterDropDownControl from '../../shared/FilterDropDownControl';
-import FilterButtonControl from '../../shared/FilterButtonControl';
-import FilterMoreButtonControl from '../../shared/FilterMoreButtonControl';
+import FilterDateControl from "../../shared/FilterDateControl";
+import FilterCustomDateControl from "../../shared/FilterCustomDateControl";
+import FilterDropDownControl from "../../shared/FilterDropDownControl";
+import FilterButtonControl from "../../shared/FilterButtonControl";
+import FilterMoreButtonControl from "../../shared/FilterMoreButtonControl";
 import moment from "moment";
-import { localStrings as local_Strings } from '../../translations/localStrings';
+import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
-import { emptyRequestDetail, IRequestFilter, IRequestDetail } from "../../Helpers/publicInterfaces";
+import {
+  emptyRequestDetail,
+  IRequestFilter,
+  IRequestDetail,
+} from "../../Helpers/publicInterfaces";
 import * as helper from "../../Helpers/helper";
 import NoResult from "../../shared/NoResult";
 import {
   GetAllRequestTypes,
   GetRequestsByCIF,
-  SendOTP
+  SendOTP,
 } from "../../services/cmsService";
 import Constant from "../../constants/defaultData";
-import LoadingOverlay from 'react-loading-overlay';
+import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import axios from "axios";
 
@@ -36,14 +40,15 @@ interface iRequestsListing {
 }
 
 function RequestsListing(props: iRequestsListing) {
-
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
   const [isLoading, setLoading] = useState(false);
   const rowLimit: number = Constant.RecordPerPage;
   const [offset, setOffset] = useState<number>(rowLimit);
   const [data, setData] = useState<IRequestDetail[]>([emptyRequestDetail]);
-  const [filteredData, setFilteredData] = useState<IRequestDetail[]>([emptyRequestDetail]);
+  const [filteredData, setFilteredData] = useState<IRequestDetail[]>([
+    emptyRequestDetail,
+  ]);
   const [filters, setFilter] = useState<IRequestFilter>({
     filterApplied: false,
     DateOption: "0",
@@ -84,7 +89,7 @@ function RequestsListing(props: iRequestsListing) {
         })
         .catch((e: any) => console.log(e))
         .finally(() => setLoading(false));
-    }
+    };
 
     if (!!currentContext.selectedCIF) {
       initialLoadMethod();
@@ -94,7 +99,6 @@ function RequestsListing(props: iRequestsListing) {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
   }, [currentContext.selectedCIF]);
-
 
   const renderItem = (item: IRequestDetail, index: number) => (
     <li className="shown" key={index}>
@@ -106,11 +110,19 @@ function RequestsListing(props: iRequestsListing) {
       >
         <div className="col-sm-8">
           <h5>{moment(item.requestCreateDate).format("DD/MM/YYYY")}</h5>
-          <h4>{currentContext.language !== "ar" ? item.requestSubject : item.requestSubjectAR}</h4>
+          <h4>
+            {currentContext.language !== "ar"
+              ? item.requestSubject
+              : item.requestSubjectAR}
+          </h4>
         </div>
         <div className="col-8 col-sm-3 text-sm-right">
           {" "}
-          <span className="status-badge ">{currentContext.language !== "ar" ? item.requestStatus : item.requestStatusAR}</span>{" "}
+          <span className="status-badge ">
+            {currentContext.language !== "ar"
+              ? item.requestStatus
+              : item.requestStatusAR}
+          </span>{" "}
         </div>
         <div className="col-4 col-sm-1 text-right">
           {" "}
@@ -130,15 +142,20 @@ function RequestsListing(props: iRequestsListing) {
       label: local_Strings.RequestListingFilterStatusOption3,
       value: "In Progress",
     },
-    { label: local_Strings.RequestListingFilterStatusOption4, value: "Cancelled" },
+    {
+      label: local_Strings.RequestListingFilterStatusOption4,
+      value: "Cancelled",
+    },
   ];
 
   const typeFilterOptions = [];
-  requestTypes && requestTypes.length > 0 &&
+  requestTypes &&
+    requestTypes.length > 0 &&
     requestTypes[0].id > 0 &&
     requestTypes.forEach((r: IRequestType) =>
       typeFilterOptions.push({
-        label: currentContext.language === "en" ? r.nameEn || "" : r.nameAr || "",
+        label:
+          currentContext.language === "en" ? r.nameEn || "" : r.nameAr || "",
         value: String(r.id),
       })
     );
@@ -161,15 +178,17 @@ function RequestsListing(props: iRequestsListing) {
             </div>
             <div className="ib-text d-flex align-items-center">
               <h4>{local_Strings.RequestListingTitle}</h4>
-              {currentContext.userRole === Constant.Customer &&
+              {currentContext.userRole === Constant.Customer && (
                 <a
                   className="btnOutlineWhite"
                   href="#"
                   onClick={props.showNewRequestModal}
                   id="newRequestBtn"
                 >
-                  <i className="fa fa-plus-circle"></i>{local_Strings.RequestListingAddButton}
-                </a>}
+                  <i className="fa fa-plus-circle"></i>
+                  {local_Strings.RequestListingAddButton}
+                </a>
+              )}
             </div>
           </div>
           <button
@@ -184,20 +203,32 @@ function RequestsListing(props: iRequestsListing) {
           <form className="filter-box">
             <div className="row headRow align-items-center">
               <div className="col-sm-3">
-                <FilterDateControl value={filters.DateOption}
-                  onChange={(_value: string) => setFilter({ ...filters, DateOption: _value })} />
+                <FilterDateControl
+                  value={filters.DateOption}
+                  onChange={(_value: string) =>
+                    setFilter({ ...filters, DateOption: _value })
+                  }
+                />
               </div>
               <div className="col-sm-3">
-                <FilterDropDownControl label={local_Strings.RequestListingFilterStatus}
-                  options={statusFilterOptions} value={filters.Status || "0"}
+                <FilterDropDownControl
+                  label={local_Strings.RequestListingFilterStatus}
+                  options={statusFilterOptions}
+                  value={filters.Status || "0"}
                   onChange={(_value: string) =>
-                    setFilter({ ...filters, Status: _value })} />
+                    setFilter({ ...filters, Status: _value })
+                  }
+                />
               </div>
               <div className="col-sm-3">
-                <FilterDropDownControl label={local_Strings.RequestListingFilterType}
-                  options={typeFilterOptions} value={filters.Type || "0"}
+                <FilterDropDownControl
+                  label={local_Strings.RequestListingFilterType}
+                  options={typeFilterOptions}
+                  value={filters.Type || "0"}
                   onChange={(_value: string) =>
-                    setFilter({ ...filters, Type: _value })} />
+                    setFilter({ ...filters, Type: _value })
+                  }
+                />
               </div>
               <div className="col-sm-3">
                 <FilterButtonControl
@@ -216,34 +247,47 @@ function RequestsListing(props: iRequestsListing) {
                   applyFilter={() => {
                     setFilter({ ...filters, filterApplied: true });
                     console.log(filters);
-                    const _filteredData = helper.filterRequests(
-                      data,
-                      filters
-                    );
+                    const _filteredData = helper.filterRequests(data, filters);
                     setFilteredData(_filteredData);
                   }}
-                  showClearFilter={filters.filterApplied} />
+                  showClearFilter={filters.filterApplied}
+                />
               </div>
               <FilterCustomDateControl
-                onStartDateChange={(_value: string) => setFilter({ ...filters, StartDate: moment(_value).toDate() })}
-                onEndDateChange={(_value: string) => setFilter({ ...filters, EndDate: moment(_value).toDate() })}
+                onStartDateChange={(_value: string) =>
+                  setFilter({ ...filters, StartDate: moment(_value).toDate() })
+                }
+                onEndDateChange={(_value: string) =>
+                  setFilter({ ...filters, EndDate: moment(_value).toDate() })
+                }
                 StartDate={filters.StartDate}
                 EndDate={filters.EndDate}
-                showCustomDateFilter={filters.DateOption === "4"} />
+                showCustomDateFilter={filters.DateOption === "4"}
+              />
             </div>
           </form>
+
           <div className="box modal-box">
             <ul className="box-list" id="reqList">
               {filteredData &&
-                filteredData.length > 0 &&
-                !!filteredData[0].requestSubject ?
-                filteredData.slice(0, offset).map((item, index) => renderItem(item, index)
-                ) : NoResult(local_Strings.NoDataToShow)}
+              filteredData.length > 0 &&
+              !!filteredData[0].requestSubject
+                ? filteredData
+                    .slice(0, offset)
+                    .map((item, index) => renderItem(item, index))
+                : NoResult(local_Strings.NoDataToShow)}
             </ul>
           </div>
 
-          <FilterMoreButtonControl showMore={data && filteredData && data.length > rowLimit &&
-            offset < filteredData.length} onClickMore={() => setOffset(offset + 5)} />
+          <FilterMoreButtonControl
+            showMore={
+              data &&
+              filteredData &&
+              data.length > rowLimit &&
+              offset < filteredData.length
+            }
+            onClickMore={() => setOffset(offset + 5)}
+          />
           <LoadingOverlay
             active={isLoading}
             spinner={
