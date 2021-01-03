@@ -2,9 +2,8 @@ import React, { useState } from "react";
 
 import depositIcon from "../../../images/deposit-icon.svg";
 import { Button, Modal } from "react-bootstrap";
-import RMListing from "./RMListing";
+import RMRequestListing from "./RMRequestListing";
 import RMDetails from "./RMDetails";
-import NewBeneficiary from "./NewRM";
 interface iRM {
   showRMListingModal?: () => void;
 }
@@ -55,24 +54,19 @@ function RM(rMProps: iRM) {
 
   return (
     <div>
-      <RMListing
-        showRMListingModal={showRMListing}
-        hideRMListingModal={handleCloseRMListing}
+      <RMRequestListing
+        showRMRequestListingModal={showRMListing}
+        hideRMRequestListingModal={handleCloseRMListing}
         showRMDetailsModal={handleShowRMDetails}
-        backRMListingModal={handleBackRMListing}
+        backRMRequestListingModal={handleBackRMListing}
         showNewBeneficiaryModal={handleShowNewBeneficiary}
-      ></RMListing>
+      ></RMRequestListing>
       <RMDetails
         showRMDetailsModal={showRMDetails}
         hideRMDetailsModal={handleCloseRMDetails}
         backRMDetailsgModal={handleBackRMDetails}
         showNewBeneficiaryModal={handleShowNewBeneficiary}
       ></RMDetails>
-      <NewBeneficiary
-        showNewBeneficiaryModal={showNewBeneficiary}
-        hideNewBeneficiaryModal={handleCloseNewBeneficiary}
-        backNewBeneficiaryModal={handleBackNewBeneficiary}
-      ></NewBeneficiary>
     </div>
   );
 }

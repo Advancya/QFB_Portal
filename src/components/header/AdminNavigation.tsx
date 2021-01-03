@@ -10,7 +10,7 @@ import { emptyUserInfo, IUserInfo } from "../../Helpers/publicInterfaces";
 import { GetUserWelcomeData } from "../../services/cmsService";
 import HoldingsLanding from "../HoldingsLanding";
 
-function Navigation() {
+function AdminNavigation() {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
   const [userInfo, setUserInfo] = useState<IUserInfo>(emptyUserInfo);
@@ -47,47 +47,23 @@ function Navigation() {
         </Link>
         &nbsp;
         <a
-          className="cursor-pointer"
+          className="cursor-pointer mx-2"
           href="#"
           title="Click to logout"
           onClick={currentContext.logout}
         >
           <i className="fa fa-sign-out" />
         </a>
+        <Inbox />
+        <Link
+          className="mx-2"
+          to={`/${currentContext.language}/OfferSubscriptions`}
+        >
+          <i className="fa fa-bell unread" />
+        </Link>
       </div>
-
-      <nav className="navbar navbar-expand-md">
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarNavDropdown"
-          aria-controls="navbarNavDropdown"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="fa fa-bars"></span>
-        </button>
-        <div
-          className="collapse navbar-collapse justify-content-end"
-          id="navbarNavDropdown"
-        >
-          <ul className="navbar-nav">
-            <HoldingsLanding />
-            <Transactions></Transactions>
-            <AuthOffersLanding></AuthOffersLanding>
-            <Requests></Requests>
-            <li className="nav-item">
-              <Inbox />
-              <Link to={`/${currentContext.language}/OfferSubscriptions`}>
-                <i className="fa fa-bell unread" />
-              </Link>
-            </li>
-          </ul>
-        </div>
-      </nav>
     </div>
   );
 }
 
-export default Navigation;
+export default AdminNavigation;

@@ -416,6 +416,8 @@ const ar = {
   ExitediveHoldingTab: "الأصول المنتهية",
 
   RMLandingBankPositionsLabel: "طلبات العملاء",
+  RMLandingClientRequestDetailsLabel: "تفاصيل طلب العملاء ",
+
   RMLandingClientsPortofoliosLabel: "محفظة العملاء",
   RMLandingBankPositionsAnchorText: "عرض جميع الطلبات لاتخاذ إجراءات بشأنها",
   RMLandingClientsPortofoliosAnchorText: "عرض جميع بورتوفوليو لعملائك هنا",

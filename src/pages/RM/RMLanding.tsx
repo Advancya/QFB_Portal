@@ -17,12 +17,23 @@ import { useHistory } from "react-router-dom";
 import Swal from "sweetalert2";
 import axios from "axios";
 import RMRequestsLanding from "../../components/RM/RMRequestsLanding";
+import Breadcrumb from "../../components/Breadcrumb";
+import RMPortfolioListing from "../../components/RM/RMPortfolioListing";
+import RMPortfolioLanding from "../../components/RM/RMPortfolioLanding";
+import AdminCustomHeader from "../../components/header/AdminCustomHeader";
 
 export const CustomerListContext = createContext<ICustomer[]>([emptyCustomer]);
 
 function RMLanding() {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
+  currentContext.language === "en"
+    ? document.getElementsByTagName("html")[0].setAttribute("dir", "ltr")
+    : document.getElementsByTagName("html")[0].setAttribute("dir", "rtl");
+  currentContext.language === "en"
+    ? document.getElementsByTagName("html")[0].setAttribute("lang", "en")
+    : document.getElementsByTagName("html")[0].setAttribute("lang", "ar");
+
   const [isLoading, setLoading] = useState<boolean>(false);
   const [customerList, setCustomerList] = useState<ICustomer[]>([
     emptyCustomer,
@@ -88,7 +99,10 @@ function RMLanding() {
 
   return (
     <div>
-      <AuthCustomHeader />
+      <AdminCustomHeader />
+      <div className="my-2">
+        <Breadcrumb pageName={""} />
+      </div>
       <div>
         <div id="main-section" className="main-section pt-4">
           <div className="container-fluid">
@@ -106,77 +120,16 @@ function RMLanding() {
                 <RMRequestsLanding></RMRequestsLanding>
               </div>
               <div className="col-lg-6 col-container flex-column loginSideBoxBoxes">
-                <div className="box pb-0 min-h-16">
-                  <div className="box-header">
-                    <h3>Admin Sections</h3>
-                  </div>
-                  <ul className="box-list" id="dataList">
-                    <li className="shown">
-                      <a
-                        href="#"
-                        className="row align-items-center"
-                        onClick={() =>
-                          setLeftSection({
-                            ProductsAndOffers: true,
-                            Notifications: false,
-                            Offers: false,
-                            Documents: false,
-                          })
-                        }
-                      >
-                        <h6 className="mb-1">Manage Products And Offers</h6>
-                      </a>
-                    </li>
-                    <li className="shown">
-                      <a
-                        href="#"
-                        className="row align-items-center"
-                        onClick={() =>
-                          setLeftSection({
-                            ProductsAndOffers: false,
-                            Notifications: true,
-                            Offers: false,
-                            Documents: false,
-                          })
-                        }
-                      >
-                        <h6 className="mb-1">Manage Notifications</h6>
-                      </a>
-                    </li>
-                    <li className="shown">
-                      <a
-                        href="#"
-                        className="row align-items-center"
-                        onClick={() =>
-                          setLeftSection({
-                            ProductsAndOffers: false,
-                            Notifications: false,
-                            Offers: true,
-                            Documents: false,
-                          })
-                        }
-                      >
-                        <h6 className="mb-1">Manage Offers</h6>
-                      </a>
-                    </li>
-                    <li className="shown">
-                      <a
-                        href="#"
-                        className="row align-items-center"
-                        onClick={() =>
-                          setLeftSection({
-                            ProductsAndOffers: false,
-                            Notifications: false,
-                            Offers: false,
-                            Documents: true,
-                          })
-                        }
-                      >
-                        <h6 className="mb-1">Manage Documents</h6>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
+                <LoadingOverlay
+                  active={isLoading}
+                  spinner={
+                    <PuffLoader
+                      size={Constant.SpnnerSize}
+                      color={Constant.SpinnerColor}
+                    />
+                  }
+                />
+                <RMPortfolioLanding></RMPortfolioLanding>
               </div>
             </div>
           </div>

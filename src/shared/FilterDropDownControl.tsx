@@ -1,40 +1,44 @@
-import React, { useContext } from 'react';
-import { localStrings as local_Strings } from '../translations/localStrings';
+import React, { useContext } from "react";
+import { localStrings as local_Strings } from "../translations/localStrings";
 import { AuthContext } from "../providers/AuthProvider";
 
-
 export interface IKeyValuePair {
-    label: string;
-    value: string;
+  label: string;
+  value: string;
 }
 
 interface IFilterDropDownControlProps {
-    label: string;
-    onChange: any;
-    options: IKeyValuePair[];
-    value: string;
+  label: string;
+  onChange: any;
+  options: IKeyValuePair[];
+  value: string;
 }
 
-const FilterDropDownControl: React.FC<IFilterDropDownControlProps> = (props) => {
+const FilterDropDownControl: React.FC<IFilterDropDownControlProps> = (
+  props
+) => {
+  const currentContext = useContext(AuthContext);
+  local_Strings.setLanguage(currentContext.language);
 
-    const currentContext = useContext(AuthContext);
-    local_Strings.setLanguage(currentContext.language);
-
-    return (
-        <React.Fragment>
-            <label>{props.label}</label>
-            <select
-                className="form-control w-50"
-                value={props.value || "0"}
-                onChange={(e) => props.onChange(e.target.value)}
-            >
-                <option value="0">{local_Strings.SelectItem}</option>
-                {props.options && props.options.length > 0 &&
-                    props.options.map((o, i) => <option key={i} value={o.value}>{o.label}</option>)
-                }
-            </select>
-        </React.Fragment>
-    );
-}
+  return (
+    <React.Fragment>
+      <label>{props.label}</label>
+      <select
+        className="form-control"
+        value={props.value || "0"}
+        onChange={(e) => props.onChange(e.target.value)}
+      >
+        <option value="0">{local_Strings.SelectItem}</option>
+        {props.options &&
+          props.options.length > 0 &&
+          props.options.map((o, i) => (
+            <option key={i} value={o.value}>
+              {o.label}
+            </option>
+          ))}
+      </select>
+    </React.Fragment>
+  );
+};
 
 export default FilterDropDownControl;

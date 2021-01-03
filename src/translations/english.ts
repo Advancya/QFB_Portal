@@ -418,6 +418,8 @@ const en = {
   ExitediveHoldingTab: "Closed Holdings",
 
   RMLandingBankPositionsLabel: "Clients Request",
+  RMLandingClientRequestDetailsLabel: "Clients Request Details",
+
   RMLandingClientsPortofoliosLabel: "Clients Portfolio ",
   RMLandingBankPositionsAnchorText: "View all requests to take action on them",
   RMLandingClientsPortofoliosAnchorText:
