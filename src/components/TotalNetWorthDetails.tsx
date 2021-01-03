@@ -5,12 +5,13 @@ import { localStrings as local_Strings } from "../translations/localStrings";
 import { AuthContext } from "../providers/AuthProvider";
 import Chart from "../images/Chart.png";
 import networthIcon from "../images/net-worth-icon.svg";
-
 import Constant from "../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
-
 import { PortfolioContext } from "../pages/Homepage";
+import PieChart from "highcharts-react-official";
+import Highcharts from "highcharts/highstock";
+import * as helper from "../Helpers/helper";
 
 interface iTotalNetWorthDetails {
   showTotalNetWorthDetailsModal: boolean;
@@ -18,19 +19,23 @@ interface iTotalNetWorthDetails {
 }
 
 function TotalNetWorthDetails(
-  totalNetWorthDetailsProps: iTotalNetWorthDetails
+  props: iTotalNetWorthDetails
 ) {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
   const userPortfolio = useContext(PortfolioContext);
   const [isLoading, setLoading] = useState(false);
-  const [showTotalNetWorthDetailsModal, showHoldings] = useState(false);
+
+  const chart_data = helper.prepareTotalNetWorth(
+    userPortfolio,
+    currentContext.language === "ar" ? true : false
+  );
 
   return (
     <React.Fragment>
       <Modal
-        show={totalNetWorthDetailsProps.showTotalNetWorthDetailsModal}
-        onHide={totalNetWorthDetailsProps.hideTotalNetWorthDetailsModal}
+        show={props.showTotalNetWorthDetailsModal}
+        onHide={props.hideTotalNetWorthDetailsModal}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
@@ -49,7 +54,7 @@ function TotalNetWorthDetails(
           <button
             type="button"
             className="close"
-            onClick={totalNetWorthDetailsProps.hideTotalNetWorthDetailsModal}
+            onClick={props.hideTotalNetWorthDetailsModal}
           >
             <span aria-hidden="true">×</span>
           </button>
@@ -67,7 +72,7 @@ function TotalNetWorthDetails(
                       <div className="ib-text">
                         <h4>{local_Strings.PortfolioTotalNetWorth}</h4>
                         <h5>
-                          {"15,450,000.00 " +
+                          {userPortfolio.networth + " " +
                             currentContext.userSettings.currency}
                         </h5>
                       </div>
@@ -77,7 +82,7 @@ function TotalNetWorthDetails(
               </div>
             </div>
             <div className="mx-auto my-4 text-center">
-              <img src={Chart} className="img-fluid " />
+              <PieChart highcharts={Highcharts} options={chart_data} />
             </div>
             <LoadingOverlay
               active={isLoading}

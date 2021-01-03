@@ -1,25 +1,49 @@
-import React, { useContext, useState } from "react";
-import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
-import dateIcon from "../../images/calendar-inactive.png";
+import React, { useContext, useEffect, useState } from "react";
+import { Modal } from "react-bootstrap";
 import { localStrings as local_Strings } from "../../translations/localStrings";
-import { useHistory } from "react-router-dom";
-
 import { AuthContext } from "../../providers/AuthProvider";
+import { initialSettingsData, IUserSettings, GetUserLocalData, SaveUserDataLocally } from "../../Helpers/authHelper";
+import {
+  ChangeDefaultLanguage
+} from "../../services/cmsService";
+import Constant from "../../constants/defaultData";
+import LoadingOverlay from "react-loading-overlay";
+import PuffLoader from "react-spinners/PuffLoader";
+import Swal from 'sweetalert2';
 
 interface iChangeLanguage {
   showChangeLanguageModal: boolean;
   hideChangeLanguageModal: () => void;
   backSettingsLandingModal: () => void;
 }
-function ChangeLanguage(changeLanguageProps: iChangeLanguage) {
-  const history = useHistory();
-  const auth = useContext(AuthContext);
-  local_Strings.setLanguage(auth.language);
+function ChangeLanguage(props: iChangeLanguage) {
+  const currentContext = useContext(AuthContext);
+  local_Strings.setLanguage(currentContext.language);
+  const [userSettings, setUserSettings] = useState<IUserSettings>(initialSettingsData);
+  const [isLoading, setLoading] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    setLoading(true);
+
+    GetUserLocalData()
+      .then((settings: any) => {
+        if (isMounted && settings && settings.length > 0) {
+          setUserSettings(JSON.parse(settings));
+        }
+      })
+      .catch((e: any) => console.log(e))
+      .finally(() => setLoading(false));
+
+    return () => {
+      isMounted = false;
+    }; // use effect cleanup to set flag false, if unmounted
+  }, [currentContext.selectedCIF]);
 
   return (
     <Modal
-      show={changeLanguageProps.showChangeLanguageModal}
-      onHide={changeLanguageProps.hideChangeLanguageModal}
+      show={props.showChangeLanguageModal}
+      onHide={props.hideChangeLanguageModal}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
@@ -31,7 +55,7 @@ function ChangeLanguage(changeLanguageProps: iChangeLanguage) {
           <div className="modal-header-text">
             <a
               href="#"
-              onClick={changeLanguageProps.backSettingsLandingModal}
+              onClick={props.backSettingsLandingModal}
               className="backToAccountsList"
             >
               <i className="fa fa-chevron-left"></i>
@@ -45,13 +69,22 @@ function ChangeLanguage(changeLanguageProps: iChangeLanguage) {
         <button
           type="button"
           className="close"
-          onClick={changeLanguageProps.hideChangeLanguageModal}
+          onClick={props.hideChangeLanguageModal}
         >
           <span aria-hidden="true">×</span>
         </button>
       </Modal.Header>
       <Modal.Body>
         <div className="box modal-box p-4  scrollabel-modal-box ">
+          <LoadingOverlay
+            active={isLoading}
+            spinner={
+              <PuffLoader
+                size={Constant.SpnnerSize}
+                color={Constant.SpinnerColor}
+              />
+            }
+          />
           <div className="form-group">
             <div className="mb-2 text-18">
               {local_Strings.ChangeLanguageLabel}
@@ -62,6 +95,10 @@ function ChangeLanguage(changeLanguageProps: iChangeLanguage) {
                 id="customRadio1"
                 name="customRadio"
                 className="custom-control-input"
+                value={userSettings.language}
+                onChange={(e) =>
+                  setUserSettings({ ...userSettings, language: e.target.value })
+                }
               />
               <label
                 className="custom-control-label color-black"
@@ -76,6 +113,10 @@ function ChangeLanguage(changeLanguageProps: iChangeLanguage) {
                 id="customRadio2"
                 name="customRadio"
                 className="custom-control-input"
+                value={userSettings.language}
+                onChange={(e) =>
+                  setUserSettings({ ...userSettings, language: e.target.value })
+                }
               />
               <label
                 className="custom-control-label color-black"
@@ -86,10 +127,32 @@ function ChangeLanguage(changeLanguageProps: iChangeLanguage) {
             </div>
           </div>
           <div className="text-right p-3 mt-5">
-            <button id="applyReqBtn" className="btn btn-primary mx-2">
+            <button id="applyReqBtn" className="btn btn-primary mx-2"
+              onClick={() => {
+                setLoading(true);
+                ChangeDefaultLanguage(currentContext.selectedCIF, userSettings.language)
+                  .then((response) => {
+                    if (response) {
+                      SaveUserDataLocally(userSettings);
+                      Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: local_Strings.ConfirmationTitle,
+                        html: local_Strings.ConfirmationDesc,
+                        showConfirmButton: false,
+                        timer: Constant.AlertTimeout
+                      });
+                    } else {
+                      Swal.fire('Oops...', local_Strings.GenericErrorMessage, 'error');
+                    }
+                  })
+                  .catch((e: any) => console.log(e))
+                  .finally(() => setLoading(false));
+              }}>
               {local_Strings.SettingSaveButton}
             </button>
-            <button id="applyReqBtn" className="btn btn-primary">
+            <button id="applyReqBtn" className="btn btn-primary"
+               onClick={props.backSettingsLandingModal}>
               {local_Strings.SettingsCancelButton}
             </button>
           </div>

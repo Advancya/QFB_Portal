@@ -1,10 +1,9 @@
 
-import { AuthContext } from "./../providers/AuthProvider";
-import React from "react";
 import defaultData from "../constants/defaultData";
-import { getUserProfile } from "../services/apiServices";
 
 export interface IUserSettings { customerId: string; language: string; currency: string; otp: string };
+export const initialSettingsData = { customerId: "", language: "en", currency: "QAR", otp: "SMS" };
+
 async function SaveUserDataLocally(values: IUserSettings) {
 
   localStorage.setItem(defaultData.LoginDetailsStorageKey, JSON.stringify(values));

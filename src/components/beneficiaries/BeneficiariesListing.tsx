@@ -36,20 +36,26 @@ function BeneficiariesListing(
   useEffect(() => {
     let isMounted = true;
 
-    setLoading(true);
-    GetBeneficiaryByCIF(currentContext.selectedCIF)
-      .then((responseData: IBeneficiaryDetail[]) => {
-        if (isMounted && responseData && responseData.length > 0) {
-          setData(responseData);
-          if (responseData.length < rowLimit) {
-            setOffset(responseData.length);
+    const initialLoadMethod = async () => {
+      setLoading(true);
+      GetBeneficiaryByCIF(currentContext.selectedCIF)
+        .then((responseData: IBeneficiaryDetail[]) => {
+          if (isMounted && responseData && responseData.length > 0) {
+            setData(responseData);
+            if (responseData.length < rowLimit) {
+              setOffset(responseData.length);
+            }
+          } else {
+            setData([]);
           }
-        } else {
-          setData([]);
-        }
-      })
-      .catch((e: any) => console.log(e))
-      .finally(() => setLoading(false));
+        })
+        .catch((e: any) => console.log(e))
+        .finally(() => setLoading(false));
+    }
+
+    if (!!currentContext.selectedCIF) {
+      initialLoadMethod();
+    }
 
     return () => {
       isMounted = false;

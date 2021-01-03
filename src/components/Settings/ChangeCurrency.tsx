@@ -1,25 +1,72 @@
-import React, { useContext, useState } from "react";
-import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
-import dateIcon from "../../images/calendar-inactive.png";
+import React, { useContext, useEffect, useState } from "react";
+import { Modal } from "react-bootstrap";
 import { localStrings as local_Strings } from "../../translations/localStrings";
-import { useHistory } from "react-router-dom";
-
 import { AuthContext } from "../../providers/AuthProvider";
+import { initialSettingsData, IUserSettings, GetUserLocalData, SaveUserDataLocally } from "../../Helpers/authHelper";
+import {
+  ChangeDefaultCurrency,
+  GetAllCurrency,
+} from "../../services/cmsService";
+import Constant from "../../constants/defaultData";
+import LoadingOverlay from "react-loading-overlay";
+import PuffLoader from "react-spinners/PuffLoader";
+import Swal from 'sweetalert2';
+
+interface ICurrency {
+  id: number;
+  name: string;
+  nameAr: string;
+}
 
 interface iChangeCurrency {
   showChangeCurrencyModal: boolean;
   hideChangeCurrencyModal: () => void;
   backSettingsLandingModal: () => void;
 }
-function ChangeCurrency(changeCurrencyProps: iChangeCurrency) {
-  const history = useHistory();
-  const auth = useContext(AuthContext);
-  local_Strings.setLanguage(auth.language);
+function ChangeCurrency(props: iChangeCurrency) {
+  const currentContext = useContext(AuthContext);
+  local_Strings.setLanguage(currentContext.language);
+  const [userSettings, setUserSettings] = useState<IUserSettings>(initialSettingsData);
+
+  const [curruncies, setCurruncies] = React.useState<ICurrency[]>([
+    {
+      id: 0,
+      name: "",
+      nameAr: "",
+    },
+  ]);
+  const [isLoading, setLoading] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    setLoading(true);
+
+    GetAllCurrency()
+      .then((responseData: any) => {
+        if (responseData && responseData.length > 0 && isMounted) {
+          setCurruncies(responseData as ICurrency[]);
+        }
+      })
+      .catch((e: any) => console.log(e))
+      .finally(() => setLoading(false));
+
+    GetUserLocalData()
+      .then((settings: any) => {
+        if (isMounted && settings && settings.length > 0) {
+          setUserSettings(JSON.parse(settings));
+        }
+      })
+      .catch((e: any) => console.log(e));
+
+    return () => {
+      isMounted = false;
+    }; // use effect cleanup to set flag false, if unmounted
+  }, [currentContext.selectedCIF]);
 
   return (
     <Modal
-      show={changeCurrencyProps.showChangeCurrencyModal}
-      onHide={changeCurrencyProps.hideChangeCurrencyModal}
+      show={props.showChangeCurrencyModal}
+      onHide={props.hideChangeCurrencyModal}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
@@ -31,7 +78,7 @@ function ChangeCurrency(changeCurrencyProps: iChangeCurrency) {
           <div className="modal-header-text">
             <a
               href="#"
-              onClick={changeCurrencyProps.backSettingsLandingModal}
+              onClick={props.backSettingsLandingModal}
               className="backToAccountsList"
             >
               <i className="fa fa-chevron-left"></i>
@@ -45,79 +92,77 @@ function ChangeCurrency(changeCurrencyProps: iChangeCurrency) {
         <button
           type="button"
           className="close"
-          onClick={changeCurrencyProps.hideChangeCurrencyModal}
+          onClick={props.hideChangeCurrencyModal}
         >
           <span aria-hidden="true">×</span>
         </button>
       </Modal.Header>
       <Modal.Body>
         <div className="box modal-box p-4  scrollabel-modal-box ">
+          <LoadingOverlay
+            active={isLoading}
+            spinner={
+              <PuffLoader
+                size={Constant.SpnnerSize}
+                color={Constant.SpinnerColor}
+              />
+            }
+          />
           <div className="form-group">
             <div className="mb-2 text-18">
               {local_Strings.ChangeCurrencyLabelTitle}
             </div>
-            <div className="custom-control custom-radio mx-2">
-              <input
-                type="radio"
-                id="customRadio1"
-                name="customRadio"
-                className="custom-control-input"
-              />
-              <label
-                className="custom-control-label color-black"
-                htmlFor="customRadio1"
-              >
-                {local_Strings.ChangeCurrencyQAR}
-              </label>
-            </div>
-            <div className="custom-control custom-radio  mx-2">
-              <input
-                type="radio"
-                id="customRadio2"
-                name="customRadio"
-                className="custom-control-input"
-              />
-              <label
-                className="custom-control-label color-black"
-                htmlFor="customRadio2"
-              >
-                {local_Strings.ChangeCurrencyUSD}
-              </label>
-            </div>
-            <div className="custom-control custom-radio  mx-2">
-              <input
-                type="radio"
-                id="customRadio3"
-                name="customRadio"
-                className="custom-control-input"
-              />
-              <label
-                className="custom-control-label color-black"
-                htmlFor="customRadio3"
-              >
-                {local_Strings.ChangeCurrencyGPB}
-              </label>
-            </div>
-            <div className="custom-control custom-radio  mx-2">
-              <input
-                type="radio"
-                id="customRadio4"
-                name="customRadio"
-                className="custom-control-input"
-              />
-              <label
-                className="custom-control-label color-black"
-                htmlFor="customRadio4"
-              >
-                {local_Strings.ChangeCurrencyEUR}
-              </label>
-            </div>
+            {curruncies &&
+              curruncies.length > 0 &&
+              !!curruncies[0].name &&
+              curruncies.map((c, i) => (
+                <div key={i} className="custom-control custom-radio mx-2">
+                  <input
+                    type="radio"
+                    id={"customRadio_" + (i + 1)}
+                    name="customRadio"
+                    className="custom-control-input"
+                    checked={userSettings.currency === (currentContext.language === "en" ? c.name : c.nameAr)}
+                    onChange={(e) => e.target.checked ? setUserSettings({ ...userSettings, currency: (currentContext.language === "en" ? c.name : c.nameAr) }) : {}}
+                  />
+                  <label
+                    className="custom-control-label color-black"
+                    htmlFor={"customRadio_" + (i + 1)}
+                  >
+                    {currentContext.language === "en" ? c.name : c.nameAr}
+                  </label>
+                </div>
+              ))}
           </div>
           <div className="text-right p-3 mt-5">
-            <button id="applyReqBtn" className="btn btn-primary mx-2">
+            <button id="applyReqBtn" className="btn btn-primary mx-2"
+              onClick={() => {
+                setLoading(true);
+                ChangeDefaultCurrency(
+                  currentContext.selectedCIF,
+                  userSettings.currency
+                )
+                  .then((response) => {
+                    if (response) {
+                      SaveUserDataLocally(userSettings);
+                      Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: local_Strings.ConfirmationTitle,
+                        html: local_Strings.ConfirmationDesc,
+                        showConfirmButton: false,
+                        timer: Constant.AlertTimeout
+                      });
+                    } else {
+                      Swal.fire('Oops...', local_Strings.GenericErrorMessage, 'error');
+                    }
+                  })
+                  .catch((e: any) => console.log(e))
+                  .finally(() => setLoading(false));
+              }}>
               {local_Strings.SettingSaveButton}
             </button>
-            <button id="applyReqBtn" className="btn btn-primary">
+            <button id="applyReqBtn" className="btn btn-primary" onClick={props.backSettingsLandingModal}>
               {local_Strings.SettingsCancelButton}
             </button>
           </div>
