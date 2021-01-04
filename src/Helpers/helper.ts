@@ -589,14 +589,14 @@ export const prepareInvestmentHoldings1stDrill = (
           key: item.subAssetId,
           name: item.secDescirption,
           color: "#724B44",
-          drilldown: item.secDescirption
+          drilldown: item.subAssetId
         })
         : data.push({
           y: item.invRecievedProfit,
           key: item.subAssetId,
           name: item.secDescirption,
           color: "#B39758",
-          drilldown: item.secDescirption
+          drilldown: item.subAssetId
         });
     });
 
@@ -610,14 +610,6 @@ export const prepareInvestmentHoldings1stDrill = (
   let data = {
     chart: {
       type: "column",
-      // events: {
-      //   drilldown: function (e: any) {
-      //     this.setTitle({ text: e.point.name });
-      //   },
-      //   drillup: function (e) {
-      //     this.setTitle({ text: title });
-      //   }
-      // }
     },
     title: {
       text: title,

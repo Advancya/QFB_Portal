@@ -772,6 +772,7 @@ const en = {
   documentDeletedMessage: "Document has been deleted successfully!",
   documentSavedMessage: "Document has been saved successfully!",
   documentListingPriority: "Priority",
+  DrillBackButtonText: "Back"
 };
 
 export default en;

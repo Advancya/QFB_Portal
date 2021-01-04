@@ -767,6 +767,7 @@ const ar = {
   documentDeletedMessage: "Document has been deleted successfully!",
   documentSavedMessage: "Document has been saved successfully!",
   documentListingPriority: "أفضلية",
+  DrillBackButtonText: "عودة"
 };
 
 export default ar;

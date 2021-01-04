@@ -141,3 +141,6 @@
 .file input:focus~.file-custom {
   box-shadow: 0 0 0 .075rem #fff, 0 0 0 .2rem #0074d9;
 }
+.highcharts-drillup-button {
+  display: contents;
+}
