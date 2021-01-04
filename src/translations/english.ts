@@ -581,7 +581,7 @@ const en = {
 
   MyBeneficiariesAddNew: "Add Beneficiary",
   landingPageInvaildBiometric: "Biometric Couldn't be verfied",
-
+  selectPeriod: "Select a Period",
   Last6Weeks: "Last 6 Weeks",
   Last6Months: "Last 6 Months",
   Last6Quarters: "Last 6 Quarters",
@@ -609,7 +609,7 @@ const en = {
   BankPositionsTotalAssetSub2: "MM Fund",
   BankPositionsTotalAssetSub3: "Placements",
   BankPositionsTotalAssetSub4: "Past Dues",
-  BankPositionsTotalAssetSub5: "Produts Investments",
+  BankPositionsTotalAssetSub5: "Investments",
   BankPositionsTotalAssetSub6: "Private Bank Loans Balances",
   BankPositionsTotalAssetSub7: "Loans",
 

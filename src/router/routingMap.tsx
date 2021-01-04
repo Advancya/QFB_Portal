@@ -7,6 +7,7 @@ import Admin from "../pages/Admin/Admin";
 import ContactUsListing from "../pages/Admin/ContactUsListing";
 import OfferSubscriptionsListing from "../pages/Admin/OfferSubscriptionsListing";
 import RMLanding from "../pages/RM/RMLanding";
+import ManagmentLanding from "../pages/Managment/ManagmentLanding";
 
 const PageNotFound = () => <div>Page not found</div>;
 
@@ -39,6 +40,9 @@ const RoutingMap = () => {
       </Route>
       <Route path={["/en/RMLanding", "/ar/RMLanding"]}>
         <RMLanding />
+      </Route>
+      <Route path={["/en/Managment", "/ar/Managment"]}>
+        <ManagmentLanding />
       </Route>
       <Route component={PageNotFound} />
     </Switch>

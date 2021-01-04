@@ -1318,12 +1318,26 @@ tr.shown {
 .status-badge {
   display: inline-block;
   padding: 0.2rem 0.75rem;
-  border-radius: 0.5rem;
+  border-radius: 1rem;
   font-size: 0.75rem;
   background: #e2dad7;
   color: #6b4f44;
   text-transform: uppercase;
   min-width: 6rem;
+  text-align: center;
+  /*border: 1px solid #f6f1ee;*/
+  font-weight: 600;
+}
+
+.status-badge-small {
+  display: inline-block;
+  padding: 0.2rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  background: #e2dad7;
+  color: #6b4f44;
+  text-transform: uppercase;
+  min-width: 3rem;
   text-align: center;
   /*border: 1px solid #f6f1ee;*/
   font-weight: 600;
@@ -1418,6 +1432,28 @@ tr.shown {
 [dir=ltr] .download-link i:last-child {
   border-bottom-right-radius: 8px;
   border-top-right-radius: 8px;
+}
+
+/**managment**/
+
+.analysis-accordion .card {
+  border: 0;
+}
+
+.analysis-accordion .card>.card-header {
+  margin-bottom: 0;
+}
+
+[dir="ltr"] .analysis-accordion .card {
+  margin-left: 2rem;
+}
+
+[dir="rtl"] .analysis-accordion .card {
+  margin-right: 2rem;
+}
+
+.analysis-accordion .card-header {
+  background-color: transparent;
 }
 
 /**Admin**/
