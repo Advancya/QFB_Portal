@@ -10,7 +10,10 @@ import { localStrings as local_Strings } from "../../../translations/localString
 function Cash() {
   const currentContext = useContext(AuthContext);
   const userPortfolio = useContext(PortfolioContext);
-  const [params, setDetailScreenParams] = useState<{ accountNumber: string, balance: number }>({ accountNumber: "", balance: 0 });
+  const [params, setDetailScreenParams] = useState<{
+    accountNumber: string;
+    balance: number;
+  }>({ accountNumber: "", balance: 0 });
   const [showCashListing, setShowCashListing] = useState(false);
 
   const handleCloseCashListing = () => {
@@ -56,14 +59,14 @@ function Cash() {
         hideCashListingModal={handleCloseCashListing}
         showCashDetailsModal={handleShowCashDetails}
       />
-      {!!params.accountNumber &&
+      {!!params.accountNumber && (
         <CashDetails
           showCashDetailsModal={showCashDetails}
           hideCashDetailsModal={handleCloseCashDetails}
           backCashListingModal={handleBackCashDetails}
           params={params}
         />
-      }
+      )}
     </div>
   );
 }

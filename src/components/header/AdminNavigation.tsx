@@ -54,9 +54,8 @@ function AdminNavigation() {
         >
           <i className="fa fa-sign-out" />
         </a>
-        <Inbox />
         <Link
-          className="mx-2"
+          className="mx-1"
           to={`/${currentContext.language}/OfferSubscriptions`}
         >
           <i className="fa fa-bell unread" />

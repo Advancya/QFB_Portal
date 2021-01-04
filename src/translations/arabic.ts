@@ -573,6 +573,7 @@ const ar = {
   MessageFilter_All: "كل الرسائل",
   MyBeneficiariesAddNew: "اضافة مستفيد جديد",
   landingPageInvaildBiometric: "فشل التحقق من المعلومات الحيوية",
+  selectPeriod: "حدد فترة",
 
   Last6Weeks: "آخر 6 أسابيع",
   Last6Months: "آخر 6 أشهر",
