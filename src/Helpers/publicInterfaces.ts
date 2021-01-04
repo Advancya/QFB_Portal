@@ -662,3 +662,56 @@ export const emptyBeneficiaryDetail = {
   "isRegister": false
 }
 
+export interface ILiveHoldings_1stDrill_Investment {
+  nominalAmount: number;
+  subAssetId: string;
+  secDescirption: string;
+  invRecievedProfit: number;  
+}
+
+export const initial_1stDrillLiveInvestmentData = {
+  nominalAmount: 0,
+  subAssetId: "",
+  secDescirption: "",
+  invRecievedProfit: 0, 
+};
+
+export interface ILiveHoldings_2ndDrill_Investment {
+  amount: number;
+  bookingDate: string;
+  smSubAssetType: string;
+  saSubAssetTypeDesc: string;
+}
+
+export const initial_2ndDrillLiveInvestmentData = {
+  amount: 0,
+  bookingDate: "",
+  smSubAssetType: "",
+  saSubAssetTypeDesc: "",
+};
+
+export interface IClosedHoldings_1stDrill_Investment {
+  investmentAmount: number;
+  invRecievedProfit: number;
+  subAssetId: string;
+  secDescirption: string;
+}
+
+export const initial_1stDrillClosedInvestmentData = {
+  investmentAmount: 0,
+  invRecievedProfit: 0,
+  subAssetId: "",
+  secDescirption: "",
+};
+
+export interface IClosedHoldings_2ndDrill_Investment {
+  amount: number;
+  bookingDate: string;
+  subAssetTypeDesc: string;
+}
+
+export const initial_2ndDrillClosedInvestmentData = {
+  amount: 0,
+  bookingDate: "",
+  subAssetTypeDesc: "",
+};

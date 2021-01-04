@@ -56,7 +56,7 @@ function ProductsAndOffersListing(
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
 
-  }, []);
+  }, [currentContext.selectedCIF]);
 
 
   const renderItem = (item: IProductAndOffersDetail, index: number) => (

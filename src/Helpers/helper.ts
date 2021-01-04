@@ -48,16 +48,6 @@ export const getLanguage = () => {
   return window.location.pathname.split("/")[1];
 }
 
-interface IChartItem {
-  percentage: number;
-  name: string;
-}
-
-interface IColumn {
-  Amount: number;
-  AmounRecievedProfitt: number;
-}
-
 declare global {
   interface Window {
     ReactNativeWebView: any;
@@ -198,8 +188,8 @@ export const filterTransactions = (
 
         filteredTransactions = filteredTransactions.filter((t) =>
           (t.transactionType || t.transacitonType)
-            ? (String(t.transactionType).toLowerCase() === o.label.toLowerCase() || 
-            String(t.transacitonType).toLowerCase() === o.label.toLowerCase())
+            ? (String(t.transactionType).toLowerCase() === o.label.toLowerCase() ||
+              String(t.transacitonType).toLowerCase() === o.label.toLowerCase())
             : !!t.transaction_Amount
               ? o.label.toLowerCase() ===
                 ("debit" || "مدين")
@@ -382,7 +372,7 @@ export const filterTransactionList = (
       break;
   }
 
-  
+
   if (
     filter.AmountOperator &&
     filter.AmountOperator !== "" &&
@@ -599,17 +589,20 @@ export const prepareInvestmentHoldings1stDrill = (
           key: item.subAssetId,
           name: item.secDescirption,
           color: "#724B44",
+          drilldown: item.secDescirption
         })
         : data.push({
           y: item.invRecievedProfit,
           key: item.subAssetId,
           name: item.secDescirption,
           color: "#B39758",
+          drilldown: item.secDescirption
         });
     });
 
     series.push({
-      // name: data.length > 0 ? data[i].name : '',
+      name: !!title ? title : '',
+      colorByPoint: true,
       data: data,
     });
   }
@@ -617,15 +610,24 @@ export const prepareInvestmentHoldings1stDrill = (
   let data = {
     chart: {
       type: "column",
+      // events: {
+      //   drilldown: function (e: any) {
+      //     this.setTitle({ text: e.point.name });
+      //   },
+      //   drillup: function (e) {
+      //     this.setTitle({ text: title });
+      //   }
+      // }
     },
     title: {
-      text: "Investment",
+      text: title,
     },
     tooltip: {
       enabled: false,
     },
     xAxis: {
-      categories: chartData.map((c: any) => c.secDescirption),
+      type: 'category',
+      //categories: chartData.map((c: any) => c.secDescirption),
     },
     yAxis: {
       title: {
@@ -645,17 +647,13 @@ export const prepareInvestmentHoldings1stDrill = (
           format: "<b>{point.y}</b>",
           useHTML: true,
         },
-        events: {
-          click: function (event: any) {
-            window.ReactNativeWebView.postMessage(
-              JSON.stringify({ name: event.point.name, key: event.point.key })
-            );
-          },
-        },
         showInLegend: false,
       },
     },
     series: series,
+    drilldown: {
+      series: []
+    }
   };
 
   return data;
@@ -694,62 +692,60 @@ export const prepareInvestmentHoldings2ndDrill = (
   let series: any = [];
   let values: any = [];
 
-  chartData.map((item: any) => {
-    values.push({
-      y: Math.round((item.amount + Number.EPSILON) * 100) / 100,
-      color: "#724B44",
-      name: moment(item.bookingDate).format("DD/MM/YYYY"),
-    });
-  });
+  chartData.map((item: any) =>
+    values.push(
+      [moment(item.bookingDate).format("DD/MM/YYYY"),
+      Math.round((item.amount + Number.EPSILON) * 100) / 100]
+    ));
 
-  series.push({
-    colorByPoint: true,
-    data: values,
-  });
+  // series.push({
+  //   colorByPoint: true,
+  //   data: values,
+  // });
 
-  let data = {
-    chart: {
-      type: "column",
-    },
-    title: {
-      text: title,
-    },
-    tooltip: {
-      enabled: false,
-    },
-    xAxis: {
-      type: "category",
-    },
-    yAxis: {
-      title: {
-        text: "",
-      },
-    },
-    credits: {
-      enabled: false,
-    },
-    legend: {
-      rtl: rtl,
-    },
-    plotOptions: {
-      column: {
-        dataLabels: {
-          enabled: true,
-          //inside: true,
-          rotation: 320,
-          allowOverlap: true,
-          verticalAlign: "top",
-          format: "<b>{point.y}</b>",
-          useHTML: true,
-        },
-        //pointPadding: 0.2,
-        showInLegend: false,
-      },
-    },
-    series: series,
-  };
+  // let data = {
+  //   chart: {
+  //     type: "column",
+  //   },
+  //   title: {
+  //     text: title,
+  //   },
+  //   tooltip: {
+  //     enabled: false,
+  //   },
+  //   xAxis: {
+  //     type: "category",
+  //   },
+  //   yAxis: {
+  //     title: {
+  //       text: "",
+  //     },
+  //   },
+  //   credits: {
+  //     enabled: false,
+  //   },
+  //   legend: {
+  //     rtl: rtl,
+  //   },
+  //   plotOptions: {
+  //     column: {
+  //       dataLabels: {
+  //         enabled: true,
+  //         //inside: true,
+  //         rotation: 320,
+  //         allowOverlap: true,
+  //         verticalAlign: "top",
+  //         format: "<b>{point.y}</b>",
+  //         useHTML: true,
+  //       },
+  //       //pointPadding: 0.2,
+  //       showInLegend: false,
+  //     },
+  //   },
+  //   series: series,
+  // };
 
-  return data;
+  return values;
 };
 
 export const prepareTotalNetWorth = (
@@ -813,6 +809,7 @@ export const prepareTotalNetWorth = (
     },
     legend: {
       rtl: rtl,
+      floating: true
     },
     plotOptions: {
       pie: {

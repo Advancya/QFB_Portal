@@ -8,7 +8,7 @@ import { AuthContext } from "../providers/AuthProvider";
 import { GetUserWelcomeData } from "../services/cmsService";
 import { localStrings as local_Strings } from "../translations/localStrings";
 
-interface ItemProps {
+interface IUserInfo {
   accountOfficer?: string;
   customerShortName?: string;
   id?: string;
@@ -19,16 +19,10 @@ interface ItemProps {
   //callmeBackLink: string;
 }
 
-interface CustomCarouselProps { }
-interface RenderItemProps {
-  item: ItemProps;
-  index: number;
-}
-
 function RelationManger() {
   const [index, setIndex] = useState(0);
   const currentContext = useContext(AuthContext);
-  const [carouselItems, setCarouselItems] = useState<ItemProps[]>([]);
+  const [carouselItems, setCarouselItems] = useState<IUserInfo[]>([]);
   const handleSelect = (selectedIndex: any, e: any) => {
     setIndex(selectedIndex);
   };

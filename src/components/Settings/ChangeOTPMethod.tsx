@@ -1,25 +1,49 @@
-import React, { useContext, useState } from "react";
-import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
-import dateIcon from "../../images/calendar-inactive.png";
+import React, { useContext, useEffect, useState } from "react";
+import { Modal } from "react-bootstrap";
 import { localStrings as local_Strings } from "../../translations/localStrings";
-import { useHistory } from "react-router-dom";
-
 import { AuthContext } from "../../providers/AuthProvider";
+import { initialSettingsData, IUserSettings, GetUserLocalData, SaveUserDataLocally } from "../../Helpers/authHelper";
+import {
+  ChangeDefaultOtp
+} from "../../services/cmsService";
+import Constant from "../../constants/defaultData";
+import LoadingOverlay from "react-loading-overlay";
+import PuffLoader from "react-spinners/PuffLoader";
+import Swal from 'sweetalert2';
 
 interface iChangeOTPMethod {
   showChangeOTPMethodModal: boolean;
   hideChangeOTPMethodModal: () => void;
   backSettingsLandingModal: () => void;
 }
-function ChangeOTPMethod(changeOTPMethodProps: iChangeOTPMethod) {
-  const history = useHistory();
-  const auth = useContext(AuthContext);
-  local_Strings.setLanguage(auth.language);
+function ChangeOTPMethod(props: iChangeOTPMethod) {
+  const currentContext = useContext(AuthContext);
+  local_Strings.setLanguage(currentContext.language);
+  const [userSettings, setUserSettings] = useState<IUserSettings>(initialSettingsData);
+  const [isLoading, setLoading] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    setLoading(true);
+
+    GetUserLocalData()
+      .then((settings: any) => {
+        if (isMounted && settings && settings.length > 0) {
+          setUserSettings(JSON.parse(settings));
+        }
+      })
+      .catch((e: any) => console.log(e))
+      .finally(() => setLoading(false));
+
+    return () => {
+      isMounted = false;
+    }; // use effect cleanup to set flag false, if unmounted
+  }, [currentContext.selectedCIF]);
 
   return (
     <Modal
-      show={changeOTPMethodProps.showChangeOTPMethodModal}
-      onHide={changeOTPMethodProps.hideChangeOTPMethodModal}
+      show={props.showChangeOTPMethodModal}
+      onHide={props.hideChangeOTPMethodModal}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
@@ -31,7 +55,7 @@ function ChangeOTPMethod(changeOTPMethodProps: iChangeOTPMethod) {
           <div className="modal-header-text">
             <a
               href="#"
-              onClick={changeOTPMethodProps.backSettingsLandingModal}
+              onClick={props.backSettingsLandingModal}
               className="backToAccountsList"
             >
               <i className="fa fa-chevron-left"></i>
@@ -45,13 +69,22 @@ function ChangeOTPMethod(changeOTPMethodProps: iChangeOTPMethod) {
         <button
           type="button"
           className="close"
-          onClick={changeOTPMethodProps.hideChangeOTPMethodModal}
+          onClick={props.hideChangeOTPMethodModal}
         >
           <span aria-hidden="true">×</span>
         </button>
       </Modal.Header>
       <Modal.Body>
         <div className="box modal-box p-4  scrollabel-modal-box ">
+        <LoadingOverlay
+            active={isLoading}
+            spinner={
+              <PuffLoader
+                size={Constant.SpnnerSize}
+                color={Constant.SpinnerColor}
+              />
+            }
+          />
           <div className="form-group">
             <div className="mb-2 text-18">{local_Strings.ChangeOTPLabel}</div>
             <div className="custom-control custom-radio mx-2">
@@ -60,6 +93,10 @@ function ChangeOTPMethod(changeOTPMethodProps: iChangeOTPMethod) {
                 id="customRadio1"
                 name="customRadio"
                 className="custom-control-input"
+                value={userSettings.otp}
+                onChange={(e) =>
+                  setUserSettings({ ...userSettings, otp: e.target.value })
+                }
               />
               <label
                 className="custom-control-label color-black"
@@ -74,6 +111,10 @@ function ChangeOTPMethod(changeOTPMethodProps: iChangeOTPMethod) {
                 id="customRadio2"
                 name="customRadio"
                 className="custom-control-input"
+                value={userSettings.otp}
+                onChange={(e) =>
+                  setUserSettings({ ...userSettings, otp: e.target.value })
+                }
               />
               <label
                 className="custom-control-label color-black"
@@ -88,6 +129,10 @@ function ChangeOTPMethod(changeOTPMethodProps: iChangeOTPMethod) {
                 id="customRadio3"
                 name="customRadio"
                 className="custom-control-input"
+                value={userSettings.otp}
+                onChange={(e) =>
+                  setUserSettings({ ...userSettings, otp: e.target.value })
+                }
               />
               <label
                 className="custom-control-label color-black"
@@ -98,10 +143,32 @@ function ChangeOTPMethod(changeOTPMethodProps: iChangeOTPMethod) {
             </div>
           </div>
           <div className="text-right p-3 mt-5">
-            <button id="applyReqBtn" className="btn btn-primary mx-2">
+            <button id="applyReqBtn" className="btn btn-primary mx-2"
+            onClick={() => {
+              setLoading(true);
+              ChangeDefaultOtp(currentContext.selectedCIF, userSettings.otp)
+                .then((response) => {
+                  if (response) {
+                    SaveUserDataLocally(userSettings);
+                    Swal.fire({
+                      position: 'top-end',
+                      icon: 'success',
+                      title: local_Strings.ConfirmationTitle,
+                      html: local_Strings.ConfirmationDesc,
+                      showConfirmButton: false,
+                      timer: Constant.AlertTimeout
+                    });
+                  } else {
+                    Swal.fire('Oops...', local_Strings.GenericErrorMessage, 'error');
+                  }
+                })
+                .catch((e: any) => console.log(e))
+                .finally(() => setLoading(false));
+            }}>
               {local_Strings.SettingSaveButton}
             </button>
-            <button id="applyReqBtn" className="btn btn-primary">
+            <button id="applyReqBtn" className="btn btn-primary"
+             onClick={props.backSettingsLandingModal}>
               {local_Strings.SettingsCancelButton}
             </button>
           </div>

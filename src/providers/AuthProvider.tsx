@@ -1,5 +1,5 @@
 import { GetSettingsByCIF } from "../services/cmsService";
-import { IUserSettings, GetUserLocalData, SaveUserDataLocally } from "../Helpers/authHelper";
+import { initialSettingsData, IUserSettings, GetUserLocalData, SaveUserDataLocally } from "../Helpers/authHelper";
 import React, { useEffect, useState } from "react";
 import { authenticate } from "../services/authenticationService";
 import * as helper from '../Helpers/helper';
@@ -7,7 +7,6 @@ import { getUserRole } from "../services/apiServices";
 import Constant from "../constants/defaultData";
 
 export type User = { username: string; password: string; otp: string };
-const initialSettingsData = { customerId: "", language: "en", currency: "QAR", otp: "SMS" };
 interface IAppContext {
   userSettings: IUserSettings,
   userRole: string;
