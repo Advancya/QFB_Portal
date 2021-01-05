@@ -83,6 +83,7 @@ function Faqs(faqsProps: iFaqs) {
         fontSize: theme.typography.pxToRem(17),
 
         fontFamily: "Archer",
+        fontWeight: "bold",
       },
       secondaryHeading: {
         fontSize: theme.typography.pxToRem(15),
@@ -135,7 +136,7 @@ function Faqs(faqsProps: iFaqs) {
                 <Accordion2
                   expanded={expanded === `panel${index}`}
                   onChange={handleChange(`panel${index}`)}
-                  className={classes.parentNode}
+                  className={classes.parentNode + " m-0"}
                 >
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
@@ -146,7 +147,7 @@ function Faqs(faqsProps: iFaqs) {
                       {item.title}
                     </Typography>
                   </AccordionSummary>
-                  <AccordionDetails className="bg-gray">
+                  <AccordionDetails className="p-0">
                     <Accordion className="analysis-accordion w-100">
                       {item.Questions.map((subitem, subindex) => {
                         return (
@@ -161,10 +162,13 @@ function Faqs(faqsProps: iFaqs) {
                             </Card.Header>
 
                             <Accordion.Collapse eventKey={`panel${subindex}`}>
-                              <Card.Body>
-                                <div className="text-left">
-                                  {subitem.Answer}
-                                </div>
+                              <Card.Body className="bg-gray">
+                                <div
+                                  className="text-left"
+                                  dangerouslySetInnerHTML={{
+                                    __html: subitem.Answer,
+                                  }}
+                                />
                               </Card.Body>
                             </Accordion.Collapse>
                           </Card>
