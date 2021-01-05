@@ -1,24 +1,27 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
 import dateIcon from "../../images/calendar-inactive.png";
-import { emptyDocumentData, IDocumentDetail } from "../../Helpers/publicInterfaces";
+import {
+  emptyDocumentData,
+  IDocumentDetail,
+} from "../../Helpers/publicInterfaces";
 import moment from "moment";
-import { localStrings as local_Strings } from '../../translations/localStrings';
+import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
 import * as helper from "../../Helpers/helper";
 import { GetDocumentById } from "../../services/cmsService";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
-import { saveAs } from 'file-saver';
+import { saveAs } from "file-saver";
 
-const mime = require('mime');
+const mime = require("mime");
 
 interface iDocumentDetails {
   showDocumentDetailsModal: boolean;
   hideDocumentDetailsModal: () => void;
   backDocumentDetailsModal: () => void;
-  itemId: number
+  itemId: number;
 }
 
 function DocumentDetails(props: iDocumentDetails) {
@@ -30,12 +33,11 @@ function DocumentDetails(props: iDocumentDetails) {
   useEffect(() => {
     let isMounted = true;
     if (props.itemId && props.itemId > 0) {
-
       setLoading(true);
       GetDocumentById(props.itemId)
         .then((responseData: any) => {
           if (responseData && responseData.length > 0 && isMounted) {
-            setDetail(responseData[0] as IDocumentDetail)
+            setDetail(responseData[0] as IDocumentDetail);
           }
         })
         .catch((e: any) => console.log(e))
@@ -50,10 +52,12 @@ function DocumentDetails(props: iDocumentDetails) {
   }, [props.itemId]);
 
   const downloadAttachment = () => {
-
-    const blob = helper.b64toBlob(item.fileContent, mime.getType(item.fileName));
+    const blob = helper.b64toBlob(
+      item.fileContent,
+      mime.getType(item.fileName)
+    );
     saveAs(blob, item.fileName);
-  }
+  };
 
   return (
     <Modal
@@ -106,33 +110,47 @@ function DocumentDetails(props: iDocumentDetails) {
             <li className="shown">
               <div className="row align-items-center py-2">
                 <div className="col-md-8 col-sm-8 ">
-                  <div className="text-xs color-grey">
+                  {/*  <div className="text-xs color-grey">
                     <img src={dateIcon} className="img-fluid" />
                     {item.documentDate
                       ? moment(item.documentDate).format(
                         "dddd DD MM YYYY"
                       )
                       : ""}
-                  </div>
+                  </div> */}
                   <h6 className="mb-1 text-600 text-18 ">
                     {currentContext.language === "en"
                       ? item.documentName
                       : item.documentNameAr}
                   </h6>
                 </div>
-                <div className="col-md-4 text-right" onClick={downloadAttachment}>
-                  <a className="download-link d-inline-block "
-                    href="#">
+                {/*  <div
+                  className="col-md-4 text-right"
+                  onClick={downloadAttachment}
+                >
+                  <a className="download-link d-inline-block " href="#">
                     <i className="mx-1 fa fa-file color-white"></i>
                     <i className="mx-1 fa fa-download color-white"></i>
                   </a>
-                </div>
+                </div> */}
               </div>
             </li>
           </ul>
-          <div className="p-3 mb-4 color-grey"
-            dangerouslySetInnerHTML={{ __html: currentContext.language === "en" ? item.documentDescription : item.documentDescriptionAr }}
+          <div
+            className="p-3 mb-4 color-grey"
+            dangerouslySetInnerHTML={{
+              __html:
+                currentContext.language === "en"
+                  ? item.documentDescription
+                  : item.documentDescriptionAr,
+            }}
           />
+
+          <div className="text-right p-3">
+            <button onClick={downloadAttachment} className="btn btn-primary">
+              {local_Strings.DocumentsDetailsDownloadButton}
+            </button>
+          </div>
         </div>
       </Modal.Body>
     </Modal>

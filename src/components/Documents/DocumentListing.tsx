@@ -1,28 +1,25 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import moment from "moment";
-import { localStrings as local_Strings } from '../../translations/localStrings';
+import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
-import {
-  GetAllDocuments,
-} from "../../services/cmsService";
-import {
-  IDocumentDetail,
-} from "../../Helpers/publicInterfaces";
+import { GetAllDocuments } from "../../services/cmsService";
+import { IDocumentDetail } from "../../Helpers/publicInterfaces";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import NoResult from "../../shared/NoResult";
 import dateIcon from "../../images/calendar-inactive.png";
-import FilterMoreButtonControl from '../../shared/FilterMoreButtonControl';
+import FilterMoreButtonControl from "../../shared/FilterMoreButtonControl";
 import DocumentDetails from "./DocumentDetails";
+import TextTruncate from "react-text-truncate";
 
 const mime = require("mime");
 
 function DocumentListing() {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
-  const [isLoading, setLoading] = useState(false);  
+  const [isLoading, setLoading] = useState(false);
   const [data, setData] = useState<IDocumentDetail[]>([]);
   const rowLimit: number = Constant.RecordPerPage;
   const [offset, setOffset] = useState<number>(rowLimit);
@@ -68,20 +65,22 @@ function DocumentListing() {
       >
         <div className="col-10 col-sm-10">
           <div className="mb-1 d-flex align-items-center">
-            <img src={dateIcon} className="img-fluid" />
-            <span className="mx-1 text-15 color-light-gold">
-              {item.documentDate
-                ? moment(item.documentDate).format(
-                  "dddd DD MM YYYY"
-                )
-                : ""}
+            <span className="text-15 color-light-gold">
+              {currentContext.language === "en"
+                ? item.documentName
+                : item.documentNameAr}
             </span>
           </div>
-          <h6 className="mb-1 text-600">
+          <h6 className="mb-1">
             {currentContext.language === "en"
               ? item.documentName
               : item.documentNameAr}
           </h6>
+          <span className="text-15">
+            {item.documentDate
+              ? moment(item.documentDate).format("DD/MM/YYYY")
+              : ""}
+          </span>
         </div>
       </a>
     </li>
@@ -134,20 +133,20 @@ function DocumentListing() {
               }
             />
             <ul className="box-list" id="dataList">
-              {data &&
-                data.length > 0 &&
-                data[0].id > 0 ?
-                data.slice(0, offset).map((item, index) =>
-                  renderItem(item, index)
-                )
+              {data && data.length > 0 && data[0].id > 0
+                ? data
+                    .slice(0, offset)
+                    .map((item, index) => renderItem(item, index))
                 : NoResult(local_Strings.NoDataToShow)}
             </ul>
           </div>
-          <FilterMoreButtonControl showMore={data && data.length > rowLimit &&
-            offset < data.length} onClickMore={() => setOffset(offset + 5)} />
+          <FilterMoreButtonControl
+            showMore={data && data.length > rowLimit && offset < data.length}
+            onClickMore={() => setOffset(offset + 5)}
+          />
         </Modal.Body>
       </Modal>
-      {itemId && itemId > 0 &&
+      {itemId && itemId > 0 && (
         <DocumentDetails
           showDocumentDetailsModal={openDocumentDetails}
           hideDocumentDetailsModal={() => {
@@ -159,7 +158,8 @@ function DocumentListing() {
             showDocumentListing(true);
           }}
           itemId={itemId}
-        />}
+        />
+      )}
     </React.Fragment>
   );
 }

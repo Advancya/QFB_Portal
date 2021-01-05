@@ -5,8 +5,10 @@ import * as helper from "../../Helpers/helper";
 import { AuthContext } from "../../providers/AuthProvider";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import DocumentListing from "../Documents/DocumentListing";
+import Faqs from "../Faqs";
 import SettingsAnchor from "../Settings/SettingsAnchor";
 import SettingsLanding from "../Settings/SettingsLanding";
+import StandardSettlement from "../StandardSettlement";
 
 function ToolBarRight() {
   const history = useHistory();
@@ -16,12 +18,13 @@ function ToolBarRight() {
   return (
     <div className="col-md-9">
       <div className="topRight text-right">
-        <Link to="/HomePage1"> {local_Strings.topBarRightItem1}</Link>
+        <StandardSettlement></StandardSettlement>
         <DocumentListing />
         <Link to={`/${currentContext.language}/OfferSubscriptions`}>
           Offers Subscriptions
         </Link>
         <SettingsAnchor></SettingsAnchor>
+        <Faqs></Faqs>
         <Link to={`/${currentContext.language}/ContactUs`}>
           {local_Strings.topBarRightItem4}
         </Link>

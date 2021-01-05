@@ -165,6 +165,10 @@ html {
   background-color: #fbfcff
 }
 
+.bg-gray {
+  background-color: #f1f3f7
+}
+
 .hintStep {
   color: #6c7279;
   font-size: 0.875rem;
@@ -1130,6 +1134,7 @@ ul.box-list a:hover h4 small, ul.box-list a:hover p {
   text-transform: uppercase;
   border-top: 0;
   background-color: #e2dad7;
+  vertical-align: middle;
 }
 
 [dir="ltr"] .table-box table th:first-child {
@@ -1518,7 +1523,13 @@ ul ul {
 
 /* Media Queries */
 
-@media all and (min-width: 768px) {}
+@media all and (min-width: 576px) {}
+
+@media all and (min-width: 768px) {
+  .modal-dialog {
+    max-width: 45%;
+  }
+}
 
 @media all and (min-width: 992px) {
   .modal-lg, .modal-xl {
