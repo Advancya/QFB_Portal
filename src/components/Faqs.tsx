@@ -82,13 +82,16 @@ function Faqs(faqsProps: iFaqs) {
       heading: {
         fontSize: theme.typography.pxToRem(17),
 
-        fontFamily: "Archer",
+        fontFamily:
+          currentContext.language === "en" ? "Archer" : "DINNextLTArabic",
+
         fontWeight: "bold",
       },
       secondaryHeading: {
         fontSize: theme.typography.pxToRem(15),
         color: theme.palette.text.secondary,
-        fontFamily: "Archer",
+        fontFamily:
+          currentContext.language === "en" ? "Archer" : "DINNextLTArabic",
       },
     })
   );
