@@ -19,7 +19,7 @@ interface iInvestmentsRecievedProfit {
   showInvestmentsRecievedProfitModal: boolean;
   hideInvestmentsRecievedProfitModal: () => void;
   backInvestmentsRecievedProfitModal: () => void;
-  investmentNumber: string;
+  investment: { Id: number, name: string };
 }
 function InvestmentsRecievedProfit(
   props: iInvestmentsRecievedProfit
@@ -39,7 +39,7 @@ function InvestmentsRecievedProfit(
 
     const initialLoadMethod = async () => {
       setLoading(true);
-      GetInvestmentsReceivedProfit(currentContext.selectedCIF, props.investmentNumber)
+      GetInvestmentsReceivedProfit(currentContext.selectedCIF, props.investment.Id)
         .then((responseData: ITransaction[]) => {
           if (isMounted && responseData && responseData.length > 0) {
             const _data = responseData.filter(
@@ -60,7 +60,7 @@ function InvestmentsRecievedProfit(
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [props.investmentNumber]);
+  }, [props.investment.Id]);
 
   return (
     <Modal
@@ -122,7 +122,7 @@ function InvestmentsRecievedProfit(
             }} />
         }
         <div className="col-12 col-sm-12">
-          <h5>{local_Strings.Investment + ": " + props.investmentNumber + " " +
+          <h5>{local_Strings.Investment + ": " + props.investment.name + " " +
             local_Strings.RecievedProfit + " (" + currentContext.userSettings.currency + ")"}
           </h5>
         </div>        

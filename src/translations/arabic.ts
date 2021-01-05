@@ -768,7 +768,13 @@ const ar = {
   documentDeletedMessage: "Document has been deleted successfully!",
   documentSavedMessage: "Document has been saved successfully!",
   documentListingPriority: "أفضلية",
-  DrillBackButtonText: "عودة"
+  DrillBackButtonText: "عودة",
+  
+  PortfolioNoInvestments: "No Investments Yet",
+  PortfolioNoDeposits: "No Deposits  Yet",
+  PortfolioNoFacilities: "No Facilities Found",
+  
+  OfferRequestSubmitMessage: "Your subscription request to the offer \"[REPLACE ME]\" has been submitted",
 };
 
 export default ar;

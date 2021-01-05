@@ -12,7 +12,7 @@ import { localStrings as local_Strings } from "../../../translations/localString
 function Investments() {
   const currentContext = useContext(AuthContext);
   const userPortfolio = useContext(PortfolioContext);
-  const [investmentNumber, setReferenceId] = useState<string>("");
+  const [selectedInvestment, setInvestmentDetail] = useState<{ Id: number, name: string }>(null);
 
   const [showInvestmentsListing, setShowInvestmentsListing] = useState(false);
   const [showInvestmentsDetails, setshowInvestmentsDetails] = useState(false);
@@ -32,7 +32,11 @@ function Investments() {
           <a
             href="#"
             className="ib-text"
-            onClick={() => setShowInvestmentsListing(true)}
+            onClick={() => {
+              if (!!userPortfolio.totalInvestment && userPortfolio.totalInvestment !== "0") {
+                setShowInvestmentsListing(true);
+              }
+            }}
           >
             <h4>{local_Strings.PortfolioAssetsOption2}</h4>
             <h5>
@@ -46,13 +50,13 @@ function Investments() {
       <InvestmentsListing
         showInvestmentsListingModal={showInvestmentsListing}
         hideInvestmentsListingModal={() => setShowInvestmentsListing(false)}
-        showInvestmentsDetailsModal={(investmentNumber: string) => {
+        showInvestmentsDetailsModal={(Id: number, name: string) => {
           setShowInvestmentsListing(false);
           setshowInvestmentsDetails(true);
-          setReferenceId(investmentNumber);
+          setInvestmentDetail({Id, name});
         }}
       />
-      {investmentNumber && !!investmentNumber &&
+      {selectedInvestment && !!selectedInvestment.name &&
         <React.Fragment>
           <InvestmentsDetails
             showInvestmentsDetailsModal={showInvestmentsDetails}
@@ -72,7 +76,7 @@ function Investments() {
               setshowInvestmentsDetails(false);
               setShowInvestmentsBuyAndSell(true);
             }}
-            investmentNumber={investmentNumber}
+            investment={selectedInvestment}
           />
           <InvestmentsRecievedProfit
             showInvestmentsRecievedProfitModal={showInvestmentsRecievedProfit}
@@ -81,7 +85,7 @@ function Investments() {
               setShowInvestmentsRecievedProfit(false);
               setshowInvestmentsDetails(true);
             }}
-            investmentNumber={investmentNumber}
+            investment={selectedInvestment}
           />
           <InvestmentsBuyAndSell
             showInvestmentsBuyAndSellModal={showInvestmentsBuyAndSell}
@@ -90,7 +94,7 @@ function Investments() {
               setShowInvestmentsBuyAndSell(false);
               setshowInvestmentsDetails(true);
             }}
-            investmentNumber={investmentNumber}
+            investment={selectedInvestment}
           />
         </React.Fragment>}
     </div>

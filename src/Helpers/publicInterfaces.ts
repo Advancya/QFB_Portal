@@ -355,17 +355,19 @@ export const emptyDepositDetail = {
 }
 
 export interface IInvestment {
-  subAssetID: string;
+  subAssetID: number;
   nominalAmount: number;
   profitRate?: string;
   securityCCY: string;
+  secDesciption: string;
 }
 
 export const emptyInvestment = {
-  subAssetID: "",
+  subAssetID: 0,
   nominalAmount: 0,
   profitRate: "",
   securityCCY: "",
+  secDesciption: "",
 }
 
 export interface IInvestmentDetail {

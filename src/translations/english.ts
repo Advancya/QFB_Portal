@@ -772,7 +772,14 @@ const en = {
   documentDeletedMessage: "Document has been deleted successfully!",
   documentSavedMessage: "Document has been saved successfully!",
   documentListingPriority: "Priority",
-  DrillBackButtonText: "Back"
+  DrillBackButtonText: "Back",
+
+  
+  PortfolioNoInvestments: "No Investments Yet",
+  PortfolioNoDeposits: "No Deposits  Yet",
+  PortfolioNoFacilities: "No Facilities Found",
+
+  OfferRequestSubmitMessage: "Your subscription request to the offer \"[REPLACE ME]\" has been submitted",
 };
 
 export default en;

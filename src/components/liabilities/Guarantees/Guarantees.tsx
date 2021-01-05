@@ -10,7 +10,7 @@ import { localStrings as local_Strings } from "../../../translations/localString
 function Guarantees() {
   const currentContext = useContext(AuthContext);
   const userPortfolio = useContext(PortfolioContext);
-  const [params, setReferenceId] = useState({gurRef: "", balance: 0});
+  const [params, setReferenceId] = useState({ gurRef: "", balance: 0 });
   const [showGuaranteesListing, setShowGuaranteesListing] = useState(false);
 
   const handleCloseGuaranteesListing = () => {
@@ -36,28 +36,30 @@ function Guarantees() {
 
   return (
     <div>
-      <div className="inner-box">
-        <div className="d-flex align-items-center">
-          <div className="ib-icon">
-            <img src={guarantiesIcon} className="img-fluid" />
+      {!!userPortfolio.totalGuarantees && userPortfolio.totalGuarantees !== "0" &&
+        <div className="inner-box">
+          <div className="d-flex align-items-center">
+            <div className="ib-icon">
+              <img src={guarantiesIcon} className="img-fluid" />
+            </div>
+            <a href="#" className="ib-text" onClick={handleShowGuaranteesListing}>
+              <h4>{local_Strings.PortfolioLiabilitiesOption2}</h4>
+              <h5>
+                {(userPortfolio.totalGuarantees || "0") +
+                  " " +
+                  currentContext.userSettings.currency}
+              </h5>
+            </a>
           </div>
-          <a href="#" className="ib-text" onClick={handleShowGuaranteesListing}>
-            <h4>{local_Strings.PortfolioLiabilitiesOption2}</h4>
-            <h5>
-              {(userPortfolio.totalGuarantees || "0") +
-                " " +
-                currentContext.userSettings.currency}
-            </h5>
-          </a>
         </div>
-      </div>
+      }
       <GuaranteesListing
         showGuaranteesListingModal={showGuaranteesListing}
         hideGuaranteesListingModal={handleCloseGuaranteesListing}
         showGuaranteesDetailsModal={(gurRef: string, balance: number) => {
           handleCloseGuaranteesListing();
           setshowGuaranteesDetails(true);
-          setReferenceId({gurRef, balance});
+          setReferenceId({ gurRef, balance });
         }}
       />
       {params && !!params.gurRef &&

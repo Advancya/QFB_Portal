@@ -108,15 +108,18 @@ function HoldingsLanding() {
               .then((drillDownResponseData: any) => {
                 if (drillDownResponseData && drillDownResponseData.length > 0) {
                   _investment_live_1stDrill.map((item: ILiveHoldings_1stDrill_Investment, index: number) => {
-                    const chart_Closed_2ndDrill_Investment = helper.prepareInvestmentHoldings2ndDrill(
-                      drillDownResponseData[index],
-                      item.secDescirption,
-                      false
-                    );
-                    chart_Live_1stDrill_Investment.drilldown.series.push({
-                      id: item.subAssetId,
-                      data: chart_Closed_2ndDrill_Investment,
-                    });
+                    if (drillDownResponseData[index].length > 0) {
+                      const chart_Closed_2ndDrill_Investment = helper.prepareInvestmentHoldings2ndDrill(
+                        drillDownResponseData[index],
+                        item.secDescirption,
+                        false
+                      );
+                      chart_Live_1stDrill_Investment.drilldown.series.push({
+                        id: item.subAssetId,
+                        name: item.secDescirption,
+                        data: chart_Closed_2ndDrill_Investment,
+                      });
+                    }
                   });
 
                   setInvestment_live_1stDrill(chart_Live_1stDrill_Investment as any);
@@ -128,7 +131,7 @@ function HoldingsLanding() {
         .finally(() => setTimeout(() => setLoading(false), 4000));
     }
   };
-  
+
   const showClosedHoldings = () => {
     if (!investment_Closed_1stDrill || !deposit_Closed_1stDrill) {
       setLoading(true);
@@ -172,15 +175,18 @@ function HoldingsLanding() {
               .then((drillDownResponseData: any) => {
                 if (drillDownResponseData && drillDownResponseData.length > 0) {
                   _investment_closed_1stDrill.map((item: IClosedHoldings_1stDrill_Investment, index: number) => {
-                    const chart_Live_2ndDrill_Investment = helper.prepareInvestmentHoldings2ndDrill(
-                      drillDownResponseData[index],
-                      item.secDescirption,
-                      false
-                    );
-                    chart_Closed_1stDrill_Investment.drilldown.series.push({
-                      id: item.subAssetId,
-                      data: chart_Live_2ndDrill_Investment,
-                    });
+                    if (drillDownResponseData[index].length > 0) {
+                      const chart_Live_2ndDrill_Investment = helper.prepareInvestmentHoldings2ndDrill(
+                        drillDownResponseData[index],
+                        item.secDescirption,
+                        false
+                      );
+                      chart_Closed_1stDrill_Investment.drilldown.series.push({
+                        id: item.subAssetId,
+                        name: item.secDescirption,
+                        data: chart_Live_2ndDrill_Investment,
+                      });
+                    }
                   });
 
                   setInvestment_Closed_1stDrill(
@@ -197,10 +203,11 @@ function HoldingsLanding() {
 
   Highcharts.setOptions({
     lang: {
-      drillUpText: local_Strings.DrillBackButtonText
+      drillUpText: local_Strings.DrillBackButtonText,
+
     }
   });
-  
+
   return (
     <React.Fragment>
       <li className="nav-item active">
@@ -268,14 +275,14 @@ function HoldingsLanding() {
                   <HighchartsReact highcharts={Highcharts} options={investment_live_1stDrill}
                     ref={liveInvestmentChart} immutable={true}
                     callback={(chart) => {
-                      chart.options.plotOptions.column.events.click
+                      // chart.options.plotOptions.column.events.click
+                      //   = (e) => {
+                      //     //liveInvestmentChart.current.chart.addSeriesAsDrilldown(e.point, []);
+                      //     chart.title.attr({ text: e.point.name });
+                      //   }
+                      chart.options.plotOptions.column.events.afterAnimate
                         = (e) => {
-                          //liveInvestmentChart.current.chart.addSeriesAsDrilldown(e.point, []);
-                          //chart.title.attr({ text: e.point.name });
-                        }
-                      chart.options.plotOptions.column.point.events.drillup
-                        = (e) => {
-                          //chart.title.attr({ text: local_Strings.Investment });
+                          chart.title.attr({ text: e.target.name });
                         }
                     }} />
                 }
@@ -293,13 +300,9 @@ function HoldingsLanding() {
                 {investment_Closed_1stDrill &&
                   <HighchartsReact highcharts={Highcharts} options={investment_Closed_1stDrill}
                     callback={(chart) => {
-                      chart.options.plotOptions.column.events.click
+                      chart.options.plotOptions.column.events.afterAnimate
                         = (e) => {
-                          //chart.title.attr({ text: e.point.name });
-                        }
-                      chart.options.plotOptions.column.point.events.drillup
-                        = (e) => {
-                          //chart.title.attr({ text: local_Strings.Investment });
+                          chart.title.attr({ text: e.target.name });
                         }
                     }} />
                 }

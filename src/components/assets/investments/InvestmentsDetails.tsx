@@ -16,7 +16,7 @@ interface iInvestmentsDetails {
   backInvestmentsListingModal: () => void;
   showInvestmentsRecievedProfit: () => void;
   showInvestmentsBuyAndSell: () => void;
-  investmentNumber: string;
+  investment: { Id: number, name: string };
 }
 
 function InvestmentsDetails(props: iInvestmentsDetails) {
@@ -28,7 +28,7 @@ function InvestmentsDetails(props: iInvestmentsDetails) {
   useEffect(() => {
     let isMounted = true;
     setLoading(true);
-    GetInvestmentsDetails(currentContext.selectedCIF, props.investmentNumber)
+    GetInvestmentsDetails(currentContext.selectedCIF, props.investment.Id)
       .then((responseData: any) => {
         if (responseData && responseData.length > 0 && isMounted) {
           const _detail = helper.transformingStringToJSON(
@@ -43,7 +43,7 @@ function InvestmentsDetails(props: iInvestmentsDetails) {
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [props.investmentNumber]);
+  }, [props.investment.Id]);
 
   return (
     <Modal
@@ -67,7 +67,7 @@ function InvestmentsDetails(props: iInvestmentsDetails) {
             </a>
           </div>
           <div className="ib-text">
-            <h4>{local_Strings.InvestmentDetail}</h4>
+            <h4>{local_Strings.InvestmentsListingCash}</h4>
           </div>
         </div>
 
@@ -94,7 +94,7 @@ function InvestmentsDetails(props: iInvestmentsDetails) {
             <li className="pb-3 px-4">
               <div className="row align-items-center">
                 <div className="col-sm-8">
-                  <h3 className="text-capitalize">{local_Strings.InvestmentsListingAccountNumberLabel + props.investmentNumber}</h3>
+                  <h3 className="text-capitalize">{local_Strings.Investment + " | " + item.InvestmentName.value}</h3>
                   <h3 className="text-sm">{item.InvestmentAmount.value || ""}</h3>
                 </div>
                 <div className="col-sm-4 text-sm-right">
@@ -113,6 +113,14 @@ function InvestmentsDetails(props: iInvestmentsDetails) {
             <div className="formGrp">
               <label>{item.InvestmentName.label}</label>
               <p>{item.InvestmentName.value || ""}</p>
+            </div>
+            <div className="formGrp">
+              <label>{item.Currency.label}</label>
+              <p>{item.Currency.value || ""}</p>
+            </div>
+            <div className="formGrp">
+              <label>{item.InvestmentAmount.label}</label>
+              <p>{item.InvestmentAmount.value || ""}</p>
             </div>
             <div className="formGrp">
               <label>{item.Location.label}</label>
