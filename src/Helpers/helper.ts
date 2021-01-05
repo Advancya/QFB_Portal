@@ -589,14 +589,13 @@ export const prepareInvestmentHoldings1stDrill = (
           key: item.subAssetId,
           name: item.secDescirption,
           color: "#724B44",
-          drilldown: item.secDescirption
         })
         : data.push({
           y: item.invRecievedProfit,
           key: item.subAssetId,
           name: item.secDescirption,
           color: "#B39758",
-          drilldown: item.secDescirption
+          drilldown: item.subAssetId
         });
     });
 
@@ -610,14 +609,6 @@ export const prepareInvestmentHoldings1stDrill = (
   let data = {
     chart: {
       type: "column",
-      // events: {
-      //   drilldown: function (e: any) {
-      //     this.setTitle({ text: e.point.name });
-      //   },
-      //   drillup: function (e) {
-      //     this.setTitle({ text: title });
-      //   }
-      // }
     },
     title: {
       text: title,
@@ -697,53 +688,6 @@ export const prepareInvestmentHoldings2ndDrill = (
       [moment(item.bookingDate).format("DD/MM/YYYY"),
       Math.round((item.amount + Number.EPSILON) * 100) / 100]
     ));
-
-  // series.push({
-  //   colorByPoint: true,
-  //   data: values,
-  // });
-
-  // let data = {
-  //   chart: {
-  //     type: "column",
-  //   },
-  //   title: {
-  //     text: title,
-  //   },
-  //   tooltip: {
-  //     enabled: false,
-  //   },
-  //   xAxis: {
-  //     type: "category",
-  //   },
-  //   yAxis: {
-  //     title: {
-  //       text: "",
-  //     },
-  //   },
-  //   credits: {
-  //     enabled: false,
-  //   },
-  //   legend: {
-  //     rtl: rtl,
-  //   },
-  //   plotOptions: {
-  //     column: {
-  //       dataLabels: {
-  //         enabled: true,
-  //         //inside: true,
-  //         rotation: 320,
-  //         allowOverlap: true,
-  //         verticalAlign: "top",
-  //         format: "<b>{point.y}</b>",
-  //         useHTML: true,
-  //       },
-  //       //pointPadding: 0.2,
-  //       showInLegend: false,
-  //     },
-  //   },
-  //   series: series,
-  // };
 
   return values;
 };
@@ -848,7 +792,6 @@ export const b64toBlob = (b64Data: any, contentType = '', sliceSize = 512) => {
 
   return new Blob(byteArrays, { type: contentType });
 }
-
 
 export const ConvertToQfbNumberFormat = (amount: any) => {
   try {

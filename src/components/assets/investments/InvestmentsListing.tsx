@@ -17,7 +17,7 @@ import { PortfolioContext } from "../../../pages/Homepage";
 interface iInvestmentsListing {
   showInvestmentsListingModal: boolean;
   hideInvestmentsListingModal: () => void;
-  showInvestmentsDetailsModal: (investmentNumber: string) => void;
+  showInvestmentsDetailsModal: (Id: number, name: string) => void;
 }
 function InvestmentsListing(props: iInvestmentsListing) {
   const currentContext = useContext(AuthContext);
@@ -59,11 +59,11 @@ function InvestmentsListing(props: iInvestmentsListing) {
       <a
         href="#"
         className="row align-items-center"
-        onClick={() => props.showInvestmentsDetailsModal(item.subAssetID)}
+        onClick={() => props.showInvestmentsDetailsModal(item.subAssetID, item.secDesciption)}
       >
         <div className="col-6 col-sm-4">
-          <h5>{local_Strings.InvestmentNo}</h5>
-          <h4>{item.subAssetID || ""}</h4>
+          <h5>{local_Strings.Investment}</h5>
+          <h4>{item.secDesciption || ""}</h4>
         </div>
         <div className="col-6 col-sm-4">
           <h5>{local_Strings.CashDetailsBalanceLabel}</h5>

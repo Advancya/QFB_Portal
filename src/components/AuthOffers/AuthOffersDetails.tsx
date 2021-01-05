@@ -26,7 +26,7 @@ function AuthOffersDetails(props: iAuthOffersDetails) {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
   const [isLoading, setLoading] = useState(true);
-  const [item, setDetail] = useState<IOfferDetail>(emptyOfferData);
+  const [item, setDetail] = useState<IOfferDetail>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -51,9 +51,10 @@ function AuthOffersDetails(props: iAuthOffersDetails) {
   }, [props.itemID]);
 
   const downloadAttachment = () => {
-
-    const blob = helper.b64toBlob(item.fileContent, mime.getType(item.fileName));
-    saveAs(blob, item.fileName);
+    if (item) {
+      const blob = helper.b64toBlob(item.fileContent, mime.getType(item.fileName));
+      saveAs(blob, item.fileName);
+    }
   }
 
   return (
@@ -108,13 +109,13 @@ function AuthOffersDetails(props: iAuthOffersDetails) {
               <div className="row align-items-center py-2">
                 <div className="col-md-8 col-sm-8 ">
                   <div className="text-xs color-grey">
-                    {moment(item.createdDate).format("dddd DD MMM YYYY")}
+                    {item ? moment(item.createdDate).format("dddd DD MMM YYYY") : ""}
                   </div>
                   <h6 className="mb-1 text-600 text-18 ">
-                    {currentContext.language === "en" ? item.title : item.titleAr}
+                    {item ? (currentContext.language === "en" ? item.title : item.titleAr) : ""}
                   </h6>
                 </div>
-                {!!item.fileName &&
+                {item && !!item.fileName &&
                   <div className="col-md-4 text-right" onClick={downloadAttachment}>
                     <a className="download-link d-inline-block "
                       href="#">
@@ -125,10 +126,11 @@ function AuthOffersDetails(props: iAuthOffersDetails) {
               </div>
             </li>
           </ul>
-          <div className="p-3 mb-4 color-grey"
-            dangerouslySetInnerHTML={{ __html: currentContext.language === "en" ? item.selectedOfferDetails : item.selectedOfferDetailsAr }}
-          />
-          {currentContext.userRole === Constant.Customer &&
+          {item &&
+            <div className="p-3 mb-4 color-grey"
+              dangerouslySetInnerHTML={{ __html: currentContext.language === "en" ? item.selectedOfferDetails : item.selectedOfferDetailsAr }}
+            />}
+          {item && currentContext.userRole === Constant.Customer &&
             <div className="text-right p-3">
               <button
                 id="applyReqBtn"

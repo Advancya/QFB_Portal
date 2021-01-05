@@ -220,7 +220,7 @@ const GetInvestmentsListing = async (cif: string) => {
   }
 };
 
-const GetInvestmentsDetails = async (cif: string, investmentNumber: string) => {
+const GetInvestmentsDetails = async (cif: string, investmentNumber: number) => {
   try {
     const result = await apiInstance.get(
       `/api/InvestmentDetails?cif=${cif}&ssid=${investmentNumber}`
@@ -235,7 +235,7 @@ const GetInvestmentsDetails = async (cif: string, investmentNumber: string) => {
 
 const GetInvestmentsReceivedProfit = async (
   cif: string,
-  investmentNumber: string
+  investmentNumber: number
 ) => {
   try {
     const result = await apiInstance.get(
@@ -251,7 +251,7 @@ const GetInvestmentsReceivedProfit = async (
 
 const GetInvestmentsReceivedProfitTotal = async (
   cif: string,
-  investmentNumber: string
+  investmentNumber: number
 ) => {
   try {
     const result = await apiInstance.get(
@@ -267,7 +267,7 @@ const GetInvestmentsReceivedProfitTotal = async (
 
 const GetBuyAndSellTransactions = async (
   cif: string,
-  investmentNumber: string
+  investmentNumber: number
 ) => {
   try {
     const result = await apiInstance.get(
@@ -957,6 +957,28 @@ const UpdateDocumentDetail = async (item: any) => {
   }
 };
 
+async function AddOfferSubscription(
+  offerId: number,
+  amount: number,
+  currency: string,
+  cif: string
+) {
+  try {
+    const result = await apiInstance.post(`/api/OfferSubscriptions/Add`, {
+      id: 0,
+      offerId: offerId,
+      subscriptionAmount: amount,
+      currency: currency,
+      subscriptionDate: new Date().toISOString(),
+      cif: cif,
+    });
+    return result.data === true ? true : false;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+}
+
 export {
   GetStockData,
   ValidateRegisterData,
@@ -1028,5 +1050,6 @@ export {
   GetDocumentById,
   AddNewDocument,
   DeleteDocumentById,
-  UpdateDocumentDetail
+  UpdateDocumentDetail,
+  AddOfferSubscription
 };

@@ -31,7 +31,11 @@ function Facilities() {
           <div className="ib-icon">
             <img src={facilitiesIcon} className="img-fluid" />
           </div>
-          <a href="#" className="ib-text" onClick={() => setShowFacilitiesListing(true)}>
+          <a href="#" className="ib-text" onClick={() => {
+            if (!!userPortfolio.totalLoans && userPortfolio.totalLoans !== "0") {
+              setShowFacilitiesListing(true)
+            }
+          }}>
             <h4>{local_Strings.PortfolioLiabilitiesOption1}</h4>
             <h5>
               {(userPortfolio.totalLoans || 0)}{

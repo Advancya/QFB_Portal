@@ -26,7 +26,12 @@ function Deposite() {
           <div className="ib-icon">
             <img src={depositIcon} className="img-fluid" />
           </div>
-          <a href="#" className="ib-text" onClick={() => setShowDepositeListing(true)}>
+          <a href="#" className="ib-text" onClick={() => {
+            if (!!userPortfolio.totalDeposits && userPortfolio.totalDeposits !== "0") {
+              setShowDepositeListing(true);
+            }
+          }}
+          >
             <h4>{local_Strings.PortfolioAssetsOption3}</h4>
             <h5>
               {(userPortfolio.totalDeposits || "0") +
