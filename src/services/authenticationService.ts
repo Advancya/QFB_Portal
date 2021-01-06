@@ -158,10 +158,164 @@ async function AddContactUs(request: iContactUs) {
   }
 }
 
+async function isRegisterBefore(cif: string) {
+  try {
+    const token = await generateRegistrationToken();
+    const result = await axios.get(
+      `${defaultData.ApiBaseUrl}/api/AccountRegisterDate/IsRegisterBefore?cif=${cif}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token["access_token"]}`,
+        },
+      }
+    );
+    return result.data;
+  } catch (err) {
+    return false;
+  }
+}
+
+async function checkUsernameAndPassword(username: string, password: string) {
+  try {
+    const requestOptions = {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    };
+    const response = await identityInstance.post(
+      "connect/token",
+      queryString.stringify({
+        ...oidc.config,
+        grant_type: "password",
+        username,
+        password,
+      }),
+      requestOptions
+    );
+    if (response.status === 200) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    return false;
+  }
+}
+
+async function signOut() {
+  try {
+    await localStorage.removeItem(oidc.storage_key);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function IsAccountLocked(cif: string) {
+  try {
+    const token = await generateRegistrationToken();
+    const result = await axios.get(
+      `${defaultData.ApiBaseUrl}/api/Account/IsAccountLocked?cif=${cif}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token["access_token"]}`,
+        },
+      }
+    );
+
+    return result.data === true ? true : false;
+  } catch (err) {
+    return false;
+  }
+}
+
+async function isAuthenticated() {
+  try {
+    const token = JSON.parse(
+      (await localStorage.getItem(oidc.storage_key)) || ""
+    );
+
+    if (token) {
+      if (!isTokenExpired(token["expires_in"])) {
+        return true;
+      }
+      return await refreshToken();
+    }
+  } catch (error) {
+    console.log(error);
+  }
+
+  function isTokenExpired(expirationDate) {
+    if (new Date(expirationDate) < new Date()) {
+      return true;
+    }
+
+    return false;
+  }
+}
+
+async function refreshToken() {
+  try {
+    const requestOptions = {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    };
+
+    const token = JSON.parse(
+      (await localStorage.getItem(oidc.storage_key)) || ""
+    );
+
+    const response = await identityInstance.post(
+      "connect/token",
+      queryString.stringify({
+        ...oidc.config,
+        grant_type: "refresh_token",
+        refresh_token: token["refresh_token"],
+      }),
+      requestOptions
+    );
+
+    response.data["expires_in"] = setTimer(response.data["expires_in"]);
+
+    await localStorage.clear();
+    await localStorage.setItem(oidc.storage_key, JSON.stringify(response.data));
+
+    return true;
+  } catch (error) {
+    console.log(error);
+
+    return false;
+  }
+}
+
+async function getCurrentUser() {
+  if (await isAuthenticated()) {
+    const token = JSON.parse(
+      (await localStorage.getItem(oidc.storage_key)) || ""
+    );
+    return token;
+  }
+  return null;
+}
+
+function setTimer(expiresIn) {
+  const date = new Date();
+  date.setTime(date.getTime() + expiresIn * 1000);
+
+  return date;
+}
+
 export {
   authenticate,
   signUp,
   generateRegistrationToken,
   resetPassword,
   AddContactUs,
+  isRegisterBefore,
+  checkUsernameAndPassword,
+  signOut,
+  IsAccountLocked,
+  isAuthenticated,
+  refreshToken,
+  getCurrentUser
 };

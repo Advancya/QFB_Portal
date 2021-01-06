@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { Button, Col, Form, Modal } from "react-bootstrap";
 import callIcon from "../../images/call-icon.png";
 import { GoogleMap, LoadScript, Marker, InfoBox } from "@react-google-maps/api";
-//import { InfoBox } from "@react-google-maps/infobox";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from 'react-loading-overlay';
 import PuffLoader from "react-spinners/PuffLoader";
@@ -123,7 +122,7 @@ function ContactUsForm(props: iContactUsForm) {
           <div className="box modal-box p-0 scrollabel-modal-box">
             <LoadScript googleMapsApiKey={Constant.MapApiKey}
               loadingElement={<LoadingOverlay
-                active={isLoading}
+                active={true}
                 spinner={
                   <PuffLoader
                     size={Constant.SpnnerSize}
@@ -152,6 +151,15 @@ function ContactUsForm(props: iContactUsForm) {
                 </Marker>)}
               </GoogleMap>
             </LoadScript>
+            <LoadingOverlay
+              active={isLoading}
+              spinner={
+                <PuffLoader
+                  size={Constant.SpnnerSize}
+                  color={Constant.SpinnerColor}
+                />
+              }
+            />
             <Formik
               initialValues={initialValues}
               validationSchema={conactUsVlidationSchema}

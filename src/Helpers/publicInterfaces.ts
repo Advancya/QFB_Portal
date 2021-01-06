@@ -717,3 +717,21 @@ export const initial_2ndDrillClosedInvestmentData = {
   bookingDate: "",
   subAssetTypeDesc: "",
 };
+
+
+export interface IRegisterationData {
+  oneTimePassword: string;
+  cif: string;
+  email: string;
+  mobile: string;
+  password: string;
+}
+
+export const initialRegisterationData: IRegisterationData = {
+  oneTimePassword: "123456",
+  cif: "1934",
+  email: "demo@advancya.com",
+  mobile: "+97477663836",
+  password: "",
+};
+
