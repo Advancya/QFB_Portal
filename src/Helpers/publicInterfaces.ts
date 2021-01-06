@@ -735,3 +735,90 @@ export const initialRegisterationData: IRegisterationData = {
   password: "",
 };
 
+export interface INewRequestDetail {
+  Id?: string;
+  Cif?: string;
+  RequestTypeId?: string;
+  RequestCreateDate?: string;
+  CashAccount?: string;
+  ExtraDetails?: string;
+  Remarks?: string;
+  FromDate?: string;
+  ToDate?: string;
+  FaxNumber?: string;
+  LandlineNumber?: string;
+  MobileNumber?: string;
+  PoBoxNumber?: string;
+  ContactPersonNumber?: string;
+  Country?: string;
+  City?: string;
+  Address?: string;
+  InvestmentName?: string;
+  DocumentType?: string;
+  DepositContractNumber?: string;
+  AuditorName?: string;
+  ConfirmationDate?: string;
+  Currency?: string;
+  FileName?: string;
+  FileContent?: string;
+  Attachments?: string;
+  RequestSubject?: string;
+  RequestStatus?: string;
+  RequestStatusChangeDate?: string;
+  RequestSubjectAr?: string;
+  Email?: string;
+  StatementType?: string;
+  Col1?: string;
+  Col2?: string;
+  Col3?: string;
+  Col4?: string;
+  Col5?: string;
+  CustomerName?: string;
+  CustomerMobile?: string;
+}
+
+export const initialNewRequest: INewRequestDetail = {
+  Address: undefined,
+  AuditorName: undefined,
+  CashAccount: undefined,
+  Cif: undefined,
+  City: undefined,
+  ConfirmationDate: undefined,
+  ContactPersonNumber: undefined,
+  Country: undefined,
+  Currency: undefined,
+  DepositContractNumber: undefined,
+  DocumentType: undefined,
+  ExtraDetails: undefined,
+  FaxNumber: undefined,
+  FileContent: undefined,
+  FileName: undefined,
+  FromDate: undefined,
+  Id: "0",
+  InvestmentName: undefined,
+  LandlineNumber: undefined,
+  MobileNumber: undefined,
+  PoBoxNumber: undefined,
+  Remarks: undefined,
+  RequestCreateDate: new Date(
+    Date.now() - new Date().getTimezoneOffset() * 60000
+  )
+    .toISOString()
+    .slice(0, -1),
+  RequestTypeId: "",
+  ToDate: undefined,
+  Attachments: undefined,
+  RequestStatus: "Awaiting Review",
+  RequestStatusChangeDate: undefined,
+  RequestSubject: "",
+  Col1: undefined,
+  Col2: undefined,
+  Col3: undefined,
+  Col4: undefined,
+  Col5: undefined,
+  CustomerMobile: undefined,
+  CustomerName: undefined,
+  Email: undefined,
+  RequestSubjectAr: undefined,
+  StatementType: undefined,
+};

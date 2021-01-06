@@ -778,6 +778,7 @@ const ar = {
   
   OfferRequestSubmitMessage: "Your subscription request to the offer \"[REPLACE ME]\" has been submitted",
   ContactUsSelectCountry: "Select Country",
+  OTPSentMessage: "An OTP has been sent successfully, kindly check.",
 };
 
 export default ar;

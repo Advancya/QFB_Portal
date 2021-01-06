@@ -158,7 +158,28 @@ function RegisterStep3(props: iRegisterStep3) {
                     />
                     {touched.otp && errors.otp && InvalidFieldError(errors.otp)}
                     <div className="form-group text-right">
-                      <a href="#" className="forgotLink">
+                      <a href="#" className="forgotLink"
+                        onClick={async () => {
+                          const optResult = await SendOTP(props.step2_data.cif);
+                          if (optResult) {
+                            Swal.fire({
+                              position: 'top-end',
+                              icon: 'success',
+                              title: local_Strings.OTPSentMessage,
+                              showConfirmButton: false,
+                              timer: Constant.AlertTimeout
+                            });
+                            props.hideRegisterStep3Modal();
+                          } else {
+                            Swal.fire({
+                              position: 'top-end',
+                              icon: 'error',
+                              title: local_Strings.GenericErrorMessage,
+                              showConfirmButton: false,
+                              timer: Constant.AlertTimeout
+                            });
+                          }
+                        }}>
                         {local_Strings.registerStep3Label2}
                       </a>
                     </div>
