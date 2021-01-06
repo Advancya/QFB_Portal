@@ -20,9 +20,9 @@ function ToolBarRight() {
       <div className="topRight text-right">
         <StandardSettlement></StandardSettlement>
         <DocumentListing />
-        <Link to={`/${currentContext.language}/OfferSubscriptions`}>
+        {/* <Link to={`/${currentContext.language}/OfferSubscriptions`}>
           Offers Subscriptions
-        </Link>
+        </Link> */}
         <SettingsAnchor></SettingsAnchor>
         <Faqs></Faqs>
         <Link to={`/${currentContext.language}/ContactUs`}>

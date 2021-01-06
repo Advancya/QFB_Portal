@@ -493,6 +493,11 @@ textarea.form-control {
   color: #FFF;
 }
 
+.log-out {
+  line-height: normal;
+  vertical-align: middle;
+}
+
 .header .logo {
   display: flex;
   align-items: flex-end;
@@ -556,6 +561,11 @@ textarea.form-control {
   border-radius: 50%;
 }
 
+.fa-envelope.unread::after {
+  top: 3px;
+  right: 0;
+}
+
 .header .navbar-nav .nav-item .fa.fa-bell.unread::after {
   top: 0.1rem;
   right: 0.1rem;
@@ -569,6 +579,17 @@ textarea.form-control {
 
 .header .navbar-nav .nav-item:last-child a {
   padding-right: 0;
+}
+
+.nav-item .rounded-circle {
+  width: 25px;
+  height: 25px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.nav-item .rounded-circle:hover {
+  background: #000;
 }
 
 .header .navbar-nav .nav-link img {
@@ -591,10 +612,6 @@ textarea.form-control {
   padding: 0.15rem 0.2rem 0.25rem 0.2rem;
   line-height: 1;
   border-radius: 50%;
-}
-
-.header .navbar-nav .nav-item a:hover i {
-  background: #000;
 }
 
 .breadcrumb-section {

@@ -9,6 +9,7 @@ import { localStrings as local_Strings } from "../../translations/localStrings";
 import { emptyUserInfo, IUserInfo } from "../../Helpers/publicInterfaces";
 import { GetUserWelcomeData } from "../../services/cmsService";
 import HoldingsLanding from "../HoldingsLanding";
+import usericon from "../../images/user-icon.svg";
 
 function Navigation() {
   const currentContext = useContext(AuthContext);
@@ -43,16 +44,16 @@ function Navigation() {
             " " +
             (userInfo.customerShortName || "") +
             " "}
-          <i className="fa fa-user-circle-o"></i>
+          <img className="mx-1" width="20" src={usericon} />
         </Link>
         &nbsp;
         <a
-          className="cursor-pointer"
+          className="cursor-pointer log-out"
           href="#"
           title="Click to logout"
           onClick={currentContext.logout}
         >
-          <i className="fa fa-sign-out" />
+          <i className="fa fa-sign-out text-sm" />
         </a>
       </div>
 
@@ -79,7 +80,10 @@ function Navigation() {
             <Requests></Requests>
             <li className="nav-item">
               <Inbox />
-              <Link to={`/${currentContext.language}/OfferSubscriptions`}>
+              <Link
+                className="border border-white rounded-circle p-0 mx-1"
+                to={`/${currentContext.language}/OfferSubscriptions`}
+              >
                 <i className="fa fa-bell unread" />
               </Link>
             </li>
