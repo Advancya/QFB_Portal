@@ -140,7 +140,7 @@ async function AddContactUs(request: iContactUs) {
         id: 0,
         name: request.name,
         country: request.country,
-        mobile: request.mobile,
+        mobile: request.mobile.toString(),
         email: request.email,
         query: request.query,
         createDate: new Date().toISOString(),

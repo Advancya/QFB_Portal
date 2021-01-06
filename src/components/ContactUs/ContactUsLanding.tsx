@@ -3,18 +3,8 @@ import inquiriesIcon from "../../images/inquiries-icon.svg";
 import ContactUsForm from "./ContactUsForm";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 
-interface iContactUsLanding {
-  showContactUsDetailsModal: () => void;
-}
-function ContactUsLanding(contactUsLandingProps: iContactUsLanding) {
+function ContactUsLanding() {
   const [showContactUsForm, setShowContactUsForm] = useState(false);
-
-  const handleCloseContactUsForm = () => {
-    setShowContactUsForm(false);
-  };
-  const handleShowContactUsForm = () => {
-    setShowContactUsForm(true);
-  };
 
   return (
     <div className="inner-box box mt-0">
@@ -27,7 +17,7 @@ function ContactUsLanding(contactUsLandingProps: iContactUsLanding) {
           <p>{local_Strings.contactUsLandingInfo}</p>
           <a
             href="#"
-            onClick={handleShowContactUsForm}
+            onClick={() => setShowContactUsForm(true)}
             className="btn btn-sm btn-primary mt-1"
           >
             {local_Strings.contactUsLandingButton}
@@ -36,7 +26,7 @@ function ContactUsLanding(contactUsLandingProps: iContactUsLanding) {
       </div>
       <ContactUsForm
         showContactUsFormModal={showContactUsForm}
-        hideContactUsFormModal={handleCloseContactUsForm}
+        hideContactUsFormModal={() => setShowContactUsForm(false)}
       ></ContactUsForm>
     </div>
   );

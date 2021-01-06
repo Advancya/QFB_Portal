@@ -5,35 +5,16 @@ import Login from "../components/Login";
 import SubmitOTP from "../components/SubmitOTP";
 import RegisterLanding from "../components/Register/RegisterLanding";
 import AppBox from "../components/AppBox";
-import ProductsAndOffers from "../components/ProductsAndOffers/ProductsAndOffersLanding";
 import ContactUsLanding from "../components/ContactUs/ContactUsLanding";
 import ProductsAndOffersLanding from "../components/ProductsAndOffers/ProductsAndOffersLanding";
-import { useHistory } from "react-router-dom";
 import { AuthContext, User } from "../providers/AuthProvider";
 import { localStrings as local_Strings } from "../translations/localStrings";
 
 const initialUserData = { username: "", password: "", otp: "" };
 function Landing() {
-  const history = useHistory();
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
 
-  const [
-    showproductsAndOffersDetails,
-    setshowproductsAndOffersDetails,
-  ] = useState(false);
-  const [showRegisterStep1, setShowRegisterStep1] = useState(false);
-  const [showContactUslanding, setshowContactUslanding] = useState(false);
-
-  const handleShowproductsAndOffersDetails = () => {
-    setshowproductsAndOffersDetails(true);
-  };
-  const handleShowcontactUsLanding = () => {
-    setshowContactUslanding(true);
-  };
-  const handleShowRegisterStep1 = () => {
-    setShowRegisterStep1(true);
-  };
   const [loginData, setUserDetail] = useState<User>(initialUserData);
   const [showValidateOTP, setOTPSubmissionRequired] = useState<boolean>(false);
   currentContext.language === "en"
@@ -59,21 +40,12 @@ function Landing() {
                 />
               )}
               <div className="col-lg-4 col-container flex-column">
-                <RegisterLanding
-                  showRegisterStep1Modal={handleShowRegisterStep1}
-                />
+                <RegisterLanding />
                 <AppBox />
               </div>
               <div className="col-lg-4 col-container flex-column loginSideBoxBoxes">
-                <ProductsAndOffersLanding
-                  showProductsAndOffersDetailsModal={
-                    handleShowproductsAndOffersDetails
-                  }
-                />
-
-                <ContactUsLanding
-                  showContactUsDetailsModal={handleShowcontactUsLanding}
-                />
+                <ProductsAndOffersLanding />
+                <ContactUsLanding />
               </div>
             </div>
           </div>

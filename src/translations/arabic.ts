@@ -775,6 +775,7 @@ const ar = {
   PortfolioNoFacilities: "No Facilities Found",
   
   OfferRequestSubmitMessage: "Your subscription request to the offer \"[REPLACE ME]\" has been submitted",
+  ContactUsSelectCountry: "Select Country",
 };
 
 export default ar;
