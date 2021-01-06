@@ -1,17 +1,20 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import guaranteesIcon from "../../../images/guaranties-icon.svg";
-import { emptyBankGuarantee, IBankGuarantee } from "../../../Helpers/publicInterfaces";
+import {
+  emptyBankGuarantee,
+  IBankGuarantee,
+} from "../../../Helpers/publicInterfaces";
 import moment from "moment";
-import { localStrings as local_Strings } from '../../../translations/localStrings';
+import { localStrings as local_Strings } from "../../../translations/localStrings";
 import { AuthContext } from "../../../providers/AuthProvider";
 import * as helper from "../../../Helpers/helper";
 import NoResult from "../../../shared/NoResult";
 import { GetBankGuaranteeListing } from "../../../services/cmsService";
 import Constant from "../../../constants/defaultData";
-import LoadingOverlay from 'react-loading-overlay';
+import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
-import FilterMoreButtonControl from '../../../shared/FilterMoreButtonControl';
+import FilterMoreButtonControl from "../../../shared/FilterMoreButtonControl";
 import { PortfolioContext } from "../../../pages/Homepage";
 
 interface iGuaranteesListing {
@@ -45,7 +48,7 @@ function GuaranteesListing(props: iGuaranteesListing) {
         })
         .catch((e: any) => console.log(e))
         .finally(() => setLoading(false));
-    }
+    };
 
     if (!!currentContext.selectedCIF) {
       initialLoadMethod();
@@ -61,21 +64,22 @@ function GuaranteesListing(props: iGuaranteesListing) {
       <a
         href="#"
         className="row align-items-center"
-        onClick={() => props.showGuaranteesDetailsModal(item.id, item.principalAmount)}
+        onClick={() =>
+          props.showGuaranteesDetailsModal(item.id, item.principalAmount)
+        }
       >
-        <div className="col-2 col-sm-1">
-          <span className="curr-icon">{item.currency || currentContext.userSettings.currency}</span>
+        <div className="col-sm-9 col-lg-10 mb-2">
+          <h3 className="text-capitalize color-gold text-16">
+            {local_Strings.LoanNo} {item.id || ""}
+          </h3>
+          <h3 className="text-18">
+            {helper.ConvertToQfbNumberFormat(item.principalAmount)}
+          </h3>
         </div>
-        <div className="col-8 col-sm-4">
-          <h5>{local_Strings.LoanNo}</h5>
-          <h4>{item.id || ""}</h4>
-        </div>
-        <div className="col-8 offset-2 offset-sm-0 col-sm-6">
-          <h5>{local_Strings.CashDetailsBalanceLabel}</h5>
-          <h4>{helper.ConvertToQfbNumberFormat(item.principalAmount) + " " + item.currency}</h4>
-        </div>
-        <div className="col-2 col-sm-1 text-right">
-          <i className="fa fa-chevron-right"></i>
+        <div className="col-sm-3 col-lg-2  text-md-center">
+          <strong className="status-badge-small color-gold text-xs">
+            {item.currency || currentContext.userSettings.currency}
+          </strong>
         </div>
       </a>
     </li>
@@ -86,7 +90,7 @@ function GuaranteesListing(props: iGuaranteesListing) {
       <Modal
         show={props.showGuaranteesListingModal}
         onHide={props.hideGuaranteesListingModal}
-        size="lg"
+        //size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
         scrollable
@@ -99,7 +103,8 @@ function GuaranteesListing(props: iGuaranteesListing) {
             </div>
             <div className="ib-text">
               <h4>{local_Strings.BankGuarantee}</h4>
-              <h5>{(userPortfolio.totalGuarantees || "0") + " " + (currentContext.userSettings.currency || "")}</h5>
+              {/*               <h5>{(userPortfolio.totalGuarantees || "0") + " " + (currentContext.userSettings.currency || "")}</h5>
+               */}{" "}
             </div>
           </div>
           <button
@@ -111,17 +116,36 @@ function GuaranteesListing(props: iGuaranteesListing) {
           </button>
         </Modal.Header>
         <Modal.Body>
+          <div className="col-lg-6 popup-box">
+            <div className="inner-box m-0 mb-3 py-3">
+              <div className="d-flex align-items-center">
+                <div className="ib-icon">
+                  <img src={guaranteesIcon} className="img-fluid" />
+                </div>
+                <div className="ib-text">
+                  <h4>{local_Strings.PortfolioLiabilitiesOption2}</h4>
+                  <h5>
+                    {(userPortfolio.totalGuarantees || "0") +
+                      " " +
+                      currentContext.userSettings.currency}
+                  </h5>
+                </div>
+              </div>
+            </div>
+          </div>
           <div className="box modal-box">
             <ul className="box-list" id="dataList">
-              {data &&
-                data.length > 0 &&
-                !!data[0].id ?
-                data.slice(0, offset).map((item, index) => renderItem(item, index)
-                ) : NoResult(local_Strings.NoDataToShow)}
+              {data && data.length > 0 && !!data[0].id
+                ? data
+                    .slice(0, offset)
+                    .map((item, index) => renderItem(item, index))
+                : NoResult(local_Strings.NoDataToShow)}
             </ul>
           </div>
-          <FilterMoreButtonControl showMore={data && data.length > rowLimit &&
-            offset < data.length} onClickMore={() => setOffset(offset + 5)} />
+          <FilterMoreButtonControl
+            showMore={data && data.length > rowLimit && offset < data.length}
+            onClickMore={() => setOffset(offset + 5)}
+          />
           <LoadingOverlay
             active={isLoading}
             spinner={

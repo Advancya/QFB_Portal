@@ -42,7 +42,7 @@ const FilterCommonControl: React.FC<IFilterCommonControlProps> = (props) => {
           />
         </div>
 
-        <div className="col-sm-3 offset-sm-2">
+        <div className="col-sm-3 offset-sm-2 col-lg-2 offset-lg-3">
           <FilterButtonControl
             clearFilter={() => {
               setFilter(emptyCommonFilter);

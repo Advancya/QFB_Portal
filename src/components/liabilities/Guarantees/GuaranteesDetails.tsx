@@ -1,10 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
-import { localStrings as local_Strings } from '../../../translations/localStrings';
+import { localStrings as local_Strings } from "../../../translations/localStrings";
 import { AuthContext } from "../../../providers/AuthProvider";
-import { emptyGuaranteeDetail, IBankGuaranteeDetail } from "../../../Helpers/publicInterfaces";
+import {
+  emptyGuaranteeDetail,
+  IBankGuaranteeDetail,
+} from "../../../Helpers/publicInterfaces";
 import Constant from "../../../constants/defaultData";
-import LoadingOverlay from 'react-loading-overlay';
+import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import { GetBankGuaranteeDetails } from "../../../services/cmsService";
 import * as helper from "../../../Helpers/helper";
@@ -13,13 +16,15 @@ interface iGuaranteesDetails {
   showGuaranteesDetailsModal: boolean;
   hideGuaranteesDetailsModal: () => void;
   backGuaranteesListingModal: () => void;
-  params: { gurRef: string, balance: number }
+  params: { gurRef: string; balance: number };
 }
 function GuaranteesDetails(props: iGuaranteesDetails) {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
   const [isLoading, setLoading] = useState(false);
-  const [item, setDetail] = useState<IBankGuaranteeDetail>(emptyGuaranteeDetail);
+  const [item, setDetail] = useState<IBankGuaranteeDetail>(
+    emptyGuaranteeDetail
+  );
 
   useEffect(() => {
     let isMounted = true;
@@ -28,7 +33,8 @@ function GuaranteesDetails(props: iGuaranteesDetails) {
       .then((responseData: any) => {
         if (responseData && responseData.length > 0 && isMounted) {
           const _detail = helper.transformingStringToJSON(
-            responseData[0], currentContext.language
+            responseData[0],
+            currentContext.language
           );
           setDetail(_detail);
         }
@@ -45,7 +51,7 @@ function GuaranteesDetails(props: iGuaranteesDetails) {
     <Modal
       show={props.showGuaranteesDetailsModal}
       onHide={props.hideGuaranteesDetailsModal}
-      size="lg"
+      // size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       scrollable
@@ -90,11 +96,15 @@ function GuaranteesDetails(props: iGuaranteesDetails) {
             <li className="pb-3 px-4">
               <div className="row align-items-center">
                 <div className="col-sm-8">
-                  <h3 className="text-capitalize">{local_Strings.GuaranteeNo}</h3>
-                  <h3 className="text-sm">{item.BankGuaranteeReference.value || "0"}</h3>
+                  <h3 className="text-capitalize color-gold">
+                    {local_Strings.GuaranteeNo}
+                  </h3>
+                  <h3 className="text-sm">
+                    {item.BankGuaranteeReference.value || "0"}
+                  </h3>
                 </div>
                 <div className="col-sm-4 text-sm-right">
-                  <strong className="status-badge status-badge-lg color-black text-xs">
+                  <strong className="status-badge status-badge-lg color-gold text-xs">
                     {item.Currency.value || ""}
                   </strong>
                   <br />

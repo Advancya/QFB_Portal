@@ -3,15 +3,15 @@ import { Button, Modal } from "react-bootstrap";
 import facilitiesIcon from "../../../images/facilities-icon.svg";
 import { emptyLoanItem, ILoanItem } from "../../../Helpers/publicInterfaces";
 import moment from "moment";
-import { localStrings as local_Strings } from '../../../translations/localStrings';
+import { localStrings as local_Strings } from "../../../translations/localStrings";
 import { AuthContext } from "../../../providers/AuthProvider";
 import * as helper from "../../../Helpers/helper";
 import NoResult from "../../../shared/NoResult";
 import { GetFacilitiesListing } from "../../../services/cmsService";
 import Constant from "../../../constants/defaultData";
-import LoadingOverlay from 'react-loading-overlay';
+import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
-import FilterMoreButtonControl from '../../../shared/FilterMoreButtonControl';
+import FilterMoreButtonControl from "../../../shared/FilterMoreButtonControl";
 import { PortfolioContext } from "../../../pages/Homepage";
 
 interface iFacilitiesListing {
@@ -45,7 +45,7 @@ function FacilitiesListing(props: iFacilitiesListing) {
         })
         .catch((e: any) => console.log(e))
         .finally(() => setLoading(false));
-    }
+    };
 
     if (!!currentContext.selectedCIF) {
       initialLoadMethod();
@@ -63,20 +63,22 @@ function FacilitiesListing(props: iFacilitiesListing) {
         className="row align-items-center"
         onClick={() => props.showFacilitiesDetailsModal(item.ldReference)}
       >
-        <div className="col-6 col-sm-4">
-          <h5>{local_Strings.LoanNo}</h5>
-          <h4>{item.ldReference || ""}</h4>
+        <div className="col-sm-9 col-lg-10 mb-2">
+          <h3 className="text-capitalize color-gold text-16">
+            {local_Strings.LoanNo} {item.ldReference || ""}
+          </h3>
+          <h3 className="text-18">
+            {helper.ConvertToQfbNumberFormat(item.productBalance)}
+          </h3>
         </div>
-        <div className="col-6 col-sm-4">
-          <h5>{local_Strings.CashDetailsBalanceLabel}</h5>
-          <h4>{helper.ConvertToQfbNumberFormat(item.productBalance) + " " + item.currency}</h4>
-        </div>
-        <div className="col-10 col-sm-3">
-          <h5>{local_Strings.percentageLabel}</h5>
-          <h4>{(item.profitRate || "") + "%"}</h4>
-        </div>
-        <div className="col-2 col-sm-1 caretArrow">
-          <i className="fa fa-chevron-right"></i>
+        <div className="col-sm-3 col-lg-2  text-md-center">
+          <strong className="status-badge-small color-gold text-xs">
+            {item.currency || ""}
+          </strong>
+          <br />
+          <strong className="color-gold text-xs">
+            {(item.profitRate || "") + "%"}
+          </strong>
         </div>
       </a>
     </li>
@@ -87,7 +89,7 @@ function FacilitiesListing(props: iFacilitiesListing) {
       <Modal
         show={props.showFacilitiesListingModal}
         onHide={props.hideFacilitiesListingModal}
-        size="lg"
+        // size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
         scrollable
@@ -100,7 +102,11 @@ function FacilitiesListing(props: iFacilitiesListing) {
             </div>
             <div className="ib-text">
               <h4>{local_Strings.Loan}</h4>
-              <h5>{(userPortfolio.totalLoans || "0") + " " + (currentContext.userSettings.currency || "")}</h5>
+              {/*  <h5>
+                {(userPortfolio.totalLoans || "0") +
+                  " " +
+                  (currentContext.userSettings.currency || "")}
+              </h5> */}
             </div>
           </div>
           <button
@@ -112,17 +118,36 @@ function FacilitiesListing(props: iFacilitiesListing) {
           </button>
         </Modal.Header>
         <Modal.Body>
+          <div className="col-lg-6 popup-box">
+            <div className="inner-box m-0 mb-3 py-3">
+              <div className="d-flex align-items-center">
+                <div className="ib-icon">
+                  <img src={facilitiesIcon} className="img-fluid" />
+                </div>
+                <div className="ib-text">
+                  <h4>{local_Strings.PortfolioLiabilitiesOption1}</h4>
+                  <h5>
+                    {(userPortfolio.totalLoans || "0") +
+                      " " +
+                      currentContext.userSettings.currency}
+                  </h5>
+                </div>
+              </div>
+            </div>
+          </div>
           <div className="box modal-box">
             <ul className="box-list" id="dataList">
-              {data &&
-                data.length > 0 &&
-                !!data[0].ldReference ?
-                data.slice(0, offset).map((item, index) => renderItem(item, index)
-                ) : NoResult(local_Strings.NoDataToShow)}
+              {data && data.length > 0 && !!data[0].ldReference
+                ? data
+                    .slice(0, offset)
+                    .map((item, index) => renderItem(item, index))
+                : NoResult(local_Strings.NoDataToShow)}
             </ul>
           </div>
-          <FilterMoreButtonControl showMore={data && data.length > rowLimit &&
-            offset < data.length} onClickMore={() => setOffset(offset + 5)} />
+          <FilterMoreButtonControl
+            showMore={data && data.length > rowLimit && offset < data.length}
+            onClickMore={() => setOffset(offset + 5)}
+          />
           <LoadingOverlay
             active={isLoading}
             spinner={

@@ -3,16 +3,17 @@ import { Button, Modal } from "react-bootstrap";
 import depositeIcon from "../../../images/deposit-icon.svg";
 import { emptyDeposit, IDeposit } from "../../../Helpers/publicInterfaces";
 import moment from "moment";
-import { localStrings as local_Strings } from '../../../translations/localStrings';
+import { localStrings as local_Strings } from "../../../translations/localStrings";
 import { AuthContext } from "../../../providers/AuthProvider";
 import * as helper from "../../../Helpers/helper";
 import NoResult from "../../../shared/NoResult";
 import { GetDepositeListing } from "../../../services/cmsService";
 import Constant from "../../../constants/defaultData";
-import LoadingOverlay from 'react-loading-overlay';
+import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
-import FilterMoreButtonControl from '../../../shared/FilterMoreButtonControl';
+import FilterMoreButtonControl from "../../../shared/FilterMoreButtonControl";
 import { PortfolioContext } from "../../../pages/Homepage";
+import depositIcon from "../../../images/deposit-icon.svg";
 
 interface iDepositeListing {
   showDepositeListingModal: boolean;
@@ -44,7 +45,7 @@ function DepositeListing(props: iDepositeListing) {
         })
         .catch((e: any) => console.log(e))
         .finally(() => setLoading(false));
-    }
+    };
 
     if (!!currentContext.selectedCIF) {
       initialLoadMethod();
@@ -62,20 +63,22 @@ function DepositeListing(props: iDepositeListing) {
         className="row align-items-center"
         onClick={() => props.showDepositeDetailsModal(item.contractNumber)}
       >
-        <div className="col-6 col-sm-4">
-          <h5>{local_Strings.DepositNo}</h5>
-          <h4>{item.contractNumber || ""}</h4>
+        <div className="col-sm-9 col-lg-10 mb-2">
+          <h3 className="text-capitalize color-gold text-16">
+            {local_Strings.DepositNo + item.contractNumber}
+          </h3>
+          <h3 className="text-18">
+            {helper.ConvertToQfbNumberFormat(item.depositAmount)}
+          </h3>
         </div>
-        <div className="col-6 col-sm-4">
-          <h5>{local_Strings.CashDetailsBalanceLabel}</h5>
-          <h4>{helper.ConvertToQfbNumberFormat(item.depositAmount)}{item.currency || ""}</h4>
-        </div>
-        <div className="col-10 col-sm-3">
-          <h5>{local_Strings.percentageLabel}</h5>
-          <h4>{(item.interestRate || "") + "%"}</h4>
-        </div>
-        <div className="col-2 col-sm-1 caretArrow">
-          <i className="fa fa-chevron-right"></i>
+        <div className="col-sm-3 col-lg-2  text-md-center">
+          <strong className="status-badge-small color-gold text-xs">
+            {item.currency || ""}
+          </strong>
+          <br />
+          <strong className="color-gold text-xs">
+            {(item.interestRate || "") + "%"}
+          </strong>
         </div>
       </a>
     </li>
@@ -86,7 +89,7 @@ function DepositeListing(props: iDepositeListing) {
       <Modal
         show={props.showDepositeListingModal}
         onHide={props.hideDepositeListingModal}
-        size="lg"
+        // size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
         scrollable
@@ -99,7 +102,11 @@ function DepositeListing(props: iDepositeListing) {
             </div>
             <div className="ib-text">
               <h4>{local_Strings.DepositeListingCash}</h4>
-              <h5>{(userPortfolio.totalDeposits || "0") + " " + (currentContext.userSettings.currency || "")}</h5>
+              {/*  <h5>
+                {(userPortfolio.totalDeposits || "0") +
+                  " " +
+                  (currentContext.userSettings.currency || "")}
+              </h5> */}
             </div>
           </div>
           <button
@@ -111,17 +118,37 @@ function DepositeListing(props: iDepositeListing) {
           </button>
         </Modal.Header>
         <Modal.Body>
+          <div className="col-lg-6 popup-box">
+            <div className="inner-box m-0 mb-3 py-3">
+              <div className="d-flex align-items-center">
+                <div className="ib-icon">
+                  <img src={depositIcon} className="img-fluid" />
+                </div>
+                <div className="ib-text">
+                  <h4>{local_Strings.PortfolioAssetsOption3}</h4>
+                  <h5>
+                    {(userPortfolio.totalDeposits || "0") +
+                      " " +
+                      currentContext.userSettings.currency}
+                  </h5>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div className="box modal-box">
             <ul className="box-list" id="dataList">
-              {data &&
-                data.length > 0 &&
-                !!data[0].contractNumber ?
-                data.slice(0, offset).map((item, index) => renderItem(item, index)
-                ) : NoResult(local_Strings.DepositListing_NoData)}
+              {data && data.length > 0 && !!data[0].contractNumber
+                ? data
+                    .slice(0, offset)
+                    .map((item, index) => renderItem(item, index))
+                : NoResult(local_Strings.DepositListing_NoData)}
             </ul>
           </div>
-          <FilterMoreButtonControl showMore={data && data.length > rowLimit &&
-            offset < data.length} onClickMore={() => setOffset(offset + 5)} />
+          <FilterMoreButtonControl
+            showMore={data && data.length > rowLimit && offset < data.length}
+            onClickMore={() => setOffset(offset + 5)}
+          />
           <LoadingOverlay
             active={isLoading}
             spinner={

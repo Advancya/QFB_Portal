@@ -17,7 +17,9 @@ function Deposite() {
 
   const [showDepositeListing, setShowDepositeListing] = useState(false);
   const [showDepositeDetails, setshowDepositeDetails] = useState(false);
-  const [showDepositeRecievedProfit, setShowDepositeRecievedProfit] = useState(false);
+  const [showDepositeRecievedProfit, setShowDepositeRecievedProfit] = useState(
+    false
+  );
 
   return (
     <div className="col-lg-4">
@@ -26,11 +28,17 @@ function Deposite() {
           <div className="ib-icon">
             <img src={depositIcon} className="img-fluid" />
           </div>
-          <a href="#" className="ib-text" onClick={() => {
-            if (!!userPortfolio.totalDeposits && userPortfolio.totalDeposits !== "0") {
-              setShowDepositeListing(true);
-            }
-          }}
+          <a
+            href="#"
+            className="ib-text"
+            onClick={() => {
+              if (
+                !!userPortfolio.totalDeposits &&
+                userPortfolio.totalDeposits !== "0"
+              ) {
+                setShowDepositeListing(true);
+              }
+            }}
           >
             <h4>{local_Strings.PortfolioAssetsOption3}</h4>
             <h5>
@@ -41,6 +49,7 @@ function Deposite() {
           </a>
         </div>
       </div>
+
       <DepositeListing
         showDepositeListingModal={showDepositeListing}
         hideDepositeListingModal={() => setShowDepositeListing(false)}
@@ -50,7 +59,7 @@ function Deposite() {
           setReferenceId(depositNumber);
         }}
       />
-      {depositNumber && !!depositNumber &&
+      {depositNumber && !!depositNumber && (
         <React.Fragment>
           <DepositeDetails
             showDepositeDetailsModal={showDepositeDetails}
@@ -67,14 +76,17 @@ function Deposite() {
           />
           <DepositeRecievedProfit
             showDepositeRecievedProfitModal={showDepositeRecievedProfit}
-            hideDepositeRecievedProfitModal={() => setShowDepositeRecievedProfit(false)}
+            hideDepositeRecievedProfitModal={() =>
+              setShowDepositeRecievedProfit(false)
+            }
             backDepositeRecievedProfitModal={() => {
               setShowDepositeRecievedProfit(false);
               setshowDepositeDetails(true);
             }}
             depositNumber={depositNumber}
           />
-        </React.Fragment>}
+        </React.Fragment>
+      )}
     </div>
   );
 }
