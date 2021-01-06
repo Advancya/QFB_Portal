@@ -12,8 +12,10 @@ function Inbox() {
   const currentContext = useContext(AuthContext);
   const InboxMessages = useContext(InboxContext);
   local_Strings.setLanguage(currentContext.language);
-  const countUnreadInbox = InboxMessages.messages && InboxMessages.messages.length > 0
-    ? InboxMessages.messages.filter((i: any) => !i.isRead).length : 0;
+  const countUnreadInbox =
+    InboxMessages.messages && InboxMessages.messages.length > 0
+      ? InboxMessages.messages.filter((i: any) => !i.isRead).length
+      : 0;
 
   const handleCloseInboxListing = () => {
     setShowInboxListing(false);
@@ -37,26 +39,35 @@ function Inbox() {
   return (
     <>
       <a
-        className=""
+        className="border border-white rounded-circle p-0 mx-1 "
         href="#"
         onClick={handleShowInboxListing}
       >
-        <i className={countUnreadInbox > 0 ? "fa fa-envelope unread" : "fa fa-envelope"} />
+        <i
+          className={
+            countUnreadInbox > 0
+              ? "fa fa-envelope unread text-xs"
+              : "fa fa-envelope text-xs"
+          }
+        />
       </a>
-      {InboxMessages.messages && InboxMessages.messages.length > 0
-        && !!InboxMessages.messages[0].adviceDate &&
-        <InboxListing
-          showInboxListingModal={showInboxListing}
-          hideInboxListingModal={handleCloseInboxListing}
-          showInboxDetailsModal={handleShowInboxDetails}
-        />}
-      {message && !!message.adviceDate &&
+      {InboxMessages.messages &&
+        InboxMessages.messages.length > 0 &&
+        !!InboxMessages.messages[0].adviceDate && (
+          <InboxListing
+            showInboxListingModal={showInboxListing}
+            hideInboxListingModal={handleCloseInboxListing}
+            showInboxDetailsModal={handleShowInboxDetails}
+          />
+        )}
+      {message && !!message.adviceDate && (
         <InboxDetails
           item={message}
           showInboxDetailsModal={showInboxDetails}
           hideInboxDetailsModal={handleCloseInboxDetails}
           backInboxListingModal={handleBackInboxDetails}
-        />}
+        />
+      )}
     </>
   );
 }

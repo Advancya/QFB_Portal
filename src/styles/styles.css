@@ -44,6 +44,7 @@ html[dir="ltr"], [dir="ltr"] {
 .nav-pills {
   justify-content: center;
   border-bottom: 0;
+  flex-direction: row;
 }
 
 .nav-pills .nav-link {
@@ -493,6 +494,11 @@ textarea.form-control {
   color: #FFF;
 }
 
+.log-out {
+  line-height: normal;
+  vertical-align: middle;
+}
+
 .header .logo {
   display: flex;
   align-items: flex-end;
@@ -556,11 +562,31 @@ textarea.form-control {
   border-radius: 50%;
 }
 
+#dataList .unread::after {
+  position: absolute;
+  top: 0rem;
+  left: -0.5rem;
+  content: "";
+  width: 0.35rem;
+  height: 0.35rem;
+  background: #e22525;
+  border-radius: 50%;
+}
+
+.fa-envelope.unread::after {
+  top: 3px;
+  right: 0;
+}
+
 .header .navbar-nav .nav-item .fa.fa-bell.unread::after {
   top: 0.1rem;
   right: 0.1rem;
   width: 0.5rem;
   height: 0.5rem;
+}
+
+.navbar-dark .navbar-nav .nav-link, .navbar-dark .navbar-toggler {
+  color: #fff;
 }
 
 .header .navbar-nav .nav-item:first-child a {
@@ -569,6 +595,17 @@ textarea.form-control {
 
 .header .navbar-nav .nav-item:last-child a {
   padding-right: 0;
+}
+
+.nav-item .rounded-circle {
+  width: 25px;
+  height: 25px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.nav-item .rounded-circle:hover {
+  background: #000;
 }
 
 .header .navbar-nav .nav-link img {
@@ -591,10 +628,6 @@ textarea.form-control {
   padding: 0.15rem 0.2rem 0.25rem 0.2rem;
   line-height: 1;
   border-radius: 50%;
-}
-
-.header .navbar-nav .nav-item a:hover i {
-  background: #000;
 }
 
 .breadcrumb-section {
@@ -1545,6 +1578,9 @@ ul ul {
   .modal-dialog {
     max-width: 50%;
   }
+  .navbar-expand-md .navbar-collapse {
+    justify-content: flex-end;
+  }
 }
 
 @media all and (min-width: 992px) {
@@ -1598,7 +1634,16 @@ ul ul {
   }
 }
 
-@media all and (max-width: 767px) {}
+@media all and (max-width: 767px) {
+  .navbar {
+    justify-content: flex-end;
+  }
+  .navbar-nav {
+    background: rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    flex-direction: row;
+  }
+}
 
 @media all and (max-width: 575px) {
   [dir="rtl"] .text-sm-right {
@@ -1624,22 +1669,15 @@ ul ul {
     justify-content: center;
     margin: 1rem 0;
   }
-  .header .navbar, .welcomeText {
-    text-align: center;
-    align-items: center;
-    justify-content: center;
-  }
   .header .navbar-nav .nav-item {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
   }
   .header .navbar-nav .nav-item a {
     padding: 0.5rem 0;
   }
   .header .navbar-nav .nav-item a i {
-    padding: 0.75rem;
+    /*     padding: 0.75rem;
+ */
     font-size: 1.25rem;
   }
   .headRow label, .headRow label a, .resetBtn {

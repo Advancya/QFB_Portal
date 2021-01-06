@@ -10,11 +10,16 @@ import NewBeneficiary from "../beneficiaries/NewBeneficiaries";
 import BeneficiariesDetails from "../beneficiaries/BeneficiariesDetails";
 import BeneficiariesListing from "../beneficiaries/BeneficiariesListing";
 import { localStrings as local_Strings } from "../../translations/localStrings";
-import { emptyTransactionDetail, ITransactionDetail } from "../../Helpers/publicInterfaces";
+import {
+  emptyTransactionDetail,
+  ITransactionDetail,
+} from "../../Helpers/publicInterfaces";
 
 function Transactions() {
   const [showTransactionsListing, setShowTransactionsListing] = useState(false);
-  const [item, setDetail] = useState<ITransactionDetail>(emptyTransactionDetail);
+  const [item, setDetail] = useState<ITransactionDetail>(
+    emptyTransactionDetail
+  );
   const [beneficiaryId, setBeneficiaryId] = useState<number>();
 
   const handleCloseTransactionsListing = () => {
@@ -103,7 +108,7 @@ function Transactions() {
   };
 
   return (
-    <div>
+    <>
       <li className="nav-item">
         <a
           className="nav-link px-2"
@@ -121,14 +126,15 @@ function Transactions() {
         showNewTransactionModal={handleShowNewTransaction}
         showBeneficiariesListing={handleShowBeneficiariesListing}
       />
-      {item && item.id > 0 &&
+      {item && item.id > 0 && (
         <TransactionsDetails
           showTransactionsDetailsModal={showTransactionsDetails}
           hideTransactionsDetailsModal={handleCloseTransactionsDetails}
           backTransactionsListingModal={handleBackTransactionsDetails}
           showNewTransactionModal={handleShowNewTransaction}
           item={item}
-        />}
+        />
+      )}
       <NewTransaction
         showNewTransactionModal={showNewTransaction}
         hideNewTransactionModal={handleCloseNewTransaction}
@@ -141,20 +147,21 @@ function Transactions() {
         backBeneficiariesListingModal={handleBackBeneficiariesListing}
         showNewBeneficiaryModal={handleShowNewBeneficiary}
       />
-      {beneficiaryId && beneficiaryId > 0 &&
+      {beneficiaryId && beneficiaryId > 0 && (
         <BeneficiariesDetails
           showBeneficiariesDetailsModal={showBeneficiariesDetails}
           hideBeneficiariesDetailsModal={handleCloseBeneficiariesDetails}
           backBeneficiariesDetailsgModal={handleBackBeneficiariesDetails}
           showNewBeneficiaryModal={handleShowNewBeneficiary}
           itemId={beneficiaryId}
-        />}
+        />
+      )}
       <NewBeneficiary
         showNewBeneficiaryModal={showNewBeneficiary}
         hideNewBeneficiaryModal={handleCloseNewBeneficiary}
         backNewBeneficiaryModal={handleBackNewBeneficiary}
       />
-    </div>
+    </>
   );
 }
 
