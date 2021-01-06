@@ -1,10 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
-import { localStrings as local_Strings } from '../../../translations/localStrings';
+import { localStrings as local_Strings } from "../../../translations/localStrings";
 import { AuthContext } from "../../../providers/AuthProvider";
-import { emptyLoanDetail, ILoanDetail } from "../../../Helpers/publicInterfaces";
+import {
+  emptyLoanDetail,
+  ILoanDetail,
+} from "../../../Helpers/publicInterfaces";
 import Constant from "../../../constants/defaultData";
-import LoadingOverlay from 'react-loading-overlay';
+import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import { GetFacilityDetails } from "../../../services/cmsService";
 import * as helper from "../../../Helpers/helper";
@@ -31,7 +34,8 @@ function FacilitiesDetails(props: iFacilitiesDetails) {
       .then((responseData: any) => {
         if (responseData && responseData.length > 0 && isMounted) {
           const _detail = helper.transformingStringToJSON(
-            responseData[0], currentContext.language
+            responseData[0],
+            currentContext.language
           );
           setDetail(_detail);
         }
@@ -48,7 +52,7 @@ function FacilitiesDetails(props: iFacilitiesDetails) {
     <Modal
       show={props.showFacilitiesDetailsModal}
       onHide={props.hideFacilitiesDetailsModal}
-      size="lg"
+      // size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       scrollable
@@ -93,11 +97,15 @@ function FacilitiesDetails(props: iFacilitiesDetails) {
             <li className="pb-3 px-4">
               <div className="row align-items-center">
                 <div className="col-sm-8">
-                  <h3 className="text-capitalize">{local_Strings.LoanNo  + " | " + props.facilityNumber}</h3>
-                  <h3 className="text-sm">{item.OutstandingAmount.value || "0"}</h3>
+                  <h3 className="text-capitalize color-gold">
+                    {local_Strings.LoanNo + " | " + props.facilityNumber}
+                  </h3>
+                  <h3 className="text-sm">
+                    {item.OutstandingAmount.value || "0"}
+                  </h3>
                 </div>
                 <div className="col-sm-4 text-sm-right">
-                  <strong className="status-badge status-badge-lg color-black text-xs">
+                  <strong className="status-badge status-badge-lg color-gold text-xs">
                     {item.Currency.value || ""}
                   </strong>
                   <br />

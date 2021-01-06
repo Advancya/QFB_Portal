@@ -631,7 +631,7 @@ textarea.form-control {
   padding-bottom: 0.5rem;
 }
 
-.box h2, .box h3, .box h4, .box h5 {
+.box h2, .box h3, .box h4, .box h5, .popup-box h2, .popup-box h3, .popup-box h4, .popup-box h5 {
   margin: 0;
   padding: 0;
   font-size: 1rem;
@@ -640,7 +640,7 @@ textarea.form-control {
   letter-spacing: 1px;
 }
 
-.box .bg-beige h3 {
+.box .bg-beige h3, .popup-box .bg-beige h3 {
   color: #6b4f44;
   font-size: 1rem;
   text-transform: capitalize;
@@ -662,13 +662,13 @@ a.box:hover {
   font-size: 0.875rem;
 }
 
-.box h2 {
+.box h2, .popup-box h2 {
   font-size: 1.6rem;
   letter-spacing: 0;
   margin: 0.25rem 0;
 }
 
-.box h2 small, .box h4, .box h5 {
+.box h2 small, .box h4, .box h5, .popup-box h2 small, .popup-box h4, .popup-box h5 {
   font-size: 0.9rem;
   font-weight: 600;
 }
@@ -693,6 +693,11 @@ a.box:hover {
   min-width: 2.5rem;
 }
 
+.popup-box .ib-icon img {
+  margin-inline-start: -1.75rem;
+  min-width: 3rem;
+}
+
 .inner-box a.ib-text {
   display: block;
   color: #000;
@@ -703,7 +708,7 @@ a.box:hover {
   text-decoration: none;
 }
 
-.inner-box .ib-text h5 {
+.inner-box .ib-text h5, .popup-box .ib-text h5 {
   font-weight: 500;
   font-size: 0.9rem;
   display: inline-block;
@@ -1471,11 +1476,11 @@ tr.shown {
 
 /**rtl***/
 
-[dir="rtl"] .text-right, [dir="rtl"] .text-md-right, [dir="rtl"] .text-sm-right {
+[dir="rtl"] .text-right, [dir="rtl"] .text-md-right {
   text-align: left!important;
 }
 
-[dir="rtl"] .text-left, [dir="rtl"] .text-md-left, [dir="rtl"] .text-sm-left {
+[dir="rtl"] .text-left, [dir="rtl"] .text-md-left {
   text-align: right!important;
 }
 
@@ -1521,13 +1526,24 @@ ul ul {
   list-style-type: circle;
 }
 
+.MuiSvgIcon-root {
+  fill: #ccc!important;
+  width: 1.9em!important;
+  height: 1.5em!important;
+  font-size: 1.3rem!important;
+}
+
+#dataList .fa-chevron-right {
+  color: #ccc;
+}
+
 /* Media Queries */
 
 @media all and (min-width: 576px) {}
 
 @media all and (min-width: 768px) {
   .modal-dialog {
-    max-width: 45%;
+    max-width: 50%;
   }
 }
 
@@ -1585,17 +1601,23 @@ ul ul {
 @media all and (max-width: 767px) {}
 
 @media all and (max-width: 575px) {
+  [dir="rtl"] .text-sm-right {
+    text-align: left!important;
+  }
+  [dir="rtl"] .text-sm-left {
+    text-align: right!important;
+  }
   html {
     font-size: 13px
   }
   .topLeftIcons {
     text-align: center;
   }
-  .topRight {
-    text-align: center;
+  .topHeader .topRight {
+    text-align: center!important;
   }
-  .topRight a {
-    display: block;
+  .topHeader .topRight a {
+    display: inline-block;
   }
   .header .logo {
     align-items: flex-end;

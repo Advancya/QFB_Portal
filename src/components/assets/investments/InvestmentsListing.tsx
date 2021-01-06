@@ -1,18 +1,22 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import investmentsIcon from "../../../images/invest-icon.svg";
-import { emptyInvestment, IInvestment } from "../../../Helpers/publicInterfaces";
+import {
+  emptyInvestment,
+  IInvestment,
+} from "../../../Helpers/publicInterfaces";
 import moment from "moment";
-import { localStrings as local_Strings } from '../../../translations/localStrings';
+import { localStrings as local_Strings } from "../../../translations/localStrings";
 import { AuthContext } from "../../../providers/AuthProvider";
 import * as helper from "../../../Helpers/helper";
 import NoResult from "../../../shared/NoResult";
 import { GetInvestmentsListing } from "../../../services/cmsService";
 import Constant from "../../../constants/defaultData";
-import LoadingOverlay from 'react-loading-overlay';
+import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
-import FilterMoreButtonControl from '../../../shared/FilterMoreButtonControl';
+import FilterMoreButtonControl from "../../../shared/FilterMoreButtonControl";
 import { PortfolioContext } from "../../../pages/Homepage";
+import investIcon from "../../../images/invest-icon.svg";
 
 interface iInvestmentsListing {
   showInvestmentsListingModal: boolean;
@@ -43,7 +47,7 @@ function InvestmentsListing(props: iInvestmentsListing) {
         })
         .catch((e: any) => console.log(e))
         .finally(() => setLoading(false));
-    }
+    };
 
     if (!!currentContext.selectedCIF) {
       initialLoadMethod();
@@ -53,28 +57,32 @@ function InvestmentsListing(props: iInvestmentsListing) {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
   }, [currentContext.selectedCIF]);
-  
+
   const renderItem = (item: IInvestment, index: number) => (
     <li className="shown" key={index}>
       <a
         href="#"
         className="row align-items-center"
-        onClick={() => props.showInvestmentsDetailsModal(item.subAssetID, item.secDesciption)}
+        onClick={() =>
+          props.showInvestmentsDetailsModal(item.subAssetID, item.secDesciption)
+        }
       >
-        <div className="col-6 col-sm-4">
-          <h5>{local_Strings.Investment}</h5>
-          <h4>{item.secDesciption || ""}</h4>
+        <div className="col-sm-9 col-lg-10 mb-2">
+          <h3 className="text-capitalize color-gold text-16">
+            {local_Strings.Investment} | {item.secDesciption || ""}
+          </h3>
+          <h3 className="text-18">
+            {helper.ConvertToQfbNumberFormat(item.nominalAmount)}
+          </h3>
         </div>
-        <div className="col-6 col-sm-4">
-          <h5>{local_Strings.CashDetailsBalanceLabel}</h5>
-          <h4>{helper.ConvertToQfbNumberFormat(item.nominalAmount) + " " + item.securityCCY}</h4>
-        </div>
-        <div className="col-10 col-sm-3">
-          <h5>{local_Strings.percentageLabel}</h5>
-          <h4>{(item.profitRate || "")}</h4>
-        </div>
-        <div className="col-2 col-sm-1 caretArrow">
-          <i className="fa fa-chevron-right"></i>
+        <div className="col-sm-3 col-lg-2  text-md-center">
+          <strong className="status-badge-small color-gold text-xs">
+            {item.securityCCY || ""}
+          </strong>
+          <br />
+          <strong className="color-gold text-xs">
+            {item.profitRate || ""}
+          </strong>
         </div>
       </a>
     </li>
@@ -85,7 +93,7 @@ function InvestmentsListing(props: iInvestmentsListing) {
       <Modal
         show={props.showInvestmentsListingModal}
         onHide={props.hideInvestmentsListingModal}
-        size="lg"
+        // size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
         scrollable
@@ -98,7 +106,11 @@ function InvestmentsListing(props: iInvestmentsListing) {
             </div>
             <div className="ib-text">
               <h4>{local_Strings.InvestmentsListingCash}</h4>
-              <h5>{(userPortfolio.totalInvestment || "0") + " " + (currentContext.userSettings.currency || "")}</h5>
+              {/* <h5>
+                {(userPortfolio.totalInvestment || "0") +
+                  " " +
+                  (currentContext.userSettings.currency || "")}
+              </h5> */}
             </div>
           </div>
           <button
@@ -110,17 +122,37 @@ function InvestmentsListing(props: iInvestmentsListing) {
           </button>
         </Modal.Header>
         <Modal.Body>
+          <div className="col-lg-6 popup-box">
+            <div className="inner-box m-0 mb-3 py-3">
+              <div className="d-flex align-items-center">
+                <div className="ib-icon">
+                  <img src={investIcon} className="img-fluid" />
+                </div>
+                <div className="ib-text">
+                  <h4>{local_Strings.PortfolioAssetsOption2}</h4>
+                  <h5>
+                    {(userPortfolio.totalInvestment || "0") +
+                      " " +
+                      currentContext.userSettings.currency}
+                  </h5>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div className="box modal-box">
             <ul className="box-list" id="dataList">
-              {data &&
-                data.length > 0 &&
-                !!data[0].subAssetID ?
-                data.slice(0, offset).map((item, index) => renderItem(item, index)
-                ) : NoResult(local_Strings.InvestmentListing_NoData)}
+              {data && data.length > 0 && !!data[0].subAssetID
+                ? data
+                    .slice(0, offset)
+                    .map((item, index) => renderItem(item, index))
+                : NoResult(local_Strings.InvestmentListing_NoData)}
             </ul>
           </div>
-          <FilterMoreButtonControl showMore={data && data.length > rowLimit &&
-            offset < data.length} onClickMore={() => setOffset(offset + 5)} />
+          <FilterMoreButtonControl
+            showMore={data && data.length > rowLimit && offset < data.length}
+            onClickMore={() => setOffset(offset + 5)}
+          />
           <LoadingOverlay
             active={isLoading}
             spinner={

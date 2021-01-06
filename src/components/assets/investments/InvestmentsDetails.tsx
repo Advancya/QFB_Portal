@@ -1,11 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import moment from "moment";
-import { localStrings as local_Strings } from '../../../translations/localStrings';
+import { localStrings as local_Strings } from "../../../translations/localStrings";
 import { AuthContext } from "../../../providers/AuthProvider";
-import { emptyInvestmentDetail, IInvestmentDetail } from "../../../Helpers/publicInterfaces";
+import {
+  emptyInvestmentDetail,
+  IInvestmentDetail,
+} from "../../../Helpers/publicInterfaces";
 import Constant from "../../../constants/defaultData";
-import LoadingOverlay from 'react-loading-overlay';
+import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import { GetInvestmentsDetails } from "../../../services/cmsService";
 import * as helper from "../../../Helpers/helper";
@@ -16,7 +19,7 @@ interface iInvestmentsDetails {
   backInvestmentsListingModal: () => void;
   showInvestmentsRecievedProfit: () => void;
   showInvestmentsBuyAndSell: () => void;
-  investment: { Id: number, name: string };
+  investment: { Id: number; name: string };
 }
 
 function InvestmentsDetails(props: iInvestmentsDetails) {
@@ -32,7 +35,8 @@ function InvestmentsDetails(props: iInvestmentsDetails) {
       .then((responseData: any) => {
         if (responseData && responseData.length > 0 && isMounted) {
           const _detail = helper.transformingStringToJSON(
-            responseData[0], currentContext.language
+            responseData[0],
+            currentContext.language
           );
           setDetail(_detail);
         }
@@ -49,7 +53,7 @@ function InvestmentsDetails(props: iInvestmentsDetails) {
     <Modal
       show={props.showInvestmentsDetailsModal}
       onHide={props.hideInvestmentsDetailsModal}
-      size="lg"
+      // size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       scrollable
@@ -94,11 +98,17 @@ function InvestmentsDetails(props: iInvestmentsDetails) {
             <li className="pb-3 px-4">
               <div className="row align-items-center">
                 <div className="col-sm-8">
-                  <h3 className="text-capitalize">{local_Strings.Investment + " | " + item.InvestmentName.value}</h3>
-                  <h3 className="text-sm">{item.InvestmentAmount.value || ""}</h3>
+                  <h3 className="text-capitalize color-gold">
+                    {local_Strings.Investment +
+                      " | " +
+                      item.InvestmentName.value}
+                  </h3>
+                  <h3 className="text-sm">
+                    {item.InvestmentAmount.value || ""}
+                  </h3>
                 </div>
                 <div className="col-sm-4 text-sm-right">
-                  <strong className="status-badge status-badge-lg color-black text-xs">
+                  <strong className="status-badge status-badge-lg color-gold text-xs">
                     {item.Currency.value || ""}
                   </strong>
                   <br />

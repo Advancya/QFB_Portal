@@ -2,11 +2,14 @@ import React, { useContext, useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import excelIcon from "../../../images/excel.svg";
 import moment from "moment";
-import { localStrings as local_Strings } from '../../../translations/localStrings';
+import { localStrings as local_Strings } from "../../../translations/localStrings";
 import { AuthContext } from "../../../providers/AuthProvider";
-import { emptyDepositDetail, IDepositDetail } from "../../../Helpers/publicInterfaces";
+import {
+  emptyDepositDetail,
+  IDepositDetail,
+} from "../../../Helpers/publicInterfaces";
 import Constant from "../../../constants/defaultData";
-import LoadingOverlay from 'react-loading-overlay';
+import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import { GetDepositsDetails } from "../../../services/cmsService";
 import * as helper from "../../../Helpers/helper";
@@ -32,7 +35,8 @@ function DepositeDetails(props: iDepositeDetails) {
       .then((responseData: any) => {
         if (responseData && responseData.length > 0 && isMounted) {
           const _detail = helper.transformingStringToJSON(
-            responseData[0], currentContext.language
+            responseData[0],
+            currentContext.language
           );
           setDetail(_detail);
         }
@@ -49,7 +53,7 @@ function DepositeDetails(props: iDepositeDetails) {
     <Modal
       show={props.showDepositeDetailsModal}
       onHide={props.hideDepositeDetailsModal}
-      size="lg"
+      // size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       scrollable
@@ -94,11 +98,14 @@ function DepositeDetails(props: iDepositeDetails) {
             <li className="pb-3 px-4">
               <div className="row align-items-center">
                 <div className="col-sm-8">
-                  <h3 className="text-capitalize">{local_Strings.DepositeListingAccountNumberLabel + props.depositNumber}</h3>
+                  <h3 className="text-capitalize color-gold">
+                    {local_Strings.DepositeListingAccountNumberLabel +
+                      props.depositNumber}
+                  </h3>
                   <h3 className="text-sm">{item.DepositAmount.value || ""}</h3>
                 </div>
                 <div className="col-sm-4 text-sm-right">
-                  <strong className="status-badge status-badge-lg color-black text-xs">
+                  <strong className="status-badge status-badge-lg color-gold text-xs">
                     {item.Currency.value || ""}
                   </strong>
                   <br />
