@@ -21,9 +21,13 @@ function AuthOffersLanding(props: iAuthOffersLanding) {
   const [showAuthOfferRequest, setshowAuthOfferRequest] = useState(false);
 
   return (
-    <div>
+    <>
       <li className="nav-item">
-        <a className="nav-link" onClick={() => setShowAuthOffersListing(true)} href="#">
+        <a
+          className="nav-link"
+          onClick={() => setShowAuthOffersListing(true)}
+          href="#"
+        >
           <img src={offerIcon} className="images-fluid" />
           {local_Strings.navigationItem3}
         </a>
@@ -37,7 +41,7 @@ function AuthOffersLanding(props: iAuthOffersLanding) {
           setDetail(itemID);
         }}
       />
-      {itemID > 0 &&
+      {itemID > 0 && (
         <React.Fragment>
           <AuthOffersDetails
             showAuthOffersDetailsModal={showAuthOffersDetails}
@@ -66,8 +70,8 @@ function AuthOffersLanding(props: iAuthOffersLanding) {
             itemID={itemID}
           />
         </React.Fragment>
-      }
-    </div>
+      )}
+    </>
   );
 }
 

@@ -10,6 +10,8 @@ import { emptyUserInfo, IUserInfo } from "../../Helpers/publicInterfaces";
 import { GetUserWelcomeData } from "../../services/cmsService";
 import HoldingsLanding from "../HoldingsLanding";
 import usericon from "../../images/user-icon.svg";
+import Notfications from "../Notifications/Notifications";
+import { Nav, Navbar } from "react-bootstrap";
 
 function Navigation() {
   const currentContext = useContext(AuthContext);
@@ -56,23 +58,11 @@ function Navigation() {
           <i className="fa fa-sign-out text-sm" />
         </a>
       </div>
-
-      <nav className="navbar navbar-expand-md">
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarNavDropdown"
-          aria-controls="navbarNavDropdown"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
+      <Navbar expand="md" variant="dark">
+        <Navbar.Toggle aria-controls="basic-navbar-nav">
           <span className="fa fa-bars"></span>
-        </button>
-        <div
-          className="collapse navbar-collapse justify-content-end"
-          id="navbarNavDropdown"
-        >
+        </Navbar.Toggle>
+        <Navbar.Collapse id="basic-navbar-nav">
           <ul className="navbar-nav">
             <HoldingsLanding />
             <Transactions></Transactions>
@@ -80,16 +70,12 @@ function Navigation() {
             <Requests></Requests>
             <li className="nav-item">
               <Inbox />
-              <Link
-                className="border border-white rounded-circle p-0 mx-1"
-                to={`/${currentContext.language}/OfferSubscriptions`}
-              >
-                <i className="fa fa-bell unread" />
-              </Link>
+
+              <Notfications />
             </li>
           </ul>
-        </div>
-      </nav>
+        </Navbar.Collapse>
+      </Navbar>
     </div>
   );
 }

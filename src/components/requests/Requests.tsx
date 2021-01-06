@@ -7,8 +7,10 @@ import RequestsDetails from "./RequestsDetails";
 import NewRequest from "./NewRequest";
 import requestIcon from "../../images/request-icon.svg";
 import { localStrings as local_Strings } from "../../translations/localStrings";
-import { emptyRequestDetail, IRequestDetail } from "../../Helpers/publicInterfaces";
-
+import {
+  emptyRequestDetail,
+  IRequestDetail,
+} from "../../Helpers/publicInterfaces";
 
 function Requests() {
   const [showRequestsListing, setShowRequestsListing] = useState(false);
@@ -29,7 +31,7 @@ function Requests() {
     setshowRequestsDetails(true);
     setDetail(detail);
   };
-  
+
   const handleBackRequestsDetails = () => {
     setshowRequestsDetails(false);
 
@@ -52,7 +54,7 @@ function Requests() {
   };
 
   return (
-    <div>
+    <>
       <li className="nav-item">
         <a className="nav-link" href="#" onClick={handleShowRequestsListing}>
           <img src={requestIcon} className="images-fluid" />
@@ -65,20 +67,21 @@ function Requests() {
         showRequestsDetailsModal={handleShowRequestsDetails}
         showNewRequestModal={handleShowNewRequest}
       />
-      {item && !!item.requestCreateDate &&
+      {item && !!item.requestCreateDate && (
         <RequestsDetails
           showRequestsDetailsModal={showRequestsDetails}
           hideRequestsDetailsModal={handleCloseRequestsDetails}
           backRequestsListingModal={handleBackRequestsDetails}
           showNewRequestModal={handleShowNewRequest}
           item={item}
-        />}
+        />
+      )}
       <NewRequest
         showNewRequestModal={showNewRequest}
         hideNewRequestModal={handleCloseNewRequest}
         backNewRequestModal={handleBackNewRequest}
       />
-    </div>
+    </>
   );
 }
 

@@ -44,6 +44,7 @@ html[dir="ltr"], [dir="ltr"] {
 .nav-pills {
   justify-content: center;
   border-bottom: 0;
+  flex-direction: row;
 }
 
 .nav-pills .nav-link {
@@ -561,6 +562,17 @@ textarea.form-control {
   border-radius: 50%;
 }
 
+#dataList .unread::after {
+  position: absolute;
+  top: 0rem;
+  left: -0.5rem;
+  content: "";
+  width: 0.35rem;
+  height: 0.35rem;
+  background: #e22525;
+  border-radius: 50%;
+}
+
 .fa-envelope.unread::after {
   top: 3px;
   right: 0;
@@ -571,6 +583,10 @@ textarea.form-control {
   right: 0.1rem;
   width: 0.5rem;
   height: 0.5rem;
+}
+
+.navbar-dark .navbar-nav .nav-link, .navbar-dark .navbar-toggler {
+  color: #fff;
 }
 
 .header .navbar-nav .nav-item:first-child a {
@@ -1562,6 +1578,9 @@ ul ul {
   .modal-dialog {
     max-width: 50%;
   }
+  .navbar-expand-md .navbar-collapse {
+    justify-content: flex-end;
+  }
 }
 
 @media all and (min-width: 992px) {
@@ -1615,7 +1634,16 @@ ul ul {
   }
 }
 
-@media all and (max-width: 767px) {}
+@media all and (max-width: 767px) {
+  .navbar {
+    justify-content: flex-end;
+  }
+  .navbar-nav {
+    background: rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    flex-direction: row;
+  }
+}
 
 @media all and (max-width: 575px) {
   [dir="rtl"] .text-sm-right {
@@ -1641,22 +1669,15 @@ ul ul {
     justify-content: center;
     margin: 1rem 0;
   }
-  .header .navbar, .welcomeText {
-    text-align: center;
-    align-items: center;
-    justify-content: center;
-  }
   .header .navbar-nav .nav-item {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
   }
   .header .navbar-nav .nav-item a {
     padding: 0.5rem 0;
   }
   .header .navbar-nav .nav-item a i {
-    padding: 0.75rem;
+    /*     padding: 0.75rem;
+ */
     font-size: 1.25rem;
   }
   .headRow label, .headRow label a, .resetBtn {
