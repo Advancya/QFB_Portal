@@ -14,4 +14,5 @@ export default {
   Management: "MANAGEMENT",
   RM: "RM",
   AlertTimeout: 3000,
+  MapApiKey: "AIzaSyChFfCU3MWxnnsh79D5Lf6_YYiEahZMvcQ",
 };

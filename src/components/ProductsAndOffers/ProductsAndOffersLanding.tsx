@@ -9,15 +9,9 @@ import {
   IProductAndOffersDetail,
 } from "../../Helpers/publicInterfaces";
 import { AuthContext } from "../../providers/AuthProvider";
-import { Link } from "react-router-dom";
 
-interface iProductsAndOffersLanding {
-  showProductsAndOffersDetailsModal: () => void;
-}
-function ProductsAndOffersLanding(
-  productsAndOffersLandingProps: iProductsAndOffersLanding
-) {
-  const history = useHistory();
+function ProductsAndOffersLanding() {
+
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
   const [item, setItemDetail] = useState<IProductAndOffersDetail>(emptyProductAndOffersData);

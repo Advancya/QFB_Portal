@@ -1,5 +1,5 @@
 import { apiInstance, identityInstance } from "./axiosMainConfig";
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import defaultData from "../constants/defaultData";
 import oidc from "./oidc-config.json";
 import randomatic from "randomatic";
@@ -979,6 +979,30 @@ async function AddOfferSubscription(
   }
 }
 
+async function GetCountries() {
+  try {
+    let config: typeof AxiosRequestConfig = {
+      method: "get",
+      url: `${defaultData.ApiBaseUrl}/api/Countries/All`,
+      headers: {},
+    };
+
+    const response = await axios(config);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function GetBanks() {
+  try {
+    const response = await apiInstance.get("/api/Banks/All");
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export {
   GetStockData,
   ValidateRegisterData,
@@ -1051,5 +1075,7 @@ export {
   AddNewDocument,
   DeleteDocumentById,
   UpdateDocumentDetail,
-  AddOfferSubscription
+  AddOfferSubscription,
+  GetCountries,
+  GetBanks
 };

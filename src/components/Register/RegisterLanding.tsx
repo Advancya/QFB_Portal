@@ -7,10 +7,8 @@ import { Link } from "react-router-dom";
 import RegisterStep1 from "./RegisterStep1";
 import RegisterStep2 from "./RegisterStep2";
 import RegisterStep3 from "./RegisterStep3";
-interface iRegisterLanding {
-  showRegisterStep1Modal: () => void;
-}
-function RegisterLanding(registerLandingProps: iRegisterLanding) {
+
+function RegisterLanding() {
   const history = useHistory();
   const auth = useContext(AuthContext);
   local_Strings.setLanguage(auth.language);

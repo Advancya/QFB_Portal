@@ -193,7 +193,7 @@ function AuthOfferRequest(props: iAuthOfferRequest) {
                       {curruncies &&
                         curruncies.length > 0 &&
                         !!curruncies[0].name &&
-                        curruncies.map((c, i) => <option value={c.name}>{currentContext.language === "en" ? c.name : c.nameAr}</option>)}
+                        curruncies.map((c, i) => <option key={i} value={c.name}>{currentContext.language === "en" ? c.name : c.nameAr}</option>)}
                     </select>
                     {touched.currency && errors.currency && InvalidFieldError(errors.currency)}
                   </div>
