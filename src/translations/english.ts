@@ -116,6 +116,9 @@ const en = {
   SignUpStep1Button: "Next",
   SignUpStep1Pager: "Step 1 of 3",
 
+  SignUpStep1CIFRegisterBefore:
+    "Customer Identification Number already register",
+    
   SignUpStep2Title: "Register",
   SignUpStep2Hint: "Kindly proceed your registration process",
   SignUpStep2EnterPassword: "Enter Password",

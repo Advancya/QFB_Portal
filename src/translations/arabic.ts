@@ -116,6 +116,8 @@ const ar = {
     "الهاتف المحمول المسجل لدى البنك (يحتوي علي كود الدولة , مثال:97412345678+)",
   SignUpStep1Button: "التالى",
   SignUpStep1Pager: "الخطوة 1 من 3",
+  
+  SignUpStep1CIFRegisterBefore: "رقم تعريف العميل مسجل من قبل",
 
   SignUpStep2Title: "تسجيل",
   SignUpStep2Hint: "يرجى متابعة عملية التسجيل الخاصة بك",
