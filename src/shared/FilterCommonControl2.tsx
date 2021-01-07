@@ -51,7 +51,7 @@ const FilterCommonControl2: React.FC<IFilterCommonControl2Props> = (props) => {
                                 onChange={(_value) => {
                                     const OptionalCheck = [...filters.OptionalCheck];
                                     OptionalCheck[0].label = props.CheckBoxLabels[0];
-                                    OptionalCheck[0].value = _value.target.checked;
+                                    OptionalCheck[0].value = !OptionalCheck[0].value;
 
                                     setFilter({
                                         ...filters, OptionalCheck
@@ -74,7 +74,7 @@ const FilterCommonControl2: React.FC<IFilterCommonControl2Props> = (props) => {
                                 onChange={(_value) => {
                                     const OptionalCheck = [...filters.OptionalCheck];
                                     OptionalCheck[1].label = props.CheckBoxLabels[1];
-                                    OptionalCheck[1].value = _value.target.checked;
+                                    OptionalCheck[1].value = !OptionalCheck[1].value;
 
                                     setFilter({
                                         ...filters, OptionalCheck

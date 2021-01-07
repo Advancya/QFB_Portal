@@ -122,11 +122,12 @@ export const filterTransactions = (
       );
       break;
     default:
-      filteredTransactions = transactions.filter(
-        (t) =>
-          moment(t.bookingDate ? t.bookingDate : t.installmentDate).toDate() >=
-          moment().subtract(3, "month").toDate()
-      );
+      filteredTransactions = transactions;
+      // .filter(
+      //   (t) =>
+      //     moment(t.bookingDate ? t.bookingDate : t.installmentDate).toDate() >=
+      //     moment().subtract(3, "month").toDate()
+      // );
       break;
   }
 
@@ -174,7 +175,7 @@ export const filterTransactions = (
     }
   }
 
-  if (filter.OptionalCheck.length > 0 && filter.OptionalCheck[0].label !== "") {
+  if (filter.OptionalCheck.length > 0) {
     const applyOptionalFilter = filter.OptionalCheck.length > 1 ?
       filter.OptionalCheck.some((a: IOptionalCheck) => a.value) &&
       filter.OptionalCheck.some((b: IOptionalCheck) => !b.value) : filter.OptionalCheck[0].value;
@@ -243,11 +244,12 @@ export const filterRequests = (
       );
       break;
     default:
-      filteredRequests = transactions.filter(
-        (t) =>
-          moment(t.requestCreateDate).toDate() >=
-          moment().subtract(3, "month").toDate()
-      );
+      filteredRequests = transactions;
+      // .filter(
+      //   (t) =>
+      //     moment(t.requestCreateDate).toDate() >=
+      //     moment().subtract(3, "month").toDate()
+      // );
       break;
   }
 
@@ -304,11 +306,12 @@ export const filterRMRequests = (
       );
       break;
     default:
-      filteredRequests = transactions.filter(
-        (t) =>
-          moment(t.requestCreateDate).toDate() >=
-          moment().subtract(3, "month").toDate()
-      );
+      filteredRequests = transactions;
+      // .filter(
+      //   (t) =>
+      //     moment(t.requestCreateDate).toDate() >=
+      //     moment().subtract(3, "month").toDate()
+      // );
       break;
   }
 
@@ -364,11 +367,12 @@ export const filterTransactionList = (
       );
       break;
     default:
-      filteredTransactions = transactions.filter(
-        (t) =>
-          moment(t.transactionDate).toDate() >=
-          moment().subtract(3, "month").toDate()
-      );
+      filteredTransactions = transactions;
+      // .filter(
+      //   (t) =>
+      //     moment(t.transactionDate).toDate() >=
+      //     moment().subtract(3, "month").toDate()
+      // );
       break;
   }
 

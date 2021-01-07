@@ -42,11 +42,11 @@ function FacilitiesHistoricalPayment(
       GetViewHistoricalPayments(currentContext.selectedCIF, props.facilityNumber)
         .then((responseData: ITransaction[]) => {
           if (isMounted && responseData && responseData.length > 0) {
-            const _data = responseData.filter(
-              (d) => new Date(d.bookingDate) > moment().add(-3, "months").toDate()
-            )
+            // const _data = responseData.filter(
+            //   (d) => new Date(d.bookingDate) > moment().add(-3, "months").toDate()
+            // )
             setData(responseData);
-            setFilteredData(_data);
+            setFilteredData(responseData);
           }
         })
         .catch((e: any) => console.log(e))
@@ -113,13 +113,13 @@ function FacilitiesHistoricalPayment(
               local_Strings.HistoricalPayments_PastDueSettlement, local_Strings.HistoricalPayments_SettlemenOfPayment
             ]}
             clearFilter={() => {
-              const _data = data.filter(
-                (d) => new Date(d.bookingDate) > moment().add(-3, "months").toDate()
-              )
-              setFilteredData(_data);
+              // const _data = data.filter(
+              //   (d) => new Date(d.bookingDate) > moment().add(-3, "months").toDate()
+              // )
+              setFilteredData(data);
             }}
             applyFilter={(filters: ICommonFilter) => {
-              console.log(filters);
+              
               const _filteredData = helper.filterTransactions(
                 data,
                 filters

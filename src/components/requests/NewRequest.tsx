@@ -1,35 +1,584 @@
-import React, { useState } from "react";
-import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
-import requestSentIcon from "../../images/req-sent.svg";
+import React, { useContext, useEffect, useState } from "react";
+import { Col, Form, Modal } from "react-bootstrap";
+import Constant from "../../constants/defaultData";
+import LoadingOverlay from 'react-loading-overlay';
+import PuffLoader from "react-spinners/PuffLoader";
+import moment from "moment";
+import { localStrings as local_Strings } from '../../translations/localStrings';
+import { AuthContext } from "../../providers/AuthProvider";
+import * as helper from "../../Helpers/helper";
+import { Formik } from "formik";
+import * as yup from "yup";
+import InvalidFieldError from '../../shared/invalid-field-error';
+import Swal from 'sweetalert2';
+import { initialNewRequest, INewRequestDetail } from "../../Helpers/publicInterfaces";
+import {
+  AddRequest,
+  GetExtraDetailCurrentDetail,
+  GetExtraDetailsDepositDetails,
+  GetRequestFields,
+  GetRequstsTypes,
+} from "../../services/requestService";
+import {
+  GetDepositeListing,
+  GetInvestmentsListing,
+} from "../../services/cmsService";
+import { GetCashListing } from "../../services/apiServices";
+import DatePicker from 'react-datepicker';
+import { saveAs } from 'file-saver';
+import { IDeposit, IAccountBalance, IInvestment } from "../../Helpers/publicInterfaces";
+import axios from "axios";
+import FileUploader from '../../shared/FileUploader';
+import ViewAttachment from '../../shared/AttachmentViewer';
+
+const mime = require('mime');
 
 interface iNewRequest {
   showNewRequestModal: boolean;
   hideNewRequestModal: () => void;
   backNewRequestModal: () => void;
 }
-function NewRequest(newRequestProps: iNewRequest) {
-  const [showRequestFields, setShowRequestFields] = useState(false);
-  const [valideForm, setValideForm] = useState(false);
-  const [valideFormOTP, setvalideFormOTP] = useState(false);
 
-  const requestTypeOnchangeHandler = (e: any) => {
-    if (e.target.value != 0) {
-      setShowRequestFields(true);
+interface iDDL {
+  label: string;
+  value: any;
+}
+
+function NewRequest(props: iNewRequest) {
+  const currentContext = useContext(AuthContext);
+  local_Strings.setLanguage(currentContext.language);
+  const [isLoading, setLoading] = useState(true);
+  const [showRequestFields, setShowRequestFields] = useState(false);
+
+  const [selectedRequestType, setSelectedRequestType] = useState("");
+  const [selectedRequestTypeName, setSelectedRequestTypeName] = useState(
+    ""
+  );
+  const [isRequestTypeSelected, setIsRequestTypeSelected] = useState(
+    false
+  );
+  const [requestTypes, setRequestTypes] = useState<iDDL[]>([
+    { label: "", value: "" },
+  ]);
+
+  const [extraDetailsValue, setExtraDetailsValue] = useState("");
+
+  const [formFields, setFormFields] = useState<any[]>([]);
+  const [showConfirmationDate, setShowConfirmationDate] = useState(false);
+  const [showFromDate, setShowFromDate] = useState(false);
+  const [showToDate, setShowToDate] = useState(false);
+  const [attachmentName, setAttachmentName] = useState("");
+  const [attachmentUri, setAttachmentUri] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
+  const [cashBalance, setCashData] = useState<IAccountBalance[]>(null);
+  const [deposits, setDepositData] = useState<IDeposit[]>(null);
+  const [investments, setInvestmentData] = useState<IInvestment[]>(null);
+
+
+  const getDropDownListValue = (type: string, value: string) => {
+    let data: iDDL[] = [];
+
+    if (type === "DDL") {
+      var items = value.split(",");
+      for (let index = 0; index < items.length; index++) {
+        data.push({
+          label: items[index].replace(/"/g, ""),
+          value: items[index].replace(/"/g, ""),
+        });
+      }
     } else {
-      setShowRequestFields(false);
+      if (value === "SP_MOB_CUST_CASH_LIST") {
+        if (cashBalance && cashBalance.length > 0) {
+          cashBalance.map((element) => data.push({
+            label: element.accountNumber,
+            value: element.accountNumber
+          }));
+        }
+      }
+      if (value === "SP_MOB_CUST_INV_LIST") {
+        if (investments && investments.length > 0) {
+          investments.map((element) => data.push({
+            label: element.secDesciption,
+            value: element.secDesciption
+          }));
+        }
+      }
+      if (value === "SP_MOB_CUST_DEP_LIST") {
+        if (deposits && deposits.length > 0) {
+          deposits.map((element) => data.push({
+            label: element.contractNumber,
+            value: element.contractNumber
+          }));
+        }
+      }
+    }
+
+    return (data &&
+      data.length > 0 ?
+      requestTypes.map((c, i) =>
+        <option key={i} value={c.value}>{c.label}</option>
+      ) : null);
+  };
+
+  const getExtraDetailsValue = (value: string, param: string) => {
+    try {
+      if (value.split(",")[0] === "MOB_REQ_EX_DET_FLD_CON_CHANGE") {
+        GetExtraDetailCurrentDetail(currentContext.selectedCIF).then((c) => {
+          let data = "";
+
+          c.map((element: any, index: any) => {
+            if (currentContext.language === "ar") {
+              data = data + element.nameAr + ":" + element.valueAr + "\n\n ";
+            } else {
+              data = data + element.name + ":" + element.value + "\n\n ";
+            }
+          });
+          setExtraDetailsValue(data);
+        });
+      } else if (value.split(",")[0] === "MOB_REQ_EX_DET_FLD_DEP_BRK") {
+        GetExtraDetailsDepositDetails(param).then((c) => {
+          let data = "";
+          c.map((element: any, index: any) => {
+            if (currentContext.language === "ar") {
+              data =
+                data + element.nameAr + ":" + element.valueAr || "" + "\n\n ";
+            } else {
+              data = data + element.name + ":" + element.value || "" + "\n\n ";
+            }
+          });
+          setExtraDetailsValue(data);
+        });
+      } else {
+        setExtraDetailsValue("");
+      }
+    } catch (error) { }
+  };
+
+  let validationSchema = yup.object().shape({});
+
+  const [formValidationSchema, setFormValidationSchema] = useState(
+    yup.object().shape({})
+  );
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const initialLoadMethod = async () => {
+      setLoading(true);
+
+      const getRequstsTypes = GetRequstsTypes();
+      const requestCashListing = GetCashListing(currentContext.selectedCIF);
+      const requestDepositsListing = GetDepositeListing(currentContext.selectedCIF);
+      const requestInvestmentsListing = GetInvestmentsListing(currentContext.selectedCIF);
+
+      axios
+        .all([getRequstsTypes, requestCashListing, requestDepositsListing, requestInvestmentsListing])
+        .then((responseData: any) => {
+          if (isMounted && responseData && responseData.length > 0) {
+
+            const requstsTypesResponse = responseData[0];
+            let data: iDDL[] = [{ label: "", value: "" }];
+            for (let index = 0; index < requstsTypesResponse.length; index++) {
+              const element = requstsTypesResponse[index];
+              data.push({
+                label: currentContext.language === "ar" ? element["nameAr"] : element["nameEn"],
+                value: element["id"],
+              });
+            }
+
+            setRequestTypes(data.slice(1));
+            setCashData(responseData[1]);
+            setDepositData(responseData[2]);
+            setInvestmentData(responseData[3]);
+          }
+        })
+        .catch((e: any) => console.log(e))
+        .finally(() => setLoading(false));
+    }
+
+    if (!!currentContext.selectedCIF) {
+      initialLoadMethod();
+    }
+
+    return () => {
+      isMounted = false;
+    }; // use effect cleanup to set flag false, if unmounted
+  }, [currentContext.selectedCIF]);
+
+  const setValidationSchema = (fieldName: string, type: string) => {
+    if (fieldName === "RequestCreateDate") {
+      let fieldSchema = yup.object().shape({
+        RequestCreateDate:
+          type !== "NUMBER"
+            ? yup.string().required()
+            : yup
+              .string()
+              .required()
+              .matches(/^[0-9]+$/),
+      });
+      validationSchema = validationSchema.concat(fieldSchema);
+    }
+    if (fieldName === "CashAccount") {
+      const fieldSchema = yup.object().shape({
+        CashAccount:
+          type !== "NUMBER"
+            ? yup.string().required()
+            : yup
+              .string()
+              .required()
+              .matches(/^[0-9]+$/),
+      });
+      validationSchema = validationSchema.concat(fieldSchema);
+    }
+    if (fieldName === "FromDate") {
+      let fieldSchema = yup.object().shape({
+        FromDate:
+          type !== "NUMBER"
+            ? yup.string().required()
+            : yup
+              .string()
+              .required()
+              .matches(/^[0-9]+$/),
+      });
+      validationSchema = validationSchema.concat(fieldSchema);
+    }
+    if (fieldName === "ToDate") {
+      let fieldSchema = yup.object().shape({
+        ToDate:
+          type !== "NUMBER"
+            ? yup.string().required()
+            : yup
+              .string()
+              .required()
+              .matches(/^[0-9]+$/),
+      });
+      validationSchema = validationSchema.concat(fieldSchema);
+    }
+    if (fieldName === "FaxNumber") {
+      const fieldSchema = yup.object().shape({
+        FaxNumber:
+          type !== "NUMBER"
+            ? yup.string().required()
+            : yup
+              .string()
+              .required()
+              .matches(/^[0-9]+$/),
+      });
+      validationSchema = validationSchema.concat(fieldSchema);
+    }
+    if (fieldName === "LandlineNumber") {
+      const fieldSchema = yup.object().shape({
+        LandlineNumber:
+          type !== "NUMBER"
+            ? yup.string().required()
+            : yup
+              .string()
+              .required()
+              .matches(/^[0-9]+$/),
+      });
+      validationSchema = validationSchema.concat(fieldSchema);
+    }
+    if (fieldName === "MobileNumber") {
+      const fieldSchema = yup.object().shape({
+        MobileNumber:
+          type !== "NUMBER"
+            ? yup.string().required()
+            : yup
+              .string()
+              .required()
+              .matches(/^[0-9]+$/),
+      });
+      validationSchema = validationSchema.concat(fieldSchema);
+    }
+    if (fieldName === "PoBoxNumber") {
+      const fieldSchema = yup.object().shape({
+        PoBoxNumber:
+          type !== "NUMBER"
+            ? yup.string().required()
+            : yup
+              .string()
+              .required()
+              .matches(/^[0-9]+$/),
+      });
+      validationSchema = validationSchema.concat(fieldSchema);
+    }
+    if (fieldName === "Country") {
+      const fieldSchema = yup.object().shape({
+        Country:
+          type !== "NUMBER"
+            ? yup.string().required()
+            : yup
+              .string()
+              .required()
+              .matches(/^[0-9]+$/),
+      });
+      validationSchema = validationSchema.concat(fieldSchema);
+    }
+    if (fieldName === "City") {
+      const fieldSchema = yup.object().shape({
+        City:
+          type !== "NUMBER"
+            ? yup.string().required()
+            : yup
+              .string()
+              .required()
+              .matches(/^[0-9]+$/),
+      });
+      validationSchema = validationSchema.concat(fieldSchema);
+    }
+    if (fieldName === "Address") {
+      const fieldSchema = yup.object().shape({
+        Address:
+          type !== "NUMBER"
+            ? yup.string().required()
+            : yup
+              .string()
+              .required()
+              .matches(/^[0-9]+$/),
+      });
+      validationSchema = validationSchema.concat(fieldSchema);
+    }
+    if (fieldName === "InvestmentName") {
+      const fieldSchema = yup.object().shape({
+        InvestmentName:
+          type !== "NUMBER"
+            ? yup.string().required()
+            : yup
+              .string()
+              .required()
+              .matches(/^[0-9]+$/),
+      });
+      validationSchema = validationSchema.concat(fieldSchema);
+    }
+    if (fieldName === "DocumentType") {
+      const fieldSchema = yup.object().shape({
+        DocumentType:
+          type !== "NUMBER"
+            ? yup.string().required()
+            : yup
+              .string()
+              .required()
+              .matches(/^[0-9]+$/),
+      });
+      validationSchema = validationSchema.concat(fieldSchema);
+    }
+    if (fieldName === "DepositContractNumber") {
+      const fieldSchema = yup.object().shape({
+        DepositContractNumber:
+          type !== "NUMBER"
+            ? yup.string().required()
+            : yup
+              .string()
+              .required()
+              .matches(/^[0-9]+$/),
+      });
+      validationSchema = validationSchema.concat(fieldSchema);
+    }
+    if (fieldName === "ConfirmationDate") {
+      const fieldSchema = yup.object().shape({
+        ConfirmationDate:
+          type !== "NUMBER"
+            ? yup.string().required()
+            : yup
+              .string()
+              .required()
+              .matches(/^[0-9]+$/),
+      });
+      validationSchema = validationSchema.concat(fieldSchema);
+    }
+    if (fieldName === "Currency") {
+      const fieldSchema = yup.object().shape({
+        Currency:
+          type !== "NUMBER"
+            ? yup.string().required()
+            : yup
+              .string()
+              .required()
+              .matches(/^[0-9]+$/),
+      });
+      validationSchema = validationSchema.concat(fieldSchema);
+    }
+    if (fieldName === "Attachments") {
+      const fieldSchema = yup.object().shape({
+        Attachments:
+          type !== "NUMBER"
+            ? yup.string().required()
+            : yup
+              .string()
+              .required()
+              .matches(/^[0-9]+$/),
+      });
+      validationSchema = validationSchema.concat(fieldSchema);
+    }
+
+    if (fieldName === "Remarks") {
+      const fieldSchema = yup.object().shape({
+        Remarks:
+          type !== "NUMBER"
+            ? yup.string().required()
+            : yup
+              .string()
+              .required()
+              .matches(/^[0-9]+$/),
+      });
+      validationSchema = validationSchema.concat(fieldSchema);
+    }
+    if (fieldName === "PoBox") {
+      const fieldSchema = yup.object().shape({
+        PoBox:
+          type !== "NUMBER"
+            ? yup.string().required()
+            : yup
+              .string()
+              .required()
+              .matches(/^[0-9]+$/),
+      });
+      validationSchema = validationSchema.concat(fieldSchema);
+    }
+    if (fieldName === "Email") {
+      const fieldSchema = yup.object().shape({
+        Email:
+          type !== "EMAIL"
+            ? yup.string().email().required()
+            : yup
+              .string()
+              .required()
+              .matches(/^[0-9]+$/),
+      });
+      validationSchema = validationSchema.concat(fieldSchema);
+    }
+
+    if (fieldName === "StatementType") {
+      const fieldSchema = yup.object().shape({
+        StatementType:
+          type !== "NUMBER"
+            ? yup.string().required()
+            : yup
+              .string()
+              .required()
+              .matches(/^[0-9]+$/),
+      });
+      validationSchema = validationSchema.concat(fieldSchema);
     }
   };
 
-  const applyRequestHandler = () => {
-    setValideForm(true);
+  const submitRequest = async (values) => {
+    let validateRequired: boolean[] = [];
+    let entertedValues: string[] = [];
+    let isValidDate: boolean = true;
+
+    formFields.map((item, index) => {
+      let elements = item["details"].split(";");
+      if (elements[4] === "YES") {
+        if (
+          values[elements[0].replace(/ /g, "")] !== undefined &&
+          values[elements[0].replace(/ /g, "")] !== ""
+        ) {
+          entertedValues.push(values[elements[0].replace(/ /g, "")]);
+          validateRequired.push(true);
+        } else {
+          validateRequired.push(false);
+          setShowErrorMessage(true);
+          setErrorMessage(local_Strings.NewRequestSubmitRequiredMessage);
+          return;
+        }
+      } else {
+        if (
+          values[elements[0].replace(/ /g, "")] !== undefined &&
+          values[elements[0].replace(/ /g, "")] !== ""
+        ) {
+          entertedValues.push(values[elements[0].replace(/ /g, "")]);
+          validateRequired.push(true);
+        } else {
+          validateRequired.push(true);
+          setShowErrorMessage(true);
+          setErrorMessage(local_Strings.NewRequestSubmitRequiredMessage);
+          return;
+        }
+      }
+    });
+
+    if (values["ToDate"] !== undefined && values["FromDate"] != undefined) {
+      if (new Date(values["ToDate"]) < new Date(values["FromDate"])) {
+        isValidDate = false;
+        setShowErrorMessage(true);
+        setErrorMessage(local_Strings.NewRequestSubmitInvalidDate);
+        return;
+      }
+    }
+
+    if (
+      !validateRequired.includes(false) &&
+      entertedValues.length > 0 &&
+      isValidDate === true
+    ) {
+      setShowErrorMessage(false);
+      setErrorMessage("");
+
+      const added = await AddRequest({
+        address: values["Address"],
+        auditorName: values["AuditorName/Requestor"],
+        cashAccount: values["CashAccount"],
+        cif: currentContext.selectedCIF,
+        city: values["City"],
+        confirmationDate: values["ConfirmationDate"],
+        contactPersonNumber: values["ContactPersonName(underPOA)"],
+        country: values["Country"],
+        currency: values["Currency"],
+        depositContractNumber: values["DepositContractNumber"],
+        documentType: values["DocumentType"],
+        extraDetails: extraDetailsValue,
+        faxNumber: values["FaxNumber"],
+        fileContent: values["Attachments"],
+        fileName: attachmentName,
+        fromDate: values["FromDate"],
+        id: 0,
+        investmentName: values["InvestmentName"],
+        landlineNumber: values["LandlineNumber"],
+        mobileNumber: values["MobileNumber"],
+        poBoxNumber: values["PoBox"],
+        remarks: values["Remarks"],
+        requestCreateDate: values["RequestCreateDate"],
+        requestTypeId: Number(selectedRequestType),
+        toDate: values["ToDate"],
+        requestStatus: values["RequestStatus"],
+        requestStatusChangeDate: values["RequestStatusChangeDate"],
+        requestSubject: selectedRequestTypeName,
+        col1: values["Col1"],
+        col2: values["Col2"],
+        col3: values["Col3"],
+        col4: values["Col4"],
+        col5: values["Col5"],
+        email: values["Email"],
+        statementType: values["StatementType"],
+        requestSubjectAr: "",
+        requestStatusAr: "",
+      });
+      if (added === true) {
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: local_Strings.SignupSuccessTitle,
+          html: local_Strings.SignupSuccessMessage,
+          showConfirmButton: false,
+          timer: Constant.AlertTimeout
+        });
+        props.backNewRequestModal();
+      } else {
+        setErrorMessage(local_Strings.GenericErrorMessage);
+        setShowErrorMessage(false);
+      }
+    } else {
+      setShowErrorMessage(true);
+      setErrorMessage(local_Strings.NewRequestSubmitRequiredMessage);
+    }
   };
-  const applyOTPRequestHandler = () => {
-    setvalideFormOTP(true);
-  };
+
   return (
     <Modal
-      show={newRequestProps.showNewRequestModal}
-      onHide={newRequestProps.hideNewRequestModal}
+      show={props.showNewRequestModal}
+      onHide={props.hideNewRequestModal}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
@@ -42,162 +591,489 @@ function NewRequest(newRequestProps: iNewRequest) {
             <div className="ib-icon">
               <a
                 href="#"
-                onClick={newRequestProps.backNewRequestModal}
+                onClick={props.backNewRequestModal}
                 className="backToAccountsList"
               >
                 <i className="fa fa-chevron-left"></i>
               </a>
             </div>
             <div className="ib-text">
-              <h4 id="newReqTxt">NEW REQUESTS</h4>
+              <h4 id="newReqTxt">{local_Strings.NewRequestTitle}</h4>
             </div>
           </div>
         </div>
         <button
           type="button"
           className="close"
-          onClick={newRequestProps.hideNewRequestModal}
+          onClick={props.hideNewRequestModal}
         >
           <span aria-hidden="true">×</span>
         </button>
       </Modal.Header>
+
       <Modal.Body>
         <div
-          className={valideForm ? "box modal-box d-none" : "box modal-box"}
+          className="box modal-box"
           id="applyReqBox"
         >
-          <div className="py-2 px-3">
-            <div className="row">
-              <div className="col-lg-8">
-                <label>Request Type</label>
-                <select
-                  className="form-control"
-                  id="reqTypeSelect"
-                  onChange={requestTypeOnchangeHandler}
-                >
-                  <option value="0">Select Type</option>
-                  <option value="1">Account Statement</option>
-                  <option value="2">Change Mobile Number</option>
-                  <option value="3">Audit Balance Confirmation </option>
-                  <option value="4">Change Email Address</option>
-                  <option value="5">Upload Renewed Documents</option>
-                  <option value="6">
-                    Change Monthly Portfolio Statement Reference Currency
-                  </option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div
-            className={
-              showRequestFields ? "newReqFields" : "newReqFields d-none"
-            }
-            id="newReqFields"
-          >
-            <div className="py-2 px-3">
-              <div className="row">
-                <div className="col-lg-4">
-                  <label>From</label>
-                  <input type="date" className="form-control" />
-                </div>
-                <div className="col-lg-4">
-                  <label>To</label>
-                  <input type="date" className="form-control" />
-                </div>
-              </div>
-            </div>
-            <div className="py-2 px-3">
-              <div className="row">
-                <div className="col-lg-8">
-                  <label>Auditor Name</label>
-                  <input type="text" className="form-control" />
-                </div>
-              </div>
-            </div>
-            <div className="py-2 px-3">
-              <div className="row">
-                <div className="col-lg-8">
-                  <label>Comments</label>
-                  <textarea value="" className="form-control">
-                    {" "}
-                  </textarea>
-                </div>
-              </div>
-            </div>
-            <div className="text-right p-3">
-              <button
-                id="applyReqBtn"
-                className="btn btn-primary"
-                onClick={applyRequestHandler}
-              >
-                Apply
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div
-          className={
-            valideForm && !valideFormOTP
-              ? "box modal-box p-4"
-              : "box modal-box p-4 d-none"
-          }
-          id="confirmOTPBox"
-        >
-          <p>Kindly enter the one time code you received.</p>
-          <div className="row">
-            <div className="col-lg-6">
-              <label>Enter OTP</label>
-              <input
-                type="password"
-                placeholder="• • • • • •"
-                className="form-control"
+          <LoadingOverlay
+            active={isLoading}
+            spinner={
+              <PuffLoader
+                size={Constant.SpnnerSize}
+                color={Constant.SpinnerColor}
               />
-              <div className="text-right">
-                <small>
-                  <a href="#">Resend OTP ?</a>
-                </small>
-              </div>
-            </div>
-          </div>
-          <div className="text-right">
-            <button
-              id="submitOTPBtn"
-              className="btn btn-primary"
-              onClick={applyOTPRequestHandler}
-            >
-              Submit
-            </button>
-          </div>
+            }
+          />
+
+          <Formik
+            initialValues={initialNewRequest}
+            validationSchema={formValidationSchema}
+            onSubmit={async (values) => {
+              setLoading(true);
+
+              await submitRequest(values);
+              //Request Sent
+              //"Your request has been sent successfully to your RM"
+              setLoading(false);
+            }}
+            enableReinitialize={true}
+
+          >
+            {({
+              values,
+              handleBlur,
+              handleChange,
+              handleSubmit,
+              handleReset,
+              errors,
+              touched,
+              setFieldValue,
+              validateForm,
+              isValid
+            }) => (
+              <React.Fragment>
+                <div className="py-2 px-3">
+                  <div className="row">
+                    <div className="col-lg-8">
+                      <label className="mb-1 text-600 pr-2">Request Type</label>
+                      <select
+                        className="form-control"
+                        id="reqTypeSelect"
+                        onChange={async (e) => {
+
+                          setLoading(true);
+                          const typeId = e.target.value;
+                          const index = e.target.selectedIndex;
+
+                          if (typeId != "") {
+                            setShowRequestFields(true);
+                          } else {
+                            setShowRequestFields(false);
+                          }
+
+                          setSelectedRequestType(typeId);
+                          setSelectedRequestTypeName(e.target[index].innerText);
+                          validationSchema = yup.object().shape({});
+                          const data = await GetRequestFields(typeId);
+
+                          data.map((d: any, index: number) => {
+                            if (d["details"].split(";")[2] === "READ_ONLY") {
+                              getExtraDetailsValue(d["details"].split(";")[3], "");
+                            }
+
+                            if (d["details"].split(";")[4] === "YES") {
+                              var fName = d["details"].split(";")[0].replace(/ /g, "");
+                              var fType = d["details"].split(";")[2];
+                              setValidationSchema(fName, fType);
+                            }
+                          });
+
+                          setFormFields(data);
+                          setFormValidationSchema(validationSchema);
+                          setIsRequestTypeSelected(true);
+                          setShowErrorMessage(false);
+                          setErrorMessage("");
+                          handleReset();
+                          setLoading(false);
+                        }}
+                      >
+                        <option value="">{local_Strings.SelectItem}</option>
+                        {requestTypes &&
+                          requestTypes.length > 0 &&
+                          !!requestTypes[0].label &&
+                          requestTypes.map((c, i) =>
+                            <option key={i} value={c.value}>{c.label}</option>
+                          )}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  className={
+                    showRequestFields ? "newReqFields" : "newReqFields d-none"
+                  }
+                  id="newReqFields"
+                >
+
+                  {formFields.map((item, index) => (
+                    <Form>
+                      <div className="py-2 px-3">
+                        {item["details"].split(";")[2] === "FILE_UPLOAD" && (
+                          <Form.Row>
+                            <Col md={8}>
+                              <Form.Group>
+                                <Form.Label className="mb-1 text-600 pr-2">
+                                  {
+                                    currentContext.language === "ar"
+                                      ? item["details"].split(";")[1]
+                                      : item["details"].split(";")[0]
+                                  }
+                                </Form.Label>
+                                <FileUploader
+                                  onUploaded={(fileName: string, fileContent: string) => {
+                                    setAttachmentName(fileName);
+                                    const attachment = item["details"]
+                                      .split(";")[0]
+                                      .replace(/ /g, "");
+                                    setFieldValue("FileName", fileName, false);
+                                    setFieldValue("FileContent", fileContent, false);
+                                    setFieldValue(attachment, fileContent, false);
+                                  }} />
+                                <ViewAttachment showDelete={true}
+                                  fileName={values.FileName}
+                                  fileContent={values.FileContent}
+                                  deleteThisFile={() => {
+                                    const attachment = item["details"]
+                                      .split(";")[0]
+                                      .replace(/ /g, "");
+                                    setFieldValue("FileName", "");
+                                    setFieldValue("FileContent", "");
+                                    setFieldValue(attachment, "");
+                                  }} />
+                              </Form.Group>
+                            </Col>
+                          </Form.Row>
+                        )}
+                        {item["details"].split(";")[2] ===
+                          "MULTILINE_TEXT" && (
+                            <Form.Row>
+                              <Col md={8}>
+                                <Form.Group>
+                                  <Form.Label className="mb-1 text-600 pr-2">
+                                    {
+                                      currentContext.language === "ar"
+                                        ? item["details"].split(";")[1]
+                                        : item["details"].split(";")[0]
+                                    }
+                                  </Form.Label>
+                                  <Form.Control
+                                    as="textarea"
+                                    value={
+                                      values[
+                                      item["details"]
+                                        .split(";")[0]
+                                        .replace(/ /g, "")
+                                      ] || ""
+                                    }
+                                    onChange={(e) => {
+                                      const fName = item["details"]
+                                        .split(";")[0]
+                                        .replace(/ /g, "");
+                                      setFieldValue(fName, e.target.value, false);
+                                    }}
+                                    rows={4}
+                                  // max={
+                                  //   item["details"].split(";")[5] !== "NULL"
+                                  //     ? Number(item["details"].split(";")[5])
+                                  //     : undefined
+                                  // }
+                                  />
+                                </Form.Group>
+                              </Col>
+                            </Form.Row>
+                          )}
+                        {item["details"].split(";")[2] === "READ_ONLY" &&
+                          item["details"].split(";")[3].toString() !==
+                          "NULL" && (
+                            <Form.Row>
+                              <Col md={8}>
+                                <Form.Group>
+                                  <Form.Label className="mb-1 text-600 pr-2">
+                                    {
+                                      currentContext.language === "ar"
+                                        ? item["details"].split(";")[1]
+                                        : item["details"].split(";")[0]
+                                    }
+                                  </Form.Label>
+                                  <Form.Control
+                                    as="textarea"
+                                    readOnly={true}
+                                    defaultValue={extraDetailsValue}
+                                    rows={6}
+                                  />
+                                </Form.Group>
+                              </Col>
+                            </Form.Row>
+                          )}
+                        {item["details"].split(";")[2] === "TEXT" && (
+                          <Form.Row>
+                            <Col md={8}>
+                              <Form.Group>
+                                <Form.Label className="mb-1 text-600 pr-2">{
+                                  currentContext.language === "ar"
+                                    ? item["details"].split(";")[1]
+                                    : item["details"].split(";")[0]
+                                }
+                                </Form.Label>
+                                <Form.Control
+                                  as="text"
+                                  value={
+                                    values[
+                                    item["details"]
+                                      .split(";")[0]
+                                      .replace(/ /g, "")
+                                    ]
+                                  }
+                                  onChange={(e) => {
+                                    const fName = item["details"]
+                                      .split(";")[0]
+                                      .replace(/ /g, "");
+                                    setFieldValue(fName, e.target.value, false);
+                                  }}
+                                  max={
+                                    item["details"].split(";")[5] !== "NULL"
+                                      ? Number(item["details"].split(";")[5])
+                                      : undefined
+                                  }
+                                />
+                              </Form.Group>
+                            </Col>
+                          </Form.Row>
+                        )}
+                        {item["details"].split(";")[2] === "EMAIL" && (
+                          <Form.Row>
+                            <Col md={8}>
+                              <Form.Group>
+                                <Form.Label className="mb-1 text-600 pr-2">
+                                  {
+                                    currentContext.language === "ar"
+                                      ? item["details"].split(";")[1]
+                                      : item["details"].split(";")[0]
+                                  }
+                                </Form.Label>
+                                <Form.Control
+                                  as="text"
+                                  value={
+                                    values[
+                                    item["details"]
+                                      .split(";")[0]
+                                      .replace(/ /g, "")
+                                    ]
+                                  }
+                                  onChange={(e) => {
+                                    const fName = item["details"]
+                                      .split(";")[0]
+                                      .replace(/ /g, "");
+                                    setFieldValue(fName, e.target.value, false);
+                                  }}
+                                  max={
+                                    item["details"].split(";")[5] !== "NULL"
+                                      ? Number(item["details"].split(";")[5])
+                                      : undefined
+                                  }
+                                />
+                              </Form.Group>
+                            </Col>
+                          </Form.Row>
+                        )}
+                        {item["details"].split(";")[2] === "NUMBER" && (
+                          <Form.Row>
+                            <Col md={8}>
+                              <Form.Group>
+                                <Form.Label className="mb-1 text-600 pr-2">
+                                  {
+                                    currentContext.language === "ar"
+                                      ? item["details"].split(";")[1]
+                                      : item["details"].split(";")[0]
+                                  }
+                                </Form.Label>
+                                <Form.Control
+                                  as="text"
+                                  value={
+                                    values[
+                                    item["details"]
+                                      .split(";")[0]
+                                      .replace(/ /g, "")
+                                    ]
+                                  }
+                                  onChange={(e) => {
+                                    const fName = item["details"]
+                                      .split(";")[0]
+                                      .replace(/ /g, "");
+                                    setFieldValue(fName, e.target.value, false);
+                                  }}
+                                  max={
+                                    item["details"].split(";")[5] !== "NULL"
+                                      ? Number(item["details"].split(";")[5])
+                                      : undefined
+                                  }
+                                />
+                              </Form.Group>
+                            </Col>
+                          </Form.Row>
+                        )}
+                        {item["details"].split(";")[2] === "DATE" && (
+                          <Form.Row>
+                            <Col md={8}>
+                              <Form.Group>
+                                <Form.Label className="mb-1 text-600 pr-2">
+                                  {
+                                    currentContext.language === "ar"
+                                      ? item["details"].split(";")[1]
+                                      : item["details"].split(";")[0]
+                                  }
+                                </Form.Label>
+                                <DatePicker dateFormat="MMMM dd, yyyy"
+                                  selected={values[
+                                    item["details"]
+                                      .split(";")[0]
+                                      .replace(/ /g, "")
+                                  ] ? new Date(values[
+                                    item["details"]
+                                      .split(";")[0]
+                                      .replace(/ /g, "")
+                                  ]) : null}
+                                  onChange={(date: Date) => {
+                                    const fName = item["details"]
+                                      .split(";")[0]
+                                      .replace(/ /g, "");
+                                    if (fName === "ConfirmationDate") {
+                                      setShowConfirmationDate(false);
+                                    }
+                                    if (fName === "FromDate") {
+                                      setShowFromDate(false);
+                                    }
+                                    if (fName === "ToDate") {
+                                      setShowToDate(false);
+                                    }
+                                    setFieldValue(
+                                      fName,
+                                      date.toISOString(),
+                                      false
+                                    );
+                                  }}
+                                />
+                              </Form.Group>
+                            </Col>
+                          </Form.Row>
+                        )}
+                        {item["details"].split(";")[2] === "DDL_API" && (
+                          <Form.Row>
+                            <Col md={8}>
+                              <Form.Group>
+                                <Form.Label className="mb-1 text-600 pr-2">
+                                  {
+                                    currentContext.language === "ar"
+                                      ? item["details"].split(";")[1]
+                                      : item["details"].split(";")[0]
+                                  }
+                                </Form.Label>
+                                <Form.Control as="select"
+                                  onChange={async (e) => {
+                                    getExtraDetailsValue(
+                                      "MOB_REQ_EX_DET_FLD_DEP_BRK,SP_MOB_CUST_DEP_LIST",
+                                      e.currentTarget.value
+                                    );
+                                    setFieldValue(
+                                      item["details"]
+                                        .split(";")[0]
+                                        .replace(/ /g, ""),
+                                      e.currentTarget.value
+                                    );
+                                  }}
+                                >
+                                  {getDropDownListValue(
+                                    item["details"].split(";")[2],
+                                    item["details"].split(";")[3]
+                                  )}
+                                </Form.Control>
+                              </Form.Group>
+                            </Col>
+                          </Form.Row>
+                        )}
+                        {item["details"].split(";")[2] === "DDL" && (
+                          <Form.Row><Col md={8}><Form.Group>
+                            <Form.Label className="mb-1 text-600 pr-2">
+                              {
+                                currentContext.language === "ar"
+                                  ? item["details"].split(";")[1]
+                                  : item["details"].split(";")[0]
+                              }
+                            </Form.Label>
+                            <Form.Control as="select"
+                              onChange={async (i) => {
+                                setFieldValue(
+                                  item["details"]
+                                    .split(";")[0]
+                                    .replace(/ /g, ""),
+                                  i["value"]
+                                );
+                              }}
+                            >
+                              {getDropDownListValue(
+                                item["details"].split(";")[2],
+                                item["details"].split(";")[3]
+                              )}
+                            </Form.Control>
+                          </Form.Group>
+                          </Col>
+                          </Form.Row>
+                        )}
+                        {touched[
+                          item["details"].split(";")[0].replace(/ /g, "")
+                        ] &&
+                          errors[
+                          item["details"].split(";")[0].replace(/ /g, "")
+                          ] && InvalidFieldError(local_Strings.GeneralValidation)}
+                      </div>
+                    </Form>
+                  ))}
+                  {showErrorMessage && InvalidFieldError(errorMessage)}
+
+                  <div className="text-right p-3">
+                    <button
+                      id="applyReqBtn"
+                      className="btn btn-primary"
+                      type="submit"
+                      onClick={(e) => {
+                        validateForm(values);
+                        if (isValid) {
+                          handleSubmit();
+                        } else {
+
+                          Swal.fire({
+                            position: 'top-end',
+                            icon: 'error',
+                            title: local_Strings.formValidationMessage,
+                            showConfirmButton: false,
+                            timer: Constant.AlertTimeout
+                          });
+                        }
+                      }}>
+                      Apply
+              </button>
+                  </div>
+                </div>
+              </React.Fragment>
+            )}
+          </Formik>
         </div>
 
-        <div
-          className={valideFormOTP ? "box modal-box" : "box modal-box d-none"}
-          id="confirmReqBox"
-        >
-          <div className="py-2 px-3 text-center text-sm-left">
-            <div className="row align-items-center justify-content-center">
-              <div className="col-sm-2">
-                <img src={requestSentIcon} className="img-fluid my-3" />
-              </div>
-              <div className="col-sm-8">
-                <h2 className="m-0 mb-4">Request Sent</h2>
-                <h5>Your request has been sent successfully to your RM</h5>
-              </div>
-            </div>
-          </div>
-          <div className="text-right p-3">
-            <button
-              id="doneRequestBtn"
-              data-dismiss="modal"
-              className="btn btn-primary"
-            >
-              Done
-            </button>
-          </div>
-        </div>
       </Modal.Body>
-    </Modal>
+
+    </Modal >
   );
 }
 

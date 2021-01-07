@@ -116,13 +116,12 @@ function FacilitiesOutstandingPayment(
               local_Strings.OutstandingPayments_PastDueSettlement, local_Strings.OutstandingPayments_SettlemenOfPayment
             ]}
             clearFilter={() => {
-              const _data = data.filter(
-                (d) => new Date(d.installmentDate ? d.installmentDate : "") > moment().add(-3, "months").toDate()
-              )
-              setFilteredData(_data);
+              // const _data = data.filter(
+              //   (d) => new Date(d.installmentDate ? d.installmentDate : "") > moment().add(-3, "months").toDate()
+              // )
+              setFilteredData(data);
             }}
             applyFilter={(filters: ICommonFilter) => {
-              console.log(filters);
               const _filteredData = helper.filterTransactions(
                 data,
                 filters

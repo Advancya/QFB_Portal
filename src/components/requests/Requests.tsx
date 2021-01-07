@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import RequestsListing from "./RequestsListing";
 import RequestsDetails from "./RequestsDetails";
 import NewRequest from "./NewRequest";
+import OTPValidationForm from "./ValidateOTPForm";
 import requestIcon from "../../images/request-icon.svg";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import {
@@ -15,6 +16,7 @@ function Requests() {
   const [showRequestsListing, setShowRequestsListing] = useState(false);
   const [showRequestsDetails, setshowRequestsDetails] = useState(false);
   const [showNewRequest, setShowNewRequest] = useState(false);
+  const [validateOTP, showValidateOTPForm] = useState(false);
 
   return (
     <>
@@ -32,7 +34,11 @@ function Requests() {
           setshowRequestsDetails(true);
           setDetail(detail);
         }}
-        showNewRequestModal={() => setShowNewRequest(true)}
+        showNewRequestModal={() => {
+          setShowRequestsListing(false);
+          setShowNewRequest(true);
+          //showValidateOTPForm(true);
+        }}
       />
       {item && !!item.requestCreateDate && (
         <RequestsDetails
@@ -55,6 +61,18 @@ function Requests() {
         backNewRequestModal={() => {
           setShowNewRequest(false);      
           setShowRequestsListing(true);
+        }}
+      />
+      <OTPValidationForm
+        showOTPValidationFormModal={validateOTP}
+        hideOTPValidationFormModal={() => showValidateOTPForm(false)}
+        backOTPValidationFormModal={() => {
+          showValidateOTPForm(false);      
+          setShowRequestsListing(true);
+        }}
+        showNewRequestModal={() => {
+          showValidateOTPForm(false);
+          setShowNewRequest(true);
         }}
       />
     </>

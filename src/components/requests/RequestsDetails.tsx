@@ -1,9 +1,17 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { IRequestDetail } from "../../Helpers/publicInterfaces";
 import moment from "moment";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
+import iRequest, {
+  GetRequestFields,
+  GetRequstByID,
+} from "../../services/requestService";
+import Constant from "../../constants/defaultData";
+import LoadingOverlay from 'react-loading-overlay';
+import PuffLoader from "react-spinners/PuffLoader";
+import ViewAttachment from '../../shared/AttachmentViewer';
 
 interface iRequestsDetails {
   showRequestsDetailsModal: boolean;
@@ -16,6 +24,129 @@ interface iRequestsDetails {
 function RequestsDetails(props: iRequestsDetails) {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
+  const [isLoading, setLoading] = useState(false);
+
+  const [formFields, setFormFields] = useState<any[]>([]);
+  const [currentRequest, setCurrentRequest] = useState<iRequest>({});
+
+  const fetchFormData = async () => {
+    setLoading(true);
+    const request: iRequest = await GetRequstByID(props.item.id.toString());
+    if (request !== null) {
+      setCurrentRequest(request[0]);
+      const data = await GetRequestFields(request[0].requestTypeId?.toString());
+      setFormFields(data);
+    }
+    setLoading(false);
+  };
+
+  const getRequestFieldValue = (fieldName: string) => {
+    let returnVlaue: any;
+    if (fieldName === "RequestTypeId") {
+      returnVlaue = currentRequest.requestTypeId;
+    }
+    if (fieldName === "RequestCreateDate") {
+      returnVlaue = currentRequest.requestCreateDate;
+    }
+    if (fieldName === "CashAccount") {
+      returnVlaue = currentRequest.cashAccount;
+    }
+    if (fieldName === "ExtraDetails") {
+      returnVlaue = currentRequest.extraDetails;
+    }
+    if (fieldName === "FromDate") {
+      returnVlaue =
+        currentRequest.fromDate?.toString() !== undefined
+          ? moment(currentRequest.fromDate).format("DD-MM-YYYY")
+          : "";
+    }
+    if (fieldName === "ToDate") {
+      returnVlaue =
+        currentRequest.toDate?.toString() !== undefined
+          ? moment(currentRequest.toDate).format("DD-MM-YYYY")
+          : "";
+    }
+    if (fieldName === "FaxNumber") {
+      returnVlaue = currentRequest.faxNumber;
+    }
+    if (fieldName === "LandlineNumber") {
+      returnVlaue = currentRequest.landlineNumber;
+    }
+    if (fieldName === "MobileNumber") {
+      returnVlaue = currentRequest.mobileNumber;
+    }
+    if (fieldName === "PoBoxNumber") {
+      returnVlaue = currentRequest.poBoxNumber;
+    }
+    if (fieldName === "ContactPersonName(underPOA)") {
+      returnVlaue = currentRequest.contactPersonNumber;
+    }
+    if (fieldName === "Country") {
+      returnVlaue = currentRequest.country;
+    }
+    if (fieldName === "City") {
+      returnVlaue = currentRequest.city;
+    }
+    if (fieldName === "Address") {
+      returnVlaue = currentRequest.address;
+    }
+    if (fieldName === "InvestmentName") {
+      returnVlaue = currentRequest.investmentName;
+    }
+    if (fieldName === "DocumentType") {
+      returnVlaue = currentRequest.documentType;
+    }
+    if (fieldName === "DepositContractNumber") {
+      returnVlaue = currentRequest.depositContractNumber;
+    }
+    if (fieldName === "AuditorName/Requestor") {
+      return currentRequest.auditorName;
+    }
+    if (fieldName === "ConfirmationDate") {
+      returnVlaue =
+        currentRequest.confirmationDate?.toString() !== undefined
+          ? moment(currentRequest.confirmationDate).format("DD-MM-YYYY")
+          : "";
+    }
+    if (fieldName === "Currency") {
+      returnVlaue = currentRequest.currency;
+    }
+    if (fieldName === "FileName") {
+      returnVlaue = currentRequest.fileName;
+    }
+    if (fieldName === "FileContent") {
+      returnVlaue = currentRequest.fileContent;
+    }
+    if (fieldName === "Attachments") {
+      returnVlaue = currentRequest.fileName;
+    }
+    if (fieldName === "requestSubject") {
+      returnVlaue = currentRequest.requestSubject;
+    }
+    if (fieldName === "requestStatus") {
+      returnVlaue = currentRequest.requestStatus;
+    }
+    if (fieldName === "requestStatusChangeDate") {
+      returnVlaue = currentRequest.requestStatusChangeDate;
+    }
+    if (fieldName === "Remarks") {
+      returnVlaue = currentRequest.remarks;
+    }
+    if (fieldName === "PoBox") {
+      returnVlaue = currentRequest.poBoxNumber;
+    }
+    if (fieldName === "Email") {
+      returnVlaue = currentRequest.email;
+    }
+    if (fieldName === "StatementType") {
+      returnVlaue = currentRequest.statementType;
+    }
+    return returnVlaue !== null ? returnVlaue : "";
+  };
+
+  useEffect(() => {
+    fetchFormData();
+  }, [props.item]);
 
   return (
     <Modal
@@ -78,56 +209,46 @@ function RequestsDetails(props: iRequestsDetails) {
               </div>
             </li>
           </ul>
-          <div className="py-2 px-3">
-            <div className="row">
-              <div className="col-lg-4">
-                <label>From</label>
-                <input
-                  type="date"
-                  value="2020-06-01"
-                  className="form-control"
-                  disabled={true}
-                />
+          <LoadingOverlay
+            active={isLoading}
+            spinner={<PuffLoader
+              size={Constant.SpnnerSize}
+              color={Constant.SpinnerColor}
+            />}
+          />
+          {formFields.map((item, index) =>
+            <React.Fragment>
+              <div className="py-2 px-3">
+                <div className="row">
+                  <div className="col-lg-8">
+                    <label>{
+                      currentContext.language === "ar"
+                        ? item["details"].split(";")[1]
+                        : item["details"].split(";")[0]
+                    }
+                    </label>
+                    {item["details"].split(";")[2] !== "FILE_UPLOAD" &&
+                      <input
+                        type="text"
+                        defaultValue={getRequestFieldValue(
+                          item["details"].split(";")[0].replace(/ /g, "")
+                        )?.toString()}
+                        className="form-control"
+                        disabled={true}
+                      />}
+                    {item["details"].split(";")[2] === "FILE_UPLOAD" &&
+                      <ViewAttachment showDelete={false}
+                        fileName={getRequestFieldValue("FileName")}
+                        fileContent={getRequestFieldValue(
+                          "FileContent"
+                        )}
+                      />
+                    }
+                  </div>
+                </div>
               </div>
-              <div className="col-lg-4">
-                <label>To</label>
-                <input
-                  type="date"
-                  value="2020-09-01"
-                  className="form-control"
-                  disabled={true}
-                />
-              </div>
-            </div>
-          </div>
-          <div className="py-2 px-3">
-            <div className="row">
-              <div className="col-lg-8">
-                <label>Auditor Name</label>
-                <input
-                  type="text"
-                  value="Rotana Rotana Rotana Rotana Rotana Rotana Rotana"
-                  className="form-control"
-                  disabled={true}
-                />
-              </div>
-            </div>
-          </div>
-          <div className="py-2 px-3">
-            <div className="row">
-              <div className="col-lg-8">
-                <label>Comments</label>
-                <textarea
-                  value="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat."
-                  className="form-control"
-                  disabled={true}
-                ></textarea>
-              </div>
-            </div>
-          </div>
+            </React.Fragment>
+          )}
         </div>
       </Modal.Body>
     </Modal>
