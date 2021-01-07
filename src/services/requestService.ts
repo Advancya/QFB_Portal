@@ -1,8 +1,4 @@
-import { apiInstance, identityInstance } from "./axiosMainConfig";
-import axios from "axios";
-import defaultData from "../constants/defaultData";
-import { generateRegistrationToken } from "./authenticationService";
-import oidc from "./oidc-config.json";
+import { apiInstance } from "./axiosMainConfig";
 
 export default interface iRequest {
   id?: number;
@@ -33,8 +29,17 @@ export default interface iRequest {
   requestSubject?: string;
   requestStatus?: string;
   requestStatusChangeDate?: string;
-  requestSubjectAR?: string;
-  requestStatusAR?: string;
+  requestSubjectAr?: string;
+  requestStatusAr?: string;
+  email?: string;
+  statementType?: string;
+  col1?: string;
+  col2?: string;
+  col3?: string;
+  col4?: string;
+  col5?: string;
+  customerName?: string;
+  customerMobile?: string;
 }
 
 async function GetRequstsTypes() {
@@ -42,7 +47,7 @@ async function GetRequstsTypes() {
     const response = await apiInstance.get("/api/RequestTypes");
     return response.data;
   } catch (error) {
-    console.log("error " + error);
+    console.log(error);
   }
 }
 
@@ -53,7 +58,7 @@ async function GetRequestFields(requestId?: string) {
     );
     return response.data;
   } catch (error) {
-    console.log("error " + error);
+    console.log(error);
   }
 }
 
@@ -88,6 +93,17 @@ async function AddRequest(request: iRequest) {
       requestStatus: request.requestStatus,
       requestStatusChangeDate: request.requestStatusChangeDate,
       requestSubject: request.requestSubject,
+      requestSubjectAr: request.requestSubjectAr,
+      email: request.email,
+      statementType: request.statementType,
+      requestStatusAr: request.requestStatusAr,
+      col1: request.col1,
+      col2: request.col2,
+      col3: request.col3,
+      col4: request.col4,
+      col5: request.col5,
+      customerName: "",
+      customerMobile: "",
     });
     return result.data === true ? true : false;
   } catch (err) {
@@ -103,7 +119,7 @@ async function GetRequstByID(requestId: string) {
     );
     return response.data;
   } catch (error) {
-    console.log("error " + error);
+    console.log(error);
   }
 }
 
@@ -114,18 +130,29 @@ async function GetExtraDetailCurrentDetail(cif: string) {
     );
     return response.data;
   } catch (error) {
-    console.log("error " + error);
+    console.log(error);
   }
 }
 
 async function GetExtraDetailsDepositDetails(id: string) {
   try {
     const response = await apiInstance.get(
-      `/api/ExtraDetails/GetExtraDetailsDepositDetails?id${id}`
+      `/api/ExtraDetails/GetExtraDetailsDepositDetails?id=${id}`
     );
     return response.data;
   } catch (error) {
-    console.log("error " + error);
+    console.log(error);
+  }
+}
+
+async function RmUpdateStatus(id: string, status: string) {
+  try {
+    const response = await apiInstance.get(
+      `/api/Requests/UpdateStatus?requestId=${id}&status=${status}`
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
   }
 }
 
@@ -136,4 +163,5 @@ export {
   GetRequstByID,
   GetExtraDetailCurrentDetail,
   GetExtraDetailsDepositDetails,
+  RmUpdateStatus,
 };
