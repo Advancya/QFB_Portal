@@ -2,20 +2,23 @@ import React, { useContext, useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import Constant from "../../constants/defaultData";
-import LoadingOverlay from 'react-loading-overlay';
+import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import { AuthContext } from "../../providers/AuthProvider";
 import * as helper from "../../Helpers/helper";
 import { Formik } from "formik";
 import * as yup from "yup";
-import InvalidFieldError from '../../shared/invalid-field-error';
-import Swal from 'sweetalert2';
+import InvalidFieldError from "../../shared/invalid-field-error";
+import Swal from "sweetalert2";
 import {
   ValidateOneTimeRegisterCode,
   ValidateOneTimeRegisterCodeWithCif,
   ValidateRegisterData,
 } from "../../services/cmsService";
-import { initialRegisterationData, IRegisterationData } from "../../Helpers/publicInterfaces";
+import {
+  initialRegisterationData,
+  IRegisterationData,
+} from "../../Helpers/publicInterfaces";
 import { isRegisterBefore } from "../../services/authenticationService";
 
 interface iRegisterStep1 {
@@ -55,7 +58,7 @@ function RegisterStep1(props: iRegisterStep1) {
       <Modal
         show={props.showRegisterStep1Modal}
         onHide={props.hideRegisterStep1Modal}
-        size="lg"
+        // size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
         dialogClassName="myModal"
@@ -102,7 +105,7 @@ function RegisterStep1(props: iRegisterStep1) {
                 touched,
                 setFieldValue,
                 isValid,
-                validateForm
+                validateForm,
               }) => (
                 <div className="container-fluid">
                   <div className="row mb-3">
@@ -135,18 +138,20 @@ function RegisterStep1(props: iRegisterStep1) {
                           } else {
                             setField2Editable(false);
                             Swal.fire({
-                              position: 'top-end',
-                              icon: 'error',
+                              position: "top-end",
+                              icon: "error",
                               title: local_Strings.GeneralValidation,
                               showConfirmButton: false,
-                              timer: Constant.AlertTimeout
+                              timer: Constant.AlertTimeout,
                             });
                           }
                           setLoading(false);
                           handleBlur("oneTimePassword");
                         }}
                       />
-                      {touched.oneTimePassword && errors.oneTimePassword && InvalidFieldError(errors.oneTimePassword)}
+                      {touched.oneTimePassword &&
+                        errors.oneTimePassword &&
+                        InvalidFieldError(errors.oneTimePassword)}
                     </div>
                     <div className="col-lg-6 form-group">
                       <label>{local_Strings.registerStep1Label2}</label>
@@ -172,29 +177,32 @@ function RegisterStep1(props: iRegisterStep1) {
                               setField3Editable(false);
                               setShowSubmitButton(false);
                               Swal.fire({
-                                position: 'top-end',
-                                icon: 'error',
-                                title: local_Strings.SignUpStep1CIFRegisterBefore,
+                                position: "top-end",
+                                icon: "error",
+                                title:
+                                  local_Strings.SignUpStep1CIFRegisterBefore,
                                 showConfirmButton: false,
-                                timer: Constant.AlertTimeout
+                                timer: Constant.AlertTimeout,
                               });
                             }
                           } else {
                             setField3Editable(false);
                             setShowSubmitButton(false);
                             Swal.fire({
-                              position: 'top-end',
-                              icon: 'error',
+                              position: "top-end",
+                              icon: "error",
                               title: local_Strings.GeneralValidation,
                               showConfirmButton: false,
-                              timer: Constant.AlertTimeout
+                              timer: Constant.AlertTimeout,
                             });
                           }
                           setLoading(false);
                           handleBlur("cif");
                         }}
                       />
-                      {touched.cif && errors.cif && InvalidFieldError(errors.cif)}
+                      {touched.cif &&
+                        errors.cif &&
+                        InvalidFieldError(errors.cif)}
                     </div>
 
                     <div className="col-lg-6 form-group">
@@ -218,29 +226,31 @@ function RegisterStep1(props: iRegisterStep1) {
                               setField4Editable(false);
                               setShowSubmitButton(false);
                               Swal.fire({
-                                position: 'top-end',
-                                icon: 'error',
+                                position: "top-end",
+                                icon: "error",
                                 title: local_Strings.GeneralValidation,
                                 showConfirmButton: false,
-                                timer: Constant.AlertTimeout
+                                timer: Constant.AlertTimeout,
                               });
                             }
                           } else {
                             setField4Editable(false);
                             setShowSubmitButton(false);
                             Swal.fire({
-                              position: 'top-end',
-                              icon: 'error',
+                              position: "top-end",
+                              icon: "error",
                               title: local_Strings.GeneralValidation,
                               showConfirmButton: false,
-                              timer: Constant.AlertTimeout
+                              timer: Constant.AlertTimeout,
                             });
                           }
                           setLoading(false);
                           handleBlur("email");
                         }}
                       />
-                      {touched.email && errors.email && InvalidFieldError(errors.email)}
+                      {touched.email &&
+                        errors.email &&
+                        InvalidFieldError(errors.email)}
                     </div>
                     <div className="col-lg-6 form-group">
                       <label>{local_Strings.registerStep1Label4}</label>
@@ -262,31 +272,33 @@ function RegisterStep1(props: iRegisterStep1) {
                             } else {
                               setShowSubmitButton(false);
                               Swal.fire({
-                                position: 'top-end',
-                                icon: 'error',
+                                position: "top-end",
+                                icon: "error",
                                 title: local_Strings.GeneralValidation,
                                 showConfirmButton: false,
-                                timer: Constant.AlertTimeout
+                                timer: Constant.AlertTimeout,
                               });
                             }
                           } else {
                             setShowSubmitButton(false);
                             Swal.fire({
-                              position: 'top-end',
-                              icon: 'error',
+                              position: "top-end",
+                              icon: "error",
                               title: local_Strings.GeneralValidation,
                               showConfirmButton: false,
-                              timer: Constant.AlertTimeout
+                              timer: Constant.AlertTimeout,
                             });
                           }
                           setLoading(false);
                           handleBlur("mobile");
                         }}
                       />
-                      {touched.mobile && errors.mobile && InvalidFieldError(errors.mobile)}
+                      {touched.mobile &&
+                        errors.mobile &&
+                        InvalidFieldError(errors.mobile)}
                     </div>
                   </div>
-                  {showSubmitButton &&
+                  {showSubmitButton && (
                     <div className="text-right p-3">
                       <button
                         id="applyReqBtn"
@@ -297,24 +309,24 @@ function RegisterStep1(props: iRegisterStep1) {
                           if (isValid) {
                             handleSubmit();
                           } else {
-
                             Swal.fire({
-                              position: 'top-end',
-                              icon: 'error',
+                              position: "top-end",
+                              icon: "error",
                               title: local_Strings.formValidationMessage,
                               showConfirmButton: false,
-                              timer: Constant.AlertTimeout
+                              timer: Constant.AlertTimeout,
                             });
                             touched.oneTimePassword = true;
                             touched.cif = true;
                             touched.mobile = true;
                             touched.email = true;
                           }
-                        }}>
+                        }}
+                      >
                         {local_Strings.registerStep1Button}
                       </button>
                     </div>
-                  }
+                  )}
                 </div>
               )}
             </Formik>

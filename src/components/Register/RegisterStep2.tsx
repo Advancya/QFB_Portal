@@ -1,15 +1,18 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
-import { initialRegisterationData, IRegisterationData } from "../../Helpers/publicInterfaces";
+import {
+  initialRegisterationData,
+  IRegisterationData,
+} from "../../Helpers/publicInterfaces";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import Constant from "../../constants/defaultData";
-import LoadingOverlay from 'react-loading-overlay';
+import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import { AuthContext } from "../../providers/AuthProvider";
 import { Formik } from "formik";
 import * as yup from "yup";
-import InvalidFieldError from '../../shared/invalid-field-error';
-import Swal from 'sweetalert2';
+import InvalidFieldError from "../../shared/invalid-field-error";
+import Swal from "sweetalert2";
 import { SendOTP } from "../../services/cmsService";
 
 interface iRegisterStep2 {
@@ -34,14 +37,17 @@ function RegisterStep2(props: iRegisterStep2) {
     confirmPassword: yup
       .string()
       .required(local_Strings.ChangePassword_ConfirmRequiredMsg)
-      .oneOf([yup.ref("password"), ""], local_Strings.ChangePassword_MustMatchMsg),
+      .oneOf(
+        [yup.ref("password"), ""],
+        local_Strings.ChangePassword_MustMatchMsg
+      ),
   });
 
   return (
     <Modal
       show={props.showRegisterStep2Modal}
       onHide={props.hideRegisterStep2Modal}
-      size="lg"
+      //size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       scrollable
@@ -88,7 +94,7 @@ function RegisterStep2(props: iRegisterStep2) {
             initialValues={{
               ...props.step1_data,
               password: "",
-              confirmPassword: ""
+              confirmPassword: "",
             }}
             validationSchema={registerFormStep2ValidationSchema}
             onSubmit={async (values) => {
@@ -97,11 +103,11 @@ function RegisterStep2(props: iRegisterStep2) {
                 props.showRegisterStep3Modal(values);
               } else {
                 Swal.fire({
-                  position: 'top-end',
-                  icon: 'error',
+                  position: "top-end",
+                  icon: "error",
                   title: local_Strings.GenericErrorMessage,
                   showConfirmButton: false,
-                  timer: Constant.AlertTimeout
+                  timer: Constant.AlertTimeout,
                 });
               }
             }}
@@ -116,7 +122,7 @@ function RegisterStep2(props: iRegisterStep2) {
               touched,
               setFieldValue,
               isValid,
-              validateForm
+              validateForm,
             }) => (
               <div className="container-fluid">
                 <div className="row mb-3">
@@ -141,7 +147,9 @@ function RegisterStep2(props: iRegisterStep2) {
                       onChange={handleChange("password")}
                       onBlur={handleBlur("password")}
                     />
-                    {touched.password && errors.password && InvalidFieldError(errors.password)}
+                    {touched.password &&
+                      errors.password &&
+                      InvalidFieldError(errors.password)}
                   </div>
                   <div className="col-lg-6 form-group">
                     <label>{local_Strings.registerStep2Label2}</label>
@@ -153,10 +161,14 @@ function RegisterStep2(props: iRegisterStep2) {
                       onChange={handleChange("confirmPassword")}
                       onBlur={handleBlur("confirmPassword")}
                     />
-                    {touched.confirmPassword && errors.confirmPassword && InvalidFieldError(errors.confirmPassword)}
+                    {touched.confirmPassword &&
+                      errors.confirmPassword &&
+                      InvalidFieldError(errors.confirmPassword)}
                   </div>
                 </div>
-                <div className="text-xs">{local_Strings.registerStep2Label3}</div>
+                <div className="text-xs">
+                  {local_Strings.registerStep2Label3}
+                </div>
 
                 <div className="text-right p-3">
                   <button
@@ -168,18 +180,18 @@ function RegisterStep2(props: iRegisterStep2) {
                       if (isValid) {
                         handleSubmit();
                       } else {
-
                         Swal.fire({
-                          position: 'top-end',
-                          icon: 'error',
+                          position: "top-end",
+                          icon: "error",
                           title: local_Strings.formValidationMessage,
                           showConfirmButton: false,
-                          timer: Constant.AlertTimeout
+                          timer: Constant.AlertTimeout,
                         });
                         touched.password = true;
                         touched.confirmPassword = true;
                       }
-                    }}>
+                    }}
+                  >
                     {local_Strings.registerStep2Button}
                   </button>
                 </div>

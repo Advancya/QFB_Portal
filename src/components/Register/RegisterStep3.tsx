@@ -2,15 +2,18 @@ import React, { useContext, useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import Constant from "../../constants/defaultData";
-import LoadingOverlay from 'react-loading-overlay';
+import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import { AuthContext } from "../../providers/AuthProvider";
 import { Formik } from "formik";
 import * as yup from "yup";
-import InvalidFieldError from '../../shared/invalid-field-error';
-import Swal from 'sweetalert2';
+import InvalidFieldError from "../../shared/invalid-field-error";
+import Swal from "sweetalert2";
 import { SendOTP, ValidateOTP } from "../../services/cmsService";
-import { initialRegisterationData, IRegisterationData } from "../../Helpers/publicInterfaces";
+import {
+  initialRegisterationData,
+  IRegisterationData,
+} from "../../Helpers/publicInterfaces";
 import { signUp } from "../../services/authenticationService";
 
 interface iRegisterStep3 {
@@ -32,7 +35,7 @@ function RegisterStep3(props: iRegisterStep3) {
     <Modal
       show={props.showRegisterStep3Modal}
       onHide={props.hideRegisterStep3Modal}
-      size="lg"
+      // size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       scrollable
@@ -82,7 +85,10 @@ function RegisterStep3(props: iRegisterStep3) {
             validationSchema={registerFormStep3ValidationSchema}
             onSubmit={async (values) => {
               setLoading(true);
-              const otpRes = await ValidateOTP(props.step2_data.cif, values.otp);
+              const otpRes = await ValidateOTP(
+                props.step2_data.cif,
+                values.otp
+              );
               if (otpRes === true) {
                 const res = await signUp({
                   username: props.step2_data.cif,
@@ -93,30 +99,30 @@ function RegisterStep3(props: iRegisterStep3) {
                 });
                 if (res) {
                   Swal.fire({
-                    position: 'top-end',
-                    icon: 'success',
+                    position: "top-end",
+                    icon: "success",
                     title: local_Strings.SignupSuccessTitle,
                     html: local_Strings.SignupSuccessMessage,
                     showConfirmButton: false,
-                    timer: Constant.AlertTimeout
+                    timer: Constant.AlertTimeout,
                   });
                   props.hideRegisterStep3Modal();
                 } else {
                   Swal.fire({
-                    position: 'top-end',
-                    icon: 'error',
+                    position: "top-end",
+                    icon: "error",
                     title: local_Strings.otpErrorMessage,
                     showConfirmButton: false,
-                    timer: Constant.AlertTimeout
+                    timer: Constant.AlertTimeout,
                   });
                 }
               } else {
                 Swal.fire({
-                  position: 'top-end',
-                  icon: 'error',
+                  position: "top-end",
+                  icon: "error",
                   title: local_Strings.otpErrorMessage,
                   showConfirmButton: false,
-                  timer: Constant.AlertTimeout
+                  timer: Constant.AlertTimeout,
                 });
               }
               setLoading(false);
@@ -131,7 +137,7 @@ function RegisterStep3(props: iRegisterStep3) {
               errors,
               touched,
               validateForm,
-              isValid
+              isValid,
             }) => (
               <div className="container-fluid">
                 <div className="row mb-3">
@@ -175,17 +181,17 @@ function RegisterStep3(props: iRegisterStep3) {
                       if (isValid) {
                         handleSubmit();
                       } else {
-
                         Swal.fire({
-                          position: 'top-end',
-                          icon: 'error',
+                          position: "top-end",
+                          icon: "error",
                           title: local_Strings.formValidationMessage,
                           showConfirmButton: false,
-                          timer: Constant.AlertTimeout
+                          timer: Constant.AlertTimeout,
                         });
                         touched.otp = true;
                       }
-                    }}>
+                    }}
+                  >
                     {local_Strings.registerStep3Button}
                   </button>
                 </div>

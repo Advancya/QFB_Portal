@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
-import dateIcon from "../../images/calendar-inactive.png";
+import successIcon from "../../images/ConfirmationIcon.png";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 
 interface iForgotPasswordStep4 {
@@ -17,7 +17,7 @@ function ForgotPasswordStep4(ForgotPasswordStep4Props: iForgotPasswordStep4) {
     <Modal
       show={ForgotPasswordStep4Props.showForgotPasswordStep4Modal}
       onHide={ForgotPasswordStep4Props.hideForgotPasswordStep4Modal}
-      size="lg"
+      //  size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       scrollable
@@ -36,7 +36,7 @@ function ForgotPasswordStep4(ForgotPasswordStep4Props: iForgotPasswordStep4) {
               </a>
             </div>
             <div className="ib-text">
-              <h4 id="newReqTxt">{local_Strings.registerTitle}</h4>
+              <h4 id="newReqTxt">{local_Strings.PasswordResetTitle}</h4>
             </div>
           </div>
         </div>
@@ -52,7 +52,16 @@ function ForgotPasswordStep4(ForgotPasswordStep4Props: iForgotPasswordStep4) {
       <Modal.Body>
         <div className="box modal-box p-4  scrollabel-modal-box">
           <div className="container-fluid">
-            <div className="text-right p-3">
+            <div className="row justify-content-center align-items-center">
+              <div className="col-md-3 text-center">
+                <img src={successIcon} className="img-fluid" width="100" />
+              </div>
+              <div className="col-md-9 text-center text-md-left mt-2">
+                <h3>{local_Strings.PasswordResetSuccessTitle}</h3>
+                <h6>{local_Strings.PasswordResetSuccessMessage}</h6>
+              </div>
+            </div>
+            <div className="text-center text-md-right mt-3">
               <button
                 id="applyReqBtn"
                 className="btn btn-primary"
