@@ -118,7 +118,7 @@ const en = {
 
   SignUpStep1CIFRegisterBefore:
     "Customer Identification Number already register",
-    
+
   SignUpStep2Title: "Register",
   SignUpStep2Hint: "Kindly proceed your registration process",
   SignUpStep2EnterPassword: "Enter Password",
@@ -482,8 +482,7 @@ const en = {
     "Your request has been submitted, we will get in touch with you soon",
 
   PasswordResetSuccessTitle: "Request Sent",
-  PasswordResetSuccessMessage:
-    "Your Password reset is done, click here to login",
+  PasswordResetSuccessMessage: "Your Password reset is done",
 
   GenericErrorMessage: "Something went wrong, please try again later",
   NewRequestSubmitRequiredMessage:
@@ -777,12 +776,12 @@ const en = {
   documentListingPriority: "Priority",
   DrillBackButtonText: "Back",
 
-  
   PortfolioNoInvestments: "No Investments Yet",
   PortfolioNoDeposits: "No Deposits  Yet",
   PortfolioNoFacilities: "No Facilities Found",
 
-  OfferRequestSubmitMessage: "Your subscription request to the offer \"[REPLACE ME]\" has been submitted",
+  OfferRequestSubmitMessage:
+    'Your subscription request to the offer "[REPLACE ME]" has been submitted',
   ContactUsSelectCountry: "Select Country",
   OTPSentMessage: "An OTP has been sent successfully, kindly check.",
 

@@ -18,7 +18,7 @@ function ForgotPasswordStep2(forgotPasswordStep2Props: iForgotPasswordStep2) {
     <Modal
       show={forgotPasswordStep2Props.showForgotPasswordStep2Modal}
       onHide={forgotPasswordStep2Props.hideForgotPasswordStep2Modal}
-      size="lg"
+      //size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       scrollable
@@ -37,7 +37,7 @@ function ForgotPasswordStep2(forgotPasswordStep2Props: iForgotPasswordStep2) {
               </a>
             </div>
             <div className="ib-text">
-              <h4 id="newReqTxt">{local_Strings.registerTitle}</h4>
+              <h4 id="newReqTxt">{local_Strings.PasswordResetOTPTitle}</h4>
             </div>
           </div>
         </div>
@@ -54,44 +54,34 @@ function ForgotPasswordStep2(forgotPasswordStep2Props: iForgotPasswordStep2) {
         <div className="box modal-box p-4  scrollabel-modal-box">
           <div className="container-fluid">
             <div className="row mb-3">
-              <div className="col-md-8 col-sm-12">
-                <h5>{local_Strings.registerStep2Hint}</h5>
-              </div>
-              <div className="col-md-4 col-sm-12 text-right">
-                <span className="hintStep">
-                  {local_Strings.registerStep2StepCount}
-                </span>
+              <div className="col-md-12 col-sm-12">
+                <h5>{local_Strings.PasswordResetOTPHint}</h5>
               </div>
             </div>
 
-            <div className="mb-3 row">
-              <div className="col-lg-6 form-group">
-                <label>{local_Strings.registerStep2Label1}</label>
+            <div className="mb-2 row">
+              <div className="col-lg-12 form-group">
+                <label>{local_Strings.PasswordResetOTPEnterOTP}</label>
                 <input
                   type="text"
                   className="form-control"
                   placeholder="2345678901234567"
                 />
-              </div>
-              <div className="col-lg-6 form-group">
-                <label>{local_Strings.registerStep2Label2}</label>
-                <select className="form-control">
-                  <option value="0">QAR</option>
-                  <option value="1">USD</option>
-                  <option value="2">AED</option>
-                  <option value="3">EGY</option>
-                </select>
+                <div className="form-group text-right">
+                  <a href="#" className="forgotLink">
+                    {local_Strings.LoginWithCredentialsPasswordResetLabel}
+                  </a>
+                </div>
               </div>
             </div>
-            <div className="text-xs">{local_Strings.registerStep2Label3}</div>
 
-            <div className="text-right p-3">
+            <div className="text-right">
               <button
                 id="applyReqBtn"
                 className="btn btn-primary"
                 onClick={forgotPasswordStep2Props.showForgotPasswordStep3Modal}
               >
-                {local_Strings.registerStep2Button}
+                {local_Strings.PasswordResetOTPButton}
               </button>
             </div>
           </div>
