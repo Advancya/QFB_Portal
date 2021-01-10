@@ -166,19 +166,9 @@ export interface IInboxFilter {
   Status: string;
 }
 
-export interface IRequestDetail {
-  id: number;
-  requestCreateDate: string;
-  remarks: string;
-  requestStatus: string;
-  requestTypeId: string;
-  requestSubject: string;
-  requestSubjectAR?: string;
-  requestStatusAR?: string;
-}
-
 export interface ITransactionDetail {
   id: number;
+  cif?: string;
   transactionDate: string;
   requestDate: string;
   transferFromAccount: string;
@@ -186,7 +176,6 @@ export interface ITransactionDetail {
   amount: string;
   currency: string;
   description: string;
-  status: string;
   transactionTypeId: number;
   beneficiaryId: string;
   requestStatus?: string;
@@ -194,6 +183,7 @@ export interface ITransactionDetail {
   requestSubjectAR?: string;
   requestStatusAR?: string;
   beneficiaryFullName?: string;
+  requestStatusChangeDate?: string;
 }
 
 export const emptyTransactionDetail = {
@@ -205,7 +195,6 @@ export const emptyTransactionDetail = {
   amount: "",
   currency: "",
   description: "",
-  status: "",
   transactionTypeId: 0,
   beneficiaryId: "",
 }
@@ -651,6 +640,8 @@ export interface IBeneficiaryDetail {
   intermediaryBank: string;
   foreignCurrency: string;
   routingNumber: string;
+  beneficiaryBankSwiftCode?: string;
+  beneficiaryCurrency?: string;
 }
 
 
@@ -821,4 +812,36 @@ export const initialNewRequest: INewRequestDetail = {
   Email: undefined,
   RequestSubjectAr: undefined,
   StatementType: undefined,
+};
+
+
+export interface INotificationDetail {
+  id: number;
+  customerId: string;
+  messageTitle: string;
+  messageTitleAr: string;
+  messageSubTitle: string;
+  messageBody: string;
+  messageBodyAr: string;
+  messageSendDate: string;
+  messagePriority: string;
+  messageTo?: string;
+  expiryDate: string;
+  isRead: boolean;
+}
+
+
+export const initialINotification: INotificationDetail = {
+  id: 0,
+  customerId: "",
+  messageTitle: "",
+  messageTitleAr: "",
+  messageSubTitle: "",
+  messageBody: "",
+  messageBodyAr: "",
+  messageSendDate: "",
+  messagePriority: "",
+  messageTo: "",
+  expiryDate: "",
+  isRead: false,
 };

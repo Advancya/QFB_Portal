@@ -121,7 +121,7 @@ const Login: React.FC<IProps> = (props) => {
                   InvalidFieldError(errors.password)}
               </div>
 
-              <ForgotPasswordLanding></ForgotPasswordLanding>
+              <ForgotPasswordLanding />
               <div className="form-group">
                 <button
                   type="submit"

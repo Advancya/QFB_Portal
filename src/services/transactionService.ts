@@ -23,24 +23,6 @@ export interface iBeneficiary {
   intermediaryBankSwiftCode?: string;
 }
 
-export interface iNewTransaction {
-  id?: number;
-  cif?: string;
-  transactionTypeId?: number;
-  transactionDate?: string;
-  transferFromAccount?: string;
-  transferToAccount?: string;
-  amount?: number;
-  currency?: string;
-  requestDate?: string;
-  description?: string;
-  beneficiaryId?: string;
-  requestSubject?: string;
-  requestStatus?: string;
-  requestStatusChangeDate?: string;
-  requestSubjectAR?: string;
-  requestStatusAR?: string;
-}
 
 async function AddBeneficiary(benficiary: iBeneficiary) {
   try {
@@ -72,7 +54,7 @@ async function AddBeneficiary(benficiary: iBeneficiary) {
   }
 }
 
-async function AddTransaction(tranaction: iNewTransaction) {
+async function AddTransaction(tranaction: any) {
   try {
     const result = await apiInstance.post(`/api/Transactions/Add`, {
       id: tranaction.id,
@@ -146,6 +128,57 @@ async function ValidateBankSwift(swift: string) {
   }
 }
 
+async function DeleteDeneficiary(id: Number) {
+  try {
+    const result = await apiInstance.get(`/api/Beneficiary/Delete?id=${id}`);
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return undefined;
+  }
+}
+
+async function UpdateBeneficiary(benficiary: iBeneficiary) {
+  try {
+    const result = await apiInstance.post(`/api/Beneficiary/Update`, {
+      id: benficiary.id,
+      cif: benficiary.cif,
+      createDate: benficiary.createDate,
+      typeId: benficiary.typeId,
+      beneficiaryId: benficiary.beneficiaryId,
+      qfbaccount: benficiary.qfbaccount,
+      beneficiaryCurrency: benficiary.beneficiaryCurrency,
+      beneficiaryBank: benficiary.beneficiaryBank,
+      beneficiarySwiftCode: benficiary.beneficiarySwiftCode,
+      beneficiaryFullName: benficiary.beneficiaryFullName,
+      beneficiaryIban: benficiary.beneficiaryIban,
+      beneficiaryAddress: benficiary.beneficiaryAddress,
+      beneficiaryAccountNumber: benficiary.beneficiaryAccountNumber,
+      beneficiaryCity: benficiary.beneficiaryCity,
+      country: benficiary.country,
+      intermediaryBankSwiftCode: benficiary.intermediaryBankSwiftCode,
+      intermediaryBankName: benficiary.intermediaryBankName,
+      routingNumber: benficiary.routingNumber,
+      beneficiaryBankSwiftCode: benficiary.beneficiaryBankSwiftCode,
+    });
+    return result.data === true ? true : false;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+}
+
+async function RmTranasctionUpdateStatus(id: string, status: string) {
+  try {
+    const response = await apiInstance.get(
+      `/api/Transactions/UpdateStatus?transactionId=${id}&status=${status}`
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export {
   AddBeneficiary,
   AddTransaction,
@@ -153,4 +186,7 @@ export {
   GetBeneficiariesByCif,
   ValidateBankIBAN,
   ValidateBankSwift,
+  DeleteDeneficiary,
+  UpdateBeneficiary,
+  RmTranasctionUpdateStatus,
 };

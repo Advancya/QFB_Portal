@@ -59,7 +59,7 @@ function InboxDetails(props: iInboxDetails) {
           if (previousItems.length < rowLimit) {
             setOffset(previousItems.length);
           }
-          InboxMessages.refresh();
+          InboxMessages.refreshInbox();
         }
       })
       .catch((e: any) => console.log(e))

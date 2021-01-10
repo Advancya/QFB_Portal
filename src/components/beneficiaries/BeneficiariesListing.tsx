@@ -3,12 +3,7 @@ import { Modal } from "react-bootstrap";
 import moment from "moment";
 import { localStrings as local_Strings } from '../../translations/localStrings';
 import { AuthContext } from "../../providers/AuthProvider";
-import {
-  GetBeneficiaryByCIF,
-} from "../../services/cmsService";
-import {
-  emptyBeneficiaryDetail, IBeneficiaryDetail,
-} from "../../Helpers/publicInterfaces";
+import { iBeneficiary } from "../../services/transactionService";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
@@ -18,62 +13,35 @@ import FilterMoreButtonControl from '../../shared/FilterMoreButtonControl';
 interface iBeneficiariesListing {
   showBeneficiariesListingModal: boolean;
   hideBeneficiariesListingModal: () => void;
-  showBeneficiariesDetailsModal: (itemId: number) => void;
+  showBeneficiariesDetailsModal: (item: iBeneficiary) => void;
   showNewBeneficiaryModal: () => void;
   backBeneficiariesListingModal: () => void;
+  beneficiaries: iBeneficiary[];
+  reloading: boolean;
 }
+
 function BeneficiariesListing(
   props: iBeneficiariesListing
 ) {
 
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
-  const [isLoading, setLoading] = useState(false);
-  const [data, setData] = useState<IBeneficiaryDetail[]>([]);
+  const [filteredData, setFilteredData] = useState<iBeneficiary[]>([]);
   const rowLimit: number = Constant.RecordPerPage;
   const [offset, setOffset] = useState<number>(rowLimit);
 
-  useEffect(() => {
-    let isMounted = true;
+  useEffect(() => setFilteredData(props.beneficiaries), [props.beneficiaries]);
 
-    const initialLoadMethod = async () => {
-      setLoading(true);
-      GetBeneficiaryByCIF(currentContext.selectedCIF)
-        .then((responseData: IBeneficiaryDetail[]) => {
-          if (isMounted && responseData && responseData.length > 0) {
-            setData(responseData);
-            if (responseData.length < rowLimit) {
-              setOffset(responseData.length);
-            }
-          } else {
-            setData([]);
-          }
-        })
-        .catch((e: any) => console.log(e))
-        .finally(() => setLoading(false));
-    }
-
-    if (!!currentContext.selectedCIF) {
-      initialLoadMethod();
-    }
-
-    return () => {
-      isMounted = false;
-    }; // use effect cleanup to set flag false, if unmounted
-  }, [currentContext.selectedCIF]);
-
-  const renderItem = (item: IBeneficiaryDetail, index: number) => (
+  const renderItem = (item: iBeneficiary, index: number) => (
     <li className="shown" key={index}>
       <a
         href="#"
         className="row align-items-center"
-        onClick={() => props.showBeneficiariesDetailsModal(item.id)}
+        onClick={() => props.showBeneficiariesDetailsModal(item)}
       >
         <div className="col-sm-8">
           <h4>{local_Strings.BeneficiaryIDLabel + " | " + item.beneficiaryId}</h4>
-          <h5>{local_Strings.BeneficiaryFullNameLabel +
-            " | " +
-            item.beneficiaryFullName}</h5>
+          <h5>{item.beneficiaryFullName}</h5>
         </div>
         <div className="col-8 col-sm-3 text-sm-right">
           <span className="status-badge ">{item.country || ""}</span>
@@ -110,15 +78,17 @@ function BeneficiariesListing(
               </a>
             </div>
             <div className="ib-text d-flex align-items-center">
-              <h4>Beneficiaries</h4>
-              <a
-                className="btnOutlineWhite"
-                href="#"
-                onClick={props.showNewBeneficiaryModal}
-                id="newBeneficiaryBtn"
-              >
-                <i className="fa fa-plus-circle"></i> New Beneficiaries
-              </a>
+              <h4>{local_Strings.BeneficiariesListingTitle}</h4>
+              {currentContext.userRole === "CUSTOMER" &&
+                <a
+                  className="btnOutlineWhite"
+                  href="#"
+                  onClick={props.showNewBeneficiaryModal}
+                  id="newBeneficiaryBtn"
+                >
+                  <i className="fa fa-plus-circle"></i>{local_Strings.MyBeneficiariesAddNew}
+                </a>
+              }
             </div>
           </div>
           <button
@@ -132,7 +102,7 @@ function BeneficiariesListing(
         <Modal.Body>
           <div className="box modal-box">
             <LoadingOverlay
-              active={isLoading}
+              active={props.reloading}
               spinner={
                 <PuffLoader
                   size={Constant.SpnnerSize}
@@ -141,18 +111,18 @@ function BeneficiariesListing(
               }
             />
             <ul className="box-list" id="dataList">
-              {data &&
-                data.length > 0 &&
-                data[0].id > 0 ?
-                data.slice(0, offset).map((item, index) =>
+              {filteredData &&
+                filteredData.length > 0 &&
+                filteredData[0].id > 0 ?
+                filteredData.slice(0, offset).map((item, index) =>
                   renderItem(item, index)
                 )
                 : NoResult(local_Strings.NoDataToShow)}
             </ul>
           </div>
 
-          <FilterMoreButtonControl showMore={data && data.length > rowLimit &&
-            offset < data.length} onClickMore={() => setOffset(offset + 5)} />
+          <FilterMoreButtonControl showMore={filteredData && filteredData.length > rowLimit &&
+            offset < filteredData.length} onClickMore={() => setOffset(offset + 5)} />
         </Modal.Body>
       </Modal>
     </div>

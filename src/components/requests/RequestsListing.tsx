@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import requestIcon from "../../images/request-icon-color.svg";
 import FilterDateControl from "../../shared/FilterDateControl";
 import FilterCustomDateControl from "../../shared/FilterCustomDateControl";
@@ -17,14 +17,11 @@ import {
 import * as helper from "../../Helpers/helper";
 import NoResult from "../../shared/NoResult";
 import {
-  GetAllRequestTypes,
-  GetRequestsByCIF,
-  SendOTP,
+  GetAllRequestTypes
 } from "../../services/cmsService";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
-import axios from "axios";
 
 interface IRequestType {
   id: number;
@@ -37,6 +34,8 @@ interface iRequestsListing {
   hideRequestsListingModal: () => void;
   showRequestsDetailsModal: (detail: IRequestDetail) => void;
   showNewRequestModal: () => void;
+  requests: IRequestDetail[];
+  reloading: boolean;
 }
 
 function RequestsListing(props: iRequestsListing) {
@@ -64,27 +63,25 @@ function RequestsListing(props: iRequestsListing) {
       nameAr: "",
     },
   ]);
+  
+  useEffect(() => {
+    setData(props.requests);
+    setFilteredData(props.requests);
+    if (props.requests && props.requests.length < rowLimit) {
+      setOffset(props.requests.length);
+    }
+  }, [props.requests]);
 
   useEffect(() => {
     let isMounted = true;
 
     const initialLoadMethod = async () => {
       setLoading(true);
-      const requestOne = GetAllRequestTypes();
-      const requestTwo = GetRequestsByCIF(currentContext.selectedCIF);
-      axios
-        .all([requestOne, requestTwo])
-        .then((responseData: any) => {
+      
+      GetAllRequestTypes()
+        .then((responseData: IRequestType[]) => {
           if (responseData && responseData.length > 0 && isMounted) {
-            setRequestTypes(responseData[0] as IRequestType[]);
-            const requests = responseData[1] as IRequestDetail[];
-
-            setData(requests);
-            setFilteredData(requests);
-
-            if (requests.length < rowLimit) {
-              setOffset(requests.length);
-            }
+            setRequestTypes(responseData);            
           }
         })
         .catch((e: any) => console.log(e))
@@ -98,7 +95,7 @@ function RequestsListing(props: iRequestsListing) {
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [currentContext.selectedCIF]);
+  }, []);
 
   const renderItem = (item: IRequestDetail, index: number) => (
     <li className="shown" key={index}>

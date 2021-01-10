@@ -105,6 +105,7 @@ function Faqs(faqsProps: iFaqs) {
   ) => {
     setExpanded(isExpanded ? panel : false);
   };
+  
   return (
     <>
       <a href="#" onClick={handleShowFaqs}>
@@ -137,6 +138,7 @@ function Faqs(faqsProps: iFaqs) {
             {Content.map((item, index) => {
               return (
                 <Accordion2
+                  key={index}
                   expanded={expanded === `panel${index}`}
                   onChange={handleChange(`panel${index}`)}
                   className={classes.parentNode + " m-0"}
@@ -154,7 +156,7 @@ function Faqs(faqsProps: iFaqs) {
                     <Accordion className="analysis-accordion w-100">
                       {item.Questions.map((subitem, subindex) => {
                         return (
-                          <Card className="mx-0 bg-transparent">
+                          <Card key={subindex} className="mx-0 bg-transparent">
                             <Card.Header>
                               <ContextAwareToggle
                                 eventKey={`panel${subindex}`}

@@ -30,13 +30,9 @@ function NotificationsListing() {
     selectedItem: emptyNotificationsDetail,
   });
   useEffect(() => {
-    let isMounted = true;
 
     refreshList();
-
-    return () => {
-      isMounted = false;
-    }; // use effect cleanup to set flag false, if unmounted
+    
   }, [currentContext.selectedCIF]);
 
   const refreshList = () => {

@@ -1,7 +1,4 @@
-import React, { useState } from "react";
-
-import depositIcon from "../../../images/deposit-icon.svg";
-import { Button, Modal } from "react-bootstrap";
+import React, { useContext, useEffect, useState } from "react";
 import TransactionsListing from "./TransactionsListing";
 import TransactionsDetails from "./TransactionsDetails";
 import NewTransaction from "./NewTransactions";
@@ -12,99 +9,86 @@ import BeneficiariesListing from "../beneficiaries/BeneficiariesListing";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import {
   emptyTransactionDetail,
-  ITransactionDetail,
+  ITransactionDetail
 } from "../../Helpers/publicInterfaces";
+import { iBeneficiary } from "../../services/transactionService";
+import OTPValidationForm from "./ValidateOTPForm";
+import {
+  GetTransactionsByCIF, GetBeneficiaryByCIF,
+} from "../../services/cmsService";
+import { AuthContext } from "../../providers/AuthProvider";
+
 
 function Transactions() {
   const [showTransactionsListing, setShowTransactionsListing] = useState(false);
   const [item, setDetail] = useState<ITransactionDetail>(
     emptyTransactionDetail
   );
-  const [beneficiaryId, setBeneficiaryId] = useState<number>();
+  const [submittedTransaction, setTransactionValue] = useState<ITransactionDetail>(null);
 
-  const handleCloseTransactionsListing = () => {
-    setShowTransactionsListing(false);
-  };
-  const handleShowTransactionsListing = () => {
-    setShowTransactionsListing(true);
-  };
+  const [selectedBeneficiary, selectBeneficiary] = useState<iBeneficiary>(null);
+  const [validateOTP, showValidateOTPForm] = useState(false);
 
   const [showTransactionsDetails, setshowTransactionsDetails] = useState(false);
 
-  const handleCloseTransactionsDetails = () =>
-    setshowTransactionsDetails(false);
-  const handleShowTransactionsDetails = (detail: ITransactionDetail) => {
-    handleCloseTransactionsListing();
-    setDetail(detail);
-    setshowTransactionsDetails(true);
-  };
-  const handleBackTransactionsDetails = () => {
-    setshowTransactionsDetails(false);
-
-    handleShowTransactionsListing();
-  };
-
   const [showNewTransaction, setShowNewTransaction] = useState(false);
 
-  const handleCloseNewTransaction = () => {
-    setShowNewTransaction(false);
-  };
-  const handleShowNewTransaction = () => {
-    handleCloseTransactionsListing();
-    setShowNewTransaction(true);
-  };
-  const handleBackNewTransaction = () => {
-    setShowNewTransaction(false);
-
-    handleShowTransactionsListing();
-  };
   ///benfeciaries
   const [showBeneficiariesListing, setShowBeneficiariesListing] = useState(
     false
   );
-
-  const handleCloseBeneficiariesListing = () => {
-    setShowBeneficiariesListing(false);
-  };
-  const handleShowBeneficiariesListing = () => {
-    handleCloseTransactionsListing();
-    setShowBeneficiariesListing(true);
-  };
-  const handleBackBeneficiariesListing = () => {
-    handleCloseBeneficiariesListing();
-
-    handleShowTransactionsListing();
-  };
-
   const [showBeneficiariesDetails, setshowBeneficiariesDetails] = useState(
     false
   );
 
-  const handleCloseBeneficiariesDetails = () =>
-    setshowBeneficiariesDetails(false);
-  const handleShowBeneficiariesDetails = () => {
-    handleCloseBeneficiariesListing();
-    setshowBeneficiariesDetails(true);
-  };
-  const handleBackBeneficiariesDetails = () => {
-    setshowBeneficiariesDetails(false);
-
-    handleShowBeneficiariesListing();
-  };
-
   const [showNewBeneficiary, setShowNewBeneficiary] = useState(false);
+  const currentContext = useContext(AuthContext);
+  local_Strings.setLanguage(currentContext.language);
+  const [beneficiaries, setBeneficiaries] = useState<iBeneficiary[]>([]);
+  const [isLoading, setLoading] = useState(false);
+  const [transactions, setTransactions] = useState<ITransactionDetail[]>([emptyTransactionDetail]);
 
-  const handleCloseNewBeneficiary = () => {
-    setShowNewBeneficiary(false);
-  };
-  const handleShowNewBeneficiary = () => {
-    handleCloseBeneficiariesListing();
-    setShowNewBeneficiary(true);
-  };
-  const handleBackNewBeneficiary = () => {
-    setShowNewBeneficiary(false);
+  useEffect(() => {
 
-    handleShowBeneficiariesListing();
+    if (!!currentContext.selectedCIF) {
+      refreshTransactions();
+      refreshBeneficiaries();
+    }
+
+  }, [currentContext.selectedCIF]);
+
+  const refreshTransactions = async () => {
+
+    if (!!currentContext.selectedCIF) {
+      setLoading(true);
+
+      const responseData: ITransactionDetail[] = await GetTransactionsByCIF(
+        currentContext.selectedCIF
+      );
+
+      if (responseData && responseData.length > 0) {
+        setTransactions(responseData.sort((a, b) => (a.id > b.id ? -1 : 1)));
+      }
+
+      setLoading(false);
+    }
+  };
+
+  const refreshBeneficiaries = async () => {
+
+    if (!!currentContext.selectedCIF) {
+      setLoading(true);
+
+      const responseData: iBeneficiary[] = await GetBeneficiaryByCIF(
+        currentContext.selectedCIF
+      );
+
+      if (responseData && responseData.length > 0) {
+        setBeneficiaries(responseData.sort((a, b) => (a.beneficiaryFullName.localeCompare(b.beneficiaryFullName))));
+      }
+
+      setLoading(false);
+    }
   };
 
   return (
@@ -113,7 +97,7 @@ function Transactions() {
         <a
           className="nav-link px-2"
           href="#"
-          onClick={handleShowTransactionsListing}
+          onClick={() => setShowTransactionsListing(true)}
         >
           <img src={transactionIcon} className="images-fluid" />
           {local_Strings.navigationItem2}
@@ -121,46 +105,125 @@ function Transactions() {
       </li>
       <TransactionsListing
         showTransactionsListingModal={showTransactionsListing}
-        hideTransactionsListingModal={handleCloseTransactionsListing}
-        showTransactionsDetailsModal={handleShowTransactionsDetails}
-        showNewTransactionModal={handleShowNewTransaction}
-        showBeneficiariesListing={handleShowBeneficiariesListing}
+        hideTransactionsListingModal={() => setShowTransactionsListing(false)}
+        showTransactionsDetailsModal={(detail: ITransactionDetail) => {
+          setShowTransactionsListing(false);
+          setDetail(detail);
+          setshowTransactionsDetails(true);
+        }}
+        showNewTransactionModal={() => {
+          setShowTransactionsListing(false);
+          setShowNewTransaction(true);
+          //showValidateOTPForm(true);
+        }}
+        showBeneficiariesListing={() => {
+          setShowTransactionsListing(false);
+          setShowNewTransaction(false);
+          setShowBeneficiariesListing(true);
+        }}
+        transactions={transactions}
+        reloading={isLoading}
       />
       {item && item.id > 0 && (
         <TransactionsDetails
           showTransactionsDetailsModal={showTransactionsDetails}
-          hideTransactionsDetailsModal={handleCloseTransactionsDetails}
-          backTransactionsListingModal={handleBackTransactionsDetails}
-          showNewTransactionModal={handleShowNewTransaction}
+          hideTransactionsDetailsModal={() => setshowTransactionsDetails(false)}
+          backTransactionsListingModal={() => {
+            setshowTransactionsDetails(false);
+            setShowTransactionsListing(true);
+          }}
+          showNewTransactionModal={() => {
+            setShowTransactionsListing(false);
+            setShowNewTransaction(true);
+          }}
           item={item}
         />
       )}
       <NewTransaction
         showNewTransactionModal={showNewTransaction}
-        hideNewTransactionModal={handleCloseNewTransaction}
-        backNewTransactionModal={handleBackNewTransaction}
+        hideNewTransactionModal={() => setShowNewTransaction(false)}
+        backNewTransactionModal={() => {
+          setShowNewTransaction(false);
+          setShowTransactionsListing(true);
+        }}
+        showOTPValidationFormModal={(submittedValues: ITransactionDetail) => {
+          setShowNewTransaction(false);
+          showValidateOTPForm(true);
+          setTransactionValue(submittedValues);
+        }}
       />
-      <BeneficiariesListing
-        showBeneficiariesListingModal={showBeneficiariesListing}
-        hideBeneficiariesListingModal={handleCloseBeneficiariesListing}
-        showBeneficiariesDetailsModal={handleShowBeneficiariesDetails}
-        backBeneficiariesListingModal={handleBackBeneficiariesListing}
-        showNewBeneficiaryModal={handleShowNewBeneficiary}
-      />
-      {beneficiaryId && beneficiaryId > 0 && (
+      {beneficiaries &&
+        beneficiaries.length > 0 &&
+        <BeneficiariesListing
+          showBeneficiariesListingModal={showBeneficiariesListing}
+          hideBeneficiariesListingModal={() => setShowBeneficiariesListing(false)}
+          showBeneficiariesDetailsModal={(item: iBeneficiary) => {
+            setShowBeneficiariesListing(false);
+            setshowBeneficiariesDetails(true);
+            selectBeneficiary(item);
+          }}
+          backBeneficiariesListingModal={() => {
+            setShowBeneficiariesListing(false);
+            setShowTransactionsListing(true);
+          }}
+          showNewBeneficiaryModal={() => {
+            selectBeneficiary(null);
+            setShowBeneficiariesListing(false);
+            setShowNewBeneficiary(true);            
+          }}
+          beneficiaries={beneficiaries}
+          reloading={isLoading}
+        />}
+      {selectedBeneficiary && selectedBeneficiary.id > 0 && (
         <BeneficiariesDetails
           showBeneficiariesDetailsModal={showBeneficiariesDetails}
-          hideBeneficiariesDetailsModal={handleCloseBeneficiariesDetails}
-          backBeneficiariesDetailsgModal={handleBackBeneficiariesDetails}
-          showNewBeneficiaryModal={handleShowNewBeneficiary}
-          itemId={beneficiaryId}
+          hideBeneficiariesDetailsModal={() => setshowBeneficiariesDetails(false)}
+          backBeneficiariesDetailsgModal={() => {
+            setshowBeneficiariesDetails(false);
+            setShowBeneficiariesListing(false);
+            setShowBeneficiariesListing(true);
+          }}
+          showEditBeneficiaryModal={() => {
+            setshowBeneficiariesDetails(false);
+            setShowNewBeneficiary(true);
+          }}
+          beneficiary={selectedBeneficiary}
+          refreshBeneficiariesListing={() => {
+            setshowBeneficiariesDetails(false);
+            setShowBeneficiariesListing(true);
+            refreshBeneficiaries();
+          }}
         />
       )}
       <NewBeneficiary
         showNewBeneficiaryModal={showNewBeneficiary}
-        hideNewBeneficiaryModal={handleCloseNewBeneficiary}
-        backNewBeneficiaryModal={handleBackNewBeneficiary}
+        hideNewBeneficiaryModal={() => setShowNewBeneficiary(false)}
+        backNewBeneficiaryModal={() => {
+          setShowNewBeneficiary(false);
+          setShowBeneficiariesListing(true);
+        }}
+        refreshBeneficiariesListing={() => {
+          setShowNewBeneficiary(false);
+          setShowBeneficiariesListing(true);
+          refreshBeneficiaries();
+        }}
+        backBeneficiaryDetailsModal={() => {
+          setShowNewBeneficiary(false);
+          setshowBeneficiariesDetails(true);
+        }}
+        beneficiary={selectedBeneficiary}
       />
+      {submittedTransaction &&
+        <OTPValidationForm
+          showOTPValidationFormModal={validateOTP}
+          hideOTPValidationFormModal={() => showValidateOTPForm(false)}
+          backOTPValidationFormModal={() => {
+            showValidateOTPForm(false);
+            refreshTransactions();
+            setShowTransactionsListing(true);
+          }}
+          submittedTransaction={submittedTransaction}
+        />}
     </>
   );
 }
