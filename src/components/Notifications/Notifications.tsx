@@ -1,42 +1,52 @@
 import React, { useContext, useEffect, useState } from "react";
-import InboxDetails from "./NotificationsDetails";
-import InboxListing from "./NotificationsListing";
-import { emptyInboxDetail, IInboxDetail } from "../../Helpers/publicInterfaces";
-import { AuthContext } from "../../providers/AuthProvider";
-import { InboxContext } from "../../pages/Homepage";
-import { localStrings as local_Strings } from "../../translations/localStrings";
 import NotficationsDetails from "./NotificationsDetails";
 import NotficationsListing from "./NotificationsListing";
+import {
+  initialINotification,
+  INotificationDetail
+} from "../../Helpers/publicInterfaces";
+import { AuthContext } from "../../providers/AuthProvider";
+import { localStrings as local_Strings } from "../../translations/localStrings";
+import { GetNotificationsByCIF } from "../../services/cmsService";
 
 function Notfications() {
   const [showNotficationsListing, setShowNotficationsListing] = useState(false);
-  const [message, setMessageDetail] = useState<IInboxDetail>(emptyInboxDetail);
+
+  const [notfications, setNotficationsListing] = useState<INotificationDetail[]>(null);
+  const [notfication, setMessageDetail] = useState<INotificationDetail>(initialINotification);
+
   const currentContext = useContext(AuthContext);
-  const InboxMessages = useContext(InboxContext);
   local_Strings.setLanguage(currentContext.language);
-  const countUnreadInbox =
-    InboxMessages.messages && InboxMessages.messages.length > 0
-      ? InboxMessages.messages.filter((i: any) => !i.isRead).length
-      : 0;
+  const countUnreadNotfications = notfications && notfications.length > 0
+    ? notfications.filter((i: any) => !i.isRead).length
+    : 0;
 
-  const handleCloseNotficationsListing = () => {
-    setShowNotficationsListing(false);
-  };
-  const handleShowNotficationsListing = () => {
-    setShowNotficationsListing(true);
-  };
+  const [showNotficationDetail, setNotficationDetail] = useState(false);
+  const [isLoading, setLoading] = useState(false);
 
-  const [showNotficationsDetails, setshowNotficationsDetails] = useState(false);
-  const handleCloseNotficationsDetails = () =>
-    setshowNotficationsDetails(false);
-  const handleShowNotficationsDetails = (detail: IInboxDetail) => {
-    handleCloseNotficationsListing();
-    setshowNotficationsDetails(true);
-    setMessageDetail(detail);
-  };
-  const handleBackNotficationsDetails = () => {
-    setshowNotficationsDetails(false);
-    setShowNotficationsListing(true);
+  useEffect(() => {
+    
+    if (!!currentContext.selectedCIF) {
+      refreshNotifications();
+    }
+
+  }, [currentContext.selectedCIF]);
+
+  const refreshNotifications = async () => {
+
+    if (!!currentContext.selectedCIF) {
+      setLoading(true);
+
+      const responseData: INotificationDetail[] = await GetNotificationsByCIF(
+        currentContext.selectedCIF
+      );
+
+      if (responseData && responseData.length > 0) {
+        setNotficationsListing(responseData.sort((a, b) => (a.id > b.id ? -1 : 1)));
+      }
+
+      setLoading(false);
+    }
   };
 
   return (
@@ -44,28 +54,38 @@ function Notfications() {
       <a
         className="border border-white rounded-circle p-0 mx-1 "
         href="#"
-        onClick={handleShowNotficationsListing}
+        onClick={() => setShowNotficationsListing(true)}
       >
         <i
-          className={countUnreadInbox > 0 ? "fa fa-bell unread" : "fa fa-bell"}
+          className={notfications && notfications.filter((i: any) => !i.isRead).length > 0 ? "fa fa-bell unread" : "fa fa-bell"}
         />
       </a>
-
-      {InboxMessages.messages &&
-        InboxMessages.messages.length > 0 &&
-        !!InboxMessages.messages[0].adviceDate && (
-          <NotficationsListing
-            showNotficationsListingModal={showNotficationsListing}
-            hideNotficationsListingModal={handleCloseNotficationsListing}
-            showNotficationsDetailsModal={handleShowNotficationsDetails}
-          />
-        )}
-      {message && !!message.adviceDate && (
+      {notfications &&
+        notfications.length > 0 &&
+        <NotficationsListing
+          showNotficationsListingModal={showNotficationsListing}
+          hideNotficationsListingModal={() => setShowNotficationsListing(false)}
+          showNotficationDetailModal={(detail: INotificationDetail) => {
+            setShowNotficationsListing(false);
+            setNotficationDetail(true);
+            setMessageDetail(detail);
+          }}
+          notfications={notfications}
+          reloading={isLoading}
+        />}
+      {notfication && notfication.id > 0 && (
         <NotficationsDetails
-          item={message}
-          showNotficationsDetailsModal={showNotficationsDetails}
-          hideNotficationsDetailsModal={handleCloseNotficationsDetails}
-          backNotficationsListingModal={handleBackNotficationsDetails}
+          item={notfication}
+          showNotficationDetailModal={showNotficationDetail}
+          hideNotficationDetailModal={() => {
+            refreshNotifications();
+            setNotficationDetail(false);
+          }}
+          backNotficationsListingModal={() => {
+            refreshNotifications();
+            setNotficationDetail(false);
+            setShowNotficationsListing(true);
+          }}
         />
       )}
     </>

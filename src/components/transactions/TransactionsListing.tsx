@@ -13,7 +13,6 @@ import {
 } from "../../Helpers/publicInterfaces";
 import * as helper from "../../Helpers/helper";
 import NoResult from "../../shared/NoResult";
-import { GetTransactionsByCIF } from "../../services/cmsService";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
@@ -25,12 +24,13 @@ interface iTransactionsListing {
   showTransactionsDetailsModal: (detail: ITransactionDetail) => void;
   showNewTransactionModal: () => void;
   showBeneficiariesListing: () => void;
+  transactions: ITransactionDetail[];
+  reloading: boolean;
 }
 
 function TransactionsListing(props: iTransactionsListing) {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
-  const [isLoading, setLoading] = useState(false);
   const rowLimit: number = Constant.RecordPerPage;
   const [offset, setOffset] = useState<number>(rowLimit);
   const [data, setData] = useState<ITransactionDetail[]>([
@@ -41,32 +41,12 @@ function TransactionsListing(props: iTransactionsListing) {
   ]);
 
   useEffect(() => {
-    let isMounted = true;
-
-    const initialLoadMethod = async () => {
-      setLoading(true);
-      GetTransactionsByCIF(currentContext.selectedCIF)
-        .then((responseData: ITransactionDetail[]) => {
-          if (isMounted && responseData && responseData.length > 0) {
-            setData(responseData);
-            setFilteredData(responseData);
-            if (responseData.length < rowLimit) {
-              setOffset(responseData.length);
-            }
-          }
-        })
-        .catch((e: any) => console.log(e))
-        .finally(() => setLoading(false));
-    };
-
-    if (!!currentContext.selectedCIF) {
-      initialLoadMethod();
+    setData(props.transactions);
+    setFilteredData(props.transactions);
+    if (props.transactions && props.transactions.length < rowLimit) {
+      setOffset(props.transactions.length);
     }
-
-    return () => {
-      isMounted = false;
-    }; // use effect cleanup to set flag false, if unmounted
-  }, [currentContext.selectedCIF]);
+  }, [props.transactions]);
 
   const renderItem = (item: ITransactionDetail, index: number) => (
     <li className="shown" key={index}>
@@ -78,7 +58,7 @@ function TransactionsListing(props: iTransactionsListing) {
         <div className="col-sm-8">
           <h5>
             {!!item.transactionDate
-              ? moment(item.transactionDate).format("DD/MM/YYYY")
+              ? moment(item.transactionDate).format("DD MMMM YYYY")
               : ""}
           </h5>
           <h4>
@@ -195,7 +175,7 @@ function TransactionsListing(props: iTransactionsListing) {
             onClickMore={() => setOffset(offset + 5)}
           />
           <LoadingOverlay
-            active={isLoading}
+            active={props.reloading}
             spinner={
               <PuffLoader
                 size={Constant.SpnnerSize}

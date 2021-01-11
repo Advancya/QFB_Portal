@@ -296,7 +296,7 @@ function RegisterStep1(props: iRegisterStep1) {
                       />
                       {touched.mobile &&
                         errors.mobile &&
-                        InvalidFieldError(errors.mobile)}
+                        InvalidFieldError(local_Strings.GeneralValidation)}
                     </div>
                   </div>
                   {showSubmitButton && (

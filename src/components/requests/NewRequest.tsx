@@ -6,7 +6,6 @@ import PuffLoader from "react-spinners/PuffLoader";
 import moment from "moment";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
-import * as helper from "../../Helpers/helper";
 import { Formik } from "formik";
 import * as yup from "yup";
 import InvalidFieldError from "../../shared/invalid-field-error";
@@ -30,7 +29,6 @@ import {
 } from "../../services/cmsService";
 import { GetCashListing } from "../../services/apiServices";
 import DatePicker from "react-datepicker";
-import { saveAs } from "file-saver";
 import {
   IDeposit,
   IAccountBalance,
@@ -40,12 +38,11 @@ import axios from "axios";
 import FileUploader from "../../shared/FileUploader";
 import ViewAttachment from "../../shared/AttachmentViewer";
 
-const mime = require("mime");
-
 interface iNewRequest {
   showNewRequestModal: boolean;
   hideNewRequestModal: () => void;
   backNewRequestModal: () => void;
+  refreshRequestsListing: () => void;
 }
 
 interface iDDL {
@@ -125,7 +122,7 @@ function NewRequest(props: iNewRequest) {
     }
 
     return data && data.length > 0
-      ? requestTypes.map((c, i) => (
+      ? data.map((c, i) => (
           <option key={i} value={c.value}>
             {c.label}
           </option>
@@ -582,12 +579,12 @@ function NewRequest(props: iNewRequest) {
         Swal.fire({
           position: "top-end",
           icon: "success",
-          title: local_Strings.SignupSuccessTitle,
-          html: local_Strings.SignupSuccessMessage,
+          title: local_Strings.RequestSuccessTitle,
+          html: local_Strings.RequestSuccessMessage,
           showConfirmButton: false,
           timer: Constant.AlertTimeout,
         });
-        props.backNewRequestModal();
+        props.refreshRequestsListing();
       } else {
         setErrorMessage(local_Strings.GenericErrorMessage);
         setShowErrorMessage(false);
@@ -651,10 +648,7 @@ function NewRequest(props: iNewRequest) {
             validationSchema={formValidationSchema}
             onSubmit={async (values) => {
               setLoading(true);
-
               await submitRequest(values);
-              //Request Sent
-              //"Your request has been sent successfully to your RM"
               setLoading(false);
             }}
             enableReinitialize={true}

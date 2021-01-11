@@ -1003,6 +1003,31 @@ async function GetBanks() {
   }
 }
 
+
+const SetNotificationItemAsRead = async (itemID: number) => {
+  try {
+    const result = await apiInstance.get(
+      `/api/Notifications/SetAsRead?id=${itemID}`
+    );
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+const GetBeneficiariesTypes = async () => {
+  try {
+    const result = await apiInstance.get("/api/BeneficiariesTypes/All");
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
 export {
   GetStockData,
   ValidateRegisterData,
@@ -1077,5 +1102,7 @@ export {
   UpdateDocumentDetail,
   AddOfferSubscription,
   GetCountries,
-  GetBanks
+  GetBanks,
+  SetNotificationItemAsRead,
+  GetBeneficiariesTypes
 };

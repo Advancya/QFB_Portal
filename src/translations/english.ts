@@ -785,6 +785,8 @@ const en = {
   OTPSentMessage: "An OTP has been sent successfully, kindly check.",
 
   fileDeleteConfirmMessage: "You want to delete this file?",
+  NewBeneficiaryMsgTitle: "Beneficiary Sent",
+  NewBeneficiaryMsgBody: "Your beneficiary has been sent successfully to your RM",
 };
 
 export default en;

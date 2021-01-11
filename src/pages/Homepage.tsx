@@ -14,8 +14,11 @@ import { AuthContext } from "../providers/AuthProvider";
 import { localStrings as local_Strings } from "../translations/localStrings";
 import axios from "axios";
 import { GetUserLocalData } from "../Helpers/authHelper";
-import { GetInboxByCIF, GetUserPortfolio, GetGuarantees } from "../services/cmsService";
-import { emptyInboxDetail, IInboxDetail } from "../Helpers/publicInterfaces";
+import { GetInboxByCIF, GetUserPortfolio, GetGuarantees, GetNotificationsByCIF } from "../services/cmsService";
+import {
+  emptyInboxDetail,
+  IInboxDetail,
+} from "../Helpers/publicInterfaces";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import Constant from "../constants/defaultData";
@@ -53,13 +56,13 @@ export const PortfolioContext = createContext<IUserPortfolio>(
 
 export interface IInboxProps {
   messages: IInboxDetail[];
-  refresh: () => void;
+  refreshInbox: () => void;
 }
 
 export const InboxContext = createContext<IInboxProps>(
   {
     messages: [emptyInboxDetail],
-    refresh: () => { },
+    refreshInbox: () => { }
   }
 );
 
@@ -90,13 +93,12 @@ function HomePage() {
   const [userPortfolio, setUserPortfolio] = useState<IUserPortfolio>(
     intialPortfolioData
   );
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     let isMounted = true;
 
     const initialLoadMethod = async () => {
-      setLoading(true);
 
       const requestOne = GetUserPortfolio(
         currentContext.selectedCIF,
@@ -157,8 +159,7 @@ function HomePage() {
     }; // use effect cleanup to set flag false, if unmounted
   }, [currentContext.selectedCIF]);
 
-  const refresh = () => {
-    console.log("refresh called");
+  const refreshInbox = () => {
 
     setLoading(true);
     GetInboxByCIF(currentContext.selectedCIF)
@@ -173,7 +174,7 @@ function HomePage() {
 
   return (
     <div>
-      <InboxContext.Provider value={{ messages, refresh }}>
+      <InboxContext.Provider value={{ messages, refreshInbox }}>
         <PortfolioContext.Provider value={userPortfolio}>
           <AuthCustomHeader />
           {/* <Breadcrumb pageName={""} /> */}
@@ -187,27 +188,29 @@ function HomePage() {
                 />
               }
             />
-            <div className="container-fluid">
-              <div className="row">
-                <div className="col-lg-9">
+            {!isLoading &&
+              <div className="container-fluid">
+                <div className="row">
+                  <div className="col-lg-9">
 
-                  <div className="main-container">
-                    <AssetsLanding />
-                    <div className="row">
-                      <LiabilitiesLanding />
-                      <TotalNetWorth />
+                    <div className="main-container">
+                      <AssetsLanding />
+                      <div className="row">
+                        <LiabilitiesLanding />
+                        <TotalNetWorth />
+                      </div>
                     </div>
-                  </div>
 
-                </div>
-                <div className="col-lg-3">
-                  <div className="sidebar-container">
-                    <InboxLanding showInboxDetailsModal={handleShowInboxDetails} />
-                    <RelationManger />
+                  </div>
+                  <div className="col-lg-3">
+                    <div className="sidebar-container">
+                      <InboxLanding showInboxDetailsModal={handleShowInboxDetails} />
+                      <RelationManger />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            }
           </section>
 
           <Footer />

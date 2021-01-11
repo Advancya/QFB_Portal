@@ -62,7 +62,8 @@
   color: #6B4F44;
 }
 
-.paging-block .page-link:hover, .paging-block .page-item.active .page-link {
+.paging-block .page-link:hover,
+.paging-block .page-item.active .page-link {
   color: #FFF;
   background-color: #6B4F44;
   border-radius: 0.25rem;
@@ -156,4 +157,17 @@
   color: #fff;
   text-align: center;
   opacity: 0.75;
+}
+
+.request-detail-control {
+  display: block;
+  border-radius: 1.5rem;
+  border: 1px solid rgba(205, 194, 188, 0.5);
+  color: rgba(107, 79, 68, 0.8);
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+  background-clip: padding-box;
 }

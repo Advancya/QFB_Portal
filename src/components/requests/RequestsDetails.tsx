@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Modal } from "react-bootstrap";
+import { Form, Modal } from "react-bootstrap";
 import { IRequestDetail } from "../../Helpers/publicInterfaces";
 import moment from "moment";
 import { localStrings as local_Strings } from "../../translations/localStrings";
@@ -34,9 +34,9 @@ function RequestsDetails(props: iRequestsDetails) {
     setLoading(true);
     const request: iRequest = await GetRequstByID(props.item.id.toString());
     if (request !== null) {
-      setCurrentRequest(request[0]);
       const data = await GetRequestFields(request[0].requestTypeId?.toString());
       setFormFields(data);
+      setCurrentRequest(request[0]);
     }
     setLoading(false);
   };
@@ -142,12 +142,13 @@ function RequestsDetails(props: iRequestsDetails) {
     if (fieldName === "StatementType") {
       returnVlaue = currentRequest.statementType;
     }
-    return returnVlaue !== null ? returnVlaue : "";
+
+    return returnVlaue ? returnVlaue : "";
   };
 
   useEffect(() => {
     fetchFormData();
-  }, [props.item]);
+  }, [props.item.id]);
 
   return (
     <Modal
@@ -220,36 +221,45 @@ function RequestsDetails(props: iRequestsDetails) {
             }
           />
           {formFields.map((item, index) => (
-            <React.Fragment>
-              <div className="py-2 px-3">
-                <div className="row">
-                  <div className="col-lg-8">
-                    <label>
-                      {currentContext.language === "ar"
-                        ? item["details"].split(";")[1]
-                        : item["details"].split(";")[0]}
-                    </label>
-                    {item["details"].split(";")[2] !== "FILE_UPLOAD" && (
-                      <input
-                        type="text"
+            <div key={index} className="py-2 px-3">
+              <div className="row">
+                <div className="col-lg-8">
+                  <label>
+                    {currentContext.language === "ar"
+                      ? item["details"].split(";")[1]
+                      : item["details"].split(";")[0]}
+                  </label>
+                  {item["details"].split(";")[2] !== "FILE_UPLOAD" ? (
+                    item["details"].split(";")[2] === "MULTILINE_TEXT" ||
+                    (item["details"].split(";")[2] === "READ_ONLY" &&
+                      item["details"].split(";")[3].toString() !== "NULL") ? (
+                      <Form.Control
+                        as="textarea"
+                        readOnly={true}
                         defaultValue={getRequestFieldValue(
                           item["details"].split(";")[0].replace(/ /g, "")
-                        )?.toString()}
-                        className="form-control"
-                        disabled={true}
+                        )}
                       />
-                    )}
-                    {item["details"].split(";")[2] === "FILE_UPLOAD" && (
-                      <ViewAttachment
-                        showDelete={false}
-                        fileName={getRequestFieldValue("FileName")}
-                        fileContent={getRequestFieldValue("FileContent")}
+                    ) : (
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: getRequestFieldValue(
+                            item["details"].split(";")[0].replace(/ /g, "")
+                          ),
+                        }}
+                        className="request-detail-control"
                       />
-                    )}
-                  </div>
+                    )
+                  ) : (
+                    <ViewAttachment
+                      showDelete={false}
+                      fileName={getRequestFieldValue("FileName")}
+                      fileContent={getRequestFieldValue("FileContent")}
+                    />
+                  )}
                 </div>
               </div>
-            </React.Fragment>
+            </div>
           ))}
         </div>
       </Modal.Body>
