@@ -333,7 +333,7 @@ function OffersForm(props: DetailsProps) {
                     errors.titleAr &&
                     InvalidFieldError(errors.titleAr)}
                 </div>
-                <div className="form-group">
+                <div className="form-group customDate">
                   <label className="mb-1 text-600">
                     {local_Strings.OfferExpireLabel}
                   </label>
@@ -343,6 +343,7 @@ function OffersForm(props: DetailsProps) {
                     selected={
                       !!values.expireDate ? new Date(values.expireDate) : null
                     }
+                    className="form-control"
                     onChange={(date: Date) => setFieldValue("expireDate", date)}
                     onBlur={handleBlur("expireDate")}
                     placeholderText={""}

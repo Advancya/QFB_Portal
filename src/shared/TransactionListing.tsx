@@ -216,11 +216,16 @@ const TransactionListing: React.FC<ITransactionListingProps> = (props) => {
           <tbody>
             {filteredData &&
             filteredData.length > 0 &&
-            (!!filteredData[0].bookingDate || !!filteredData[0].installmentDate)
-              ? filteredData
-                  .slice(0, offset)
-                  .map((item, index) => renderItem(item, String(index)))
-              : NoResult(local_Strings.NoDataToShow)}
+            (!!filteredData[0].bookingDate ||
+              !!filteredData[0].installmentDate) ? (
+              filteredData
+                .slice(0, offset)
+                .map((item, index) => renderItem(item, String(index)))
+            ) : (
+              <tr>
+                <td colSpan={7}>{NoResult(local_Strings.NoDataToShow)}</td>
+              </tr>
+            )}
           </tbody>
         </Accordion>
       </div>

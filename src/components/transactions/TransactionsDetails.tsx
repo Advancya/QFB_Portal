@@ -25,7 +25,7 @@ function TransactionsDetails(props: iTransactionsDetails) {
     <Modal
       show={props.showTransactionsDetailsModal}
       onHide={props.hideTransactionsDetailsModal}
-      size="lg"
+      //size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       scrollable
@@ -82,7 +82,7 @@ function TransactionsDetails(props: iTransactionsDetails) {
             </li>
           </ul>
           <div className="py-2">
-            <div className="row col-lg-9">
+            <div className="row col-xl-9">
               <div className="col-lg-6 form-group">
                 <label>{local_Strings.TransactionFromAccountLabel}</label>
                 <div className="readonly">

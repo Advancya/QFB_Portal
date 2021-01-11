@@ -49,7 +49,7 @@ function BeneficiariesListing(props: iBeneficiariesListing) {
           <h5>{item.beneficiaryFullName}</h5>
         </div>
         <div className="col-8 col-sm-3 text-sm-right">
-          <span className="status-badge ">{item.country || ""}</span>
+          <span className="status-badge ">{item.country || "NA"}</span>
         </div>
         <div className="col-4 col-sm-1 text-right">
           <i className="fa fa-chevron-right"></i>
@@ -63,7 +63,7 @@ function BeneficiariesListing(props: iBeneficiariesListing) {
       <Modal
         show={props.showBeneficiariesListingModal}
         onHide={props.hideBeneficiariesListingModal}
-        size="lg"
+        // size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
         scrollable

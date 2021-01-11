@@ -117,7 +117,7 @@ function NotficationsListing(props: iNotficationsListing) {
             <React.Fragment>
               <form className="filter-box">
                 <div className="row headRow align-items-center justify-content-between">
-                  <div className="col-sm-5">
+                  <div className="col-md-5">
                     <FilterDropDownControl
                       label={local_Strings.NotificationsListingFilter}
                       options={statusFilterOptions}
@@ -128,7 +128,7 @@ function NotficationsListing(props: iNotficationsListing) {
                     />
                   </div>
 
-                  <div className="col-sm-2">
+                  <div className="px-3">
                     <FilterButtonControl
                       clearFilter={() => {
                         setFilter({

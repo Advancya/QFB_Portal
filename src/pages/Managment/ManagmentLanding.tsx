@@ -107,7 +107,7 @@ function ManagmentLanding() {
         <div id="main-section" className="main-section pt-4">
           <div className="container-fluid">
             <div className="row">
-              <div className="col-lg-6 col-container flex-column">
+              <div className="col-xl-6 col-container flex-column">
                 <LoadingOverlay
                   active={isLoading}
                   spinner={
@@ -119,7 +119,7 @@ function ManagmentLanding() {
                 />
                 <ManagmentRequestsLanding></ManagmentRequestsLanding>
               </div>
-              <div className="col-lg-6 col-container flex-column loginSideBoxBoxes">
+              <div className="col-xl-6 col-container flex-column loginSideBoxBoxes">
                 <LoadingOverlay
                   active={isLoading}
                   spinner={

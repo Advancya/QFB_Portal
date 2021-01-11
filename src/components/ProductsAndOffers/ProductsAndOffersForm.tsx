@@ -191,7 +191,7 @@ function ProductsAndOffersForm(props: DetailsProps) {
                     errors.nameAr &&
                     InvalidFieldError(errors.nameAr)}
                 </div>
-                <div className="form-group">
+                <div className="form-group customDate">
                   <label className="mb-1 text-600">
                     {local_Strings.ProductsAndOffersExpireLabel}
                   </label>
@@ -201,6 +201,7 @@ function ProductsAndOffersForm(props: DetailsProps) {
                     selected={
                       !!values.expiryDate ? new Date(values.expiryDate) : null
                     }
+                    className="form-control"
                     onChange={(date: Date) => setFieldValue("expiryDate", date)}
                     onBlur={handleBlur("expiryDate")}
                     placeholderText={""}

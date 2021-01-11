@@ -334,6 +334,21 @@ a:active, a:focus, a:hover {
   text-decoration: underline;
 }
 
+.file {
+  border: 0;
+}
+
+.file .file-custom {
+  border-radius: 1.5rem;
+  box-shadow: none;
+  border: 1px solid #d8d8d8;
+  color: #000;
+}
+
+.file-custom:before {
+  border-radius: 0 1.5rem 1.5rem 0;
+}
+
 input.form-control, select.form-control, select.custom-select, textarea.form-control, .custom-file-label, .custom-file-label {
   border: 1px solid #d8d8d8;
   border-radius: 1rem;
@@ -359,6 +374,14 @@ input.form-control, select.form-control, select.custom-select, textarea.form-con
   font-weight: 400;
   line-height: 1.5;
   background-clip: padding-box;
+}
+
+.react-datepicker-wrapper {
+  display: block;
+}
+
+.react-datepicker-wrapper input {
+  background: url("../images/calendar-inactive.png") no-repeat 96% 41%;
 }
 
 .form-control:disabled[type="date"] {
@@ -1589,18 +1612,34 @@ ul ul {
   [dir="rtl"] .text-sm-left {
     text-align: right!important;
   }
+  .modal-dialog {
+    max-width: 80%;
+  }
+  .modal-lg {
+    max-width: 70%;
+  }
+  .modal-xl {
+    max-width: 90%;
+  }
+  .offset-sm-0 {
+    margin-left: 0;
+    margin-right: 0!important;
+  }
 }
 
 @media all and (min-width: 768px) {
-  .modal-dialog {
-    max-width: 50%;
-  }
   .navbar-expand-md .navbar-collapse {
     justify-content: flex-end;
+  }
+  .modal-dialog {
+    max-width: 80%;
   }
 }
 
 @media all and (min-width: 992px) {
+  .modal-dialog {
+    max-width: 58%;
+  }
   .modal-lg {
     max-width: 70%;
   }
@@ -1609,10 +1648,29 @@ ul ul {
   }
 }
 
-@media all and (min-width: 1024px) {}
+@media all and (min-width: 1024px) {
+  .modal-dialog {
+    max-width: 55%;
+  }
+  .modal-lg {
+    max-width: 70%;
+  }
+  .modal-xl {
+    max-width: 90%;
+  }
+}
 
 @media all and (min-width: 1200px) {
   /*.inner-boxes {max-width: 84%;}*/
+  .modal-dialog {
+    max-width: 50%;
+  }
+  .modal-lg {
+    max-width: 70%;
+  }
+  .modal-xl {
+    max-width: 90%;
+  }
 }
 
 @media all and (min-width: 1440px) {
@@ -1672,6 +1730,9 @@ ul ul {
   }
   .nav-pills {
     background-color: transparent;
+  }
+  .resetBtn {
+    margin-top: 5px;
   }
 }
 

@@ -91,7 +91,7 @@ function TransactionsListing(props: iTransactionsListing) {
       <Modal
         show={props.showTransactionsListingModal}
         onHide={props.hideTransactionsListingModal}
-        size="lg"
+        // size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
         scrollable

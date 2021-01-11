@@ -599,7 +599,7 @@ function NewRequest(props: iNewRequest) {
     <Modal
       show={props.showNewRequestModal}
       onHide={props.hideNewRequestModal}
-      size="lg"
+      // size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       scrollable
@@ -669,7 +669,7 @@ function NewRequest(props: iNewRequest) {
                 <div className="py-2 px-3">
                   <div className="row">
                     <div className="col-lg-8">
-                      <label className="mb-1 text-600 pr-2">Request Type</label>
+                      <label className="">Request Type</label>
                       <select
                         className="form-control"
                         id="reqTypeSelect"
@@ -742,7 +742,7 @@ function NewRequest(props: iNewRequest) {
                           <Form.Row>
                             <Col md={8}>
                               <Form.Group>
-                                <Form.Label className="mb-1 text-600 pr-2">
+                                <Form.Label className="">
                                   {currentContext.language === "ar"
                                     ? item["details"].split(";")[1]
                                     : item["details"].split(";")[0]}
@@ -790,7 +790,7 @@ function NewRequest(props: iNewRequest) {
                           <Form.Row>
                             <Col md={8}>
                               <Form.Group>
-                                <Form.Label className="mb-1 text-600 pr-2">
+                                <Form.Label className="">
                                   {currentContext.language === "ar"
                                     ? item["details"].split(";")[1]
                                     : item["details"].split(";")[0]}
@@ -827,7 +827,7 @@ function NewRequest(props: iNewRequest) {
                             <Form.Row>
                               <Col md={8}>
                                 <Form.Group>
-                                  <Form.Label className="mb-1 text-600 pr-2">
+                                  <Form.Label className="">
                                     {currentContext.language === "ar"
                                       ? item["details"].split(";")[1]
                                       : item["details"].split(";")[0]}
@@ -846,13 +846,12 @@ function NewRequest(props: iNewRequest) {
                           <Form.Row>
                             <Col md={8}>
                               <Form.Group>
-                                <Form.Label className="mb-1 text-600 pr-2">
+                                <Form.Label className="">
                                   {currentContext.language === "ar"
                                     ? item["details"].split(";")[1]
                                     : item["details"].split(";")[0]}
                                 </Form.Label>
                                 <Form.Control
-                                  as="text"
                                   value={
                                     values[
                                       item["details"]
@@ -880,13 +879,12 @@ function NewRequest(props: iNewRequest) {
                           <Form.Row>
                             <Col md={8}>
                               <Form.Group>
-                                <Form.Label className="mb-1 text-600 pr-2">
+                                <Form.Label className="">
                                   {currentContext.language === "ar"
                                     ? item["details"].split(";")[1]
                                     : item["details"].split(";")[0]}
                                 </Form.Label>
                                 <Form.Control
-                                  as="text"
                                   value={
                                     values[
                                       item["details"]
@@ -914,13 +912,12 @@ function NewRequest(props: iNewRequest) {
                           <Form.Row>
                             <Col md={8}>
                               <Form.Group>
-                                <Form.Label className="mb-1 text-600 pr-2">
+                                <Form.Label className="">
                                   {currentContext.language === "ar"
                                     ? item["details"].split(";")[1]
                                     : item["details"].split(";")[0]}
                                 </Form.Label>
                                 <Form.Control
-                                  as="text"
                                   value={
                                     values[
                                       item["details"]
@@ -947,14 +944,15 @@ function NewRequest(props: iNewRequest) {
                         {item["details"].split(";")[2] === "DATE" && (
                           <Form.Row>
                             <Col md={8}>
-                              <Form.Group>
-                                <Form.Label className="mb-1 text-600 pr-2">
+                              <Form.Group className="customDate">
+                                <Form.Label className="mb-1 text-600">
                                   {currentContext.language === "ar"
                                     ? item["details"].split(";")[1]
                                     : item["details"].split(";")[0]}
                                 </Form.Label>
                                 <DatePicker
                                   dateFormat="MMMM dd, yyyy"
+                                  className="form-control"
                                   selected={
                                     values[
                                       item["details"]
@@ -998,7 +996,7 @@ function NewRequest(props: iNewRequest) {
                           <Form.Row>
                             <Col md={8}>
                               <Form.Group>
-                                <Form.Label className="mb-1 text-600 pr-2">
+                                <Form.Label className="">
                                   {currentContext.language === "ar"
                                     ? item["details"].split(";")[1]
                                     : item["details"].split(";")[0]}
@@ -1031,7 +1029,7 @@ function NewRequest(props: iNewRequest) {
                           <Form.Row>
                             <Col md={8}>
                               <Form.Group>
-                                <Form.Label className="mb-1 text-600 pr-2">
+                                <Form.Label className="">
                                   {currentContext.language === "ar"
                                     ? item["details"].split(";")[1]
                                     : item["details"].split(";")[0]}

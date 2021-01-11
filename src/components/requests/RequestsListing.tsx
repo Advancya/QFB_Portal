@@ -162,7 +162,7 @@ function RequestsListing(props: iRequestsListing) {
       <Modal
         show={props.showRequestsListingModal}
         onHide={props.hideRequestsListingModal}
-        size="lg"
+        // size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
         scrollable

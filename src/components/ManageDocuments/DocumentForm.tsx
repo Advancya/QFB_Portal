@@ -238,13 +238,14 @@ function DocumentForm(props: DetailsProps) {
                     errors.documentNameAr &&
                     InvalidFieldError(errors.documentNameAr)}
                 </div>
-                <div className="form-group">
+                <div className="form-group customDate">
                   <label className="mb-1 text-600">
                     {local_Strings.documentDate}
                   </label>
 
                   <DatePicker
                     name="documentDate"
+                    className="form-control"
                     selected={
                       !!values.documentDate
                         ? new Date(values.documentDate)

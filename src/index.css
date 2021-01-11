@@ -62,8 +62,7 @@
   color: #6B4F44;
 }
 
-.paging-block .page-link:hover,
-.paging-block .page-item.active .page-link {
+.paging-block .page-link:hover, .paging-block .page-item.active .page-link {
   color: #FFF;
   background-color: #6B4F44;
   border-radius: 0.25rem;
@@ -80,6 +79,9 @@
   background: #f6f1ee;
   margin: 1rem;
   color: #6b4f44;
+}
+
+.noResult span {
   width: 100%;
 }
 

@@ -256,7 +256,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
     <Modal
       show={props.showNewBeneficiaryModal}
       onHide={props.hideNewBeneficiaryModal}
-      size="lg"
+      //size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       scrollable
@@ -316,8 +316,8 @@ function NewBeneficiary(props: iNewBeneficiary) {
             </ul>
           ) : (
             <div className="container-fluid">
-              <div className="row ">
-                <div className="col-lg-9 form-group">
+              <div className="row  col-xl-12">
+                <div className="col-lg-12 form-group">
                   <label>Beneficiary Type</label>
                   <select
                     className="form-control"
@@ -387,126 +387,122 @@ function NewBeneficiary(props: iNewBeneficiary) {
                 isValid,
               }) => (
                 <div className="newReqFields" id="newReqFields">
-                  <div className="py-2">
-                    <div className=" col-lg-9">
-                      <div className="row mb-5">
-                        <div className="col-lg-6 form-group">
-                          <label>{local_Strings.BeneficiaryIDLabel}</label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            placeholder=""
-                            defaultValue={values.beneficiaryId}
-                            readOnly
-                          />
-                        </div>
-                        <div className="col-lg-6 form-group">
-                          <label>
-                            {local_Strings.BeneficiaryFullNameLabel}
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            placeholder=""
-                            value={values.beneficiaryFullName || ""}
-                            onChange={handleChange("beneficiaryFullName")}
-                            onBlur={handleBlur("beneficiaryFullName")}
-                          />
-                          {touched.beneficiaryFullName &&
-                            errors.beneficiaryFullName &&
-                            InvalidFieldError(errors.beneficiaryFullName)}
-                        </div>
-                        <div className="col-lg-6 form-group">
-                          <label>
-                            {local_Strings.BeneficiaryQFBAccountOrIBAN}
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            placeholder=""
-                            value={values.qfbaccount || ""}
-                            onBlur={async () => {
-                              if (!!values.qfbaccount) {
-                                setLoading(true);
-                                const res = await ValidateQFBAccountOrIBan(
-                                  values.qfbaccount
-                                );
+                  <div className="container-fluid py-2">
+                    <div className="row  col-xl-12 mb-5">
+                      <div className="col-lg-6 form-group">
+                        <label>{local_Strings.BeneficiaryIDLabel}</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder=""
+                          defaultValue={values.beneficiaryId}
+                          readOnly
+                        />
+                      </div>
+                      <div className="col-lg-6 form-group">
+                        <label>{local_Strings.BeneficiaryFullNameLabel}</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder=""
+                          value={values.beneficiaryFullName || ""}
+                          onChange={handleChange("beneficiaryFullName")}
+                          onBlur={handleBlur("beneficiaryFullName")}
+                        />
+                        {touched.beneficiaryFullName &&
+                          errors.beneficiaryFullName &&
+                          InvalidFieldError(errors.beneficiaryFullName)}
+                      </div>
+                      <div className="col-lg-6 form-group">
+                        <label>
+                          {local_Strings.BeneficiaryQFBAccountOrIBAN}
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder=""
+                          value={values.qfbaccount || ""}
+                          onBlur={async () => {
+                            if (!!values.qfbaccount) {
+                              setLoading(true);
+                              const res = await ValidateQFBAccountOrIBan(
+                                values.qfbaccount
+                              );
 
-                                if (res.length > 0) {
-                                  setFieldValue(
-                                    "beneficiaryCurrency",
-                                    res[0]["currency"]
-                                  );
-                                  setIsValidIban(true);
-                                } else {
-                                  setFieldValue("beneficiaryCurrency", "");
-                                  setIsValidIban(false);
-                                }
-                                setLoading(false);
+                              if (res.length > 0) {
+                                setFieldValue(
+                                  "beneficiaryCurrency",
+                                  res[0]["currency"]
+                                );
+                                setIsValidIban(true);
+                              } else {
+                                setFieldValue("beneficiaryCurrency", "");
+                                setIsValidIban(false);
                               }
-                              handleBlur("qfbaccount");
-                            }}
-                            onChange={handleChange("qfbaccount")}
-                          />
-                          {touched.qfbaccount &&
-                            errors.qfbaccount &&
-                            InvalidFieldError(errors.qfbaccount)}
-                          {!isValidIban &&
-                            InvalidFieldError(
-                              local_Strings.BeneficiaryInvalidIban
-                            )}
-                        </div>
-                        <div className="col-lg-6 form-group">
-                          <label>
-                            {local_Strings.BeneficiaryForeignCurrencyLabel}
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            placeholder=""
-                            defaultValue={values.beneficiaryCurrency}
-                            readOnly
-                          />
-                        </div>
+                              setLoading(false);
+                            }
+                            handleBlur("qfbaccount");
+                          }}
+                          onChange={handleChange("qfbaccount")}
+                        />
+                        {touched.qfbaccount &&
+                          errors.qfbaccount &&
+                          InvalidFieldError(errors.qfbaccount)}
+                        {!isValidIban &&
+                          InvalidFieldError(
+                            local_Strings.BeneficiaryInvalidIban
+                          )}
+                      </div>
+                      <div className="col-lg-6 form-group">
+                        <label>
+                          {local_Strings.BeneficiaryForeignCurrencyLabel}
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder=""
+                          defaultValue={values.beneficiaryCurrency}
+                          readOnly
+                        />
                       </div>
                     </div>
-                    <div className="text-right p-3">
+                  </div>
+                  <div className="text-right p-3">
+                    <button
+                      id="applyReqBtn"
+                      className="btn btn-primary"
+                      type="submit"
+                      onClick={(e) => {
+                        validateForm(values);
+                        if (isValid) {
+                          handleSubmit();
+                        } else {
+                          touched.beneficiaryId = true;
+                          touched.beneficiaryFullName = true;
+                          touched.qfbaccount = true;
+                          touched.beneficiaryCurrency = true;
+                          Swal.fire({
+                            position: "top-end",
+                            icon: "error",
+                            title: local_Strings.formValidationMessage,
+                            showConfirmButton: false,
+                            timer: Constant.AlertTimeout,
+                          });
+                        }
+                      }}
+                    >
+                      {local_Strings.BeneficiarySaveButton}
+                    </button>
+                    {props.beneficiary && (
                       <button
                         id="applyReqBtn"
                         className="btn btn-primary"
-                        type="submit"
-                        onClick={(e) => {
-                          validateForm(values);
-                          if (isValid) {
-                            handleSubmit();
-                          } else {
-                            touched.beneficiaryId = true;
-                            touched.beneficiaryFullName = true;
-                            touched.qfbaccount = true;
-                            touched.beneficiaryCurrency = true;
-                            Swal.fire({
-                              position: "top-end",
-                              icon: "error",
-                              title: local_Strings.formValidationMessage,
-                              showConfirmButton: false,
-                              timer: Constant.AlertTimeout,
-                            });
-                          }
-                        }}
+                        type="button"
+                        onClick={(e) => props.backBeneficiaryDetailsModal()}
                       >
-                        {local_Strings.BeneficiarySaveButton}
+                        {local_Strings.BeneficiaryCancelButton}
                       </button>
-                      {props.beneficiary && (
-                        <button
-                          id="applyReqBtn"
-                          className="btn btn-primary"
-                          type="button"
-                          onClick={(e) => props.backBeneficiaryDetailsModal()}
-                        >
-                          {local_Strings.BeneficiaryCancelButton}
-                        </button>
-                      )}
-                    </div>
+                    )}
                   </div>
                 </div>
               )}
@@ -560,183 +556,175 @@ function NewBeneficiary(props: iNewBeneficiary) {
                 isValid,
               }) => (
                 <div className="newReqFields" id="newReqFields">
-                  <div className="py-2">
-                    <div className=" col-lg-9">
-                      <div className="row mb-5">
-                        <div className="col-lg-6 form-group">
-                          <label>{local_Strings.BeneficiaryIDLabel}</label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            placeholder=""
-                            defaultValue={values.beneficiaryId || ""}
-                            readOnly
-                          />
-                        </div>
-                        <div className="col-lg-6 form-group">
-                          <label>
-                            {local_Strings.BeneficiaryFullNameLabel}
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            placeholder=""
-                            value={values.beneficiaryFullName || ""}
-                            onChange={handleChange("beneficiaryFullName")}
-                            onBlur={handleBlur("beneficiaryFullName")}
-                          />
-                          {touched.beneficiaryFullName &&
-                            errors.beneficiaryFullName &&
-                            InvalidFieldError(errors.beneficiaryFullName)}
-                        </div>
-                        <div className="col-lg-6 form-group">
-                          <label>{local_Strings.BeneficiaryBankLabel}</label>
-                          <select
-                            className="form-control"
-                            onBlur={handleBlur("beneficiaryBank")}
-                            value={values.beneficiaryBank || ""}
-                            onChange={(e) => {
-                              setFieldValue("beneficiaryBank", e.target.value);
-                              setBankSwift(e.target.value);
-                              setFieldValue(
-                                "beneficiaryBankSwiftCode",
-                                e.target.value
-                              );
-                            }}
-                          >
-                            <option value="">{local_Strings.SelectItem}</option>
-                            {banks &&
-                              banks.length > 0 &&
-                              banks.map((c, i) => (
-                                <option key={i} value={c.value}>
-                                  {c.label}
-                                </option>
-                              ))}
-                          </select>
-                          {touched.beneficiaryBank &&
-                            errors.beneficiaryBank &&
-                            InvalidFieldError(errors.beneficiaryBank)}
-                        </div>
-                        <div className="col-lg-6 form-group">
-                          <label>
-                            {local_Strings.BeneficiarySwiftCodeLabel}
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            placeholder=""
-                            defaultValue={bankSwift}
-                            readOnly
-                          />
-                        </div>
+                  <div className="container-fluid py-2">
+                    <div className="row  col-xl-12 mb-5">
+                      <div className="col-lg-6 form-group">
+                        <label>{local_Strings.BeneficiaryIDLabel}</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder=""
+                          defaultValue={values.beneficiaryId || ""}
+                          readOnly
+                        />
                       </div>
-                      <div className="row mb-5">
-                        <div className="col-lg-6 form-group">
-                          <label>
-                            {local_Strings.BeneficiaryQFBAccountOrIBAN}
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            placeholder=""
-                            value={values.beneficiaryIban || ""}
-                            onBlur={async () => {
-                              if (!!values.beneficiaryIban) {
-                                const result = await ValidateBankIBAN(
-                                  values.beneficiaryIban!
-                                );
-                                if (result && !!result.bic) {
-                                  setIsValidIban(true);
-                                } else {
-                                  setIsValidIban(false);
-                                }
-                              }
-                              handleBlur("beneficiaryIban");
-                            }}
-                            onChange={handleChange("beneficiaryIban")}
-                          />
-                          {touched.beneficiaryIban &&
-                            errors.beneficiaryIban &&
-                            InvalidFieldError(errors.beneficiaryIban)}
-                          {!isValidIban &&
-                            InvalidFieldError(
-                              local_Strings.BeneficiaryInvalidIban
-                            )}
-                        </div>
-                        <div className="col-lg-6 form-group">
-                          <label>
-                            {local_Strings.TransactionCurrencyLabel}
-                          </label>
-                          <select
-                            className="form-control"
-                            value={values.beneficiaryCurrency || ""}
-                            onBlur={handleBlur("beneficiaryCurrency")}
-                            onChange={handleChange("beneficiaryCurrency")}
-                          >
-                            <option value="">{local_Strings.SelectItem}</option>
-                            {currencies &&
-                              currencies.length > 0 &&
-                              currencies.map((c, i) => (
-                                <option key={i} value={c.value}>
-                                  {c.label}
-                                </option>
-                              ))}
-                          </select>
-                          {touched.beneficiaryCurrency &&
-                            errors.beneficiaryCurrency &&
-                            InvalidFieldError(errors.beneficiaryCurrency)}
-                        </div>
-                        <div className="col-lg-12">
-                          <label>{local_Strings.BeneficiaryAddressLabel}</label>
-                          <textarea
-                            className="form-control"
-                            value={values.beneficiaryAddress || ""}
-                            rows={4}
-                            onBlur={handleBlur("beneficiaryAddress")}
-                            onChange={handleChange("beneficiaryAddress")}
-                          />
-                        </div>
+                      <div className="col-lg-6 form-group">
+                        <label>{local_Strings.BeneficiaryFullNameLabel}</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder=""
+                          value={values.beneficiaryFullName || ""}
+                          onChange={handleChange("beneficiaryFullName")}
+                          onBlur={handleBlur("beneficiaryFullName")}
+                        />
+                        {touched.beneficiaryFullName &&
+                          errors.beneficiaryFullName &&
+                          InvalidFieldError(errors.beneficiaryFullName)}
+                      </div>
+                      <div className="col-lg-6 form-group">
+                        <label>{local_Strings.BeneficiaryBankLabel}</label>
+                        <select
+                          className="form-control"
+                          onBlur={handleBlur("beneficiaryBank")}
+                          value={values.beneficiaryBank || ""}
+                          onChange={(e) => {
+                            setFieldValue("beneficiaryBank", e.target.value);
+                            setBankSwift(e.target.value);
+                            setFieldValue(
+                              "beneficiaryBankSwiftCode",
+                              e.target.value
+                            );
+                          }}
+                        >
+                          <option value="">{local_Strings.SelectItem}</option>
+                          {banks &&
+                            banks.length > 0 &&
+                            banks.map((c, i) => (
+                              <option key={i} value={c.value}>
+                                {c.label}
+                              </option>
+                            ))}
+                        </select>
+                        {touched.beneficiaryBank &&
+                          errors.beneficiaryBank &&
+                          InvalidFieldError(errors.beneficiaryBank)}
+                      </div>
+                      <div className="col-lg-6 form-group">
+                        <label>{local_Strings.BeneficiarySwiftCodeLabel}</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder=""
+                          defaultValue={bankSwift}
+                          readOnly
+                        />
                       </div>
                     </div>
-                    <div className="text-right p-3">
+                    <div className="row  col-xl-12 mb-5">
+                      <div className="col-lg-6 form-group">
+                        <label>
+                          {local_Strings.BeneficiaryQFBAccountOrIBAN}
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder=""
+                          value={values.beneficiaryIban || ""}
+                          onBlur={async () => {
+                            if (!!values.beneficiaryIban) {
+                              const result = await ValidateBankIBAN(
+                                values.beneficiaryIban!
+                              );
+                              if (result && !!result.bic) {
+                                setIsValidIban(true);
+                              } else {
+                                setIsValidIban(false);
+                              }
+                            }
+                            handleBlur("beneficiaryIban");
+                          }}
+                          onChange={handleChange("beneficiaryIban")}
+                        />
+                        {touched.beneficiaryIban &&
+                          errors.beneficiaryIban &&
+                          InvalidFieldError(errors.beneficiaryIban)}
+                        {!isValidIban &&
+                          InvalidFieldError(
+                            local_Strings.BeneficiaryInvalidIban
+                          )}
+                      </div>
+                      <div className="col-lg-6 form-group">
+                        <label>{local_Strings.TransactionCurrencyLabel}</label>
+                        <select
+                          className="form-control"
+                          value={values.beneficiaryCurrency || ""}
+                          onBlur={handleBlur("beneficiaryCurrency")}
+                          onChange={handleChange("beneficiaryCurrency")}
+                        >
+                          <option value="">{local_Strings.SelectItem}</option>
+                          {currencies &&
+                            currencies.length > 0 &&
+                            currencies.map((c, i) => (
+                              <option key={i} value={c.value}>
+                                {c.label}
+                              </option>
+                            ))}
+                        </select>
+                        {touched.beneficiaryCurrency &&
+                          errors.beneficiaryCurrency &&
+                          InvalidFieldError(errors.beneficiaryCurrency)}
+                      </div>
+                      <div className="col-lg-12">
+                        <label>{local_Strings.BeneficiaryAddressLabel}</label>
+                        <textarea
+                          className="form-control"
+                          value={values.beneficiaryAddress || ""}
+                          rows={4}
+                          onBlur={handleBlur("beneficiaryAddress")}
+                          onChange={handleChange("beneficiaryAddress")}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-right p-3">
+                    <button
+                      id="applyReqBtn"
+                      className="btn btn-primary"
+                      type="submit"
+                      onClick={(e) => {
+                        validateForm(values);
+                        if (isValid) {
+                          handleSubmit();
+                        } else {
+                          touched.beneficiaryId = true;
+                          touched.beneficiaryFullName = true;
+                          touched.beneficiaryBank = true;
+                          touched.beneficiaryBankSwiftCode = true;
+                          touched.beneficiaryIban = true;
+                          touched.beneficiaryCurrency = true;
+                          Swal.fire({
+                            position: "top-end",
+                            icon: "error",
+                            title: local_Strings.formValidationMessage,
+                            showConfirmButton: false,
+                            timer: Constant.AlertTimeout,
+                          });
+                        }
+                      }}
+                    >
+                      {local_Strings.BeneficiarySaveButton}
+                    </button>
+                    {props.beneficiary && (
                       <button
                         id="applyReqBtn"
                         className="btn btn-primary"
-                        type="submit"
-                        onClick={(e) => {
-                          validateForm(values);
-                          if (isValid) {
-                            handleSubmit();
-                          } else {
-                            touched.beneficiaryId = true;
-                            touched.beneficiaryFullName = true;
-                            touched.beneficiaryBank = true;
-                            touched.beneficiaryBankSwiftCode = true;
-                            touched.beneficiaryIban = true;
-                            touched.beneficiaryCurrency = true;
-                            Swal.fire({
-                              position: "top-end",
-                              icon: "error",
-                              title: local_Strings.formValidationMessage,
-                              showConfirmButton: false,
-                              timer: Constant.AlertTimeout,
-                            });
-                          }
-                        }}
+                        type="button"
+                        onClick={(e) => props.backBeneficiaryDetailsModal()}
                       >
-                        {local_Strings.BeneficiarySaveButton}
+                        {local_Strings.BeneficiaryCancelButton}
                       </button>
-                      {props.beneficiary && (
-                        <button
-                          id="applyReqBtn"
-                          className="btn btn-primary"
-                          type="button"
-                          onClick={(e) => props.backBeneficiaryDetailsModal()}
-                        >
-                          {local_Strings.BeneficiaryCancelButton}
-                        </button>
-                      )}
-                    </div>
+                    )}
                   </div>
                 </div>
               )}
@@ -792,257 +780,249 @@ function NewBeneficiary(props: iNewBeneficiary) {
                 isValid,
               }) => (
                 <div className="newReqFields" id="newReqFields">
-                  <div className="py-2">
-                    <div className=" col-lg-9">
-                      <div className="row mb-5">
-                        <div className="col-lg-6 form-group">
-                          <label>
-                            {local_Strings.BeneficiaryFullNameLabel}
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            placeholder=""
-                            value={values.beneficiaryFullName}
-                            onChange={handleChange("beneficiaryFullName")}
-                            onBlur={handleBlur("beneficiaryFullName")}
-                          />
-                          {touched.beneficiaryFullName &&
-                            errors.beneficiaryFullName &&
-                            InvalidFieldError(errors.beneficiaryFullName)}
-                        </div>
-                        <div className="col-lg-6 form-group">
-                          <label>
-                            {local_Strings.BeneficiaryIDLabelInternational}
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            placeholder=""
-                            defaultValue={values.beneficiaryId}
-                            readOnly
-                          />
-                        </div>
-                        <div className="col-lg-6 form-group">
-                          <label>
-                            {local_Strings.BeneficiarySwiftCodeLabel}
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            placeholder=""
-                            value={values.beneficiarySwiftCode}
-                            onChange={handleChange("beneficiarySwiftCode")}
-                            onBlur={async () => {
-                              if (!!values.beneficiarySwiftCode) {
-                                setLoading(true);
-
-                                const result = await ValidateBankSwift(
-                                  values.beneficiarySwiftCode!
-                                );
-                                if (result && result.bicdata) {
-                                  setFieldValue(
-                                    "beneficiaryBank",
-                                    result.bicdata[0]["institution_name"]
-                                  );
-                                }
-                                setLoading(false);
-                              }
-                              handleBlur("beneficiarySwiftCode");
-                            }}
-                          />
-                          {touched.beneficiarySwiftCode &&
-                            errors.beneficiarySwiftCode &&
-                            InvalidFieldError(errors.beneficiarySwiftCode)}
-                        </div>
-                        <div className="col-lg-6 form-group">
-                          <label>
-                            {local_Strings.TransactionCurrencyLabel}
-                          </label>
-                          <select
-                            className="form-control"
-                            value={values.beneficiaryCurrency || ""}
-                            onChange={handleChange("beneficiaryCurrency")}
-                            onBlur={handleBlur("beneficiaryCurrency")}
-                          >
-                            <option value="">{local_Strings.SelectItem}</option>
-                            {currencies &&
-                              currencies.length > 0 &&
-                              currencies
-                                .filter((i) => i.value !== "QAR")
-                                .map((c, i) => (
-                                  <option key={i} value={c.value}>
-                                    {c.label}
-                                  </option>
-                                ))}
-                          </select>
-                          {touched.beneficiaryCurrency &&
-                            errors.beneficiaryCurrency &&
-                            InvalidFieldError(errors.beneficiaryCurrency)}
-                        </div>
+                  <div className="container-fluid py-2">
+                    <div className="row  col-xl-12 mb-5">
+                      <div className="col-lg-6 form-group">
+                        <label>{local_Strings.BeneficiaryFullNameLabel}</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder=""
+                          value={values.beneficiaryFullName}
+                          onChange={handleChange("beneficiaryFullName")}
+                          onBlur={handleBlur("beneficiaryFullName")}
+                        />
+                        {touched.beneficiaryFullName &&
+                          errors.beneficiaryFullName &&
+                          InvalidFieldError(errors.beneficiaryFullName)}
                       </div>
-                      <div className="row mb-5">
-                        <div className="col-lg-6 form-group">
-                          <label>
-                            {local_Strings.BeneficiaryAccountNumberLabel}
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            placeholder=""
-                            value={values.beneficiaryAccountNumber}
-                            onBlur={handleBlur("beneficiaryAccountNumber")}
-                            onChange={handleChange("beneficiaryAccountNumber")}
-                          />
-                          {touched.beneficiaryAccountNumber &&
-                            errors.beneficiaryAccountNumber &&
-                            InvalidFieldError(errors.beneficiaryAccountNumber)}
-                        </div>
-                        <div className="col-lg-6 form-group">
-                          <label>
-                            {local_Strings.BeneficiaryIBANInternationalLabel}
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            placeholder=""
-                            value={values.beneficiaryIban}
-                            onBlur={async () => {
-                              if (!!values.beneficiaryIban) {
-                                setLoading(true);
+                      <div className="col-lg-6 form-group">
+                        <label>
+                          {local_Strings.BeneficiaryIDLabelInternational}
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder=""
+                          defaultValue={values.beneficiaryId}
+                          readOnly
+                        />
+                      </div>
+                      <div className="col-lg-6 form-group">
+                        <label>{local_Strings.BeneficiarySwiftCodeLabel}</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder=""
+                          value={values.beneficiarySwiftCode}
+                          onChange={handleChange("beneficiarySwiftCode")}
+                          onBlur={async () => {
+                            if (!!values.beneficiarySwiftCode) {
+                              setLoading(true);
 
-                                const result = await ValidateBankIBAN(
-                                  values.beneficiaryIban!
+                              const result = await ValidateBankSwift(
+                                values.beneficiarySwiftCode!
+                              );
+                              if (result && result.bicdata) {
+                                setFieldValue(
+                                  "beneficiaryBank",
+                                  result.bicdata[0]["institution_name"]
                                 );
-                                if (result && !!result.bic) {
-                                  setIsValidIban(true);
-                                } else {
-                                  setIsValidIban(false);
-                                }
-                                setLoading(false);
                               }
-                              handleBlur("beneficiaryIban");
-                            }}
-                            onChange={handleChange("beneficiaryIban")}
-                          />
-                          {!isValidIban &&
-                            InvalidFieldError(local_Strings.GeneralValidation)}
-                        </div>
-                        <div className="col-lg-6 form-group">
-                          <label>{local_Strings.BeneficiaryCityLabel}</label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            placeholder=""
-                            value={values.beneficiaryCity}
-                            onBlur={handleBlur("beneficiaryCity")}
-                            onChange={handleChange("beneficiaryCity")}
-                          />
-                          {touched.beneficiaryCity &&
-                            errors.beneficiaryCity &&
-                            InvalidFieldError(errors.beneficiaryCity)}
-                        </div>
-                        <div className="col-lg-6 form-group">
-                          <label>
-                            {
-                              local_Strings.BeneficiaryIntermediaryBankSwiftCodeLabel
+                              setLoading(false);
                             }
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            placeholder=""
-                            value={values.intermediaryBankSwiftCode}
-                            onBlur={async () => {
-                              if (!!values.beneficiaryIban) {
-                                setLoading(true);
-
-                                const result = await ValidateBankIBAN(
-                                  values.beneficiaryIban!
-                                );
-                                if (result && !!result.bic) {
-                                  setIsValidIban(true);
-                                } else {
-                                  setIsValidIban(false);
-                                }
-                                setLoading(false);
-                              }
-                              handleBlur("intermediaryBankSwiftCode");
-                            }}
-                            onChange={handleChange("intermediaryBankSwiftCode")}
-                          />
-                          {touched.intermediaryBankSwiftCode &&
-                            errors.intermediaryBankSwiftCode &&
-                            InvalidFieldError(errors.intermediaryBankSwiftCode)}
-                        </div>
-                        <div className="col-lg-6 form-group">
-                          <label>
-                            {local_Strings.BeneficiaryIntermediaryBankLabel}
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            placeholder=""
-                            value={values.intermediaryBankName}
-                            onBlur={handleBlur("intermediaryBankName")}
-                            onChange={handleChange("intermediaryBankName")}
-                          />
-                          {touched.intermediaryBankName &&
-                            errors.intermediaryBankName &&
-                            InvalidFieldError(errors.intermediaryBankName)}
-                        </div>
-                        <div className="col-lg-6 form-group">
-                          <label>
-                            {local_Strings.BeneficiaryRoutingNumberLabel}
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            placeholder=""
-                            value={values.routingNumber}
-                            onBlur={handleBlur("routingNumber")}
-                            onChange={handleChange("routingNumber")}
-                          />
-                        </div>
+                            handleBlur("beneficiarySwiftCode");
+                          }}
+                        />
+                        {touched.beneficiarySwiftCode &&
+                          errors.beneficiarySwiftCode &&
+                          InvalidFieldError(errors.beneficiarySwiftCode)}
+                      </div>
+                      <div className="col-lg-6 form-group">
+                        <label>{local_Strings.TransactionCurrencyLabel}</label>
+                        <select
+                          className="form-control"
+                          value={values.beneficiaryCurrency || ""}
+                          onChange={handleChange("beneficiaryCurrency")}
+                          onBlur={handleBlur("beneficiaryCurrency")}
+                        >
+                          <option value="">{local_Strings.SelectItem}</option>
+                          {currencies &&
+                            currencies.length > 0 &&
+                            currencies
+                              .filter((i) => i.value !== "QAR")
+                              .map((c, i) => (
+                                <option key={i} value={c.value}>
+                                  {c.label}
+                                </option>
+                              ))}
+                        </select>
+                        {touched.beneficiaryCurrency &&
+                          errors.beneficiaryCurrency &&
+                          InvalidFieldError(errors.beneficiaryCurrency)}
                       </div>
                     </div>
-                    <div className="text-right p-3">
+                    <div className="row  col-xl-12 mb-5">
+                      <div className="col-lg-6 form-group">
+                        <label>
+                          {local_Strings.BeneficiaryAccountNumberLabel}
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder=""
+                          value={values.beneficiaryAccountNumber}
+                          onBlur={handleBlur("beneficiaryAccountNumber")}
+                          onChange={handleChange("beneficiaryAccountNumber")}
+                        />
+                        {touched.beneficiaryAccountNumber &&
+                          errors.beneficiaryAccountNumber &&
+                          InvalidFieldError(errors.beneficiaryAccountNumber)}
+                      </div>
+                      <div className="col-lg-6 form-group">
+                        <label>
+                          {local_Strings.BeneficiaryIBANInternationalLabel}
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder=""
+                          value={values.beneficiaryIban}
+                          onBlur={async () => {
+                            if (!!values.beneficiaryIban) {
+                              setLoading(true);
+
+                              const result = await ValidateBankIBAN(
+                                values.beneficiaryIban!
+                              );
+                              if (result && !!result.bic) {
+                                setIsValidIban(true);
+                              } else {
+                                setIsValidIban(false);
+                              }
+                              setLoading(false);
+                            }
+                            handleBlur("beneficiaryIban");
+                          }}
+                          onChange={handleChange("beneficiaryIban")}
+                        />
+                        {!isValidIban &&
+                          InvalidFieldError(local_Strings.GeneralValidation)}
+                      </div>
+                      <div className="col-lg-6 form-group">
+                        <label>{local_Strings.BeneficiaryCityLabel}</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder=""
+                          value={values.beneficiaryCity}
+                          onBlur={handleBlur("beneficiaryCity")}
+                          onChange={handleChange("beneficiaryCity")}
+                        />
+                        {touched.beneficiaryCity &&
+                          errors.beneficiaryCity &&
+                          InvalidFieldError(errors.beneficiaryCity)}
+                      </div>
+                      <div className="col-lg-6 form-group">
+                        <label>
+                          {
+                            local_Strings.BeneficiaryIntermediaryBankSwiftCodeLabel
+                          }
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder=""
+                          value={values.intermediaryBankSwiftCode}
+                          onBlur={async () => {
+                            if (!!values.beneficiaryIban) {
+                              setLoading(true);
+
+                              const result = await ValidateBankIBAN(
+                                values.beneficiaryIban!
+                              );
+                              if (result && !!result.bic) {
+                                setIsValidIban(true);
+                              } else {
+                                setIsValidIban(false);
+                              }
+                              setLoading(false);
+                            }
+                            handleBlur("intermediaryBankSwiftCode");
+                          }}
+                          onChange={handleChange("intermediaryBankSwiftCode")}
+                        />
+                        {touched.intermediaryBankSwiftCode &&
+                          errors.intermediaryBankSwiftCode &&
+                          InvalidFieldError(errors.intermediaryBankSwiftCode)}
+                      </div>
+                      <div className="col-lg-6 form-group">
+                        <label>
+                          {local_Strings.BeneficiaryIntermediaryBankLabel}
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder=""
+                          value={values.intermediaryBankName}
+                          onBlur={handleBlur("intermediaryBankName")}
+                          onChange={handleChange("intermediaryBankName")}
+                        />
+                        {touched.intermediaryBankName &&
+                          errors.intermediaryBankName &&
+                          InvalidFieldError(errors.intermediaryBankName)}
+                      </div>
+                      <div className="col-lg-6 form-group">
+                        <label>
+                          {local_Strings.BeneficiaryRoutingNumberLabel}
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder=""
+                          value={values.routingNumber}
+                          onBlur={handleBlur("routingNumber")}
+                          onChange={handleChange("routingNumber")}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <button
+                      id="applyReqBtn"
+                      className="btn btn-primary mx-2"
+                      type="submit"
+                      onClick={(e) => {
+                        validateForm(values);
+                        if (isValid) {
+                          handleSubmit();
+                        } else {
+                          touched.beneficiaryId = true;
+                          touched.beneficiaryFullName = true;
+                          touched.qfbaccount = true;
+                          touched.beneficiaryCurrency = true;
+                          Swal.fire({
+                            position: "top-end",
+                            icon: "error",
+                            title: local_Strings.formValidationMessage,
+                            showConfirmButton: false,
+                            timer: Constant.AlertTimeout,
+                          });
+                        }
+                      }}
+                    >
+                      {local_Strings.BeneficiarySaveButton}
+                    </button>
+                    {props.beneficiary && (
                       <button
                         id="applyReqBtn"
                         className="btn btn-primary"
-                        type="submit"
-                        onClick={(e) => {
-                          validateForm(values);
-                          if (isValid) {
-                            handleSubmit();
-                          } else {
-                            touched.beneficiaryId = true;
-                            touched.beneficiaryFullName = true;
-                            touched.qfbaccount = true;
-                            touched.beneficiaryCurrency = true;
-                            Swal.fire({
-                              position: "top-end",
-                              icon: "error",
-                              title: local_Strings.formValidationMessage,
-                              showConfirmButton: false,
-                              timer: Constant.AlertTimeout,
-                            });
-                          }
-                        }}
+                        type="button"
+                        onClick={(e) => props.backBeneficiaryDetailsModal()}
                       >
-                        {local_Strings.BeneficiarySaveButton}
+                        {local_Strings.BeneficiaryCancelButton}
                       </button>
-                      {props.beneficiary && (
-                        <button
-                          id="applyReqBtn"
-                          className="btn btn-primary"
-                          type="button"
-                          onClick={(e) => props.backBeneficiaryDetailsModal()}
-                        >
-                          {local_Strings.BeneficiaryCancelButton}
-                        </button>
-                      )}
-                    </div>
+                    )}
                   </div>
                 </div>
               )}

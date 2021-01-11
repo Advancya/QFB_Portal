@@ -1,14 +1,19 @@
 import { GetSettingsByCIF } from "../services/cmsService";
-import { initialSettingsData, IUserSettings, GetUserLocalData, SaveUserDataLocally } from "../Helpers/authHelper";
+import {
+  initialSettingsData,
+  IUserSettings,
+  GetUserLocalData,
+  SaveUserDataLocally,
+} from "../Helpers/authHelper";
 import React, { useEffect, useState } from "react";
 import { authenticate } from "../services/authenticationService";
-import * as helper from '../Helpers/helper';
+import * as helper from "../Helpers/helper";
 import { getUserRole } from "../services/apiServices";
 import Constant from "../constants/defaultData";
 
 export type User = { username: string; password: string; otp: string };
 interface IAppContext {
-  userSettings: IUserSettings,
+  userSettings: IUserSettings;
   userRole: string;
   language: string;
   selectedCIF: string;
@@ -28,28 +33,37 @@ export const AuthContext = React.createContext<IAppContext>({
       return false;
     });
   },
-  logout: () => { },
-  changeLanguage: (language) => { },
-  changeUserSettings: (settings) => { },
+  logout: () => {},
+  changeLanguage: (language) => {},
+  changeUserSettings: (settings) => {},
 });
 
-interface AuthProviderProps { }
+interface AuthProviderProps {}
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [userSettings, setUserSettings] = useState<IUserSettings>(initialSettingsData);
+  const [userSettings, setUserSettings] = useState<IUserSettings>(
+    initialSettingsData
+  );
   const [language, setLanguage] = useState(helper.getLanguage() || "en");
   const [userRole, setUserRole] = useState<string>("");
-  const [selectedCIF, setselectedCIF] = useState<string>(initialSettingsData.customerId);
+  const [selectedCIF, setselectedCIF] = useState<string>(
+    initialSettingsData.customerId
+  );
 
   useEffect(() => {
     const getUserData = async () => {
       const userData = await GetUserLocalData();
       if (userData) {
         setUserSettings(userData);
-        const role = await getUserRole(userData.customerId || initialSettingsData.customerId);
+        const role = await getUserRole(
+          userData.customerId || initialSettingsData.customerId
+        );
         if (role && role !== undefined) {
           setselectedCIF(userData.customerId);
-          setUserRole(role.name);          
+          //  setselectedCIF("100537");
+          // setselectedCIF("101102");
+
+          setUserRole(role.name);
         } else {
           setselectedCIF(initialSettingsData.customerId);
         }
@@ -76,19 +90,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           );
 
           if (resutl) {
-            await GetSettingsByCIF(userData.username)
-              .then(async (settings: any) => {
+            await GetSettingsByCIF(userData.username).then(
+              async (settings: any) => {
                 if (settings && settings.length > 0) {
                   const _userSettings = settings[0];
                   setUserSettings(_userSettings);
                   setselectedCIF(userData.username);
-                  await SaveUserDataLocally(_userSettings);                  
-
-                } else {                 
-                  const _userData = {...initialSettingsData, customerId: userData.username}; 
+                  await SaveUserDataLocally(_userSettings);
+                } else {
+                  const _userData = {
+                    ...initialSettingsData,
+                    customerId: userData.username,
+                  };
                   setUserSettings(_userData);
                   setselectedCIF(userData.username);
-                  await SaveUserDataLocally(_userData);                  
+                  await SaveUserDataLocally(_userData);
                 }
 
                 console.log("user settings is saved on local storage");
@@ -96,7 +112,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                 if (role && role !== undefined) {
                   setUserRole(role.name || "");
                 }
-              });
+              }
+            );
             return resutl;
           } else {
             return false;

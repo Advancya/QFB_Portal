@@ -174,7 +174,7 @@ const en = {
 
   CashDetailsTitle: "Cash Details",
   CashDetailsFilter: "Filter",
-  CashDetailsRemoveFilter: "Remove Filters",
+  CashDetailsRemoveFilter: "Clear Filters",
   CashDetailsFilterDate: "Date",
   CashDetailsFilterTransactionAmount: "Amount",
   CashDetailsFilterType: "Type",
@@ -202,7 +202,7 @@ const en = {
 
   DepositeDetailsRecieved: "Recieved Profit Transactions",
   DepositeDetailsFilter: "Filter",
-  DepositeDetailsRemoveFilter: "Remove Filters",
+  DepositeDetailsRemoveFilter: "Clear Filters",
   DepositeDetailsFilterDate: "Date",
   DepositeDetailsFilterTransactionAmount: "Amount",
   DepositeDetailsFilterType: "Type",
@@ -786,7 +786,8 @@ const en = {
 
   fileDeleteConfirmMessage: "You want to delete this file?",
   NewBeneficiaryMsgTitle: "Beneficiary Sent",
-  NewBeneficiaryMsgBody: "Your beneficiary has been sent successfully to your RM",
+  NewBeneficiaryMsgBody:
+    "Your beneficiary has been sent successfully to your RM",
 };
 
 export default en;

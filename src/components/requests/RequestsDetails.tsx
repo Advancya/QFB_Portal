@@ -154,7 +154,7 @@ function RequestsDetails(props: iRequestsDetails) {
     <Modal
       show={props.showRequestsDetailsModal}
       onHide={props.hideRequestsDetailsModal}
-      size="lg"
+      //size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       scrollable

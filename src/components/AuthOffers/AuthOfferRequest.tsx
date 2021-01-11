@@ -73,7 +73,7 @@ function AuthOfferRequest(props: iAuthOfferRequest) {
     <Modal
       show={props.showAuthOfferRequestModal}
       onHide={props.hideAuthOfferRequestModal}
-      size="lg"
+      // size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       scrollable
@@ -185,7 +185,7 @@ function AuthOfferRequest(props: iAuthOfferRequest) {
               setFieldValue,
             }) => (
               <div className="container-fluid">
-                <div className="p-3 mb-5 row col-lg-8">
+                <div className="py-3  row col-xl-9">
                   <div className="col-lg-6 form-group">
                     <label>{local_Strings.OfferSubscriptionAmountLabel}</label>
                     <input

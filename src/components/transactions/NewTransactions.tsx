@@ -207,7 +207,7 @@ function NewTransaction(props: iNewTransaction) {
     <Modal
       show={props.showNewTransactionModal}
       onHide={props.hideNewTransactionModal}
-      size="lg"
+      //size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       scrollable
@@ -241,8 +241,8 @@ function NewTransaction(props: iNewTransaction) {
       <Modal.Body>
         <div className="box modal-box" id="applyReqBox">
           <div className="container-fluid">
-            <div className="row">
-              <div className="col-lg-9 form-group">
+            <div className="row col-xl-9">
+              <div className="col-lg-12 form-group">
                 <label>{local_Strings.TransactionTransferTypeLabel}</label>
                 <select
                   className="form-control"
@@ -321,8 +321,8 @@ function NewTransaction(props: iNewTransaction) {
                 isValid,
               }) => (
                 <div className="newReqFields" id="newReqFields">
-                  <div className="py-2">
-                    <div className="row col-lg-9">
+                  <div className="container-fluid py-2">
+                    <div className="row col-xl-9">
                       <div className="col-lg-6 form-group">
                         <label>
                           {local_Strings.TransactionFromAccountLabel}
@@ -351,7 +351,6 @@ function NewTransaction(props: iNewTransaction) {
                           errors.transferFromAccount &&
                           InvalidFieldError(errors.transferFromAccount)}
                       </div>
-
                       <div className="col-lg-6 form-group">
                         <label>{local_Strings.TransactionToAccountLabel}</label>
                         <select
@@ -380,7 +379,6 @@ function NewTransaction(props: iNewTransaction) {
                           errors.transferToAccount &&
                           InvalidFieldError(errors.transferToAccount)}
                       </div>
-
                       <div className="col-lg-6 form-group">
                         <label>{local_Strings.TransactionAmountLabel}</label>
                         <input
@@ -474,8 +472,8 @@ function NewTransaction(props: iNewTransaction) {
                 isValid,
               }) => (
                 <div className="newReqFields" id="newReqFields">
-                  <div className="py-2">
-                    <div className="row col-lg-9">
+                  <div className="py-2 container-fluid">
+                    <div className="row col-xl-9">
                       <div className="col-lg-6 form-group">
                         <label>
                           {local_Strings.TransactionFromAccountLabel}
@@ -597,11 +595,10 @@ function NewTransaction(props: iNewTransaction) {
                           InvalidFieldError(errors.amount)}
                       </div>
 
-                      <div className="col-lg-6 form-group customDate pr-2">
-                        <label className="pr-2">
-                          {local_Strings.TransactionDateLabel}
-                        </label>
+                      <div className="col-lg-6 form-group customDate ">
+                        <label>{local_Strings.TransactionDateLabel}</label>
                         <DatePicker
+                          className="form-control"
                           dateFormat="MMMM dd, yyyy"
                           selected={
                             values.transactionDate
