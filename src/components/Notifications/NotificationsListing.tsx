@@ -18,6 +18,7 @@ import FilterDropDownControl from "../../shared/FilterDropDownControl";
 import FilterButtonControl from "../../shared/FilterButtonControl";
 import * as helper from "../../Helpers/helper";
 import NoResult from "../../shared/NoResult";
+import xIcon from "../../images/x-icon.svg";
 
 interface iNotficationsListing {
   showNotficationsListingModal: boolean;
@@ -79,7 +80,7 @@ function NotficationsListing(props: iNotficationsListing) {
       <Modal
         show={props.showNotficationsListingModal}
         onHide={props.hideNotficationsListingModal}
-        size="lg"
+        // size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
         dialogClassName="myModal"
@@ -95,7 +96,7 @@ function NotficationsListing(props: iNotficationsListing) {
             className="close"
             onClick={props.hideNotficationsListingModal}
           >
-            <span aria-hidden="true">×</span>
+            <img src={xIcon} width="15" />
           </button>
         </Modal.Header>
         <Modal.Body>
@@ -110,7 +111,7 @@ function NotficationsListing(props: iNotficationsListing) {
           />
           <form className="filter-box">
             <div className="row headRow align-items-center justify-content-between">
-              <div className="col-sm-5">
+              <div className="col-md-5">
                 <FilterDropDownControl
                   label={local_Strings.NotificationsListingFilter}
                   options={statusFilterOptions}
@@ -121,7 +122,7 @@ function NotficationsListing(props: iNotficationsListing) {
                 />
               </div>
 
-              <div className="col-sm-2">
+              <div className="col-md-3">
                 <FilterButtonControl
                   clearFilter={() => {
                     setFilter({
@@ -141,22 +142,6 @@ function NotficationsListing(props: iNotficationsListing) {
                   }}
                   showClearFilter={filters.filterApplied}
                 />
-              </div>
-              <div className="col-sm-9 py-3 customDate d-none" id="">
-                <div className="row">
-                  <div className="col-lg-4">
-                    <label>
-                      {local_Strings.InboxMessageListingFilterWithLabel}
-                    </label>
-                    <input type="date" className="form-control" />
-                  </div>
-                  <div className="col-lg-4">
-                    <label>
-                      {local_Strings.InboxMessageListingFilterWithLabel}
-                    </label>
-                    <input type="date" className="form-control" />
-                  </div>
-                </div>
               </div>
             </div>
           </form>

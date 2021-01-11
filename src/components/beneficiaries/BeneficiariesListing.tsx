@@ -1,19 +1,19 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import moment from "moment";
-import { localStrings as local_Strings } from '../../translations/localStrings';
+import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
+import { GetBeneficiaryByCIF } from "../../services/cmsService";
 import {
-  GetBeneficiaryByCIF,
-} from "../../services/cmsService";
-import {
-  emptyBeneficiaryDetail, IBeneficiaryDetail,
+  emptyBeneficiaryDetail,
+  IBeneficiaryDetail,
 } from "../../Helpers/publicInterfaces";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import NoResult from "../../shared/NoResult";
-import FilterMoreButtonControl from '../../shared/FilterMoreButtonControl';
+import FilterMoreButtonControl from "../../shared/FilterMoreButtonControl";
+import xIcon from "../../images/x-icon.svg";
 
 interface iBeneficiariesListing {
   showBeneficiariesListingModal: boolean;
@@ -22,10 +22,7 @@ interface iBeneficiariesListing {
   showNewBeneficiaryModal: () => void;
   backBeneficiariesListingModal: () => void;
 }
-function BeneficiariesListing(
-  props: iBeneficiariesListing
-) {
-
+function BeneficiariesListing(props: iBeneficiariesListing) {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
   const [isLoading, setLoading] = useState(false);
@@ -51,7 +48,7 @@ function BeneficiariesListing(
         })
         .catch((e: any) => console.log(e))
         .finally(() => setLoading(false));
-    }
+    };
 
     if (!!currentContext.selectedCIF) {
       initialLoadMethod();
@@ -70,10 +67,14 @@ function BeneficiariesListing(
         onClick={() => props.showBeneficiariesDetailsModal(item.id)}
       >
         <div className="col-sm-8">
-          <h4>{local_Strings.BeneficiaryIDLabel + " | " + item.beneficiaryId}</h4>
-          <h5>{local_Strings.BeneficiaryFullNameLabel +
-            " | " +
-            item.beneficiaryFullName}</h5>
+          <h4>
+            {local_Strings.BeneficiaryIDLabel + " | " + item.beneficiaryId}
+          </h4>
+          <h5>
+            {local_Strings.BeneficiaryFullNameLabel +
+              " | " +
+              item.beneficiaryFullName}
+          </h5>
         </div>
         <div className="col-8 col-sm-3 text-sm-right">
           <span className="status-badge ">{item.country || ""}</span>
@@ -101,9 +102,7 @@ function BeneficiariesListing(
             <div className="modal-header-text">
               <a
                 href="#"
-                onClick={
-                  props.backBeneficiariesListingModal
-                }
+                onClick={props.backBeneficiariesListingModal}
                 className="backToAccountsList"
               >
                 <i className="fa fa-chevron-left"></i>
@@ -126,7 +125,7 @@ function BeneficiariesListing(
             className="close"
             onClick={props.hideBeneficiariesListingModal}
           >
-            <span aria-hidden="true">×</span>
+            <img src={xIcon} width="15" />
           </button>
         </Modal.Header>
         <Modal.Body>
@@ -141,18 +140,18 @@ function BeneficiariesListing(
               }
             />
             <ul className="box-list" id="dataList">
-              {data &&
-                data.length > 0 &&
-                data[0].id > 0 ?
-                data.slice(0, offset).map((item, index) =>
-                  renderItem(item, index)
-                )
+              {data && data.length > 0 && data[0].id > 0
+                ? data
+                    .slice(0, offset)
+                    .map((item, index) => renderItem(item, index))
                 : NoResult(local_Strings.NoDataToShow)}
             </ul>
           </div>
 
-          <FilterMoreButtonControl showMore={data && data.length > rowLimit &&
-            offset < data.length} onClickMore={() => setOffset(offset + 5)} />
+          <FilterMoreButtonControl
+            showMore={data && data.length > rowLimit && offset < data.length}
+            onClickMore={() => setOffset(offset + 5)}
+          />
         </Modal.Body>
       </Modal>
     </div>

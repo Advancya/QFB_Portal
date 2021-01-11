@@ -9,9 +9,10 @@ import iRequest, {
   GetRequstByID,
 } from "../../services/requestService";
 import Constant from "../../constants/defaultData";
-import LoadingOverlay from 'react-loading-overlay';
+import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
-import ViewAttachment from '../../shared/AttachmentViewer';
+import ViewAttachment from "../../shared/AttachmentViewer";
+import xIcon from "../../images/x-icon.svg";
 
 interface iRequestsDetails {
   showRequestsDetailsModal: boolean;
@@ -179,7 +180,7 @@ function RequestsDetails(props: iRequestsDetails) {
           className="close"
           onClick={props.hideRequestsDetailsModal}
         >
-          <span aria-hidden="true">×</span>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
 
@@ -211,23 +212,24 @@ function RequestsDetails(props: iRequestsDetails) {
           </ul>
           <LoadingOverlay
             active={isLoading}
-            spinner={<PuffLoader
-              size={Constant.SpnnerSize}
-              color={Constant.SpinnerColor}
-            />}
+            spinner={
+              <PuffLoader
+                size={Constant.SpnnerSize}
+                color={Constant.SpinnerColor}
+              />
+            }
           />
-          {formFields.map((item, index) =>
+          {formFields.map((item, index) => (
             <React.Fragment>
               <div className="py-2 px-3">
                 <div className="row">
                   <div className="col-lg-8">
-                    <label>{
-                      currentContext.language === "ar"
+                    <label>
+                      {currentContext.language === "ar"
                         ? item["details"].split(";")[1]
-                        : item["details"].split(";")[0]
-                    }
+                        : item["details"].split(";")[0]}
                     </label>
-                    {item["details"].split(";")[2] !== "FILE_UPLOAD" &&
+                    {item["details"].split(";")[2] !== "FILE_UPLOAD" && (
                       <input
                         type="text"
                         defaultValue={getRequestFieldValue(
@@ -235,20 +237,20 @@ function RequestsDetails(props: iRequestsDetails) {
                         )?.toString()}
                         className="form-control"
                         disabled={true}
-                      />}
-                    {item["details"].split(";")[2] === "FILE_UPLOAD" &&
-                      <ViewAttachment showDelete={false}
-                        fileName={getRequestFieldValue("FileName")}
-                        fileContent={getRequestFieldValue(
-                          "FileContent"
-                        )}
                       />
-                    }
+                    )}
+                    {item["details"].split(";")[2] === "FILE_UPLOAD" && (
+                      <ViewAttachment
+                        showDelete={false}
+                        fileName={getRequestFieldValue("FileName")}
+                        fileContent={getRequestFieldValue("FileContent")}
+                      />
+                    )}
                   </div>
                 </div>
               </div>
             </React.Fragment>
-          )}
+          ))}
         </div>
       </Modal.Body>
     </Modal>

@@ -14,6 +14,7 @@ import PuffLoader from "react-spinners/PuffLoader";
 import FilterMoreButtonControl from "../../../shared/FilterMoreButtonControl";
 import { PortfolioContext } from "../../../pages/Homepage";
 import depositIcon from "../../../images/deposit-icon.svg";
+import xIcon from "../../../images/x-icon.svg";
 
 interface iDepositeListing {
   showDepositeListingModal: boolean;
@@ -76,7 +77,7 @@ function DepositeListing(props: iDepositeListing) {
             {item.currency || ""}
           </strong>
           <br />
-          <strong className="color-gold text-xs">
+          <strong className="color-gold text-xs mx-2">
             {(item.interestRate || "") + "%"}
           </strong>
         </div>
@@ -114,7 +115,7 @@ function DepositeListing(props: iDepositeListing) {
             className="close"
             onClick={props.hideDepositeListingModal}
           >
-            <span aria-hidden="true">×</span>
+            <img src={xIcon} width="15" />
           </button>
         </Modal.Header>
         <Modal.Body>

@@ -65,6 +65,7 @@ html[dir="ltr"], [dir="ltr"] {
 
 ::-webkit-scrollbar {
   width: 10px;
+  height: 10px;
 }
 
 /* Track */
@@ -1192,7 +1193,16 @@ ul.box-list a:hover h4 small, ul.box-list a:hover p {
   border-radius: 1rem 0 0 0;
 }
 
+[dir="rtl"] .offset-2 {
+  margin-right: 16.666667%;
+  margin-left: 0;
+}
+
 /*.table-box .table-striped tbody tr:nth-of-type(odd)  {background-color: #f6f1ee;}*/
+
+.table-box {
+  overflow: auto;
+}
 
 .table-box .table-striped tbody tr {
   background-color: #FFF;
@@ -1572,7 +1582,14 @@ ul ul {
 
 /* Media Queries */
 
-@media all and (min-width: 576px) {}
+@media all and (min-width: 576px) {
+  [dir="rtl"] .text-sm-right {
+    text-align: left!important;
+  }
+  [dir="rtl"] .text-sm-left {
+    text-align: right!important;
+  }
+}
 
 @media all and (min-width: 768px) {
   .modal-dialog {
@@ -1584,8 +1601,11 @@ ul ul {
 }
 
 @media all and (min-width: 992px) {
-  .modal-lg, .modal-xl {
+  .modal-lg {
     max-width: 70%;
+  }
+  .modal-xl {
+    max-width: 90%;
   }
 }
 
@@ -1619,7 +1639,11 @@ ul ul {
   }
 }
 
-@media all and (max-width: 1199px) {}
+@media all and (max-width: 1199px) {
+  .btn-primary {
+    min-width: auto;
+  }
+}
 
 @media all and (max-width: 1023px) {
   html {
@@ -1632,6 +1656,9 @@ ul ul {
     max-width: 85%;
     margin: 1.75rem auto;
   }
+  .min-h-24 {
+    min-height: auto;
+  }
 }
 
 @media all and (max-width: 767px) {
@@ -1640,18 +1667,15 @@ ul ul {
   }
   .navbar-nav {
     background: rgba(0, 0, 0, 0.1);
-    padding: 1rem;
+    padding: 5px;
     flex-direction: row;
+  }
+  .nav-pills {
+    background-color: transparent;
   }
 }
 
 @media all and (max-width: 575px) {
-  [dir="rtl"] .text-sm-right {
-    text-align: left!important;
-  }
-  [dir="rtl"] .text-sm-left {
-    text-align: right!important;
-  }
   html {
     font-size: 13px
   }
@@ -1667,7 +1691,7 @@ ul ul {
   .header .logo {
     align-items: flex-end;
     justify-content: center;
-    margin: 1rem 0;
+    margin: 0;
   }
   .header .navbar-nav .nav-item {
     display: flex;
@@ -1682,5 +1706,10 @@ ul ul {
   }
   .headRow label, .headRow label a, .resetBtn {
     margin-top: 0.5rem;
+  }
+  .btn.btn-primary {
+    width: 100%;
+    margin: 5px 0!important;
+    max-width: 100%;
   }
 }

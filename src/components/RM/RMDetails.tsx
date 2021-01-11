@@ -4,6 +4,7 @@ import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
 import excelIcon from "../../../images/excel.svg";
 import { AuthContext } from "../../providers/AuthProvider";
 import { localStrings as local_Strings } from "../../translations/localStrings";
+import xIcon from "../../images/x-icon.svg";
 
 interface iRMDetails {
   showRMDetailsModal: boolean;
@@ -18,7 +19,7 @@ function RMDetails(rMDetailsProps: iRMDetails) {
     <Modal
       show={rMDetailsProps.showRMDetailsModal}
       onHide={rMDetailsProps.hideRMDetailsModal}
-      size="lg"
+      // size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       scrollable
@@ -37,7 +38,7 @@ function RMDetails(rMDetailsProps: iRMDetails) {
           className="close"
           onClick={rMDetailsProps.hideRMDetailsModal}
         >
-          <span aria-hidden="true">×</span>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
 

@@ -5,6 +5,7 @@ import { localStrings as local_Strings } from "../../translations/localStrings";
 import { useHistory } from "react-router-dom";
 
 import { AuthContext } from "../../providers/AuthProvider";
+import xIcon from "../../images/x-icon.svg";
 
 interface iAnnonymousTerms {
   showAnnonymousTermsModal: boolean;
@@ -39,7 +40,7 @@ function AnnonymousTerms(annonymousTermsProps: iAnnonymousTerms) {
           className="close"
           onClick={annonymousTermsProps.hideAnnonymousTermsModal}
         >
-          <span aria-hidden="true">×</span>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
       <Modal.Body>

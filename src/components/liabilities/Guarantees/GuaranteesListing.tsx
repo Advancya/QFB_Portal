@@ -16,6 +16,7 @@ import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import FilterMoreButtonControl from "../../../shared/FilterMoreButtonControl";
 import { PortfolioContext } from "../../../pages/Homepage";
+import xIcon from "../../../images/x-icon.svg";
 
 interface iGuaranteesListing {
   showGuaranteesListingModal: boolean;
@@ -77,7 +78,7 @@ function GuaranteesListing(props: iGuaranteesListing) {
           </h3>
         </div>
         <div className="col-sm-3 col-lg-2  text-md-center">
-          <strong className="status-badge-small color-gold text-xs">
+          <strong className="status-badge-small color-gold text-xs mx-2">
             {item.currency || currentContext.userSettings.currency}
           </strong>
         </div>
@@ -112,7 +113,7 @@ function GuaranteesListing(props: iGuaranteesListing) {
             className="close"
             onClick={props.hideGuaranteesListingModal}
           >
-            <span aria-hidden="true">×</span>
+            <img src={xIcon} width="15" />
           </button>
         </Modal.Header>
         <Modal.Body>

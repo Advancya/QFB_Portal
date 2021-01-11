@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
 import beneficiarySentIcon from "../../images/req-sent.svg";
+import xIcon from "../../images/x-icon.svg";
 
 interface iNewBeneficiary {
   showNewBeneficiaryModal: boolean;
@@ -58,7 +59,7 @@ function NewBeneficiary(newBeneficiaryProps: iNewBeneficiary) {
           className="close"
           onClick={newBeneficiaryProps.hideNewBeneficiaryModal}
         >
-          <span aria-hidden="true">×</span>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
       <Modal.Body>

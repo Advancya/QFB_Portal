@@ -1,18 +1,16 @@
 import React, { useState } from "react";
 import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
-import excelIcon from "../../../images/excel.svg";
+import xIcon from "../../images/x-icon.svg";
 
 interface iBeneficiariesDetails {
   showBeneficiariesDetailsModal: boolean;
   hideBeneficiariesDetailsModal: () => void;
   backBeneficiariesDetailsgModal: () => void;
   showNewBeneficiaryModal: () => void;
-  itemId: number
+  itemId: number;
 }
 
-function BeneficiariesDetails(
-  props: iBeneficiariesDetails
-) {
+function BeneficiariesDetails(props: iBeneficiariesDetails) {
   return (
     <Modal
       show={props.showBeneficiariesDetailsModal}
@@ -44,7 +42,7 @@ function BeneficiariesDetails(
           className="close"
           onClick={props.hideBeneficiariesDetailsModal}
         >
-          <span aria-hidden="true">×</span>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
       <Modal.Body>

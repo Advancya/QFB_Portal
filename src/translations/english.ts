@@ -469,8 +469,7 @@ const en = {
 
   ContactUsNameLabel: "Name",
   ContactUsCountryLabel: "Country",
-  ContactUsMobileLabel:
-    "Mobile Number (Include country code, ex: +97412345678)",
+  ContactUsMobileLabel: "Mobile Number (ex: +97412345678)",
   ContactUsEmailAddressLabel: "Email Address",
   ContactUsQueryLabel: "Query",
   SignupSuccessTitle: "Request Sent",

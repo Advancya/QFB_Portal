@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
-import excelIcon from "../../../images/excel.svg";
+import xIcon from "../../images/x-icon.svg";
 
 interface iRMPortfolioDetails {
   showRMPortfolioDetailsModal: boolean;
@@ -13,7 +13,7 @@ function RMPortfolioDetails(rMPortfolioDetailsProps: iRMPortfolioDetails) {
     <Modal
       show={rMPortfolioDetailsProps.showRMPortfolioDetailsModal}
       onHide={rMPortfolioDetailsProps.hideRMPortfolioDetailsModal}
-      size="lg"
+      //  size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       scrollable
@@ -40,7 +40,7 @@ function RMPortfolioDetails(rMPortfolioDetailsProps: iRMPortfolioDetails) {
           className="close"
           onClick={rMPortfolioDetailsProps.hideRMPortfolioDetailsModal}
         >
-          <span aria-hidden="true">×</span>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
       <Modal.Body>

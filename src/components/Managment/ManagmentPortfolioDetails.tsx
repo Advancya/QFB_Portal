@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
-import excelIcon from "../../../images/excel.svg";
+import xIcon from "../../images/x-icon.svg";
 
 interface iManagmentPortfolioDetails {
   showManagmentPortfolioDetailsModal: boolean;
@@ -46,7 +46,7 @@ function ManagmentPortfolioDetails(
             managmentPortfolioDetailsProps.hideManagmentPortfolioDetailsModal
           }
         >
-          <span aria-hidden="true">×</span>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
       <Modal.Body>

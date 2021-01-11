@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import * as helper from "../../Helpers/helper";
 import { AuthContext } from "../../providers/AuthProvider";
 import { localStrings as local_Strings } from "../../translations/localStrings";
+import ContactUsForm from "../ContactUs/ContactUsForm";
 import DocumentListing from "../Documents/DocumentListing";
 import Faqs from "../Faqs";
 import SettingsAnchor from "../Settings/SettingsAnchor";
@@ -14,6 +15,7 @@ function ToolBarRight() {
   const history = useHistory();
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
+  const [showContactUsForm, setShowContactUsForm] = useState(false);
 
   return (
     <div className="col-md-9">
@@ -25,10 +27,14 @@ function ToolBarRight() {
         </Link> */}
         <SettingsAnchor></SettingsAnchor>
         <Faqs></Faqs>
-        <Link to={`/${currentContext.language}/ContactUs`}>
+        <a href="#" onClick={() => setShowContactUsForm(true)}>
           {local_Strings.topBarRightItem4}
-        </Link>
+        </a>
       </div>
+      <ContactUsForm
+        showContactUsFormModal={showContactUsForm}
+        hideContactUsFormModal={() => setShowContactUsForm(false)}
+      ></ContactUsForm>
     </div>
   );
 }

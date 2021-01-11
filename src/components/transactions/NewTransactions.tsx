@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
 import transactionSentIcon from "../../images/req-sent.svg";
+import xIcon from "../../images/x-icon.svg";
 
 interface iNewTransaction {
   showNewTransactionModal: boolean;
@@ -58,7 +59,7 @@ function NewTransaction(props: iNewTransaction) {
           className="close"
           onClick={props.hideNewTransactionModal}
         >
-          <span aria-hidden="true">×</span>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
       <Modal.Body>

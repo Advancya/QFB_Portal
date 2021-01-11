@@ -3,6 +3,7 @@ import { Button, Modal } from "react-bootstrap";
 import dateIcon from "../../images/calendar-inactive.png";
 import productsIcon from "../../images/products-icon.png";
 import { localStrings as local_Strings } from "../../translations/localStrings";
+import xIcon from "../../images/x-icon.svg";
 
 interface iForgotPasswordStep1 {
   showForgotPasswordStep1Modal: boolean;
@@ -34,7 +35,7 @@ function ForgotPasswordStep1(forgotPasswordStep1Props: iForgotPasswordStep1) {
             className="close"
             onClick={forgotPasswordStep1Props.hideForgotPasswordStep1Modal}
           >
-            <span aria-hidden="true">×</span>
+            <img src={xIcon} width="15" />
           </button>
         </Modal.Header>
         <Modal.Body>

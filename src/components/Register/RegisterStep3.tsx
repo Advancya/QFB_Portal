@@ -15,6 +15,7 @@ import {
   IRegisterationData,
 } from "../../Helpers/publicInterfaces";
 import { signUp } from "../../services/authenticationService";
+import xIcon from "../../images/x-icon.svg";
 
 interface iRegisterStep3 {
   showRegisterStep3Modal: boolean;
@@ -64,7 +65,7 @@ function RegisterStep3(props: iRegisterStep3) {
           className="close"
           onClick={props.hideRegisterStep3Modal}
         >
-          <span aria-hidden="true">×</span>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
       <Modal.Body>
@@ -164,28 +165,31 @@ function RegisterStep3(props: iRegisterStep3) {
                     />
                     {touched.otp && errors.otp && InvalidFieldError(errors.otp)}
                     <div className="form-group text-right">
-                      <a href="#" className="forgotLink"
+                      <a
+                        href="#"
+                        className="forgotLink"
                         onClick={async () => {
                           const optResult = await SendOTP(props.step2_data.cif);
                           if (optResult) {
                             Swal.fire({
-                              position: 'top-end',
-                              icon: 'success',
+                              position: "top-end",
+                              icon: "success",
                               title: local_Strings.OTPSentMessage,
                               showConfirmButton: false,
-                              timer: Constant.AlertTimeout
+                              timer: Constant.AlertTimeout,
                             });
                             props.hideRegisterStep3Modal();
                           } else {
                             Swal.fire({
-                              position: 'top-end',
-                              icon: 'error',
+                              position: "top-end",
+                              icon: "error",
                               title: local_Strings.GenericErrorMessage,
                               showConfirmButton: false,
-                              timer: Constant.AlertTimeout
+                              timer: Constant.AlertTimeout,
                             });
                           }
-                        }}>
+                        }}
+                      >
                         {local_Strings.registerStep3Label2}
                       </a>
                     </div>

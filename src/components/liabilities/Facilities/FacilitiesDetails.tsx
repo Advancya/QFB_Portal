@@ -11,6 +11,7 @@ import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import { GetFacilityDetails } from "../../../services/cmsService";
 import * as helper from "../../../Helpers/helper";
+import xIcon from "../../../images/x-icon.svg";
 
 interface iFacilitiesDetails {
   showFacilitiesDetailsModal: boolean;
@@ -79,7 +80,7 @@ function FacilitiesDetails(props: iFacilitiesDetails) {
           className="close"
           onClick={props.hideFacilitiesDetailsModal}
         >
-          <span aria-hidden="true">×</span>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
       <Modal.Body>

@@ -116,7 +116,7 @@ const ar = {
     "الهاتف المحمول المسجل لدى البنك (يحتوي علي كود الدولة , مثال:97412345678+)",
   SignUpStep1Button: "التالى",
   SignUpStep1Pager: "الخطوة 1 من 3",
-  
+
   SignUpStep1CIFRegisterBefore: "رقم تعريف العميل مسجل من قبل",
 
   SignUpStep2Title: "تسجيل",
@@ -466,8 +466,7 @@ const ar = {
 
   ContactUsNameLabel: "الاسم",
   ContactUsCountryLabel: "البلد",
-  ContactUsMobileLabel:
-    "أدخل رقم الهاتف المحمول (يحتوي علي كود الدولة, مثال 97412345678+)",
+  ContactUsMobileLabel: "أدخل رقم الهاتف المحمول (مثال 97412345678+)",
   ContactUsEmailAddressLabel: "عنوان بريد الكتروني",
   ContactUsQueryLabel: "الموضوع",
   SignupSuccessTitle: "تم الإرسال",
@@ -771,12 +770,13 @@ const ar = {
   documentSavedMessage: "Document has been saved successfully!",
   documentListingPriority: "أفضلية",
   DrillBackButtonText: "عودة",
-  
+
   PortfolioNoInvestments: "No Investments Yet",
   PortfolioNoDeposits: "No Deposits  Yet",
   PortfolioNoFacilities: "No Facilities Found",
-  
-  OfferRequestSubmitMessage: "Your subscription request to the offer \"[REPLACE ME]\" has been submitted",
+
+  OfferRequestSubmitMessage:
+    'Your subscription request to the offer "[REPLACE ME]" has been submitted',
   ContactUsSelectCountry: "Select Country",
   OTPSentMessage: "An OTP has been sent successfully, kindly check.",
   fileDeleteConfirmMessage: "You want to delete this file?",

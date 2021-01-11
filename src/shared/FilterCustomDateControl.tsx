@@ -22,13 +22,13 @@ const FilterCustomDateControl: React.FC<IFilterCustomDateControlProps> = (
     <div
       className={
         props.showCustomDateFilter
-          ? "col-sm-9 py-3 customDate " + props.customClass
-          : "col-sm-9 py-3 customDate d-none " + props.customClass
+          ? "col-md-9 py-3 customDate " + props.customClass
+          : "col-md-9 py-3 customDate d-none " + props.customClass
       }
       id="customDate"
     >
       <div className="row">
-        <div className="col-lg-4">
+        <div className="col-md-6 col-lg-4">
           <label>{local_Strings.RequestFromLabel}</label>
           <input
             type="date"
@@ -43,7 +43,7 @@ const FilterCustomDateControl: React.FC<IFilterCustomDateControlProps> = (
             onChange={(e) => props.onStartDateChange(e.target.value)}
           />
         </div>
-        <div className="col-lg-4">
+        <div className="col-md-6 col-lg-4">
           <label>{local_Strings.RequestToLabel}</label>
           <input
             type="date"

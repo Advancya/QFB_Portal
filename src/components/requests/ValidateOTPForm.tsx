@@ -2,16 +2,20 @@ import React, { useContext, useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import Constant from "../../constants/defaultData";
-import LoadingOverlay from 'react-loading-overlay';
+import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import { AuthContext } from "../../providers/AuthProvider";
 import { Formik } from "formik";
 import * as yup from "yup";
-import InvalidFieldError from '../../shared/invalid-field-error';
-import Swal from 'sweetalert2';
+import InvalidFieldError from "../../shared/invalid-field-error";
+import Swal from "sweetalert2";
 import { SendOTP, ValidateOTP } from "../../services/cmsService";
-import { initialRegisterationData, IRegisterationData } from "../../Helpers/publicInterfaces";
+import {
+  initialRegisterationData,
+  IRegisterationData,
+} from "../../Helpers/publicInterfaces";
 import { signUp } from "../../services/authenticationService";
+import xIcon from "../../images/x-icon.svg";
 
 interface iOTPValidationForm {
   showOTPValidationFormModal: boolean;
@@ -62,7 +66,7 @@ function OTPValidationForm(props: iOTPValidationForm) {
           className="close"
           onClick={props.hideOTPValidationFormModal}
         >
-          <span aria-hidden="true">×</span>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
       <Modal.Body>
@@ -83,25 +87,28 @@ function OTPValidationForm(props: iOTPValidationForm) {
             validationSchema={registerFormStep3ValidationSchema}
             onSubmit={async (values) => {
               setLoading(true);
-              const otpRes = await ValidateOTP(currentContext.selectedCIF, values.otp);
-              
+              const otpRes = await ValidateOTP(
+                currentContext.selectedCIF,
+                values.otp
+              );
+
               if (otpRes === true) {
                 Swal.fire({
-                  position: 'top-end',
-                  icon: 'success',
+                  position: "top-end",
+                  icon: "success",
                   title: local_Strings.SignupSuccessTitle,
                   html: local_Strings.SignupSuccessMessage,
                   showConfirmButton: false,
-                  timer: Constant.AlertTimeout
+                  timer: Constant.AlertTimeout,
                 });
                 props.showNewRequestModal();
               } else {
                 Swal.fire({
-                  position: 'top-end',
-                  icon: 'error',
+                  position: "top-end",
+                  icon: "error",
                   title: local_Strings.otpErrorMessage,
                   showConfirmButton: false,
-                  timer: Constant.AlertTimeout
+                  timer: Constant.AlertTimeout,
                 });
               }
               setLoading(false);
@@ -116,13 +123,13 @@ function OTPValidationForm(props: iOTPValidationForm) {
               errors,
               touched,
               validateForm,
-              isValid
+              isValid,
             }) => (
               <div className="container-fluid">
                 <div className="row mb-3">
                   <div className="col-md-8 col-sm-12">
                     <h5>{local_Strings.PasswordResetOTPHint}</h5>
-                  </div>                  
+                  </div>
                 </div>
 
                 <div className="mb-5 row">
@@ -138,28 +145,33 @@ function OTPValidationForm(props: iOTPValidationForm) {
                     />
                     {touched.otp && errors.otp && InvalidFieldError(errors.otp)}
                     <div className="form-group text-right">
-                      <a href="#" className="forgotLink"
+                      <a
+                        href="#"
+                        className="forgotLink"
                         onClick={async () => {
-                          const optResult = await SendOTP(currentContext.selectedCIF);
+                          const optResult = await SendOTP(
+                            currentContext.selectedCIF
+                          );
                           if (optResult) {
                             Swal.fire({
-                              position: 'top-end',
-                              icon: 'success',
+                              position: "top-end",
+                              icon: "success",
                               title: local_Strings.OTPSentMessage,
                               showConfirmButton: false,
-                              timer: Constant.AlertTimeout
+                              timer: Constant.AlertTimeout,
                             });
                             props.hideOTPValidationFormModal();
                           } else {
                             Swal.fire({
-                              position: 'top-end',
-                              icon: 'error',
+                              position: "top-end",
+                              icon: "error",
                               title: local_Strings.GenericErrorMessage,
                               showConfirmButton: false,
-                              timer: Constant.AlertTimeout
+                              timer: Constant.AlertTimeout,
                             });
                           }
-                        }}>
+                        }}
+                      >
                         {local_Strings.registerStep3Label2}
                       </a>
                     </div>
@@ -176,17 +188,17 @@ function OTPValidationForm(props: iOTPValidationForm) {
                       if (isValid) {
                         handleSubmit();
                       } else {
-
                         Swal.fire({
-                          position: 'top-end',
-                          icon: 'error',
+                          position: "top-end",
+                          icon: "error",
                           title: local_Strings.formValidationMessage,
                           showConfirmButton: false,
-                          timer: Constant.AlertTimeout
+                          timer: Constant.AlertTimeout,
                         });
                         touched.otp = true;
                       }
-                    }}>
+                    }}
+                  >
                     {local_Strings.PasswordResetOTPButton}
                   </button>
                 </div>

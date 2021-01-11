@@ -9,6 +9,8 @@ import moment from "moment";
 import { AuthContext } from "../../providers/AuthProvider";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import dumyimg from "../../images/NewsImg.jpg";
+import xIcon from "../../images/x-icon.svg";
+
 import {
   GetInboxByCIFAndType,
   SetInboxItemAsRead,
@@ -108,7 +110,7 @@ function NotficationsDetails(props: iNotficationsDetails) {
     <Modal
       show={props.showNotficationsDetailsModal}
       onHide={props.hideNotficationsDetailsModal}
-      size="lg"
+      //  size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       scrollable
@@ -137,7 +139,7 @@ function NotficationsDetails(props: iNotficationsDetails) {
           className="close"
           onClick={props.hideNotficationsDetailsModal}
         >
-          <span aria-hidden="true">×</span>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
       <Modal.Body>

@@ -79,6 +79,7 @@
   background: #f6f1ee;
   margin: 1rem;
   color: #6b4f44;
+  width: 100%;
 }
 
 /*
@@ -142,11 +143,13 @@
 .file input:focus~.file-custom {
   box-shadow: 0 0 0 .075rem #fff, 0 0 0 .2rem #0074d9;
 }
+
 .highcharts-drillup-button {
   display: contents;
 }
+
 .mapInfoBox {
-  background-color:  #6B4F44;
+  background-color: #6B4F44;
   padding: 12px;
   border-radius: 15px;
   border: .075rem solid #ddd;

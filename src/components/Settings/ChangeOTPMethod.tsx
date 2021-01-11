@@ -2,14 +2,19 @@ import React, { useContext, useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
-import { initialSettingsData, IUserSettings, GetUserLocalData, SaveUserDataLocally } from "../../Helpers/authHelper";
+import xIcon from "../../images/x-icon.svg";
+
 import {
-  ChangeDefaultOtp
-} from "../../services/cmsService";
+  initialSettingsData,
+  IUserSettings,
+  GetUserLocalData,
+  SaveUserDataLocally,
+} from "../../Helpers/authHelper";
+import { ChangeDefaultOtp } from "../../services/cmsService";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 
 interface iChangeOTPMethod {
   showChangeOTPMethodModal: boolean;
@@ -19,7 +24,9 @@ interface iChangeOTPMethod {
 function ChangeOTPMethod(props: iChangeOTPMethod) {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
-  const [userSettings, setUserSettings] = useState<IUserSettings>(initialSettingsData);
+  const [userSettings, setUserSettings] = useState<IUserSettings>(
+    initialSettingsData
+  );
   const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -44,7 +51,7 @@ function ChangeOTPMethod(props: iChangeOTPMethod) {
     <Modal
       show={props.showChangeOTPMethodModal}
       onHide={props.hideChangeOTPMethodModal}
-      size="lg"
+      // size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       scrollable
@@ -71,12 +78,12 @@ function ChangeOTPMethod(props: iChangeOTPMethod) {
           className="close"
           onClick={props.hideChangeOTPMethodModal}
         >
-          <span aria-hidden="true">×</span>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
       <Modal.Body>
         <div className="box modal-box p-4  scrollabel-modal-box ">
-        <LoadingOverlay
+          <LoadingOverlay
             active={isLoading}
             spinner={
               <PuffLoader
@@ -142,33 +149,43 @@ function ChangeOTPMethod(props: iChangeOTPMethod) {
               </label>
             </div>
           </div>
-          <div className="text-right p-3 mt-5">
-            <button id="applyReqBtn" className="btn btn-primary mx-2"
-            onClick={() => {
-              setLoading(true);
-              ChangeDefaultOtp(currentContext.selectedCIF, userSettings.otp)
-                .then((response) => {
-                  if (response) {
-                    SaveUserDataLocally(userSettings);
-                    Swal.fire({
-                      position: 'top-end',
-                      icon: 'success',
-                      title: local_Strings.ConfirmationTitle,
-                      html: local_Strings.ConfirmationDesc,
-                      showConfirmButton: false,
-                      timer: Constant.AlertTimeout
-                    });
-                  } else {
-                    Swal.fire('Oops...', local_Strings.GenericErrorMessage, 'error');
-                  }
-                })
-                .catch((e: any) => console.log(e))
-                .finally(() => setLoading(false));
-            }}>
+          <div className="text-right p-3">
+            <button
+              id="applyReqBtn"
+              className="btn btn-primary mx-2"
+              onClick={() => {
+                setLoading(true);
+                ChangeDefaultOtp(currentContext.selectedCIF, userSettings.otp)
+                  .then((response) => {
+                    if (response) {
+                      SaveUserDataLocally(userSettings);
+                      Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: local_Strings.ConfirmationTitle,
+                        html: local_Strings.ConfirmationDesc,
+                        showConfirmButton: false,
+                        timer: Constant.AlertTimeout,
+                      });
+                    } else {
+                      Swal.fire(
+                        "Oops...",
+                        local_Strings.GenericErrorMessage,
+                        "error"
+                      );
+                    }
+                  })
+                  .catch((e: any) => console.log(e))
+                  .finally(() => setLoading(false));
+              }}
+            >
               {local_Strings.SettingSaveButton}
             </button>
-            <button id="applyReqBtn" className="btn btn-primary"
-             onClick={props.backSettingsLandingModal}>
+            <button
+              id="applyReqBtn"
+              className="btn btn-primary"
+              onClick={props.backSettingsLandingModal}
+            >
               {local_Strings.SettingsCancelButton}
             </button>
           </div>

@@ -11,6 +11,7 @@ import {
 } from "react-bootstrap";
 import arrowUp from "../images/arrow-up.svg";
 import arrowDown from "../images/arrow-down.svg";
+import xIcon from "../images/x-icon.svg";
 
 import { AuthContext } from "../providers/AuthProvider";
 import { localStrings as local_Strings } from "../translations/localStrings";
@@ -128,7 +129,7 @@ function Faqs(faqsProps: iFaqs) {
           </div>
 
           <button type="button" className="close" onClick={handleCloseFaqs}>
-            <span aria-hidden="true">×</span>
+            <img src={xIcon} width="15" />
           </button>
         </Modal.Header>
 

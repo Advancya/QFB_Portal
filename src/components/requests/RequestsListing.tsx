@@ -25,6 +25,7 @@ import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import axios from "axios";
+import xIcon from "../../images/x-icon.svg";
 
 interface IRequestType {
   id: number;
@@ -196,7 +197,7 @@ function RequestsListing(props: iRequestsListing) {
             className="close"
             onClick={props.hideRequestsListingModal}
           >
-            <span aria-hidden="true">×</span>
+            <img src={xIcon} width="15" />
           </button>
         </Modal.Header>
         <Modal.Body>

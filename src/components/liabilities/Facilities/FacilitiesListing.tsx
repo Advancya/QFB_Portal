@@ -13,6 +13,7 @@ import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import FilterMoreButtonControl from "../../../shared/FilterMoreButtonControl";
 import { PortfolioContext } from "../../../pages/Homepage";
+import xIcon from "../../../images/x-icon.svg";
 
 interface iFacilitiesListing {
   showFacilitiesListingModal: boolean;
@@ -76,7 +77,7 @@ function FacilitiesListing(props: iFacilitiesListing) {
             {item.currency || ""}
           </strong>
           <br />
-          <strong className="color-gold text-xs">
+          <strong className="color-gold text-xs mx-2">
             {(item.profitRate || "") + "%"}
           </strong>
         </div>
@@ -114,7 +115,7 @@ function FacilitiesListing(props: iFacilitiesListing) {
             className="close"
             onClick={props.hideFacilitiesListingModal}
           >
-            <span aria-hidden="true">×</span>
+            <img src={xIcon} width="15" />
           </button>
         </Modal.Header>
         <Modal.Body>

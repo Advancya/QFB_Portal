@@ -3,15 +3,16 @@ import { Modal } from "react-bootstrap";
 import offerIcon from "../../images/offer-icon-color.svg";
 import { emptyOfferData, IOfferDetail } from "../../Helpers/publicInterfaces";
 import moment from "moment";
-import { localStrings as local_Strings } from '../../translations/localStrings';
+import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
 import * as helper from "../../Helpers/helper";
 import NoResult from "../../shared/NoResult";
 import { GetOfferAll } from "../../services/cmsService";
 import Constant from "../../constants/defaultData";
-import LoadingOverlay from 'react-loading-overlay';
+import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
-import FilterMoreButtonControl from '../../shared/FilterMoreButtonControl';
+import FilterMoreButtonControl from "../../shared/FilterMoreButtonControl";
+import xIcon from "../../images/x-icon.svg";
 
 interface iAuthOffersListing {
   showAuthOffersListingModal: boolean;
@@ -33,7 +34,9 @@ function AuthOffersListing(props: iAuthOffersListing) {
     GetOfferAll()
       .then((responseData: IOfferDetail[]) => {
         if (isMounted && responseData && responseData.length > 0) {
-          const _data = responseData.filter((d) => new Date(d.expireDate) > new Date());
+          const _data = responseData.filter(
+            (d) => new Date(d.expireDate) > new Date()
+          );
           setData(_data);
           if (_data.length < rowLimit) {
             setOffset(_data.length);
@@ -56,9 +59,13 @@ function AuthOffersListing(props: iAuthOffersListing) {
         onClick={() => props.showAuthOffersDetailsModal(item.id)}
       >
         <div className="col-12 col-sm-12">
-          <div className="text-15">{moment(item.createdDate).format("DD MMM YYYY")}</div>
+          <div className="text-15 color-grey">
+            {moment(item.createdDate).format("DD MMM YYYY")}
+          </div>
           <h6 className="mb-1 text-600">
-            {currentContext.language === "en" ? item.title || "" : item.titleAr || ""}
+            {currentContext.language === "en"
+              ? item.title || ""
+              : item.titleAr || ""}
           </h6>
         </div>
       </a>
@@ -70,7 +77,7 @@ function AuthOffersListing(props: iAuthOffersListing) {
       <Modal
         show={props.showAuthOffersListingModal}
         onHide={props.hideAuthOffersListingModal}
-        size="lg"
+        // size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
         dialogClassName="myModal"
@@ -89,22 +96,24 @@ function AuthOffersListing(props: iAuthOffersListing) {
             className="close"
             onClick={props.hideAuthOffersListingModal}
           >
-            <span aria-hidden="true">×</span>
+            <img src={xIcon} width="15" />
           </button>
         </Modal.Header>
         <Modal.Body>
           <div className="box modal-box py-0 mb-0 scrollabel-modal-box">
             <ul className="box-list" id="dataList">
-              {data &&
-                data.length > 0 &&
-                data[0].id > 0 ?
-                data.slice(0, offset).map((item, index) => renderItem(item, index)
-                ) : NoResult(local_Strings.NoDataToShow)}
+              {data && data.length > 0 && data[0].id > 0
+                ? data
+                    .slice(0, offset)
+                    .map((item, index) => renderItem(item, index))
+                : NoResult(local_Strings.NoDataToShow)}
             </ul>
           </div>
 
-          <FilterMoreButtonControl showMore={data && data.length > rowLimit &&
-            offset < data.length} onClickMore={() => setOffset(offset + 5)} />
+          <FilterMoreButtonControl
+            showMore={data && data.length > rowLimit && offset < data.length}
+            onClickMore={() => setOffset(offset + 5)}
+          />
           <LoadingOverlay
             active={isLoading}
             spinner={
