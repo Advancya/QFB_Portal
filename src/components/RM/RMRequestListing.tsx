@@ -1,22 +1,29 @@
-import React, { useContext, useState } from "react";
-import { Button, Modal } from "react-bootstrap";
-import beneficiaryIconColor from "../../images/beneficiary-icon-color.svg";
+import React, { useContext, useEffect, useState } from "react";
 import FilterCustomDateControl from "../../shared/FilterCustomDateControl";
 import {
-  emptyRequestDetail,
   IRequestFilter,
-  IRequestDetail,
+  iRmRequests,
 } from "../../Helpers/publicInterfaces";
 import moment from "moment";
 import FilterDateControl from "../../shared/FilterDateControl";
 import FilterDropDownControl from "../../shared/FilterDropDownControl";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
-import FilterButtonControl from "../../shared/FilterButtonControl";
-import Constant from "../../constants/defaultData";
 import * as helper from "../../Helpers/helper";
 import FilterButtonControlInline from "../../shared/FilterButtonControlInline";
 import CommonSearchControl from "../../shared/CommonSearchControl";
+import NoResult from "../../shared/NoResult";
+import {
+  GetAllRequestTypes
+} from "../../services/cmsService";
+import Constant from "../../constants/defaultData";
+import LoadingOverlay from "react-loading-overlay";
+import PuffLoader from "react-spinners/PuffLoader";
+import FilterMoreButtonControl from "../../shared/FilterMoreButtonControl";
+import {
+  RmReadRequest,
+  RmReadTransaction,
+} from "../../services/requestService";
 
 interface IRequestType {
   id: number;
@@ -26,25 +33,20 @@ interface IRequestType {
 interface iRMRequestListing {
   showRMRequestListingModal: boolean;
   hideRMRequestListingModal: () => void;
-  showRMDetailsModal: () => void;
-  showNewBeneficiaryModal: () => void;
+  showRequestDetailModal: (itemId: number) => void;
+  showTransactionDetailModal: (itemId: number) => void;
+  requests: iRmRequests[];
   backRMRequestListingModal: () => void;
+  reloading: boolean;
 }
-function RMRequestListing(rMRequestListingProps: iRMRequestListing) {
+
+function RMRequestListing(props: iRMRequestListing) {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
-  const [isLoading, setLoading] = useState(false);
   const rowLimit: number = Constant.RecordPerPage;
   const [offset, setOffset] = useState<number>(rowLimit);
-  const [data, setData] = useState<IRequestDetail[]>([emptyRequestDetail]);
 
-  const [showClearFilter, setShowClearFilter] = useState(false);
-  const [showBeneficiaryDateFilter, setShowBeneficiaryDateFilter] = useState(
-    false
-  );
-  const [filteredData, setFilteredData] = useState<IRequestDetail[]>([
-    emptyRequestDetail,
-  ]);
+  const [filteredData, setFilteredData] = useState<iRmRequests[]>(null);
   const [requestTypes, setRequestTypes] = useState<IRequestType[]>([
     {
       id: 0,
@@ -55,9 +57,12 @@ function RMRequestListing(rMRequestListingProps: iRMRequestListing) {
   const statusFilterOptions = [
     {
       label: local_Strings.RequestListingFilterStatusOption1,
-      value: "Awaiting acknowledgement",
+      value: "Awaiting Review",
     },
-    { label: local_Strings.RequestListingFilterStatusOption2, value: "Closed" },
+    {
+      label: local_Strings.RequestListingFilterStatusOption2,
+      value: "Closed"
+    },
     {
       label: local_Strings.RequestListingFilterStatusOption3,
       value: "In Progress",
@@ -67,6 +72,94 @@ function RMRequestListing(rMRequestListingProps: iRMRequestListing) {
       value: "Cancelled",
     },
   ];
+
+  const [filters, setFilter] = useState<IRequestFilter>({
+    filterApplied: false,
+    DateOption: "0",
+    StartDate: moment().add(-7, "days").toDate(),
+    EndDate: moment().toDate(),
+    Status: "0",
+    Type: "0",
+  });
+
+  useEffect(() => {
+    let isMounted = true;
+
+    GetAllRequestTypes()
+      .then((responseData: IRequestType[]) => {
+        if (responseData && responseData.length > 0 && isMounted) {
+          setRequestTypes(responseData);
+        }
+      })
+      .catch((e: any) => console.log(e));
+
+    return () => {
+      isMounted = false;
+    }; // use effect cleanup to set flag false, if unmounted
+  }, []);
+
+  useEffect(() => {
+    setFilteredData(props.requests);
+    if (props.requests && props.requests.length > 0 && props.requests.length < rowLimit) {
+      setOffset(props.requests.length);
+    }
+  }, [props.requests]);
+
+  const renderItem = (item: iRmRequests, index: number) => (
+    <li className="shown border-0 py-2" key={index}>
+      <a
+        className="d-block p-0"
+        href="#"
+        onClick={() => {
+          if (item["type"] === "Request") {
+            RmReadRequest(item["id"]);
+            props.showRequestDetailModal(item.id);
+          } else {
+            RmReadTransaction(item["id"]);
+            props.showTransactionDetailModal(item.id);
+          }
+        }}
+      >
+        <div className="row align-items-center border-bottom  pb-2 mb-2">
+          <div className="col-sm-8">
+            <h5 className={!item.isRead ? "unread" : ""}>{moment(item["requestCreateDate"]).format("DD-MM-YYYY")}</h5>
+            <h4>{currentContext.language === "ar"
+              ? item["requestSubjectAr"] || ""
+              : item["requestSubject"] || ""}</h4>
+          </div>
+          <div className="col-sm-4 text-sm-right">
+            <span className="status-badge ">
+              {currentContext.language === "ar"
+                ? item["requestStatusAr"] || ""
+                : item["requestStatus"] || ""}
+            </span>
+          </div>
+        </div>
+        <div className="row align-items-center">
+          <div className="col-sm-8">
+            <h6 className="text-15 mb-0">
+              {item["customerName"] || ""}
+            </h6>
+            <span className="color-light-gold">
+              {local_Strings.RMSampleAccount + item["cif"] || ""}
+            </span>
+          </div>
+          <div className="col-sm-4 text-sm-right">
+            <span className="icon-badge-text">
+              {local_Strings.WelcomeScreenCall}
+            </span>
+            <span className="icon-badge">
+              <i
+                className="fa fa-mobile text-sm"
+                aria-hidden="true"
+              ></i>
+            </span>
+          </div>
+        </div>
+      </a>
+    </li>
+  );
+
   const typeFilterOptions = [];
   requestTypes &&
     requestTypes.length > 0 &&
@@ -79,32 +172,6 @@ function RMRequestListing(rMRequestListingProps: iRMRequestListing) {
       })
     );
 
-  const [filters, setFilter] = useState<IRequestFilter>({
-    filterApplied: false,
-    DateOption: "0",
-    StartDate: moment().add(-7, "days").toDate(),
-    EndDate: moment().toDate(),
-    Status: "0",
-    Type: "0",
-  });
-  const applyFilter = () => {
-    setShowClearFilter(true);
-  };
-
-  const clearFilter = () => {
-    setShowClearFilter(false);
-  };
-  const showMoreRMRequestListing = () => {
-    console.log("retrieve more from server");
-  };
-  const requestDateFilterOnchangeHandler = (e: any) => {
-    if (e.target.value == 4) {
-      setShowBeneficiaryDateFilter(true);
-    } else {
-      setShowBeneficiaryDateFilter(false);
-    }
-  };
-
   return (
     <div className="box p-0">
       <div className="border-bottom p-3">
@@ -113,7 +180,30 @@ function RMRequestListing(rMRequestListingProps: iRMRequestListing) {
             <h3>{local_Strings.RMLandingBankPositionsLabel}</h3>
           </div>
           <div className="col-md-4">
-            <CommonSearchControl></CommonSearchControl>
+            <CommonSearchControl applySearch={(_text) => {
+              if (!!_text) {
+                const _filteredData = [...props.requests];
+                setFilteredData(
+                  _filteredData
+                    .filter(
+                      (f) =>
+                        Object.values(f).filter(
+                          (t: any) =>
+                            t &&
+                            t
+                              .toString()
+                              .toLowerCase()
+                              .indexOf(
+                                _text.toLowerCase()
+                              ) !== -1
+                        ).length > 0
+                    )
+                    .slice(0, 10)
+                );
+              } else {
+                setFilteredData(props.requests.slice(0, 10));
+              }
+            }} />
           </div>
         </div>
       </div>
@@ -171,13 +261,13 @@ function RMRequestListing(rMRequestListingProps: iRMRequestListing) {
                   Status: "0",
                   Type: "0",
                 });
-                setFilteredData(data);
+                setFilteredData(props.requests);
                 setOffset(rowLimit);
               }}
               applyFilter={() => {
                 setFilter({ ...filters, filterApplied: true });
                 console.log(filters);
-                const _filteredData = helper.filterRequests(data, filters);
+                const _filteredData = helper.filterRMRequests(props.requests, filters);
                 setFilteredData(_filteredData);
               }}
               showClearFilter={filters.filterApplied}
@@ -187,266 +277,31 @@ function RMRequestListing(rMRequestListingProps: iRMRequestListing) {
       </form>
       <div className="px-3">
         <div className="box modal-box py-0 modal-box-scrollable ">
+          <LoadingOverlay
+            active={props.reloading}
+            spinner={
+              <PuffLoader
+                size={Constant.SpnnerSize}
+                color={Constant.SpinnerColor}
+              />
+            }
+          />
           <ul className="box-list" id="reqList">
-            <li className="shown border-0 py-2">
-              <a
-                className="d-block p-0"
-                href="#"
-                onClick={rMRequestListingProps.showRMDetailsModal}
-              >
-                <div className="row align-items-center border-bottom  pb-2 mb-2">
-                  <div className="col-sm-8">
-                    <h5>{local_Strings.dummyDate}</h5>
-
-                    <h4>{local_Strings.RMSampleTitle} </h4>
-                  </div>
-                  <div className="col-sm-4 text-sm-right">
-                    <span className="status-badge ">
-                      {local_Strings.RequestListingSampleStatus}
-                    </span>
-                  </div>
-                </div>
-                <div className="row align-items-center">
-                  <div className="col-sm-8">
-                    <h6 className="text-15 mb-0">
-                      {local_Strings.SettingsLandingNameSample}
-                    </h6>
-
-                    <span className="color-light-gold">
-                      {local_Strings.RMSampleAccount} | 56789009
-                    </span>
-                  </div>
-                  <div className="col-sm-4 text-sm-right">
-                    <span className="icon-badge-text">
-                      {local_Strings.WelcomeScreenCall}
-                    </span>
-                    <span className="icon-badge">
-                      <i
-                        className="fa fa-mobile text-sm"
-                        aria-hidden="true"
-                      ></i>
-                    </span>
-                  </div>
-                </div>
-              </a>
-            </li>
-
-            <li className="shown border-0 py-2">
-              <a
-                className="d-block p-0"
-                href="#"
-                onClick={rMRequestListingProps.showRMDetailsModal}
-              >
-                <div className="row align-items-center border-bottom  pb-2 mb-2">
-                  <div className="col-sm-8">
-                    <h5>{local_Strings.dummyDate}</h5>
-
-                    <h4>{local_Strings.RMSampleTitle} </h4>
-                  </div>
-                  <div className="col-sm-4 text-sm-right">
-                    <span className="status-badge ">
-                      {local_Strings.RequestListingSampleStatus}
-                    </span>
-                  </div>
-                </div>
-                <div className="row align-items-center">
-                  <div className="col-sm-8">
-                    <h6 className="text-15 mb-0">
-                      {local_Strings.SettingsLandingNameSample}
-                    </h6>
-
-                    <span className="color-light-gold">
-                      {local_Strings.RMSampleAccount} | 56789009
-                    </span>
-                  </div>
-                  <div className="col-sm-4 text-sm-right">
-                    <span className="icon-badge-text">
-                      {local_Strings.WelcomeScreenCall}
-                    </span>
-                    <span className="icon-badge">
-                      <i
-                        className="fa fa-mobile text-sm"
-                        aria-hidden="true"
-                      ></i>
-                    </span>
-                  </div>
-                </div>
-              </a>
-            </li>
-
-            <li className="shown border-0 py-2">
-              <a
-                className="d-block p-0"
-                href="#"
-                onClick={rMRequestListingProps.showRMDetailsModal}
-              >
-                <div className="row align-items-center border-bottom  pb-2 mb-2">
-                  <div className="col-sm-8">
-                    <h5>{local_Strings.dummyDate}</h5>
-
-                    <h4>{local_Strings.RMSampleTitle} </h4>
-                  </div>
-                  <div className="col-sm-4 text-sm-right">
-                    <span className="status-badge ">
-                      {local_Strings.RequestListingSampleStatus}
-                    </span>
-                  </div>
-                </div>
-                <div className="row align-items-center">
-                  <div className="col-sm-8">
-                    <h6 className="text-15 mb-0">
-                      {local_Strings.SettingsLandingNameSample}
-                    </h6>
-
-                    <span className="color-light-gold">
-                      {local_Strings.RMSampleAccount} | 56789009
-                    </span>
-                  </div>
-                  <div className="col-sm-4 text-sm-right">
-                    <span className="icon-badge-text">
-                      {local_Strings.WelcomeScreenCall}
-                    </span>
-                    <span className="icon-badge">
-                      <i
-                        className="fa fa-mobile text-sm"
-                        aria-hidden="true"
-                      ></i>
-                    </span>
-                  </div>
-                </div>
-              </a>
-            </li>
-
-            <li className="shown border-0 py-2">
-              <a
-                className="d-block p-0"
-                href="#"
-                onClick={rMRequestListingProps.showRMDetailsModal}
-              >
-                <div className="row align-items-center border-bottom  pb-2 mb-2">
-                  <div className="col-sm-8">
-                    <h5>{local_Strings.dummyDate}</h5>
-
-                    <h4>{local_Strings.RMSampleTitle} </h4>
-                  </div>
-                  <div className="col-sm-4 text-sm-right">
-                    <span className="status-badge ">
-                      {local_Strings.RequestListingSampleStatus}
-                    </span>
-                  </div>
-                </div>
-                <div className="row align-items-center">
-                  <div className="col-sm-8">
-                    <h6 className="text-15 mb-0">
-                      {local_Strings.SettingsLandingNameSample}
-                    </h6>
-
-                    <span className="color-light-gold">
-                      {local_Strings.RMSampleAccount} | 56789009
-                    </span>
-                  </div>
-                  <div className="col-sm-4 text-sm-right">
-                    <span className="icon-badge-text">
-                      {local_Strings.WelcomeScreenCall}
-                    </span>
-                    <span className="icon-badge">
-                      <i
-                        className="fa fa-mobile text-sm"
-                        aria-hidden="true"
-                      ></i>
-                    </span>
-                  </div>
-                </div>
-              </a>
-            </li>
-
-            <li className="shown border-0 py-2">
-              <a
-                className="d-block p-0"
-                href="#"
-                onClick={rMRequestListingProps.showRMDetailsModal}
-              >
-                <div className="row align-items-center border-bottom  pb-2 mb-2">
-                  <div className="col-sm-8">
-                    <h5>{local_Strings.dummyDate}</h5>
-
-                    <h4>{local_Strings.RMSampleTitle} </h4>
-                  </div>
-                  <div className="col-sm-4 text-sm-right">
-                    <span className="status-badge ">
-                      {local_Strings.RequestListingSampleStatus}
-                    </span>
-                  </div>
-                </div>
-                <div className="row align-items-center">
-                  <div className="col-sm-8">
-                    <h6 className="text-15 mb-0">
-                      {local_Strings.SettingsLandingNameSample}
-                    </h6>
-
-                    <span className="color-light-gold">
-                      {local_Strings.RMSampleAccount} | 56789009
-                    </span>
-                  </div>
-                  <div className="col-sm-4 text-sm-right">
-                    <span className="icon-badge-text">
-                      {local_Strings.WelcomeScreenCall}
-                    </span>
-                    <span className="icon-badge">
-                      <i
-                        className="fa fa-mobile text-sm"
-                        aria-hidden="true"
-                      ></i>
-                    </span>
-                  </div>
-                </div>
-              </a>
-            </li>
-
-            <li className="shown border-0 py-2">
-              <a
-                className="d-block p-0"
-                href="#"
-                onClick={rMRequestListingProps.showRMDetailsModal}
-              >
-                <div className="row align-items-center border-bottom  pb-2 mb-2">
-                  <div className="col-sm-8">
-                    <h5>{local_Strings.dummyDate}</h5>
-
-                    <h4>{local_Strings.RMSampleTitle} </h4>
-                  </div>
-                  <div className="col-sm-4 text-sm-right">
-                    <span className="status-badge ">
-                      {local_Strings.RequestListingSampleStatus}
-                    </span>
-                  </div>
-                </div>
-                <div className="row align-items-center">
-                  <div className="col-sm-8">
-                    <h6 className="text-15 mb-0">
-                      {local_Strings.SettingsLandingNameSample}
-                    </h6>
-
-                    <span className="color-light-gold">
-                      {local_Strings.RMSampleAccount} | 56789009
-                    </span>
-                  </div>
-                  <div className="col-sm-4 text-sm-right">
-                    <span className="icon-badge-text">
-                      {local_Strings.WelcomeScreenCall}
-                    </span>
-                    <span className="icon-badge">
-                      <i
-                        className="fa fa-mobile text-sm"
-                        aria-hidden="true"
-                      ></i>
-                    </span>
-                  </div>
-                </div>
-              </a>
-            </li>
+            {filteredData &&
+              filteredData.length > 0 &&
+              !!filteredData[0].cif
+              ? filteredData
+                .slice(0, offset)
+                .map((item, index) => renderItem(item, index))
+              : NoResult(local_Strings.NoDataToShow)}
           </ul>
         </div>
+        <FilterMoreButtonControl
+          showMore={
+            filteredData && filteredData.length > rowLimit && offset < filteredData.length
+          }
+          onClickMore={() => setOffset(offset + 5)}
+        />
       </div>
     </div>
   );

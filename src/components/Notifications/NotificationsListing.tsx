@@ -42,7 +42,12 @@ function NotficationsListing(props: iNotficationsListing) {
       : rowLimit
   );
 
-  useEffect(() => setFilteredData(props.notfications), [props.notfications]);
+  useEffect(() => {
+    setFilteredData(props.notfications);
+    if (props.notfications && props.notfications.length > 0 && props.notfications.length < rowLimit) {
+      setOffset(props.notfications.length);
+    }
+  }, [props.notfications]);
 
   const renderItem = (item: INotificationDetail, index: number) => (
     <li className="shown" key={index}>

@@ -16,6 +16,7 @@ import { localStrings as local_Strings } from "../../translations/localStrings";
 import { useHistory } from "react-router-dom";
 import Swal from 'sweetalert2';
 import axios from "axios";
+import { GetUserLocalData } from "../../Helpers/authHelper";
 
 export const CustomerListContext = createContext<ICustomer[]>(
   [emptyCustomer]
@@ -38,44 +39,57 @@ function Landing() {
     let isMounted = true;
 
     const initialLoadMethod = async () => {
-      setLoading(true);
-      const requestOne = await getUserRole(currentContext.selectedCIF);
-      const requestTwo = await GetAllCustomerList();
-      axios
-        .all([requestOne, requestTwo])
-        .then((responseData: any) => {
+      const userData = await GetUserLocalData();
+      if (userData) {
+        setLoading(true);
+        const requestOne = await getUserRole(userData.customerId);
+        const requestTwo = await GetAllCustomerList();
+        axios
+          .all([requestOne, requestTwo])
+          .then((responseData: any) => {
 
-          if (responseData && responseData.length > 0 && isMounted) {
+            if (responseData && responseData.length > 0 && isMounted) {
 
-            const role = responseData[0];
-            if (!(role && role !== undefined && (role.name === Constant.RM || role.name === Constant.Management))) {
-              let timerInterval: any;
-              Swal.fire({
-                title: 'Access Denied!',
-                icon: 'warning',
-                iconColor: "red",
-                html: 'Your are not authorize to accesss this admin section.',
-                timer: Constant.AlertTimeout,
-                timerProgressBar: true,
-                didOpen: () => {
-                  Swal.showLoading();
-                },
-                willClose: () => {
-                  clearInterval(timerInterval);
-                  history.push(`/${currentContext.language}/Home`);
-                }
-              }).then((result) => {
-                if (result.dismiss === Swal.DismissReason.timer) {
-                  history.push(`/${currentContext.language}/Home`);
-                }
-              });
+              const role = responseData[0];
+              if (!(role && role.name === Constant.Management)) {
+                let timerInterval: any;
+                Swal.fire({
+                  title: local_Strings.AccessDeniedMsgTitle,
+                  icon: 'warning',
+                  iconColor: "red",
+                  text: local_Strings.AccessDeniedMessage,
+                  timer: Constant.AlertTimeout,
+                  timerProgressBar: true,
+                  didOpen: () => {
+                    Swal.showLoading();
+                  },
+                  willClose: () => {
+                    clearInterval(timerInterval);
+                    if (role.name === Constant.Customer) {
+                      history.push(`/${currentContext.language}/Home`);
+                    } else if (role.name === Constant.RM) {
+                      history.push(`/${currentContext.language}/RMLanding`);
+                    } else {
+                      history.push(`/${currentContext.language}`);
+                    }
+                  }
+                }).then((result) => {
+                  if (role.name === Constant.Customer) {
+                    history.push(`/${currentContext.language}/Home`);
+                  } else if (role.name === Constant.RM) {
+                    history.push(`/${currentContext.language}/RMLanding`);
+                  } else {
+                    history.push(`/${currentContext.language}`);
+                  }
+                });
+              }
+
+              setCustomerList(responseData[1]);
             }
-
-            setCustomerList(responseData[1]);
-          }
-        })
-        .catch((e: any) => console.log(e))
-        .finally(() => setLoading(false));
+          })
+          .catch((e: any) => console.log(e))
+          .finally(() => setLoading(false));
+      }
     }
 
     if (!!currentContext.selectedCIF) {

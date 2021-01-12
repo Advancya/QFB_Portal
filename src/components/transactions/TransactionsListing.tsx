@@ -28,13 +28,11 @@ function TransactionsListing(props: iTransactionsListing) {
   local_Strings.setLanguage(currentContext.language);
   const rowLimit: number = Constant.RecordPerPage;
   const [offset, setOffset] = useState<number>(rowLimit);
-  const [data, setData] = useState<ITransactionDetail[]>([emptyTransactionDetail]);
   const [filteredData, setFilteredData] = useState<ITransactionDetail[]>([emptyTransactionDetail]);
 
   useEffect(() => {
-    setData(props.transactions);
     setFilteredData(props.transactions);
-    if (props.transactions && props.transactions.length < rowLimit) {
+    if (props.transactions && props.transactions.length > 0 && props.transactions.length < rowLimit) {
       setOffset(props.transactions.length);
     }
   }, [props.transactions]);
@@ -109,12 +107,12 @@ function TransactionsListing(props: iTransactionsListing) {
           </button>
         </Modal.Header>
         <Modal.Body>
-          {data && data.length > 0 && !!data[0].transactionDate &&
+          {props.transactions && props.transactions.length > 0 && !!props.transactions[0].transactionDate &&
             <FilterCommonControl
               clearFilter={() => {
-                setFilteredData(data);
-                if (data.length < rowLimit) {
-                  setOffset(data.length);
+                setFilteredData(props.transactions);
+                if (props.transactions.length < rowLimit) {
+                  setOffset(props.transactions.length);
                 } else {
                   setOffset(rowLimit);
                 }
@@ -122,7 +120,7 @@ function TransactionsListing(props: iTransactionsListing) {
               applyFilter={(filters: ICommonFilter) => {
                 console.log(filters);
                 const _filteredData = helper.filterTransactionList(
-                  data,
+                  props.transactions,
                   filters
                 );
                 setFilteredData(_filteredData);
@@ -136,7 +134,7 @@ function TransactionsListing(props: iTransactionsListing) {
                 ) : NoResult(local_Strings.NoDataToShow)}
             </ul>
           </div>
-          <FilterMoreButtonControl showMore={data && filteredData && data.length > rowLimit &&
+          <FilterMoreButtonControl showMore={props.transactions && filteredData && props.transactions.length > rowLimit &&
             offset < filteredData.length} onClickMore={() => setOffset(offset + 5)} />
           <LoadingOverlay
             active={props.reloading}

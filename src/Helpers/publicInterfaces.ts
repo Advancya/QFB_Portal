@@ -845,3 +845,18 @@ export const initialINotification: INotificationDetail = {
   expiryDate: "",
   isRead: false,
 };
+
+export interface iRmRequests {
+  id: number;
+  requestCreateDate: string;
+  requestSubjectAr: string;
+  requestSubject: string;
+  requestStatusAr: string;
+  requestStatus: string;
+  customerName: string;
+  cif: string;
+  customerMobile: string;
+  type: string;
+  requestTypeId: string;
+  isRead?: boolean;
+}

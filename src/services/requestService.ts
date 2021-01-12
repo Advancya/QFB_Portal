@@ -156,7 +156,48 @@ async function RmUpdateStatus(id: string, status: string) {
   }
 }
 
+async function RmReadRequest(id: number) {
+  try {
+    const response = await apiInstance.get(
+      `/api/Requests/SetIsRead?requestId=${id}`
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function RmReadTransaction(id: number) {
+  try {
+    const response = await apiInstance.get(
+      `/api/Transactions/SetIsRead?requestId=${id}`
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function RequestCallback(
+  rmName: string,
+  cif: string,
+  customerName: string,
+  email: string,
+  phone: string
+) {
+  try {
+    const response = await apiInstance.get(
+      `/api/Requests/RequestCallBack?rmName=${rmName}&cif=${cif}&customerName=${customerName}&email=${email}&sms=${phone}`
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export {
+  RmReadRequest,
+  RmReadTransaction,
   GetRequstsTypes,
   GetRequestFields,
   AddRequest,
@@ -164,4 +205,5 @@ export {
   GetExtraDetailCurrentDetail,
   GetExtraDetailsDepositDetails,
   RmUpdateStatus,
+  RequestCallback,
 };

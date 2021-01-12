@@ -41,10 +41,8 @@ interface iRequestsListing {
 function RequestsListing(props: iRequestsListing) {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
-  const [isLoading, setLoading] = useState(false);
   const rowLimit: number = Constant.RecordPerPage;
   const [offset, setOffset] = useState<number>(rowLimit);
-  const [data, setData] = useState<IRequestDetail[]>([emptyRequestDetail]);
   const [filteredData, setFilteredData] = useState<IRequestDetail[]>([
     emptyRequestDetail,
   ]);
@@ -63,11 +61,10 @@ function RequestsListing(props: iRequestsListing) {
       nameAr: "",
     },
   ]);
-  
+
   useEffect(() => {
-    setData(props.requests);
     setFilteredData(props.requests);
-    if (props.requests && props.requests.length < rowLimit) {
+    if (props.requests && props.requests.length > 0 && props.requests.length < rowLimit) {
       setOffset(props.requests.length);
     }
   }, [props.requests]);
@@ -75,22 +72,13 @@ function RequestsListing(props: iRequestsListing) {
   useEffect(() => {
     let isMounted = true;
 
-    const initialLoadMethod = async () => {
-      setLoading(true);
-      
-      GetAllRequestTypes()
-        .then((responseData: IRequestType[]) => {
-          if (responseData && responseData.length > 0 && isMounted) {
-            setRequestTypes(responseData);            
-          }
-        })
-        .catch((e: any) => console.log(e))
-        .finally(() => setLoading(false));
-    };
-
-    if (!!currentContext.selectedCIF) {
-      initialLoadMethod();
-    }
+    GetAllRequestTypes()
+      .then((responseData: IRequestType[]) => {
+        if (responseData && responseData.length > 0 && isMounted) {
+          setRequestTypes(responseData);
+        }
+      })
+      .catch((e: any) => console.log(e));
 
     return () => {
       isMounted = false;
@@ -238,13 +226,13 @@ function RequestsListing(props: iRequestsListing) {
                       Status: "0",
                       Type: "0",
                     });
-                    setFilteredData(data);
+                    setFilteredData(props.requests);
                     setOffset(rowLimit);
                   }}
                   applyFilter={() => {
                     setFilter({ ...filters, filterApplied: true });
                     console.log(filters);
-                    const _filteredData = helper.filterRequests(data, filters);
+                    const _filteredData = helper.filterRequests(props.requests, filters);
                     setFilteredData(_filteredData);
                   }}
                   showClearFilter={filters.filterApplied}
@@ -267,26 +255,26 @@ function RequestsListing(props: iRequestsListing) {
           <div className="box modal-box">
             <ul className="box-list" id="reqList">
               {filteredData &&
-              filteredData.length > 0 &&
-              !!filteredData[0].requestSubject
+                filteredData.length > 0 &&
+                !!filteredData[0].requestSubject
                 ? filteredData
-                    .slice(0, offset)
-                    .map((item, index) => renderItem(item, index))
+                  .slice(0, offset)
+                  .map((item, index) => renderItem(item, index))
                 : NoResult(local_Strings.NoDataToShow)}
             </ul>
           </div>
 
           <FilterMoreButtonControl
             showMore={
-              data &&
+              props.requests &&
               filteredData &&
-              data.length > rowLimit &&
+              props.requests.length > rowLimit &&
               offset < filteredData.length
             }
             onClickMore={() => setOffset(offset + 5)}
           />
           <LoadingOverlay
-            active={isLoading}
+            active={props.reloading}
             spinner={
               <PuffLoader
                 size={Constant.SpnnerSize}

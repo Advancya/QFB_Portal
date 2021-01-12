@@ -8,13 +8,13 @@ import * as helper from "../../Helpers/helper";
 import { AuthContext } from "../../providers/AuthProvider";
 import { getUserRole } from "../../services/apiServices";
 import Constant from "../../constants/defaultData";
+import { GetUserLocalData } from "../../Helpers/authHelper";
 
 function ToolBarLeft() {
   const history = useHistory();
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
-  const [showHomeLink, setHomeLink] = useState<boolean>(false);
-  const [showAdminLink, setAdminLink] = useState<boolean>(false);
+  const [homeLink, setHomeLink] = useState<string>(`/${currentContext.language}`);
 
   const switchLanguage = (language: string) => {
     if (language === "en") {
@@ -32,19 +32,17 @@ function ToolBarLeft() {
 
   useEffect(() => {
     const initialLoadMethod = async () => {
-      
-      const role = await getUserRole(currentContext.selectedCIF);
-      if (role && role !== undefined && (role.name === Constant.RM || role.name === Constant.Management)) {
-        setAdminLink(true);
-      }
-      if (role && role !== undefined) {
-        if (role.name === Constant.Customer) {
-          setHomeLink(true);
-        } else if (role.name === Constant.RM || role.name === Constant.Management) {
-          setHomeLink(true);
-          setAdminLink(true);
+      const userData = await GetUserLocalData();
+      if (userData) {
+        const role = await getUserRole(userData.customerId);
+        if (role && role.name === Constant.Customer) {
+          setHomeLink(`/${currentContext.language}/Home`);
+        } else if (role && role.name === Constant.RM) {
+          setHomeLink(`/${currentContext.language}/RMLanding`);
+        } else if (role && role.name === Constant.Management) {
+          setHomeLink(`/${currentContext.language}/Managment`);
         } else {
-          history.push(`/${currentContext.language}`);
+          setHomeLink(`/${currentContext.language}`);
         }
       }
     }
@@ -57,9 +55,9 @@ function ToolBarLeft() {
   return (
     <div className="col-md-3">
       <div className="topLeftIcons">
-        {showHomeLink && <Link to={`/${currentContext.language}/Home`}>
+        <Link to={homeLink}>
           <FontAwesomeIcon icon={faHome} />
-        </Link>}
+        </Link>
         <a
           onClick={() => switchLanguage(currentContext.language)}
           style={{ cursor: "pointer" }}
@@ -68,10 +66,6 @@ function ToolBarLeft() {
             ? local_Strings.arabic
             : local_Strings.english}
         </a>
-        {showAdminLink &&
-          <Link to={`/${currentContext.language}/Admin`}>
-            <FontAwesomeIcon icon={faCogs} />
-          </Link>}
       </div>
     </div>
   );

@@ -60,13 +60,13 @@ function Managment(managmentProps: iManagment) {
         showManagmentDetailsModal={handleShowManagmentDetails}
         backManagmentRequestListingModal={handleBackManagmentListing}
         showNewBeneficiaryModal={handleShowNewBeneficiary}
-      ></ManagmentRequestListing>
+      />
       <ManagmentDetails
         showManagmentDetailsModal={showManagmentDetails}
         hideManagmentDetailsModal={handleCloseManagmentDetails}
         backManagmentDetailsgModal={handleBackManagmentDetails}
         showNewBeneficiaryModal={handleShowNewBeneficiary}
-      ></ManagmentDetails>
+      />
     </div>
   );
 }

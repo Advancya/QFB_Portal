@@ -1028,6 +1028,197 @@ const GetBeneficiariesTypes = async () => {
   }
 };
 
+
+const GetRmClinetList = async (accountId: string) => {
+  try {
+    const result = await apiInstance.get(`/api/RMCustomerList?rm=${accountId}`);
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+const GetManagementClinetList = async () => {
+  try {
+    const result = await apiInstance.get(`/api/ManagmentCustomerList`);
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+const GetRmRequestList = async (accountId: string) => {
+  try {
+    const result = await apiInstance.get(
+      `/api/Requests/GetByRM?rmId=${accountId}`
+    );
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+const GetRmDisplayName = async (accountId: string) => {
+  try {
+    const result = await apiInstance.get(
+      `/api/RMCustomerList/GetRmName?rm=${accountId}`
+    );
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+const GetRmTransactionList = async (accountId: string) => {
+  try {
+    const result = await apiInstance.get(
+      `/api/Transactions/GetByRM?rmId=${accountId}`
+    );
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+const GetTotalNetWorthData = async (cif: string, currency: string) => {
+  try {
+    const customerPortfolioResponse = await apiInstance.get(
+      `/api/CustomerPortfolio/${currency}?cif=${cif}`
+    );
+    const GuranteeResponse = await apiInstance.get(
+      `/api/Guarantees/${currency}?cif=${cif}`
+    );
+
+    let response = {
+      customer_portfolio: customerPortfolioResponse.data,
+      gurantees: GuranteeResponse.data,
+    };
+
+    return response;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+const GetCustomerInvestmentDashboardData = async (period: string) => {
+  try {
+    const response = await apiInstance.get(
+      `/api/CustomersInvestmentsDashboard/${period}`
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+const GetFinancingBalancesAndRatesPBAndHCDashboardData = async (
+  period: string
+) => {
+  try {
+    const response = await apiInstance.get(
+      `/api/FinancingBalancesAndRatesPBAndHCDashboard/${period}`
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+const GetPastDuesPBAndHCDashboardData = async (period: string) => {
+  try {
+    const response = await apiInstance.get(
+      `/api/PastDuesPBAndHCDashboard/${period}`
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+const GetCustomersDepositsAndRatesDashboardData = async (period: string) => {
+  try {
+    const response = await apiInstance.get(
+      `/api/CustomersDepositsAndRatesDashboard/${period}`
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+const GetBankCashBalancesDashboardData = async (period: string) => {
+  try {
+    const response = await apiInstance.get(
+      `/api/BankCashBalancesDashboard/${period}`
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+const GetMMFUNDBalancesDashboardData = async (period: string) => {
+  try {
+    const response = await apiInstance.get(
+      `/api/MMFUNDBalancesDashboard/${period}`
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+const GetSUKUKBalancesDashboardData = async (period: string) => {
+  try {
+    const response = await apiInstance.get(
+      `/api/SUKUKBalancesDashboard/${period}`
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+const GetTreasuryPlacementsBalancesDashboardData = async (period: string) => {
+  try {
+    const response = await apiInstance.get(
+      `/api/TreasuryPlacementsBalancesDashboard/${period}`
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+const GetManagementBankPoistion = async () => {
+  try {
+    const response = await apiInstance.get(`/api/ManagementBankPoistion`);
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
 export {
   GetStockData,
   ValidateRegisterData,
@@ -1104,5 +1295,20 @@ export {
   GetCountries,
   GetBanks,
   SetNotificationItemAsRead,
-  GetBeneficiariesTypes
+  GetBeneficiariesTypes,
+  GetRmClinetList,
+  GetRmRequestList,
+  GetRmDisplayName,
+  GetTotalNetWorthData,
+  GetBankCashBalancesDashboardData,
+  GetCustomerInvestmentDashboardData,
+  GetCustomersDepositsAndRatesDashboardData,
+  GetFinancingBalancesAndRatesPBAndHCDashboardData,
+  GetMMFUNDBalancesDashboardData,
+  GetPastDuesPBAndHCDashboardData,
+  GetSUKUKBalancesDashboardData,
+  GetTreasuryPlacementsBalancesDashboardData,
+  GetManagementClinetList,
+  GetManagementBankPoistion,
+  GetRmTransactionList,
 };

@@ -47,7 +47,6 @@ function NewBeneficiary(props: iNewBeneficiary) {
   const [currencies, setCurrencies] = useState<iDDL[]>([]);
   const [countries, setCountries] = useState<iDDL[]>([]);
   const [banks, setBanks] = useState<iDDL[]>([]);
-  const [bankSwift, setBankSwift] = useState("");
   const [transactionTypeId, setTransactionTypeId] = useState(props.beneficiary ? props.beneficiary.typeId : "");
 
   const [isValidIban, setIsValidIban] = useState(true);
@@ -531,14 +530,11 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           <label>{local_Strings.BeneficiaryBankLabel}</label>
                           <select className="form-control"
                             onBlur={handleBlur("beneficiaryBank")}
-                            value={values.beneficiaryBank || ""}
+                            value={values.beneficiaryBankSwiftCode || ""}
                             onChange={(e) => {
-                              setFieldValue("beneficiaryBank", e.target.value);
-                              setBankSwift(e.target.value);
-                              setFieldValue(
-                                "beneficiaryBankSwiftCode",
-                                e.target.value
-                              );
+                              const index = e.target.selectedIndex;
+                              setFieldValue("beneficiaryBank", e.target[index].innerText);
+                              setFieldValue( "beneficiaryBankSwiftCode", e.target.value);
                             }}>
                             <option value="">{local_Strings.SelectItem}</option>
                             {banks &&
@@ -555,7 +551,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                             type="text"
                             className="form-control"
                             placeholder=""
-                            defaultValue={bankSwift}
+                            value={values.beneficiaryBankSwiftCode || ""}
                             readOnly
                           />
                         </div>

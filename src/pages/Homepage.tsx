@@ -8,7 +8,6 @@ import TotalNetWorth from "../components/TotalNetWorth";
 import RelationManger from "../components/RelationManger";
 import InboxLanding from "../components/Inbox/InboxLanding";
 import InboxDetails from "../components/Inbox/InboxDetails";
-import InboxListing from "../components/Inbox/InboxListing";
 import { useHistory } from "react-router-dom";
 import { AuthContext } from "../providers/AuthProvider";
 import { localStrings as local_Strings } from "../translations/localStrings";
@@ -23,7 +22,8 @@ import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import Constant from "../constants/defaultData";
 import * as helper from "../Helpers/helper";
-
+import { getUserRole } from "../services/apiServices";
+import Swal from 'sweetalert2';
 export interface IUserPortfolio {
   customerCode: string;
   customerName: string;
@@ -100,6 +100,36 @@ function HomePage() {
 
     const initialLoadMethod = async () => {
 
+      const role = await getUserRole(currentContext.selectedCIF);
+      console.log(currentContext.selectedCIF + " " + role);
+      if (role && !!role) {
+        if (!(role && role.name === Constant.Customer)) {
+          if (role.name === Constant.RM) {
+            history.push(`/${currentContext.language}/RMLanding`);
+          } else if (role.name === Constant.Management) {
+            history.push(`/${currentContext.language}/Managment`);
+          } else {
+            let timerInterval: any;
+            Swal.fire({
+              title: local_Strings.SessionTimeOutMessage,
+              icon: 'warning',
+              iconColor: "red",
+              html: 'Please login again',
+              timer: Constant.AlertTimeout,
+              timerProgressBar: true,
+              didOpen: () => {
+                Swal.showLoading();
+              },
+              willClose: () => {
+                clearInterval(timerInterval);
+                history.push(`/${currentContext.language}`);
+              }
+            }).then((result) => {
+              history.push(`/${currentContext.language}`);
+            });
+          }
+        }
+      }
       const requestOne = GetUserPortfolio(
         currentContext.selectedCIF,
         currentContext.userSettings.currency

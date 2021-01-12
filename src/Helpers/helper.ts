@@ -1,5 +1,5 @@
 import moment from "moment";
-import { ICommonFilter, IRequestFilter, ITransactionDetail, IRequestDetail } from "./publicInterfaces";
+import { ICommonFilter, IRequestFilter, ITransactionDetail, IRequestDetail, iRmRequests } from "./publicInterfaces";
 import { localStrings as local_Strings } from '../translations/localStrings';
 
 export interface ITransactionFilter {
@@ -30,19 +30,6 @@ export interface ITransaction {
   paymentDetails?: string;
 }
 
-export interface iRmRequests {
-  id: string;
-  requestCreateDate: string;
-  requestSubjectAR: string;
-  requestSubject: string;
-  requestStatusAR: string;
-  requestStatus: string;
-  customerName: string;
-  cif: string;
-  customerMobile: string;
-  type: string;
-  requestTypeId: string;
-}
 
 export const getLanguage = () => {
   return window.location.pathname.split("/")[1];

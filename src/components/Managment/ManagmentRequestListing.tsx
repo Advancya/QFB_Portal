@@ -2,18 +2,12 @@ import React, { useContext, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import assetsIcon from "../../images/assets-icon.svg";
 import liabilitiesIcon from "../../images/liabilities-icon.svg";
-
-import {
-  emptyRequestDetail,
-  IRequestFilter,
-  IRequestDetail,
-} from "../../Helpers/publicInterfaces";
 import moment from "moment";
-
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
 import Constant from "../../constants/defaultData";
-
+import { GetManagementBankPoistion } from "../../services/cmsService";
+import * as helper from "../../Helpers/helper";
 interface IRequestType {
   id: number;
   nameEn: string;
@@ -29,79 +23,42 @@ interface iManagmentRequestListing {
 function ManagmentRequestListing(
   managmentRequestListingProps: iManagmentRequestListing
 ) {
+
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
   const [isLoading, setLoading] = useState(false);
-  const rowLimit: number = Constant.RecordPerPage;
-  const [offset, setOffset] = useState<number>(rowLimit);
-  const [data, setData] = useState<IRequestDetail[]>([emptyRequestDetail]);
 
-  const [showClearFilter, setShowClearFilter] = useState(false);
-  const [showBeneficiaryDateFilter, setShowBeneficiaryDateFilter] = useState(
-    false
-  );
-  const [filteredData, setFilteredData] = useState<IRequestDetail[]>([
-    emptyRequestDetail,
-  ]);
-  const [requestTypes, setRequestTypes] = useState<IRequestType[]>([
-    {
-      id: 0,
-      nameEn: "",
-      nameAr: "",
-    },
-  ]);
-  const statusFilterOptions = [
-    {
-      label: local_Strings.RequestListingFilterStatusOption1,
-      value: "Awaiting acknowledgement",
-    },
-    { label: local_Strings.RequestListingFilterStatusOption2, value: "Closed" },
-    {
-      label: local_Strings.RequestListingFilterStatusOption3,
-      value: "In Progress",
-    },
-    {
-      label: local_Strings.RequestListingFilterStatusOption4,
-      value: "Cancelled",
-    },
-  ];
-  const typeFilterOptions = [];
-  requestTypes &&
-    requestTypes.length > 0 &&
-    requestTypes[0].id > 0 &&
-    requestTypes.forEach((r: IRequestType) =>
-      typeFilterOptions.push({
-        label:
-          currentContext.language === "en" ? r.nameEn || "" : r.nameAr || "",
-        value: String(r.id),
-      })
-    );
-
-  const [filters, setFilter] = useState<IRequestFilter>({
-    filterApplied: false,
-    DateOption: "0",
-    StartDate: moment().add(-7, "days").toDate(),
-    EndDate: moment().toDate(),
-    Status: "0",
-    Type: "0",
+  const [data, setData] = React.useState({
+    totalAssets: "",
+    cashBalance: "",
+    privateBankLoansBalances: "",
+    privateBankLoansAvreageRate: "",
+    pastDuesBalance: "",
+    holdingCompanyLoansBalances: "",
+    holdingCompanyLoansAvreageRate: "",
+    sukukBalance: "",
+    sukukNetAverageRate: "",
+    mmFundBalance: "",
+    mmFundAverageRate: "",
+    treasuryPlacements: "",
+    treasuryPlacementsAverageRate: "",
+    totalInvestmentsinProducts: "",
+    customersDeposits: "",
+    depositsNetAverageRate: "",
+    customersCash: "",
+    totalLiabilities: "",
   });
-  const applyFilter = () => {
-    setShowClearFilter(true);
+
+  const fetchData = async () => {
+    const result = await GetManagementBankPoistion();
+    setData(result[0]);
   };
 
-  const clearFilter = () => {
-    setShowClearFilter(false);
-  };
-  const showMoreManagmentRequestListing = () => {
-    console.log("retrieve more from server");
-  };
-  const requestDateFilterOnchangeHandler = (e: any) => {
-    if (e.target.value == 4) {
-      setShowBeneficiaryDateFilter(true);
-    } else {
-      setShowBeneficiaryDateFilter(false);
+  React.useEffect(() => {
+    if (!!currentContext.selectedCIF) {
+      fetchData();
     }
-  };
+  }, [currentContext.selectedCIF]);
 
   return (
     <div className="box p-0">
@@ -133,7 +90,7 @@ function ManagmentRequestListing(
                   </div>
                   <a href="#" className="ib-text">
                     <h4>{local_Strings.ManagementLandingAssetsTitle}</h4>
-                    <h5>3,150,000.00 QAR</h5>
+                    <h5>{helper.ConvertToQfbNumberFormat(data["totalAssets"] || "")}</h5>
                   </a>
                 </div>
               </div>
@@ -147,7 +104,7 @@ function ManagmentRequestListing(
                         </div>
                         <div className="col-sm-6 text-sm-right">
                           <h4 className="justify-content-end">
-                            100,0000,00 QAR{" "}
+                            {helper.ConvertToQfbNumberFormat(data["sukukBalance"] || "")}
                           </h4>
                         </div>
                       </div>
@@ -159,7 +116,7 @@ function ManagmentRequestListing(
                           </h6>
                         </div>
                         <div className="col-sm-3 text-sm-right">
-                          <span className="status-badge-small ">2%</span>
+                          <span className="status-badge-small ">{helper.ConvertToQfbNumberFormat(data["sukukNetAverageRate"] || "") + "%" || ""}</span>
                         </div>
                       </div>
                     </a>
@@ -173,7 +130,7 @@ function ManagmentRequestListing(
                         </div>
                         <div className="col-sm-6 text-sm-right">
                           <h4 className="justify-content-end">
-                            100,0000,00 QAR{" "}
+                            {helper.ConvertToQfbNumberFormat(data["mmFundBalance"] || "")}
                           </h4>
                         </div>
                       </div>
@@ -185,7 +142,7 @@ function ManagmentRequestListing(
                           </h6>
                         </div>
                         <div className="col-sm-3 text-sm-right">
-                          <span className="status-badge-small ">2%</span>
+                          <span className="status-badge-small ">{helper.ConvertToQfbNumberFormat(data["mmFundAverageRate"] || "") + "%" || ""}</span>
                         </div>
                       </div>
                     </a>
@@ -199,7 +156,9 @@ function ManagmentRequestListing(
                         </div>
                         <div className="col-sm-6 text-sm-right">
                           <h4 className="justify-content-end">
-                            100,0000,00 QAR{" "}
+                            {helper.ConvertToQfbNumberFormat(
+                              data["treasuryPlacements"] || ""
+                            )}
                           </h4>
                         </div>
                       </div>
@@ -211,7 +170,7 @@ function ManagmentRequestListing(
                           </h6>
                         </div>
                         <div className="col-sm-3 text-sm-right">
-                          <span className="status-badge-small ">2%</span>
+                          <span className="status-badge-small ">{helper.ConvertToQfbNumberFormat(data["treasuryPlacementsAverageRate"] || "") + "%" || ""}</span>
                         </div>
                       </div>
                     </a>
@@ -225,19 +184,8 @@ function ManagmentRequestListing(
                         </div>
                         <div className="col-sm-6 text-sm-right">
                           <h4 className="justify-content-end">
-                            100,0000,00 QAR{" "}
+                            {helper.ConvertToQfbNumberFormat(data["pastDuesBalance"] || "")}
                           </h4>
-                        </div>
-                      </div>
-
-                      <div className="row align-items-center">
-                        <div className="col-sm-9">
-                          <h6 className="text-15 mb-0">
-                            {local_Strings.NetAverageRate}
-                          </h6>
-                        </div>
-                        <div className="col-sm-3 text-sm-right">
-                          <span className="status-badge-small ">2%</span>
                         </div>
                       </div>
                     </a>
@@ -251,19 +199,27 @@ function ManagmentRequestListing(
                         </div>
                         <div className="col-sm-6 text-sm-right">
                           <h4 className="justify-content-end">
-                            100,0000,00 QAR{" "}
+                            {helper.ConvertToQfbNumberFormat(
+                              data["totalInvestmentsinProducts"] || ""
+                            )}
                           </h4>
                         </div>
                       </div>
+                    </a>
+                  </li>
 
-                      <div className="row align-items-center">
-                        <div className="col-sm-9">
-                          <h6 className="text-15 mb-0">
-                            {local_Strings.NetAverageRate}
-                          </h6>
+                  <li className="shown border-0 py-2">
+                    <a className="d-block p-0">
+                      <div className="row align-items-center  ">
+                        <div className="col-sm-6">
+                          <h4>{local_Strings.BankPositionsTotalAssetSub5} </h4>
                         </div>
-                        <div className="col-sm-3 text-sm-right">
-                          <span className="status-badge-small ">2%</span>
+                        <div className="col-sm-6 text-sm-right">
+                          <h4 className="justify-content-end">
+                            {helper.ConvertToQfbNumberFormat(
+                              data["holdingCompanyLoansBalances"] || ""
+                            )}
+                          </h4>
                         </div>
                       </div>
                     </a>
@@ -277,7 +233,9 @@ function ManagmentRequestListing(
                         </div>
                         <div className="col-sm-6 text-sm-right">
                           <h4 className="justify-content-end">
-                            100,0000,00 QAR{" "}
+                            {helper.ConvertToQfbNumberFormat(
+                              data["privateBankLoansBalances"] || ""
+                            )}
                           </h4>
                         </div>
                       </div>
@@ -289,7 +247,7 @@ function ManagmentRequestListing(
                           </h6>
                         </div>
                         <div className="col-sm-3 text-sm-right">
-                          <span className="status-badge-small ">2%</span>
+                          <span className="status-badge-small ">{helper.ConvertToQfbNumberFormat(data["privateBankLoansAvreageRate"] || "") + "%" || ""}</span>
                         </div>
                       </div>
                     </a>
@@ -305,7 +263,9 @@ function ManagmentRequestListing(
                   </div>
                   <a href="#" className="ib-text">
                     <h4>{local_Strings.ManagementLandingLiabilitiesTitle}</h4>
-                    <h5>3,150,000.00 QAR</h5>
+                    <h5>{helper.ConvertToQfbNumberFormat(
+                      data["totalLiabilities"] || ""
+                    )}</h5>
                   </a>
                 </div>
               </div>
@@ -319,19 +279,8 @@ function ManagmentRequestListing(
                         </div>
                         <div className="col-sm-6 text-sm-right">
                           <h4 className="justify-content-end">
-                            100,0000,00 QAR
+                            {helper.ConvertToQfbNumberFormat(data["cashBalance"] || "")}
                           </h4>
-                        </div>
-                      </div>
-
-                      <div className="row align-items-center">
-                        <div className="col-sm-9">
-                          <h6 className="text-15 mb-0">
-                            {local_Strings.NetAverageRate}
-                          </h6>
-                        </div>
-                        <div className="col-sm-3 text-sm-right">
-                          <span className="status-badge-small ">2%</span>
                         </div>
                       </div>
                     </a>
@@ -345,19 +294,8 @@ function ManagmentRequestListing(
                         </div>
                         <div className="col-sm-6 text-sm-right">
                           <h4 className="justify-content-end">
-                            100,0000,00 QAR{" "}
+                            {helper.ConvertToQfbNumberFormat(data["customersCash"] || "")}
                           </h4>
-                        </div>
-                      </div>
-
-                      <div className="row align-items-center">
-                        <div className="col-sm-9">
-                          <h6 className="text-15 mb-0">
-                            {local_Strings.NetAverageRate}
-                          </h6>
-                        </div>
-                        <div className="col-sm-3 text-sm-right">
-                          <span className="status-badge-small ">2%</span>
                         </div>
                       </div>
                     </a>
@@ -371,7 +309,9 @@ function ManagmentRequestListing(
                         </div>
                         <div className="col-sm-6 text-sm-right">
                           <h4 className="justify-content-end">
-                            100,0000,00 QAR{" "}
+                            {helper.ConvertToQfbNumberFormat(
+                              data["customersDeposits"] || ""
+                            )}
                           </h4>
                         </div>
                       </div>
@@ -383,85 +323,8 @@ function ManagmentRequestListing(
                           </h6>
                         </div>
                         <div className="col-sm-3 text-sm-right">
-                          <span className="status-badge-small ">2%</span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-
-                  <li className="shown border-0 py-2">
-                    <a className="d-block p-0">
-                      <div className="row align-items-center  ">
-                        <div className="col-sm-6">
-                          <h4>{local_Strings.BankPositionsTotalAssetSub4} </h4>
-                        </div>
-                        <div className="col-sm-6 text-sm-right">
-                          <h4 className="justify-content-end">
-                            100,0000,00 QAR{" "}
-                          </h4>
-                        </div>
-                      </div>
-
-                      <div className="row align-items-center">
-                        <div className="col-sm-9">
-                          <h6 className="text-15 mb-0">
-                            {local_Strings.NetAverageRate}
-                          </h6>
-                        </div>
-                        <div className="col-sm-3 text-sm-right">
-                          <span className="status-badge-small ">2%</span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-
-                  <li className="shown border-0 py-2">
-                    <a className="d-block p-0">
-                      <div className="row align-items-center  ">
-                        <div className="col-sm-6">
-                          <h4>{local_Strings.BankPositionsTotalAssetSub5} </h4>
-                        </div>
-                        <div className="col-sm-6 text-sm-right">
-                          <h4 className="justify-content-end">
-                            100,0000,00 QAR{" "}
-                          </h4>
-                        </div>
-                      </div>
-
-                      <div className="row align-items-center">
-                        <div className="col-sm-9">
-                          <h6 className="text-15 mb-0">
-                            {local_Strings.NetAverageRate}
-                          </h6>
-                        </div>
-                        <div className="col-sm-3 text-sm-right">
-                          <span className="status-badge-small ">2%</span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-
-                  <li className="shown border-0 py-2">
-                    <a className="d-block p-0">
-                      <div className="row align-items-center  ">
-                        <div className="col-sm-6">
-                          <h4>{local_Strings.BankPositionsTotalAssetSub7} </h4>
-                        </div>
-                        <div className="col-sm-6 text-sm-right">
-                          <h4 className="justify-content-end">
-                            100,0000,00 QAR{" "}
-                          </h4>
-                        </div>
-                      </div>
-
-                      <div className="row align-items-center">
-                        <div className="col-sm-9">
-                          <h6 className="text-15 mb-0">
-                            {local_Strings.NetAverageRate}
-                          </h6>
-                        </div>
-                        <div className="col-sm-3 text-sm-right">
-                          <span className="status-badge-small ">2%</span>
+                          <span className="status-badge-small ">
+                            {helper.ConvertToQfbNumberFormat(data["depositsNetAverageRate"] || "") + "%" || ""}</span>
                         </div>
                       </div>
                     </a>

@@ -48,7 +48,6 @@ function NewTransaction(props: iNewTransaction) {
   const [showFormWithin, setShowFormWithin] = useState(false);
   const [showFormLocal, setShowFormLocal] = useState(false);
   const [showFormInternational, setShowInternational] = useState(false);
-  const [showDate, setShowDate] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState(
     local_Strings.SelectItem
   );

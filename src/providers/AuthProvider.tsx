@@ -16,6 +16,7 @@ interface IAppContext {
   logout: () => void;
   changeLanguage: (language: string) => void;
   changeUserSettings: (settings: IUserSettings) => void;
+  selectCIF: (cif: string) => void;
 }
 
 export const AuthContext = React.createContext<IAppContext>({
@@ -31,6 +32,7 @@ export const AuthContext = React.createContext<IAppContext>({
   logout: () => { },
   changeLanguage: (language) => { },
   changeUserSettings: (settings) => { },
+  selectCIF: (cif) => { },
 });
 
 interface AuthProviderProps { }
@@ -39,7 +41,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [userSettings, setUserSettings] = useState<IUserSettings>(initialSettingsData);
   const [language, setLanguage] = useState(helper.getLanguage() || "en");
   const [userRole, setUserRole] = useState<string>("");
-  const [selectedCIF, setselectedCIF] = useState<string>(initialSettingsData.customerId);
+  const [selectedCIF, setCIF] = useState<string>(initialSettingsData.customerId);
 
   useEffect(() => {
     const getUserData = async () => {
@@ -47,14 +49,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (userData) {
         setUserSettings(userData);
         const role = await getUserRole(userData.customerId || initialSettingsData.customerId);
-        if (role && role !== undefined) {
-          setselectedCIF(userData.customerId);
+        if (role && !!role) {
+          setCIF(userData.customerId);
           setUserRole(role.name);          
         } else {
-          setselectedCIF(initialSettingsData.customerId);
+          setCIF(initialSettingsData.customerId);
         }
       } else {
-        setselectedCIF(initialSettingsData.customerId);
+        setCIF(initialSettingsData.customerId);
         setUserRole("");
         setUserSettings(initialSettingsData);
       }
@@ -81,20 +83,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                 if (settings && settings.length > 0) {
                   const _userSettings = settings[0];
                   setUserSettings(_userSettings);
-                  setselectedCIF(userData.username);
+                  setCIF(userData.username);
                   await SaveUserDataLocally(_userSettings);                  
 
                 } else {                 
                   const _userData = {...initialSettingsData, customerId: userData.username}; 
                   setUserSettings(_userData);
-                  setselectedCIF(userData.username);
+                  setCIF(userData.username);
                   await SaveUserDataLocally(_userData);                  
                 }
 
-                console.log("user settings is saved on local storage");
                 const role = await getUserRole(userData.username);
-                if (role && role !== undefined) {
-                  setUserRole(role.name || "");
+                if (role && !!role) {
+                  setUserRole(role.name);
                 }
               });
             return resutl;
@@ -103,7 +104,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           }
         },
         logout: async () => {
-          setselectedCIF(initialSettingsData.customerId);
+          setCIF(initialSettingsData.customerId);
           setUserRole("");
           setUserSettings(initialSettingsData);
           await SaveUserDataLocally(initialSettingsData);
@@ -111,6 +112,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         },
         changeLanguage: setLanguage,
         changeUserSettings: setUserSettings,
+        selectCIF: setCIF
       }}
     >
       {children}

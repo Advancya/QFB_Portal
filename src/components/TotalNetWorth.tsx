@@ -12,13 +12,6 @@ function TotalNetWorth() {
     false
   );
 
-  const handleCloseTotalNetWorthDetails = () => {
-    setShowTotalNetWorthDetails(false);
-  };
-  const handleShowTotalNetWorthDetails = () => {
-    setShowTotalNetWorthDetails(true);
-  };
-
   return (
     <div className="col-lg-7 col-container">
       <div className="box box min-h-24">
@@ -29,7 +22,7 @@ function TotalNetWorth() {
         </h2>
         <a
           href="#"
-          onClick={handleShowTotalNetWorthDetails}
+          onClick={() => setShowTotalNetWorthDetails(true)}
           className="chart-block"
         >
           <img src={Chart} className="img-fluid" />
@@ -37,8 +30,8 @@ function TotalNetWorth() {
       </div>
       <TotalNetWorthDetails
         showTotalNetWorthDetailsModal={showTotalNetWorthDetails}
-        hideTotalNetWorthDetailsModal={handleCloseTotalNetWorthDetails}
-      ></TotalNetWorthDetails>
+        hideTotalNetWorthDetailsModal={() => setShowTotalNetWorthDetails(false)}
+      />
     </div>
   );
 }

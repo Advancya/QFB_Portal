@@ -783,6 +783,9 @@ const ar = {
   
   NewBeneficiaryMsgTitle: "Beneficiary Sent",
   NewBeneficiaryMsgBody: "Your beneficiary has been sent successfully to your RM",
+  
+  AccessDeniedMsgTitle: "Access Denied",
+  AccessDeniedMessage: "Your are not authorize to accesss this section.",
 };
 
 export default ar;
