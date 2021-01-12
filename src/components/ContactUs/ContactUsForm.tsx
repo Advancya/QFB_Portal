@@ -3,18 +3,19 @@ import { Button, Col, Form, Modal } from "react-bootstrap";
 import callIcon from "../../images/call-icon.png";
 import { GoogleMap, LoadScript, Marker, InfoBox } from "@react-google-maps/api";
 import Constant from "../../constants/defaultData";
-import LoadingOverlay from 'react-loading-overlay';
+import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import moment from "moment";
-import { localStrings as local_Strings } from '../../translations/localStrings';
+import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
 import * as helper from "../../Helpers/helper";
 import { GetCountries } from "../../services/cmsService";
 import { AddContactUs, iContactUs } from "../../services/authenticationService";
 import { Formik } from "formik";
 import * as yup from "yup";
-import InvalidFieldError from '../../shared/invalid-field-error';
-import Swal from 'sweetalert2';
+import InvalidFieldError from "../../shared/invalid-field-error";
+import Swal from "sweetalert2";
+import xIcon from "../../images/x-icon.svg";
 
 interface ICountry {
   id: number;
@@ -59,7 +60,7 @@ function ContactUsForm(props: iContactUsForm) {
         lat: 25.2893127,
         lng: 51.5058653,
       },
-    }
+    },
   ];
 
   useEffect(() => {
@@ -115,40 +116,51 @@ function ContactUsForm(props: iContactUsForm) {
             className="close"
             onClick={props.hideContactUsFormModal}
           >
-            <span aria-hidden="true">×</span>
+            <img src={xIcon} width="15" />
           </button>
         </Modal.Header>
         <Modal.Body>
           <div className="box modal-box p-0 scrollabel-modal-box">
-            <LoadScript googleMapsApiKey={Constant.MapApiKey}
-              loadingElement={<LoadingOverlay
-                active={true}
-                spinner={
-                  <PuffLoader
-                    size={Constant.SpnnerSize}
-                    color={Constant.SpinnerColor}
-                  />
-                }
-              />}>
+            <LoadScript
+              googleMapsApiKey={Constant.MapApiKey}
+              loadingElement={
+                <LoadingOverlay
+                  active={true}
+                  spinner={
+                    <PuffLoader
+                      size={Constant.SpnnerSize}
+                      color={Constant.SpinnerColor}
+                    />
+                  }
+                />
+              }
+            >
               <GoogleMap
                 mapContainerStyle={mapStyles}
                 zoom={13}
                 center={defaultCenter}
                 options={{ streetViewControl: false }}
               >
-                {locations.map((item) => <Marker key={item.name} title={item.name} position={item.location} >
-                  <InfoBox
-                    onLoad={(_v) => { }}
-                    options={{ closeBoxURL: '', enableEventPropagation: true }}
-                    position={defaultCenter}
+                {locations.map((item) => (
+                  <Marker
+                    key={item.name}
+                    title={item.name}
+                    position={item.location}
                   >
-                    <div className="mapInfoBox">
-                      <div style={{ fontSize: 16 }}>
-                        {item.name}
+                    <InfoBox
+                      onLoad={(_v) => {}}
+                      options={{
+                        closeBoxURL: "",
+                        enableEventPropagation: true,
+                      }}
+                      position={defaultCenter}
+                    >
+                      <div className="mapInfoBox">
+                        <div style={{ fontSize: 16 }}>{item.name}</div>
                       </div>
-                    </div>
-                  </InfoBox>
-                </Marker>)}
+                    </InfoBox>
+                  </Marker>
+                ))}
               </GoogleMap>
             </LoadScript>
             <LoadingOverlay
@@ -169,21 +181,21 @@ function ContactUsForm(props: iContactUsForm) {
                 setLoading(false);
                 if (success) {
                   Swal.fire({
-                    position: 'top-end',
-                    icon: 'success',
+                    position: "top-end",
+                    icon: "success",
                     title: local_Strings.SuccessMessageTitle,
                     html: local_Strings.RequestSuccessMessage,
                     showConfirmButton: false,
-                    timer: Constant.AlertTimeout
+                    timer: Constant.AlertTimeout,
                   });
                   props.hideContactUsFormModal();
                 } else {
                   Swal.fire({
-                    position: 'top-end',
-                    icon: 'error',
+                    position: "top-end",
+                    icon: "error",
                     title: local_Strings.GenericErrorMessage,
                     showConfirmButton: false,
-                    timer: Constant.AlertTimeout
+                    timer: Constant.AlertTimeout,
                   });
                 }
               }}
@@ -198,13 +210,13 @@ function ContactUsForm(props: iContactUsForm) {
                 touched,
                 setFieldValue,
                 isValid,
-                validateForm
+                validateForm,
               }) => (
                 <div className="container-fluid">
                   <div className="row my-4">
-                    <div className="col-md-8">
+                    <div className="col-lg-9">
                       <Form>
-                        <Form.Row>
+                        <div className="row">
                           <Col md={6}>
                             <Form.Group controlId="formName">
                               <Form.Label>
@@ -216,7 +228,9 @@ function ContactUsForm(props: iContactUsForm) {
                                 onChange={handleChange("name")}
                                 onBlur={handleBlur("name")}
                               />
-                              {touched.name && errors.name && InvalidFieldError(errors.name)}
+                              {touched.name &&
+                                errors.name &&
+                                InvalidFieldError(errors.name)}
                             </Form.Group>
                           </Col>
                           <Col md={6}>
@@ -224,21 +238,33 @@ function ContactUsForm(props: iContactUsForm) {
                               <Form.Label>
                                 {local_Strings.ContactUsCountryLabel}
                               </Form.Label>
-                              <Form.Control as="select" placeholder=""
+                              <Form.Control
+                                as="select"
+                                placeholder=""
                                 onChange={handleChange("country")}
                                 onBlur={handleBlur("country")}
                               >
-                                <option value="">{local_Strings.ContactUsSelectCountry}</option>
+                                <option value="">
+                                  {local_Strings.ContactUsSelectCountry}
+                                </option>
                                 {countries &&
                                   countries.length > 0 &&
                                   !!countries[0].nameEn &&
-                                  countries.map((c, i) => <option key={i} value={c.nameEn}>{currentContext.language === "en" ? c.nameEn : c.nameAr}</option>)}
+                                  countries.map((c, i) => (
+                                    <option key={i} value={c.nameEn}>
+                                      {currentContext.language === "en"
+                                        ? c.nameEn
+                                        : c.nameAr}
+                                    </option>
+                                  ))}
                               </Form.Control>
-                              {touched.country && errors.country && InvalidFieldError(errors.country)}
+                              {touched.country &&
+                                errors.country &&
+                                InvalidFieldError(errors.country)}
                             </Form.Group>
                           </Col>
-                        </Form.Row>
-                        <Form.Row>
+                        </div>
+                        <div className="row">
                           <Col md={6}>
                             <Form.Group controlId="formMobile">
                               <Form.Label>
@@ -250,7 +276,9 @@ function ContactUsForm(props: iContactUsForm) {
                                 onChange={handleChange("mobile")}
                                 onBlur={handleBlur("mobile")}
                               />
-                              {touched.mobile && errors.mobile && InvalidFieldError(errors.mobile)}
+                              {touched.mobile &&
+                                errors.mobile &&
+                                InvalidFieldError(errors.mobile)}
                             </Form.Group>
                           </Col>
                           <Col md={6}>
@@ -264,11 +292,13 @@ function ContactUsForm(props: iContactUsForm) {
                                 onChange={handleChange("email")}
                                 onBlur={handleBlur("email")}
                               />
-                              {touched.email && errors.email && InvalidFieldError(errors.email)}
+                              {touched.email &&
+                                errors.email &&
+                                InvalidFieldError(errors.email)}
                             </Form.Group>
                           </Col>
-                        </Form.Row>
-                        <Form.Row>
+                        </div>
+                        <div className="row">
                           <Col md={12}>
                             <Form.Group controlId="forQuery">
                               <Form.Label>
@@ -280,41 +310,44 @@ function ContactUsForm(props: iContactUsForm) {
                                 onChange={handleChange("query")}
                                 onBlur={handleBlur("query")}
                               />
-                              {touched.query && errors.query && InvalidFieldError(errors.query)}
+                              {touched.query &&
+                                errors.query &&
+                                InvalidFieldError(errors.query)}
                             </Form.Group>
                           </Col>
-                        </Form.Row>
+                        </div>
                       </Form>
                     </div>
                     <div className="offset-md-2 col-md-2"></div>
                   </div>
-                  <div className="row my-4">
-                    <div className="col-md-10"></div>
-                    <div className="col-md-2">
-                      <Button variant="primary" type="submit" className="w-100"
-                        onClick={(e) => {
-                          validateForm(values);
-                          if (isValid) {
-                            handleSubmit();
-                          } else {
 
-                            Swal.fire({
-                              position: 'top-end',
-                              icon: 'error',
-                              title: local_Strings.formValidationMessage,
-                              showConfirmButton: false,
-                              timer: Constant.AlertTimeout
-                            });
-                            touched.name = true;
-                            touched.country = true;
-                            touched.mobile = true;
-                            touched.email = true;
-                            touched.query = true;
-                          }
-                        }}>
-                        {local_Strings.ContactUsSubmitButton}
-                      </Button>
-                    </div>
+                  <div className="text-right pb-3">
+                    <Button
+                      variant="primary"
+                      type="submit"
+                      className="btn btn-primary"
+                      onClick={(e) => {
+                        validateForm(values);
+                        if (isValid) {
+                          handleSubmit();
+                        } else {
+                          Swal.fire({
+                            position: "top-end",
+                            icon: "error",
+                            title: local_Strings.formValidationMessage,
+                            showConfirmButton: false,
+                            timer: Constant.AlertTimeout,
+                          });
+                          touched.name = true;
+                          touched.country = true;
+                          touched.mobile = true;
+                          touched.email = true;
+                          touched.query = true;
+                        }
+                      }}
+                    >
+                      {local_Strings.ContactUsSubmitButton}
+                    </Button>
                   </div>
                 </div>
               )}

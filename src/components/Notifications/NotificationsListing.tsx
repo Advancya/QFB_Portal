@@ -17,6 +17,7 @@ import FilterDropDownControl from "../../shared/FilterDropDownControl";
 import FilterButtonControl from "../../shared/FilterButtonControl";
 import * as helper from "../../Helpers/helper";
 import NoResult from "../../shared/NoResult";
+import xIcon from "../../images/x-icon.svg";
 import { GetNotificationsByCIF } from "../../services/cmsService";
 
 interface iNotficationsListing {
@@ -65,8 +66,12 @@ function NotficationsListing(props: iNotficationsListing) {
                 : ""}
             </span>
           </div>
-          <h6 className={item.isRead ? "mb-1 text-600" : "mb-1 text-600 unread"}>
-            {currentContext.language === "en" ? item.messageTitle : item.messageTitleAr}
+          <h6
+            className={item.isRead ? "mb-1 text-600" : "mb-1 text-600 unread"}
+          >
+            {currentContext.language === "en"
+              ? item.messageTitle
+              : item.messageTitleAr}
           </h6>
         </div>
       </a>
@@ -84,7 +89,7 @@ function NotficationsListing(props: iNotficationsListing) {
       <Modal
         show={props.showNotficationsListingModal}
         onHide={props.hideNotficationsListingModal}
-        size="lg"
+        // size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
         dialogClassName="myModal"
@@ -100,7 +105,7 @@ function NotficationsListing(props: iNotficationsListing) {
             className="close"
             onClick={props.hideNotficationsListingModal}
           >
-            <span aria-hidden="true">×</span>
+            <img src={xIcon} width="15" />
           </button>
         </Modal.Header>
         <Modal.Body>
@@ -113,11 +118,11 @@ function NotficationsListing(props: iNotficationsListing) {
               />
             }
           />
-          {!props.reloading &&
+          {!props.reloading && (
             <React.Fragment>
               <form className="filter-box">
                 <div className="row headRow align-items-center justify-content-between">
-                  <div className="col-sm-5">
+                  <div className="col-md-5">
                     <FilterDropDownControl
                       label={local_Strings.NotificationsListingFilter}
                       options={statusFilterOptions}
@@ -128,7 +133,7 @@ function NotficationsListing(props: iNotficationsListing) {
                     />
                   </div>
 
-                  <div className="col-sm-2">
+                  <div className="px-3">
                     <FilterButtonControl
                       clearFilter={() => {
                         setFilter({
@@ -171,11 +176,11 @@ function NotficationsListing(props: iNotficationsListing) {
               <div className="box modal-box py-0 mb-0 scrollabel-modal-box">
                 <ul className="box-list" id="dataList">
                   {filteredData &&
-                    filteredData.length > 0 &&
-                    filteredData[0].id > 0
+                  filteredData.length > 0 &&
+                  filteredData[0].id > 0
                     ? filteredData
-                      .slice(0, offset)
-                      .map((item, index) => renderItem(item, index))
+                        .slice(0, offset)
+                        .map((item, index) => renderItem(item, index))
                     : NoResult(local_Strings.NoDataToShow)}
                 </ul>
               </div>
@@ -188,7 +193,7 @@ function NotficationsListing(props: iNotficationsListing) {
                 onClickMore={() => setOffset(offset + 5)}
               />
             </React.Fragment>
-          }
+          )}
         </Modal.Body>
       </Modal>
     </div>

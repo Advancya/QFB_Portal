@@ -21,7 +21,7 @@ const FilterCommonControl: React.FC<IFilterCommonControlProps> = (props) => {
   return (
     <form className="filter-box">
       <div className="row headRow align-items-center">
-        <div className="col-sm-3">
+        <div className="col-md-3">
           <FilterDateControl
             value={filters.DateOption}
             onChange={(_value: string) =>
@@ -29,7 +29,7 @@ const FilterCommonControl: React.FC<IFilterCommonControlProps> = (props) => {
             }
           />
         </div>
-        <div className="col-sm-4">
+        <div className="col-md-6">
           <FilterAmountControl
             AmountOperator={filters.AmountOperator}
             Amount={filters.Amount}
@@ -42,7 +42,7 @@ const FilterCommonControl: React.FC<IFilterCommonControlProps> = (props) => {
           />
         </div>
 
-        <div className="col-sm-3 offset-sm-2 col-lg-2 offset-lg-3">
+        <div className="col-md-3 text-right order-3">
           <FilterButtonControl
             clearFilter={() => {
               setFilter(emptyCommonFilter);
@@ -55,6 +55,7 @@ const FilterCommonControl: React.FC<IFilterCommonControlProps> = (props) => {
             showClearFilter={filters.filterApplied}
           />
         </div>
+
         <FilterCustomDateControl
           onStartDateChange={(_value: string) =>
             setFilter({ ...filters, StartDate: moment(_value).toDate() })

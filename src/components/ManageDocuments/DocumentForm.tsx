@@ -1,32 +1,46 @@
-import React, { createRef, useContext, useEffect, useRef, useState } from "react";
+import React, {
+  createRef,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
 import dateIcon from "../../images/calendar-inactive.png";
-import { localStrings as local_Strings } from '../../translations/localStrings';
+import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
-import { AddNewDocument, GetDocumentById, UpdateDocumentDetail } from "../../services/cmsService";
+import {
+  AddNewDocument,
+  GetDocumentById,
+  UpdateDocumentDetail,
+} from "../../services/cmsService";
 import moment from "moment";
 import { Formik } from "formik";
 import * as yup from "yup";
-import InvalidFieldError from '../../shared/invalid-field-error';
-import CKEditor from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import '@ckeditor/ckeditor5-build-classic/build/translations/ar.js';
+import InvalidFieldError from "../../shared/invalid-field-error";
+import CKEditor from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import "@ckeditor/ckeditor5-build-classic/build/translations/ar.js";
 //import Base64UploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/base64uploadadapter';
-import DatePicker from 'react-datepicker';
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { emptyDocumentData, IDocumentDetail } from "../../Helpers/publicInterfaces";
+import {
+  emptyDocumentData,
+  IDocumentDetail,
+} from "../../Helpers/publicInterfaces";
 import Constant from "../../constants/defaultData";
-import LoadingOverlay from 'react-loading-overlay';
+import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import fileIcon from "../../images/pdf.png";
 import * as helper from "../../Helpers/helper";
-import { saveAs } from 'file-saver';
-import Swal from 'sweetalert2';
+import { saveAs } from "file-saver";
+import Swal from "sweetalert2";
+import xIcon from "../../images/x-icon.svg";
 
-const mime = require('mime');
+const mime = require("mime");
 
 interface DetailsProps {
-  itemID?: number
+  itemID?: number;
   show: boolean;
   editable: boolean;
   OnHide: () => void;
@@ -44,41 +58,62 @@ function DocumentForm(props: DetailsProps) {
 
   const formValidationSchema = yup.object({
     documentName: yup.string().nullable().required("Document Name is required"),
-    documentNameAr: yup.string().nullable().required("Document Arabic Name is required"),
-    fileName: yup.string().nullable().required("Please upload a PDF file. " + local_Strings.moreThanLimit),
+    documentNameAr: yup
+      .string()
+      .nullable()
+      .required("Document Arabic Name is required"),
+    fileName: yup
+      .string()
+      .nullable()
+      .required("Please upload a PDF file. " + local_Strings.moreThanLimit),
     documentDate: yup.string().nullable().required("Document date is required"),
-    documentDescription: yup.string().required("Document Description is required"),
-    documentDescriptionAr: yup.string().required("Document Arabic Description is required"),
-    orderId: yup.number().nullable().moreThan(0, "Document Display Priority is required and must be number only."),
+    documentDescription: yup
+      .string()
+      .required("Document Description is required"),
+    documentDescriptionAr: yup
+      .string()
+      .required("Document Arabic Description is required"),
+    orderId: yup
+      .number()
+      .nullable()
+      .moreThan(
+        0,
+        "Document Display Priority is required and must be number only."
+      ),
   });
 
   const submitTheRecord = async (values: IDocumentDetail) => {
-
     setLoading(true);
-    const item = values.id > 0 ? values : {
-      documentName: values.documentName,
-      documentNameAr: values.documentNameAr,
-      documentDate: moment(values.documentDate).utc(true),
-      documentDescription: values.documentDescription,
-      documentDescriptionAr: values.documentDescriptionAr,
-      fileName: values.fileName,
-      fileContent: values.fileContent,
-      orderId: values.orderId
-    };
+    const item =
+      values.id > 0
+        ? values
+        : {
+            documentName: values.documentName,
+            documentNameAr: values.documentNameAr,
+            documentDate: moment(values.documentDate).utc(true),
+            documentDescription: values.documentDescription,
+            documentDescriptionAr: values.documentDescriptionAr,
+            fileName: values.fileName,
+            fileContent: values.fileContent,
+            orderId: values.orderId,
+          };
 
-    const x = values.id > 0 ? await UpdateDocumentDetail(item) : await AddNewDocument(item);
+    const x =
+      values.id > 0
+        ? await UpdateDocumentDetail(item)
+        : await AddNewDocument(item);
     if (x) {
       Swal.fire({
-        position: 'top-end',
-        icon: 'success',
+        position: "top-end",
+        icon: "success",
         title: local_Strings.documentSavedMessage,
         showConfirmButton: false,
-        timer: Constant.AlertTimeout
+        timer: Constant.AlertTimeout,
       });
       props.refreshList();
       props.OnHide();
     } else {
-      Swal.fire('Oops...', local_Strings.GenericErrorMessage, 'error');
+      Swal.fire("Oops...", local_Strings.GenericErrorMessage, "error");
     }
     setLoading(false);
   };
@@ -86,15 +121,19 @@ function DocumentForm(props: DetailsProps) {
   useEffect(() => {
     let isMounted = true;
     if (props.itemID && props.itemID > 0) {
-
       setLoading(true);
       GetDocumentById(props.itemID)
         .then((responseData: any) => {
           if (responseData && responseData.length > 0 && isMounted) {
             const _item = responseData[0] as IDocumentDetail;
             setData(_item);
-            const _calSize = (3 * (_item.fileContent.length / 4 / 1024 / 1024)).toFixed(4);
-            setFileSize(Math.round((Number(_calSize) + Number.EPSILON) * 100) / 100);
+            const _calSize = (
+              3 *
+              (_item.fileContent.length / 4 / 1024 / 1024)
+            ).toFixed(4);
+            setFileSize(
+              Math.round((Number(_calSize) + Number.EPSILON) * 100) / 100
+            );
           }
         })
         .catch((e: any) => console.log(e))
@@ -122,11 +161,7 @@ function DocumentForm(props: DetailsProps) {
         <div className="modal-header-text">
           <div className="d-flex align-items-center">
             <div className="ib-icon">
-              <a
-                href="#"
-                onClick={props.OnBack}
-                className="backToAccountsList"
-              >
+              <a href="#" onClick={props.OnBack} className="backToAccountsList">
                 <i className="fa fa-chevron-left"></i>
               </a>
             </div>
@@ -136,21 +171,19 @@ function DocumentForm(props: DetailsProps) {
           </div>
         </div>
 
-        <button
-          type="button"
-          className="close"
-          onClick={props.OnHide}
-        >
-          <span aria-hidden="true">×</span>
+        <button type="button" className="close" onClick={props.OnHide}>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
       <Modal.Body>
         <LoadingOverlay
           active={isLoading}
-          spinner={<PuffLoader
-            size={Constant.SpnnerSize}
-            color={Constant.SpinnerColor}
-          />}
+          spinner={
+            <PuffLoader
+              size={Constant.SpnnerSize}
+              color={Constant.SpinnerColor}
+            />
+          }
         />
         <Formik
           initialValues={data}
@@ -169,61 +202,104 @@ function DocumentForm(props: DetailsProps) {
             errors,
             touched,
             isValid,
-            validateForm
+            validateForm,
           }) => (
             <div className="box modal-box py-0 mb-0 scrollabel-modal-box">
               <div className="box-body">
                 <div className="form-group">
-                  <label className="mb-1 text-600">{local_Strings.documentName}</label>
-                  <input type="text" className="form-control"
+                  <label className="mb-1 text-600">
+                    {local_Strings.documentName}
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
                     readOnly={!props.editable}
                     value={values.documentName || ""}
                     onChange={handleChange("documentName")}
-                    onBlur={handleBlur("documentName")} />
-                  {touched.documentName && errors.documentName && InvalidFieldError(errors.documentName)}
+                    onBlur={handleBlur("documentName")}
+                  />
+                  {touched.documentName &&
+                    errors.documentName &&
+                    InvalidFieldError(errors.documentName)}
                 </div>
                 <div className="form-group">
-                  <label className="mb-1 text-600">{local_Strings.documentNameAr}</label>
-                  <input type="text" className="form-control"
+                  <label className="mb-1 text-600">
+                    {local_Strings.documentNameAr}
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
                     readOnly={!props.editable}
                     value={values.documentNameAr || ""}
                     onChange={handleChange("documentNameAr")}
-                    onBlur={handleBlur("documentNameAr")} />
-                  {touched.documentNameAr && errors.documentNameAr && InvalidFieldError(errors.documentNameAr)}
+                    onBlur={handleBlur("documentNameAr")}
+                  />
+                  {touched.documentNameAr &&
+                    errors.documentNameAr &&
+                    InvalidFieldError(errors.documentNameAr)}
                 </div>
-                <div className="form-group">
-                  <label className="mb-1 text-600">{local_Strings.documentDate}</label>
+                <div className="form-group customDate">
+                  <label className="mb-1 text-600">
+                    {local_Strings.documentDate}
+                  </label>
 
-                  <DatePicker name="documentDate"
-                    selected={!!values.documentDate ? new Date(values.documentDate) : null}
-                    onChange={(date: Date) => setFieldValue("documentDate", date)}
+                  <DatePicker
+                    name="documentDate"
+                    className="form-control"
+                    selected={
+                      !!values.documentDate
+                        ? new Date(values.documentDate)
+                        : null
+                    }
+                    onChange={(date: Date) =>
+                      setFieldValue("documentDate", date)
+                    }
                     onBlur={handleBlur("documentDate")}
                     placeholderText={""}
                     readOnly={!props.editable}
                     //minDate={new Date()}
-                    dateFormat="MMMM dd, yyyy" />
-                  {touched.documentDate && errors.documentDate && InvalidFieldError(errors.documentDate)}
+                    dateFormat="MMMM dd, yyyy"
+                  />
+                  {touched.documentDate &&
+                    errors.documentDate &&
+                    InvalidFieldError(errors.documentDate)}
                 </div>
                 <div className="form-group">
-                  <label className="mb-1 text-600">{local_Strings.documentPriority}</label>
-                  <input type="text" className="form-control"
+                  <label className="mb-1 text-600">
+                    {local_Strings.documentPriority}
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
                     readOnly={!props.editable}
                     value={values.orderId || ""}
-                    pattern="[0-9]*" maxLength={6}
+                    pattern="[0-9]*"
+                    maxLength={6}
                     onBlur={handleBlur("orderId")}
                     style={{ width: 120 }}
                     onChange={(e) => {
-                      
-                      if (e.currentTarget.validity.valid && e.currentTarget.value.length <= 6) {
-                        setFieldValue("orderId", !!e.currentTarget.value ? parseInt(e.target.value.replace(/[^0-9]*/, '')) : 0);
+                      if (
+                        e.currentTarget.validity.valid &&
+                        e.currentTarget.value.length <= 6
+                      ) {
+                        setFieldValue(
+                          "orderId",
+                          !!e.currentTarget.value
+                            ? parseInt(e.target.value.replace(/[^0-9]*/, ""))
+                            : 0
+                        );
                       }
                     }}
                   />
-                  {touched.orderId && errors.orderId && InvalidFieldError(errors.orderId)}
+                  {touched.orderId &&
+                    errors.orderId &&
+                    InvalidFieldError(errors.orderId)}
                 </div>
                 <div className="form-group">
-                  <label className="mb-1 text-600">{local_Strings.documentShortDescription}</label>
-                  {props.editable ?
+                  <label className="mb-1 text-600">
+                    {local_Strings.documentShortDescription}
+                  </label>
+                  {props.editable ? (
                     <React.Fragment>
                       <CKEditor
                         editor={ClassicEditor}
@@ -234,25 +310,45 @@ function DocumentForm(props: DetailsProps) {
                         }}
                         config={{
                           //plugins: [Base64UploadAdapter],
-                          toolbar: ['heading', '|', 'bold', 'italic', '|', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo'],
+                          toolbar: [
+                            "heading",
+                            "|",
+                            "bold",
+                            "italic",
+                            "|",
+                            "link",
+                            "bulletedList",
+                            "numberedList",
+                            "blockQuote",
+                            "|",
+                            "undo",
+                            "redo",
+                          ],
                           allowedContent: true,
-                          extraAllowedContent: 'div(*)',
+                          extraAllowedContent: "div(*)",
                           language: "en",
                           content: "en",
                         }}
                       />
-                      {touched.documentDescription && errors.documentDescription && InvalidFieldError(errors.documentDescription)}
+                      {touched.documentDescription &&
+                        errors.documentDescription &&
+                        InvalidFieldError(errors.documentDescription)}
                     </React.Fragment>
-                    : <span className="box-brief mb-3">
+                  ) : (
+                    <span className="box-brief mb-3">
                       <div
                         dangerouslySetInnerHTML={{
-                          __html: values.documentDescription
-                        }} />
-                    </span>}
+                          __html: values.documentDescription,
+                        }}
+                      />
+                    </span>
+                  )}
                 </div>
                 <div className="form-group">
-                  <label className="mb-1 text-600">{local_Strings.documentShortDescriptionAr}</label>
-                  {props.editable ?
+                  <label className="mb-1 text-600">
+                    {local_Strings.documentShortDescriptionAr}
+                  </label>
+                  {props.editable ? (
                     <React.Fragment>
                       <CKEditor
                         editor={ClassicEditor}
@@ -263,143 +359,206 @@ function DocumentForm(props: DetailsProps) {
                         }}
                         config={{
                           //plugins: [Base64UploadAdapter],
-                          toolbar: ['heading', '|', 'bold', 'italic', '|', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo'],
+                          toolbar: [
+                            "heading",
+                            "|",
+                            "bold",
+                            "italic",
+                            "|",
+                            "link",
+                            "bulletedList",
+                            "numberedList",
+                            "blockQuote",
+                            "|",
+                            "undo",
+                            "redo",
+                          ],
                           allowedContent: true,
-                          extraAllowedContent: 'div(*)',
+                          extraAllowedContent: "div(*)",
                           language: "ar",
                           content: "ar",
                         }}
                       />
-                      {touched.documentDescriptionAr && errors.documentDescriptionAr && InvalidFieldError(errors.documentDescriptionAr)}
+                      {touched.documentDescriptionAr &&
+                        errors.documentDescriptionAr &&
+                        InvalidFieldError(errors.documentDescriptionAr)}
                     </React.Fragment>
-                    : <span className="box-brief mb-3">
+                  ) : (
+                    <span className="box-brief mb-3">
                       <div
                         dangerouslySetInnerHTML={{
-                          __html: values.documentDescriptionAr
-                        }} />
-                    </span>}
+                          __html: values.documentDescriptionAr,
+                        }}
+                      />
+                    </span>
+                  )}
                 </div>
                 <div className="form-group">
-
-                  <label className="mb-1 text-600">{local_Strings.OfferAttachment}</label>
-                  {props.editable ?
+                  <label className="mb-1 text-600">
+                    {local_Strings.OfferAttachment}
+                  </label>
+                  {props.editable ? (
                     <React.Fragment>
                       <label className="file">
-                        <input type="file" multiple={false}
-                          id="file" aria-label="File browser example"
+                        <input
+                          type="file"
+                          multiple={false}
+                          id="file"
+                          aria-label="File browser example"
                           lang={currentContext.language}
                           className=""
-                          accept='application/pdf'
+                          accept="application/pdf"
                           ref={fileInputRef}
                           onBlur={handleBlur("fileName")}
                           onChange={() => {
-
                             const file = fileInputRef.current.files[0];
-                            const supportedExtensions = ['pdf'];
+                            const supportedExtensions = ["pdf"];
                             if (file) {
-                              if (file.size <= 0) {                                
+                              if (file.size <= 0) {
                                 Swal.fire({
-                                  position: 'top-end',
-                                  icon: 'error',
+                                  position: "top-end",
+                                  icon: "error",
                                   title: file.name + local_Strings.isEmptyText,
                                   showConfirmButton: false,
-                                  timer: Constant.AlertTimeout
+                                  timer: Constant.AlertTimeout,
                                 });
                                 fileInputRef.current.value = "";
-                              } else if (!supportedExtensions.includes(file.name.toLowerCase().split('.').pop())) {
-                                
-                                Swal.fire({
-                                  position: 'top-end',
-                                  icon: 'error',
-                                  title: local_Strings.supportedFileTypeError.replace("{*}", file.name),
-                                  showConfirmButton: false,
-                                  timer: Constant.AlertTimeout
-                                });
-                                fileInputRef.current.value = "";
-                              } else if ((file.size / 1024 / 1024) > 10 ||
-                                (file.size / 1024 / 1024) > 10
+                              } else if (
+                                !supportedExtensions.includes(
+                                  file.name.toLowerCase().split(".").pop()
+                                )
                               ) {
-                                
                                 Swal.fire({
-                                  position: 'top-end',
-                                  icon: 'error',
+                                  position: "top-end",
+                                  icon: "error",
+                                  title: local_Strings.supportedFileTypeError.replace(
+                                    "{*}",
+                                    file.name
+                                  ),
+                                  showConfirmButton: false,
+                                  timer: Constant.AlertTimeout,
+                                });
+                                fileInputRef.current.value = "";
+                              } else if (
+                                file.size / 1024 / 1024 > 10 ||
+                                file.size / 1024 / 1024 > 10
+                              ) {
+                                Swal.fire({
+                                  position: "top-end",
+                                  icon: "error",
                                   title: local_Strings.moreThanLimit,
                                   showConfirmButton: false,
-                                  timer: Constant.AlertTimeout
+                                  timer: Constant.AlertTimeout,
                                 });
                                 fileInputRef.current.value = "";
                               } else {
                                 const reader = new FileReader();
                                 reader.onload = (e: any) => {
-                                  const content = new TextDecoder().decode(Buffer.from(e.target.result));
-                                  const fileContent = content.split(',').pop();
+                                  const content = new TextDecoder().decode(
+                                    Buffer.from(e.target.result)
+                                  );
+                                  const fileContent = content.split(",").pop();
 
                                   setFieldValue("fileName", file.name);
                                   setFieldValue("fileContent", fileContent);
 
-                                  const _calSize = (3 * ((fileContent ? fileContent.length : 1) / 4 / 1024 / 1024)).toFixed(4);
-                                  setFileSize(Math.round((Number(_calSize) + Number.EPSILON) * 100) / 100);
-                                }
+                                  const _calSize = (
+                                    3 *
+                                    ((fileContent ? fileContent.length : 1) /
+                                      4 /
+                                      1024 /
+                                      1024)
+                                  ).toFixed(4);
+                                  setFileSize(
+                                    Math.round(
+                                      (Number(_calSize) + Number.EPSILON) * 100
+                                    ) / 100
+                                  );
+                                };
                                 reader.readAsDataURL(file);
                                 fileInputRef.current.value = "";
                               }
                             }
-                          }} />
+                          }}
+                        />
 
                         <span className="file-custom">
                           {local_Strings.OfferFileBrowseLabel}
                         </span>
                       </label>
-                    </React.Fragment> : null}
+                    </React.Fragment>
+                  ) : null}
 
-                  {touched.fileName && errors.fileName && InvalidFieldError(errors.fileName)}
+                  {touched.fileName &&
+                    errors.fileName &&
+                    InvalidFieldError(errors.fileName)}
                 </div>
-                {values.fileName && !!values.fileName ?
+                {values.fileName && !!values.fileName ? (
                   <div className="row no-gutters align-items-center view-attachment">
                     <div className="col-2 col-lg-2 text-center">
-                      <img alt="" src={fileIcon}
-                        style={{ maxWidth: "75%" }} className="img-fluid" />
+                      <img
+                        alt=""
+                        src={fileIcon}
+                        style={{ maxWidth: "75%" }}
+                        className="img-fluid"
+                      />
                     </div>
-                    <div className="col-8 col-lg-9 cursor-pointer"
+                    <div
+                      className="col-8 col-lg-9 cursor-pointer"
                       onClick={() => {
-                        const blob = helper.b64toBlob(values.fileContent, mime.getType(values.fileName));
+                        const blob = helper.b64toBlob(
+                          values.fileContent,
+                          mime.getType(values.fileName)
+                        );
                         saveAs(blob, values.fileName);
-                      }}>
-                      <h5>{values.fileName}<br />
-                        <small>{local_Strings.sizeLabel}: {fileSize} MB</small></h5>
+                      }}
+                    >
+                      <h5>
+                        {values.fileName}
+                        <br />
+                        <small>
+                          {local_Strings.sizeLabel}: {fileSize} MB
+                        </small>
+                      </h5>
                     </div>
-                    {props.editable &&
+                    {props.editable && (
                       <div className="col-2 col-lg-1 text-center">
-                        <button className="btnFileDelete" onClick={() => {
-                          setFieldValue("fileName", "");
-                          setFieldValue("fileContent", "");
-                          setData({
-                            ...data, fileName: "", fileContent: "",
-                          });
-                        }}
+                        <button
+                          className="btnFileDelete"
+                          onClick={() => {
+                            setFieldValue("fileName", "");
+                            setFieldValue("fileContent", "");
+                            setData({
+                              ...data,
+                              fileName: "",
+                              fileContent: "",
+                            });
+                          }}
                         >
                           <i className="fa fa-trash-o"></i>
                         </button>
                       </div>
-                    }
-                  </div> : null}
-                {props.editable &&
+                    )}
+                  </div>
+                ) : null}
+                {props.editable && (
                   <div className="form-group">
-
-                    <button className="btn btn-sm btn-primary mt-1" type="submit" style={{ float: "right", margin: 20 }}
+                    <button
+                      className="btn btn-sm btn-primary mt-1"
+                      type="submit"
+                      style={{ float: "right", margin: 20 }}
                       onClick={(e) => {
                         validateForm(values);
-                        
+
                         if (isValid) {
                           handleSubmit();
                         } else {
-                          
                           Swal.fire({
-                            position: 'top-end',
-                            icon: 'error',
+                            position: "top-end",
+                            icon: "error",
                             title: local_Strings.formValidationMessage,
                             showConfirmButton: false,
-                            timer: Constant.AlertTimeout
+                            timer: Constant.AlertTimeout,
                           });
                           touched.documentName = true;
                           touched.documentNameAr = true;
@@ -409,17 +568,18 @@ function DocumentForm(props: DetailsProps) {
                           touched.documentDescriptionAr = true;
                           touched.orderId = true;
                         }
-                      }}>
-                      {local_Strings.OfferSaveButton}</button>
+                      }}
+                    >
+                      {local_Strings.OfferSaveButton}
+                    </button>
                   </div>
-                }
+                )}
               </div>
-
             </div>
           )}
         </Formik>
       </Modal.Body>
-    </Modal >
+    </Modal>
   );
 }
 

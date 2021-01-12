@@ -20,6 +20,7 @@ import {
   IRegisterationData,
 } from "../../Helpers/publicInterfaces";
 import { isRegisterBefore } from "../../services/authenticationService";
+import xIcon from "../../images/x-icon.svg";
 
 interface iRegisterStep1 {
   showRegisterStep1Modal: boolean;
@@ -74,7 +75,7 @@ function RegisterStep1(props: iRegisterStep1) {
             className="close"
             onClick={props.hideRegisterStep1Modal}
           >
-            <span aria-hidden="true">×</span>
+            <img src={xIcon} width="15" />
           </button>
         </Modal.Header>
         <Modal.Body>

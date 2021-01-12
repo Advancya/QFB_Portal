@@ -1,9 +1,13 @@
 import React, { useContext, useState } from "react";
 import { Modal } from "react-bootstrap";
-import { emptyTransactionDetail, ITransactionDetail } from "../../Helpers/publicInterfaces";
+import {
+  emptyTransactionDetail,
+  ITransactionDetail,
+} from "../../Helpers/publicInterfaces";
 import moment from "moment";
-import { localStrings as local_Strings } from '../../translations/localStrings';
+import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
+import xIcon from "../../images/x-icon.svg";
 
 interface iTransactionsDetails {
   showTransactionsDetailsModal: boolean;
@@ -21,7 +25,7 @@ function TransactionsDetails(props: iTransactionsDetails) {
     <Modal
       show={props.showTransactionsDetailsModal}
       onHide={props.hideTransactionsDetailsModal}
-      size="lg"
+      //size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       scrollable
@@ -47,7 +51,7 @@ function TransactionsDetails(props: iTransactionsDetails) {
           className="close"
           onClick={props.hideTransactionsDetailsModal}
         >
-          <span aria-hidden="true">×</span>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
       <Modal.Body>
@@ -57,23 +61,33 @@ function TransactionsDetails(props: iTransactionsDetails) {
               <div className="row align-items-center">
                 <div className="col-sm-8">
                   <h5 className="mb-2">
-                    {props.item.requestDate ? moment(props.item.requestDate).format("DD MMMM YYYY") : ""}</h5>
-                  <h4>{currentContext.language === "ar" ? props.item.requestSubjectAR : props.item.requestSubject}</h4>
+                    {props.item.requestDate
+                      ? moment(props.item.requestDate).format("DD MMMM YYYY")
+                      : ""}
+                  </h5>
+                  <h4>
+                    {currentContext.language === "ar"
+                      ? props.item.requestSubjectAR
+                      : props.item.requestSubject}
+                  </h4>
                 </div>
                 <div className="col-sm-4 text-sm-right">
                   <span className="status-badge">
-                    {currentContext.language === "ar" ? props.item.requestStatusAR : props.item.requestStatus}
+                    {currentContext.language === "ar"
+                      ? props.item.requestStatusAR
+                      : props.item.requestStatus}
                   </span>
                 </div>
               </div>
             </li>
           </ul>
           <div className="py-2">
-            <div className="row col-lg-9">
+            <div className="row col-xl-9">
               <div className="col-lg-6 form-group">
                 <label>{local_Strings.TransactionFromAccountLabel}</label>
                 <div className="readonly">
-                  {props.item.transferFromAccount || ""}</div>
+                  {props.item.transferFromAccount || ""}
+                </div>
               </div>
               {props.item.transactionTypeId === 1 && (
                 <div className="col-lg-6 form-group">
@@ -81,28 +95,35 @@ function TransactionsDetails(props: iTransactionsDetails) {
                   <div className="readonly">
                     {props.item.transferToAccount || ""}
                   </div>
-                </div>)}
+                </div>
+              )}
               <div className="col-lg-6 form-group">
                 <label>{local_Strings.TransactionAmountLabel}</label>
-                <div className="readonly">
-                  {props.item.amount || ""}</div>
+                <div className="readonly">{props.item.amount || ""}</div>
               </div>
               {props.item.transactionTypeId !== 1 && (
                 <React.Fragment>
                   <div className="col-lg-6 form-group">
                     <label>{local_Strings.TransactionCurrencyLabel}</label>
                     <div className="readonly">
-                      {props.item.currency || currentContext.userSettings.currency}
+                      {props.item.currency ||
+                        currentContext.userSettings.currency}
                     </div>
                   </div>
                   <div className="col-lg-6 form-group">
                     <label>{local_Strings.TransactionBenficiaryLabel}</label>
-                    <div className="readonly">{props.item.beneficiaryFullName || ""}</div>
+                    <div className="readonly">
+                      {props.item.beneficiaryFullName || ""}
+                    </div>
                   </div>
                   <div className="col-lg-6 form-group customDate">
                     <label>{local_Strings.TransactionDateLabel}</label>
                     <div className="readonly date d-flex justify-content-between align-items-center">
-                      {props.item.transactionDate ? moment(props.item.transactionDate).format("DD/MM/YYYY") : ""}
+                      {props.item.transactionDate
+                        ? moment(props.item.transactionDate).format(
+                            "DD/MM/YYYY"
+                          )
+                        : ""}
                       <i className="fa fa-calendar-o" aria-hidden="true"></i>
                     </div>
                   </div>
@@ -112,7 +133,8 @@ function TransactionsDetails(props: iTransactionsDetails) {
                       {props.item.description || ""}
                     </div>
                   </div>
-                </React.Fragment>)}
+                </React.Fragment>
+              )}
             </div>
           </div>
         </div>

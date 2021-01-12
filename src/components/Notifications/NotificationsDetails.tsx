@@ -4,6 +4,18 @@ import { INotificationDetail } from "../../Helpers/publicInterfaces";
 import moment from "moment";
 import { AuthContext } from "../../providers/AuthProvider";
 import { localStrings as local_Strings } from "../../translations/localStrings";
+import dumyimg from "../../images/NewsImg.jpg";
+import xIcon from "../../images/x-icon.svg";
+
+import {
+  GetInboxByCIFAndType,
+  SetInboxItemAsRead,
+} from "../../services/cmsService";
+import axios from "axios";
+import * as helper from "../../Helpers/helper";
+import NoResult from "../../shared/NoResult";
+import FilterMoreButtonControl from "../../shared/FilterMoreButtonControl";
+import { InboxContext } from "../../pages/Homepage";
 import { SetNotificationItemAsRead } from "../../services/cmsService";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
@@ -31,14 +43,13 @@ function NotficationDetail(props: iNotficationDetail) {
       })
       .catch((e: any) => console.log(e))
       .finally(() => setLoading(false));
-
   }, [props.item.id]);
 
   return (
     <Modal
       show={props.showNotficationDetailModal}
       onHide={props.hideNotficationDetailModal}
-      size="lg"
+      //  size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       scrollable
@@ -67,7 +78,7 @@ function NotficationDetail(props: iNotficationDetail) {
           className="close"
           onClick={props.hideNotficationDetailModal}
         >
-          <span aria-hidden="true">×</span>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
       <Modal.Body>
@@ -82,32 +93,40 @@ function NotficationDetail(props: iNotficationDetail) {
             }
           />
           <ul className="box-list mb-0">
-            {!isLoading &&
+            {!isLoading && (
               <li className="shown">
                 <div className="row align-items-center py-2">
                   <div className="col-sm-12 ">
                     <div className="mb-1 d-flex align-items-center">
                       <span className="mx-1 text-15 color-grey">
                         {!!props.item.messageSendDate
-                          ? moment(props.item.messageSendDate).format("DD/MM/YYYY")
+                          ? moment(props.item.messageSendDate).format(
+                              "DD/MM/YYYY"
+                            )
                           : ""}
                       </span>
                     </div>
                     <h6 className="mb-1 text-600">
-                      {currentContext.language === "en" ? props.item.messageTitle : props.item.messageTitleAr}
+                      {currentContext.language === "en"
+                        ? props.item.messageTitle
+                        : props.item.messageTitleAr}
                     </h6>
                   </div>
                   <div className="col-sm-12 ">
                     <span className="box-brief mb-3">
                       <div
                         dangerouslySetInnerHTML={{
-                          __html: currentContext.language === "en" ? props.item.messageBody : props.item.messageBodyAr
-                        }} />
+                          __html:
+                            currentContext.language === "en"
+                              ? props.item.messageBody
+                              : props.item.messageBodyAr,
+                        }}
+                      />
                     </span>
                   </div>
                 </div>
               </li>
-            }
+            )}
           </ul>
         </div>
       </Modal.Body>

@@ -2,7 +2,14 @@ import React, { useContext, useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
-import { initialSettingsData, IUserSettings, GetUserLocalData, SaveUserDataLocally } from "../../Helpers/authHelper";
+import xIcon from "../../images/x-icon.svg";
+
+import {
+  initialSettingsData,
+  IUserSettings,
+  GetUserLocalData,
+  SaveUserDataLocally,
+} from "../../Helpers/authHelper";
 import {
   ChangeDefaultCurrency,
   GetAllCurrency,
@@ -10,7 +17,7 @@ import {
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 
 interface ICurrency {
   id: number;
@@ -26,7 +33,9 @@ interface iChangeCurrency {
 function ChangeCurrency(props: iChangeCurrency) {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
-  const [userSettings, setUserSettings] = useState<IUserSettings>(initialSettingsData);
+  const [userSettings, setUserSettings] = useState<IUserSettings>(
+    initialSettingsData
+  );
 
   const [curruncies, setCurruncies] = React.useState<ICurrency[]>([
     {
@@ -67,7 +76,7 @@ function ChangeCurrency(props: iChangeCurrency) {
     <Modal
       show={props.showChangeCurrencyModal}
       onHide={props.hideChangeCurrencyModal}
-      size="lg"
+      //  size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       scrollable
@@ -94,7 +103,7 @@ function ChangeCurrency(props: iChangeCurrency) {
           className="close"
           onClick={props.hideChangeCurrencyModal}
         >
-          <span aria-hidden="true">×</span>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
       <Modal.Body>
@@ -122,8 +131,21 @@ function ChangeCurrency(props: iChangeCurrency) {
                     id={"customRadio_" + (i + 1)}
                     name="customRadio"
                     className="custom-control-input"
-                    checked={userSettings.currency === (currentContext.language === "en" ? c.name : c.nameAr)}
-                    onChange={(e) => e.target.checked ? setUserSettings({ ...userSettings, currency: (currentContext.language === "en" ? c.name : c.nameAr) }) : {}}
+                    checked={
+                      userSettings.currency ===
+                      (currentContext.language === "en" ? c.name : c.nameAr)
+                    }
+                    onChange={(e) =>
+                      e.target.checked
+                        ? setUserSettings({
+                            ...userSettings,
+                            currency:
+                              currentContext.language === "en"
+                                ? c.name
+                                : c.nameAr,
+                          })
+                        : {}
+                    }
                   />
                   <label
                     className="custom-control-label color-black"
@@ -134,8 +156,10 @@ function ChangeCurrency(props: iChangeCurrency) {
                 </div>
               ))}
           </div>
-          <div className="text-right p-3 mt-5">
-            <button id="applyReqBtn" className="btn btn-primary mx-2"
+          <div className="text-right p-3">
+            <button
+              id="applyReqBtn"
+              className="btn btn-primary mx-2"
               onClick={() => {
                 setLoading(true);
                 ChangeDefaultCurrency(
@@ -146,23 +170,32 @@ function ChangeCurrency(props: iChangeCurrency) {
                     if (response) {
                       SaveUserDataLocally(userSettings);
                       Swal.fire({
-                        position: 'top-end',
-                        icon: 'success',
+                        position: "top-end",
+                        icon: "success",
                         title: local_Strings.ConfirmationTitle,
                         html: local_Strings.ConfirmationDesc,
                         showConfirmButton: false,
-                        timer: Constant.AlertTimeout
+                        timer: Constant.AlertTimeout,
                       });
                     } else {
-                      Swal.fire('Oops...', local_Strings.GenericErrorMessage, 'error');
+                      Swal.fire(
+                        "Oops...",
+                        local_Strings.GenericErrorMessage,
+                        "error"
+                      );
                     }
                   })
                   .catch((e: any) => console.log(e))
                   .finally(() => setLoading(false));
-              }}>
+              }}
+            >
               {local_Strings.SettingSaveButton}
             </button>
-            <button id="applyReqBtn" className="btn btn-primary" onClick={props.backSettingsLandingModal}>
+            <button
+              id="applyReqBtn"
+              className="btn btn-primary"
+              onClick={props.backSettingsLandingModal}
+            >
               {local_Strings.SettingsCancelButton}
             </button>
           </div>

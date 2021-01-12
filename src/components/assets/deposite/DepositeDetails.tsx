@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
-import excelIcon from "../../../images/excel.svg";
 import moment from "moment";
 import { localStrings as local_Strings } from "../../../translations/localStrings";
 import { AuthContext } from "../../../providers/AuthProvider";
@@ -13,6 +12,7 @@ import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import { GetDepositsDetails } from "../../../services/cmsService";
 import * as helper from "../../../Helpers/helper";
+import xIcon from "../../../images/x-icon.svg";
 
 interface iDepositeDetails {
   showDepositeDetailsModal: boolean;
@@ -80,7 +80,7 @@ function DepositeDetails(props: iDepositeDetails) {
           className="close"
           onClick={props.hideDepositeDetailsModal}
         >
-          <span aria-hidden="true">×</span>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
       <Modal.Body>

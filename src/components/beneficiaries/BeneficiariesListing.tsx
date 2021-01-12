@@ -1,14 +1,20 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import moment from "moment";
-import { localStrings as local_Strings } from '../../translations/localStrings';
+import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
+import { GetBeneficiaryByCIF } from "../../services/cmsService";
+import {
+  emptyBeneficiaryDetail,
+  IBeneficiaryDetail,
+} from "../../Helpers/publicInterfaces";
 import { iBeneficiary } from "../../services/transactionService";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import NoResult from "../../shared/NoResult";
-import FilterMoreButtonControl from '../../shared/FilterMoreButtonControl';
+import FilterMoreButtonControl from "../../shared/FilterMoreButtonControl";
+import xIcon from "../../images/x-icon.svg";
 
 interface iBeneficiariesListing {
   showBeneficiariesListingModal: boolean;
@@ -20,10 +26,7 @@ interface iBeneficiariesListing {
   reloading: boolean;
 }
 
-function BeneficiariesListing(
-  props: iBeneficiariesListing
-) {
-
+function BeneficiariesListing(props: iBeneficiariesListing) {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
   const [filteredData, setFilteredData] = useState<iBeneficiary[]>([]);
@@ -40,11 +43,13 @@ function BeneficiariesListing(
         onClick={() => props.showBeneficiariesDetailsModal(item)}
       >
         <div className="col-sm-8">
-          <h4>{local_Strings.BeneficiaryIDLabel + " | " + item.beneficiaryId}</h4>
+          <h4>
+            {local_Strings.BeneficiaryIDLabel + " | " + item.beneficiaryId}
+          </h4>
           <h5>{item.beneficiaryFullName}</h5>
         </div>
         <div className="col-8 col-sm-3 text-sm-right">
-          <span className="status-badge ">{item.country || ""}</span>
+          <span className="status-badge ">{item.country || "NA"}</span>
         </div>
         <div className="col-4 col-sm-1 text-right">
           <i className="fa fa-chevron-right"></i>
@@ -58,7 +63,7 @@ function BeneficiariesListing(
       <Modal
         show={props.showBeneficiariesListingModal}
         onHide={props.hideBeneficiariesListingModal}
-        size="lg"
+        // size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
         scrollable
@@ -69,9 +74,7 @@ function BeneficiariesListing(
             <div className="modal-header-text">
               <a
                 href="#"
-                onClick={
-                  props.backBeneficiariesListingModal
-                }
+                onClick={props.backBeneficiariesListingModal}
                 className="backToAccountsList"
               >
                 <i className="fa fa-chevron-left"></i>
@@ -79,16 +82,17 @@ function BeneficiariesListing(
             </div>
             <div className="ib-text d-flex align-items-center">
               <h4>{local_Strings.BeneficiariesListingTitle}</h4>
-              {currentContext.userRole === "CUSTOMER" &&
+              {currentContext.userRole === "CUSTOMER" && (
                 <a
                   className="btnOutlineWhite"
                   href="#"
                   onClick={props.showNewBeneficiaryModal}
                   id="newBeneficiaryBtn"
                 >
-                  <i className="fa fa-plus-circle"></i>{local_Strings.MyBeneficiariesAddNew}
+                  <i className="fa fa-plus-circle"></i>
+                  {local_Strings.MyBeneficiariesAddNew}
                 </a>
-              }
+              )}
             </div>
           </div>
           <button
@@ -96,7 +100,7 @@ function BeneficiariesListing(
             className="close"
             onClick={props.hideBeneficiariesListingModal}
           >
-            <span aria-hidden="true">×</span>
+            <img src={xIcon} width="15" />
           </button>
         </Modal.Header>
         <Modal.Body>
@@ -111,18 +115,22 @@ function BeneficiariesListing(
               }
             />
             <ul className="box-list" id="dataList">
-              {filteredData &&
-                filteredData.length > 0 &&
-                filteredData[0].id > 0 ?
-                filteredData.slice(0, offset).map((item, index) =>
-                  renderItem(item, index)
-                )
+              {filteredData && filteredData.length > 0 && filteredData[0].id > 0
+                ? filteredData
+                    .slice(0, offset)
+                    .map((item, index) => renderItem(item, index))
                 : NoResult(local_Strings.NoDataToShow)}
             </ul>
           </div>
 
-          <FilterMoreButtonControl showMore={filteredData && filteredData.length > rowLimit &&
-            offset < filteredData.length} onClickMore={() => setOffset(offset + 5)} />
+          <FilterMoreButtonControl
+            showMore={
+              filteredData &&
+              filteredData.length > rowLimit &&
+              offset < filteredData.length
+            }
+            onClickMore={() => setOffset(offset + 5)}
+          />
         </Modal.Body>
       </Modal>
     </div>

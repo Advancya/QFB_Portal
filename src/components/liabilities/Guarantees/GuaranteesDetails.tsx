@@ -11,6 +11,7 @@ import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import { GetBankGuaranteeDetails } from "../../../services/cmsService";
 import * as helper from "../../../Helpers/helper";
+import xIcon from "../../../images/x-icon.svg";
 
 interface iGuaranteesDetails {
   showGuaranteesDetailsModal: boolean;
@@ -78,7 +79,7 @@ function GuaranteesDetails(props: iGuaranteesDetails) {
           className="close"
           onClick={props.hideGuaranteesDetailsModal}
         >
-          <span aria-hidden="true">×</span>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
       <Modal.Body>

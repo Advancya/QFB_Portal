@@ -1,17 +1,22 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import transactionIconColor from "../../images/transaction-icon-color.svg";
-import FilterCommonControl from '../../shared/FilterCommonControl';
-import FilterMoreButtonControl from '../../shared/FilterMoreButtonControl';
+import FilterCommonControl from "../../shared/FilterCommonControl";
+import FilterMoreButtonControl from "../../shared/FilterMoreButtonControl";
 import moment from "moment";
-import { localStrings as local_Strings } from '../../translations/localStrings';
+import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
-import { emptyTransactionDetail, ICommonFilter, ITransactionDetail } from "../../Helpers/publicInterfaces";
+import {
+  emptyTransactionDetail,
+  ICommonFilter,
+  ITransactionDetail,
+} from "../../Helpers/publicInterfaces";
 import * as helper from "../../Helpers/helper";
 import NoResult from "../../shared/NoResult";
 import Constant from "../../constants/defaultData";
-import LoadingOverlay from 'react-loading-overlay';
+import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
+import xIcon from "../../images/x-icon.svg";
 
 interface iTransactionsListing {
   showTransactionsListingModal: boolean;
@@ -45,13 +50,27 @@ function TransactionsListing(props: iTransactionsListing) {
         onClick={() => props.showTransactionsDetailsModal(item)}
       >
         <div className="col-sm-8">
-          <h5>{!!item.transactionDate ? moment(item.transactionDate).format("DD MMMM YYYY") : ""}</h5>
-          <h4>{(currentContext.language === "ar" ? item.requestSubjectAR : item.requestSubject)
-            + " (" + helper.ConvertToQfbNumberFormat(item.amount) + " " + (item.currency || currentContext.userSettings.currency) + ")"}</h4>
+          <h5>
+            {!!item.transactionDate
+              ? moment(item.transactionDate).format("DD MMMM YYYY")
+              : ""}
+          </h5>
+          <h4>
+            {(currentContext.language === "ar"
+              ? item.requestSubjectAR
+              : item.requestSubject) +
+              " (" +
+              helper.ConvertToQfbNumberFormat(item.amount) +
+              " " +
+              (item.currency || currentContext.userSettings.currency) +
+              ")"}
+          </h4>
         </div>
         <div className="col-8 col-sm-3 text-sm-right">
           <span className="status-badge ">
-            {currentContext.language === "ar" ? item.requestStatusAR : item.requestStatus}
+            {currentContext.language === "ar"
+              ? item.requestStatusAR
+              : item.requestStatus}
           </span>
         </div>
         <div className="col-4 col-sm-1 text-right">
@@ -66,7 +85,7 @@ function TransactionsListing(props: iTransactionsListing) {
       <Modal
         show={props.showTransactionsListingModal}
         onHide={props.hideTransactionsListingModal}
-        size="lg"
+        // size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
         scrollable
@@ -79,15 +98,17 @@ function TransactionsListing(props: iTransactionsListing) {
             </div>
             <div className="ib-text d-flex align-items-center">
               <h4>{local_Strings.TransactionsListingTitle}</h4>
-              {currentContext.userRole === Constant.Customer &&
+              {currentContext.userRole === Constant.Customer && (
                 <a
                   className="btnOutlineWhite"
                   href="#"
                   onClick={props.showNewTransactionModal}
                   id="newTransactionBtn"
                 >
-                  <i className="fa fa-plus-circle"></i> {local_Strings.TransactionsListingNewButton}
-                </a>}
+                  <i className="fa fa-plus-circle"></i>{" "}
+                  {local_Strings.TransactionsListingNewButton}
+                </a>
+              )}
               <a
                 className="btnOutlineWhite bg-white color-gold"
                 href="#"
@@ -103,7 +124,7 @@ function TransactionsListing(props: iTransactionsListing) {
             className="close"
             onClick={props.hideTransactionsListingModal}
           >
-            <span aria-hidden="true">×</span>
+            <img src={xIcon} width="15" />
           </button>
         </Modal.Header>
         <Modal.Body>
@@ -124,14 +145,18 @@ function TransactionsListing(props: iTransactionsListing) {
                   filters
                 );
                 setFilteredData(_filteredData);
-              }} />}
+              }}
+            />
+          }
           <div className="box modal-box">
             <ul className="box-list" id="reqList">
               {filteredData &&
-                filteredData.length > 0 &&
-                !!filteredData[0].transactionDate ?
-                filteredData.slice(0, offset).map((item, index) => renderItem(item, index)
-                ) : NoResult(local_Strings.NoDataToShow)}
+              filteredData.length > 0 &&
+              !!filteredData[0].transactionDate
+                ? filteredData
+                    .slice(0, offset)
+                    .map((item, index) => renderItem(item, index))
+                : NoResult(local_Strings.NoDataToShow)}
             </ul>
           </div>
           <FilterMoreButtonControl showMore={props.transactions && filteredData && props.transactions.length > rowLimit &&

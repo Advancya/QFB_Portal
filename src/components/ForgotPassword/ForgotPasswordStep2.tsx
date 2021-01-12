@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { localStrings as local_Strings } from "../../translations/localStrings";
+import xIcon from "../../images/x-icon.svg";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
@@ -64,7 +65,7 @@ function ForgotPasswordStep2(props: iForgotPasswordStep2) {
           className="close"
           onClick={props.hideForgotPasswordStep2Modal}
         >
-          <span aria-hidden="true">×</span>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
       <Modal.Body>
@@ -128,8 +129,11 @@ function ForgotPasswordStep2(props: iForgotPasswordStep2) {
                     />
                     {touched.otp && errors.otp && InvalidFieldError(errors.otp)}
                     <div className="form-group text-right">
-                      <a href="#" className="forgotLink"
-                        onClick={async () => await SendOTP(props.customerId)}>
+                      <a
+                        href="#"
+                        className="forgotLink"
+                        onClick={async () => await SendOTP(props.customerId)}
+                      >
                         {local_Strings.PasswordResetOTPResendOTP}
                       </a>
                     </div>

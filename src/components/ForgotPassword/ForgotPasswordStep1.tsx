@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { localStrings as local_Strings } from "../../translations/localStrings";
+import xIcon from "../../images/x-icon.svg";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
@@ -70,7 +71,7 @@ function ForgotPasswordStep1(props: iForgotPasswordStep1) {
             className="close"
             onClick={props.hideForgotPasswordStep1Modal}
           >
-            <span aria-hidden="true">×</span>
+            <img src={xIcon} width="15" />
           </button>
         </Modal.Header>
         <Modal.Body>
@@ -93,7 +94,8 @@ function ForgotPasswordStep1(props: iForgotPasswordStep1) {
                 console.log(data[0]);
                 if (data.toString() !== "") {
                   if (
-                    values.email.toLowerCase() === data[0]["Email"].toLowerCase() &&
+                    values.email.toLowerCase() ===
+                      data[0]["Email"].toLowerCase() &&
                     values.mobile.toLowerCase() === data[0]["SMS"].toLowerCase()
                   ) {
                     //Send OTP here

@@ -1,15 +1,21 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Col, Form, Modal } from "react-bootstrap";
 import Constant from "../../constants/defaultData";
-import LoadingOverlay from 'react-loading-overlay';
+import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
-import { localStrings as local_Strings } from '../../translations/localStrings';
+import moment from "moment";
+import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
 import { Formik } from "formik";
 import * as yup from "yup";
-import InvalidFieldError from '../../shared/invalid-field-error';
-import Swal from 'sweetalert2';
-import { initialNewRequest, INewRequestDetail } from "../../Helpers/publicInterfaces";
+import InvalidFieldError from "../../shared/invalid-field-error";
+import Swal from "sweetalert2";
+import xIcon from "../../images/x-icon.svg";
+
+import {
+  initialNewRequest,
+  INewRequestDetail,
+} from "../../Helpers/publicInterfaces";
 import {
   AddRequest,
   GetExtraDetailCurrentDetail,
@@ -22,11 +28,15 @@ import {
   GetInvestmentsListing,
 } from "../../services/cmsService";
 import { GetCashListing } from "../../services/apiServices";
-import DatePicker from 'react-datepicker';
-import { IDeposit, IAccountBalance, IInvestment } from "../../Helpers/publicInterfaces";
+import DatePicker from "react-datepicker";
+import {
+  IDeposit,
+  IAccountBalance,
+  IInvestment,
+} from "../../Helpers/publicInterfaces";
 import axios from "axios";
-import FileUploader from '../../shared/FileUploader';
-import ViewAttachment from '../../shared/AttachmentViewer';
+import FileUploader from "../../shared/FileUploader";
+import ViewAttachment from "../../shared/AttachmentViewer";
 
 interface iNewRequest {
   showNewRequestModal: boolean;
@@ -47,12 +57,8 @@ function NewRequest(props: iNewRequest) {
   const [showRequestFields, setShowRequestFields] = useState(false);
 
   const [selectedRequestType, setSelectedRequestType] = useState("");
-  const [selectedRequestTypeName, setSelectedRequestTypeName] = useState(
-    ""
-  );
-  const [isRequestTypeSelected, setIsRequestTypeSelected] = useState(
-    false
-  );
+  const [selectedRequestTypeName, setSelectedRequestTypeName] = useState("");
+  const [isRequestTypeSelected, setIsRequestTypeSelected] = useState(false);
   const [requestTypes, setRequestTypes] = useState<iDDL[]>([
     { label: "", value: "" },
   ]);
@@ -71,7 +77,6 @@ function NewRequest(props: iNewRequest) {
   const [deposits, setDepositData] = useState<IDeposit[]>(null);
   const [investments, setInvestmentData] = useState<IInvestment[]>(null);
 
-
   const getDropDownListValue = (type: string, value: string) => {
     let data: iDDL[] = [];
 
@@ -86,35 +91,43 @@ function NewRequest(props: iNewRequest) {
     } else {
       if (value === "SP_MOB_CUST_CASH_LIST") {
         if (cashBalance && cashBalance.length > 0) {
-          cashBalance.map((element) => data.push({
-            label: element.accountNumber,
-            value: element.accountNumber
-          }));
+          cashBalance.map((element) =>
+            data.push({
+              label: element.accountNumber,
+              value: element.accountNumber,
+            })
+          );
         }
       }
       if (value === "SP_MOB_CUST_INV_LIST") {
         if (investments && investments.length > 0) {
-          investments.map((element) => data.push({
-            label: element.secDesciption,
-            value: element.secDesciption
-          }));
+          investments.map((element) =>
+            data.push({
+              label: element.secDesciption,
+              value: element.secDesciption,
+            })
+          );
         }
       }
       if (value === "SP_MOB_CUST_DEP_LIST") {
         if (deposits && deposits.length > 0) {
-          deposits.map((element) => data.push({
-            label: element.contractNumber,
-            value: element.contractNumber
-          }));
+          deposits.map((element) =>
+            data.push({
+              label: element.contractNumber,
+              value: element.contractNumber,
+            })
+          );
         }
       }
     }
 
-    return (data &&
-      data.length > 0 ?
-      data.map((c, i) =>
-        <option key={i} value={c.value}>{c.label}</option>
-      ) : null);
+    return data && data.length > 0
+      ? data.map((c, i) => (
+          <option key={i} value={c.value}>
+            {c.label}
+          </option>
+        ))
+      : null;
   };
 
   const getExtraDetailsValue = (value: string, param: string) => {
@@ -148,7 +161,7 @@ function NewRequest(props: iNewRequest) {
       } else {
         setExtraDetailsValue("");
       }
-    } catch (error) { }
+    } catch (error) {}
   };
 
   let validationSchema = yup.object().shape({});
@@ -165,20 +178,31 @@ function NewRequest(props: iNewRequest) {
 
       const getRequstsTypes = GetRequstsTypes();
       const requestCashListing = GetCashListing(currentContext.selectedCIF);
-      const requestDepositsListing = GetDepositeListing(currentContext.selectedCIF);
-      const requestInvestmentsListing = GetInvestmentsListing(currentContext.selectedCIF);
+      const requestDepositsListing = GetDepositeListing(
+        currentContext.selectedCIF
+      );
+      const requestInvestmentsListing = GetInvestmentsListing(
+        currentContext.selectedCIF
+      );
 
       axios
-        .all([getRequstsTypes, requestCashListing, requestDepositsListing, requestInvestmentsListing])
+        .all([
+          getRequstsTypes,
+          requestCashListing,
+          requestDepositsListing,
+          requestInvestmentsListing,
+        ])
         .then((responseData: any) => {
           if (isMounted && responseData && responseData.length > 0) {
-
             const requstsTypesResponse = responseData[0];
             let data: iDDL[] = [{ label: "", value: "" }];
             for (let index = 0; index < requstsTypesResponse.length; index++) {
               const element = requstsTypesResponse[index];
               data.push({
-                label: currentContext.language === "ar" ? element["nameAr"] : element["nameEn"],
+                label:
+                  currentContext.language === "ar"
+                    ? element["nameAr"]
+                    : element["nameEn"],
                 value: element["id"],
               });
             }
@@ -191,7 +215,7 @@ function NewRequest(props: iNewRequest) {
         })
         .catch((e: any) => console.log(e))
         .finally(() => setLoading(false));
-    }
+    };
 
     if (!!currentContext.selectedCIF) {
       initialLoadMethod();
@@ -209,9 +233,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required()
             : yup
-              .string()
-              .required()
-              .matches(/^[0-9]+$/),
+                .string()
+                .required()
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -221,9 +245,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required()
             : yup
-              .string()
-              .required()
-              .matches(/^[0-9]+$/),
+                .string()
+                .required()
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -233,9 +257,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required()
             : yup
-              .string()
-              .required()
-              .matches(/^[0-9]+$/),
+                .string()
+                .required()
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -245,9 +269,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required()
             : yup
-              .string()
-              .required()
-              .matches(/^[0-9]+$/),
+                .string()
+                .required()
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -257,9 +281,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required()
             : yup
-              .string()
-              .required()
-              .matches(/^[0-9]+$/),
+                .string()
+                .required()
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -269,9 +293,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required()
             : yup
-              .string()
-              .required()
-              .matches(/^[0-9]+$/),
+                .string()
+                .required()
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -281,9 +305,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required()
             : yup
-              .string()
-              .required()
-              .matches(/^[0-9]+$/),
+                .string()
+                .required()
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -293,9 +317,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required()
             : yup
-              .string()
-              .required()
-              .matches(/^[0-9]+$/),
+                .string()
+                .required()
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -305,9 +329,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required()
             : yup
-              .string()
-              .required()
-              .matches(/^[0-9]+$/),
+                .string()
+                .required()
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -317,9 +341,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required()
             : yup
-              .string()
-              .required()
-              .matches(/^[0-9]+$/),
+                .string()
+                .required()
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -329,9 +353,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required()
             : yup
-              .string()
-              .required()
-              .matches(/^[0-9]+$/),
+                .string()
+                .required()
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -341,9 +365,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required()
             : yup
-              .string()
-              .required()
-              .matches(/^[0-9]+$/),
+                .string()
+                .required()
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -353,9 +377,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required()
             : yup
-              .string()
-              .required()
-              .matches(/^[0-9]+$/),
+                .string()
+                .required()
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -365,9 +389,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required()
             : yup
-              .string()
-              .required()
-              .matches(/^[0-9]+$/),
+                .string()
+                .required()
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -377,9 +401,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required()
             : yup
-              .string()
-              .required()
-              .matches(/^[0-9]+$/),
+                .string()
+                .required()
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -389,9 +413,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required()
             : yup
-              .string()
-              .required()
-              .matches(/^[0-9]+$/),
+                .string()
+                .required()
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -401,9 +425,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required()
             : yup
-              .string()
-              .required()
-              .matches(/^[0-9]+$/),
+                .string()
+                .required()
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -414,9 +438,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required()
             : yup
-              .string()
-              .required()
-              .matches(/^[0-9]+$/),
+                .string()
+                .required()
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -426,9 +450,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required()
             : yup
-              .string()
-              .required()
-              .matches(/^[0-9]+$/),
+                .string()
+                .required()
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -438,9 +462,9 @@ function NewRequest(props: iNewRequest) {
           type !== "EMAIL"
             ? yup.string().email().required()
             : yup
-              .string()
-              .required()
-              .matches(/^[0-9]+$/),
+                .string()
+                .required()
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -451,9 +475,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required()
             : yup
-              .string()
-              .required()
-              .matches(/^[0-9]+$/),
+                .string()
+                .required()
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -553,12 +577,12 @@ function NewRequest(props: iNewRequest) {
       });
       if (added === true) {
         Swal.fire({
-          position: 'top-end',
-          icon: 'success',
+          position: "top-end",
+          icon: "success",
           title: local_Strings.RequestSuccessTitle,
           html: local_Strings.RequestSuccessMessage,
           showConfirmButton: false,
-          timer: Constant.AlertTimeout
+          timer: Constant.AlertTimeout,
         });
         props.refreshRequestsListing();
       } else {
@@ -575,7 +599,7 @@ function NewRequest(props: iNewRequest) {
     <Modal
       show={props.showNewRequestModal}
       onHide={props.hideNewRequestModal}
-      size="lg"
+      // size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       scrollable
@@ -603,15 +627,12 @@ function NewRequest(props: iNewRequest) {
           className="close"
           onClick={props.hideNewRequestModal}
         >
-          <span aria-hidden="true">×</span>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
 
       <Modal.Body>
-        <div
-          className="box modal-box"
-          id="applyReqBox"
-        >
+        <div className="box modal-box" id="applyReqBox">
           <LoadingOverlay
             active={isLoading}
             spinner={
@@ -631,7 +652,6 @@ function NewRequest(props: iNewRequest) {
               setLoading(false);
             }}
             enableReinitialize={true}
-
           >
             {({
               values,
@@ -643,18 +663,17 @@ function NewRequest(props: iNewRequest) {
               touched,
               setFieldValue,
               validateForm,
-              isValid
+              isValid,
             }) => (
               <React.Fragment>
                 <div className="py-2 px-3">
                   <div className="row">
                     <div className="col-lg-8">
-                      <label className="mb-1 text-600 pr-2">Request Type</label>
+                      <label className="">Request Type</label>
                       <select
                         className="form-control"
                         id="reqTypeSelect"
                         onChange={async (e) => {
-
                           setLoading(true);
                           const typeId = e.target.value;
                           const index = e.target.selectedIndex;
@@ -672,11 +691,16 @@ function NewRequest(props: iNewRequest) {
 
                           data.map((d: any, index: number) => {
                             if (d["details"].split(";")[2] === "READ_ONLY") {
-                              getExtraDetailsValue(d["details"].split(";")[3], "");
+                              getExtraDetailsValue(
+                                d["details"].split(";")[3],
+                                ""
+                              );
                             }
 
                             if (d["details"].split(";")[4] === "YES") {
-                              var fName = d["details"].split(";")[0].replace(/ /g, "");
+                              var fName = d["details"]
+                                .split(";")[0]
+                                .replace(/ /g, "");
                               var fType = d["details"].split(";")[2];
                               setValidationSchema(fName, fType);
                             }
@@ -695,9 +719,11 @@ function NewRequest(props: iNewRequest) {
                         {requestTypes &&
                           requestTypes.length > 0 &&
                           !!requestTypes[0].label &&
-                          requestTypes.map((c, i) =>
-                            <option key={i} value={c.value}>{c.label}</option>
-                          )}
+                          requestTypes.map((c, i) => (
+                            <option key={i} value={c.value}>
+                              {c.label}
+                            </option>
+                          ))}
                       </select>
                     </div>
                   </div>
@@ -709,7 +735,6 @@ function NewRequest(props: iNewRequest) {
                   }
                   id="newReqFields"
                 >
-
                   {formFields.map((item, index) => (
                     <Form>
                       <div className="py-2 px-3">
@@ -717,24 +742,35 @@ function NewRequest(props: iNewRequest) {
                           <Form.Row>
                             <Col md={8}>
                               <Form.Group>
-                                <Form.Label className="mb-1 text-600 pr-2">
-                                  {
-                                    currentContext.language === "ar"
-                                      ? item["details"].split(";")[1]
-                                      : item["details"].split(";")[0]
-                                  }
+                                <Form.Label className="">
+                                  {currentContext.language === "ar"
+                                    ? item["details"].split(";")[1]
+                                    : item["details"].split(";")[0]}
                                 </Form.Label>
                                 <FileUploader
-                                  onUploaded={(fileName: string, fileContent: string) => {
+                                  onUploaded={(
+                                    fileName: string,
+                                    fileContent: string
+                                  ) => {
                                     setAttachmentName(fileName);
                                     const attachment = item["details"]
                                       .split(";")[0]
                                       .replace(/ /g, "");
                                     setFieldValue("FileName", fileName, false);
-                                    setFieldValue("FileContent", fileContent, false);
-                                    setFieldValue(attachment, fileContent, false);
-                                  }} />
-                                <ViewAttachment showDelete={true}
+                                    setFieldValue(
+                                      "FileContent",
+                                      fileContent,
+                                      false
+                                    );
+                                    setFieldValue(
+                                      attachment,
+                                      fileContent,
+                                      false
+                                    );
+                                  }}
+                                />
+                                <ViewAttachment
+                                  showDelete={true}
                                   fileName={values.FileName}
                                   fileContent={values.FileContent}
                                   deleteThisFile={() => {
@@ -744,61 +780,57 @@ function NewRequest(props: iNewRequest) {
                                     setFieldValue("FileName", "");
                                     setFieldValue("FileContent", "");
                                     setFieldValue(attachment, "");
-                                  }} />
+                                  }}
+                                />
                               </Form.Group>
                             </Col>
                           </Form.Row>
                         )}
-                        {item["details"].split(";")[2] ===
-                          "MULTILINE_TEXT" && (
-                            <Form.Row>
-                              <Col md={8}>
-                                <Form.Group>
-                                  <Form.Label className="mb-1 text-600 pr-2">
-                                    {
-                                      currentContext.language === "ar"
-                                        ? item["details"].split(";")[1]
-                                        : item["details"].split(";")[0]
-                                    }
-                                  </Form.Label>
-                                  <Form.Control
-                                    as="textarea"
-                                    value={
-                                      values[
+                        {item["details"].split(";")[2] === "MULTILINE_TEXT" && (
+                          <Form.Row>
+                            <Col md={8}>
+                              <Form.Group>
+                                <Form.Label className="">
+                                  {currentContext.language === "ar"
+                                    ? item["details"].split(";")[1]
+                                    : item["details"].split(";")[0]}
+                                </Form.Label>
+                                <Form.Control
+                                  as="textarea"
+                                  value={
+                                    values[
                                       item["details"]
                                         .split(";")[0]
                                         .replace(/ /g, "")
-                                      ] || ""
-                                    }
-                                    onChange={(e) => {
-                                      const fName = item["details"]
-                                        .split(";")[0]
-                                        .replace(/ /g, "");
-                                      setFieldValue(fName, e.target.value, false);
-                                    }}
-                                    rows={4}
+                                    ] || ""
+                                  }
+                                  onChange={(e) => {
+                                    const fName = item["details"]
+                                      .split(";")[0]
+                                      .replace(/ /g, "");
+                                    setFieldValue(fName, e.target.value, false);
+                                  }}
+                                  rows={4}
                                   // max={
                                   //   item["details"].split(";")[5] !== "NULL"
                                   //     ? Number(item["details"].split(";")[5])
                                   //     : undefined
                                   // }
-                                  />
-                                </Form.Group>
-                              </Col>
-                            </Form.Row>
-                          )}
+                                />
+                              </Form.Group>
+                            </Col>
+                          </Form.Row>
+                        )}
                         {item["details"].split(";")[2] === "READ_ONLY" &&
                           item["details"].split(";")[3].toString() !==
-                          "NULL" && (
+                            "NULL" && (
                             <Form.Row>
                               <Col md={8}>
                                 <Form.Group>
-                                  <Form.Label className="mb-1 text-600 pr-2">
-                                    {
-                                      currentContext.language === "ar"
-                                        ? item["details"].split(";")[1]
-                                        : item["details"].split(";")[0]
-                                    }
+                                  <Form.Label className="">
+                                    {currentContext.language === "ar"
+                                      ? item["details"].split(";")[1]
+                                      : item["details"].split(";")[0]}
                                   </Form.Label>
                                   <Form.Control
                                     as="textarea"
@@ -814,19 +846,17 @@ function NewRequest(props: iNewRequest) {
                           <Form.Row>
                             <Col md={8}>
                               <Form.Group>
-                                <Form.Label className="mb-1 text-600 pr-2">{
-                                  currentContext.language === "ar"
+                                <Form.Label className="">
+                                  {currentContext.language === "ar"
                                     ? item["details"].split(";")[1]
-                                    : item["details"].split(";")[0]
-                                }
+                                    : item["details"].split(";")[0]}
                                 </Form.Label>
                                 <Form.Control
-                                  as="text"
                                   value={
                                     values[
-                                    item["details"]
-                                      .split(";")[0]
-                                      .replace(/ /g, "")
+                                      item["details"]
+                                        .split(";")[0]
+                                        .replace(/ /g, "")
                                     ]
                                   }
                                   onChange={(e) => {
@@ -849,20 +879,17 @@ function NewRequest(props: iNewRequest) {
                           <Form.Row>
                             <Col md={8}>
                               <Form.Group>
-                                <Form.Label className="mb-1 text-600 pr-2">
-                                  {
-                                    currentContext.language === "ar"
-                                      ? item["details"].split(";")[1]
-                                      : item["details"].split(";")[0]
-                                  }
+                                <Form.Label className="">
+                                  {currentContext.language === "ar"
+                                    ? item["details"].split(";")[1]
+                                    : item["details"].split(";")[0]}
                                 </Form.Label>
                                 <Form.Control
-                                  as="text"
                                   value={
                                     values[
-                                    item["details"]
-                                      .split(";")[0]
-                                      .replace(/ /g, "")
+                                      item["details"]
+                                        .split(";")[0]
+                                        .replace(/ /g, "")
                                     ]
                                   }
                                   onChange={(e) => {
@@ -885,20 +912,17 @@ function NewRequest(props: iNewRequest) {
                           <Form.Row>
                             <Col md={8}>
                               <Form.Group>
-                                <Form.Label className="mb-1 text-600 pr-2">
-                                  {
-                                    currentContext.language === "ar"
-                                      ? item["details"].split(";")[1]
-                                      : item["details"].split(";")[0]
-                                  }
+                                <Form.Label className="">
+                                  {currentContext.language === "ar"
+                                    ? item["details"].split(";")[1]
+                                    : item["details"].split(";")[0]}
                                 </Form.Label>
                                 <Form.Control
-                                  as="text"
                                   value={
                                     values[
-                                    item["details"]
-                                      .split(";")[0]
-                                      .replace(/ /g, "")
+                                      item["details"]
+                                        .split(";")[0]
+                                        .replace(/ /g, "")
                                     ]
                                   }
                                   onChange={(e) => {
@@ -920,24 +944,30 @@ function NewRequest(props: iNewRequest) {
                         {item["details"].split(";")[2] === "DATE" && (
                           <Form.Row>
                             <Col md={8}>
-                              <Form.Group>
-                                <Form.Label className="mb-1 text-600 pr-2">
-                                  {
-                                    currentContext.language === "ar"
-                                      ? item["details"].split(";")[1]
-                                      : item["details"].split(";")[0]
-                                  }
+                              <Form.Group className="customDate">
+                                <Form.Label className="mb-1 text-600">
+                                  {currentContext.language === "ar"
+                                    ? item["details"].split(";")[1]
+                                    : item["details"].split(";")[0]}
                                 </Form.Label>
-                                <DatePicker dateFormat="MMMM dd, yyyy"
-                                  selected={values[
-                                    item["details"]
-                                      .split(";")[0]
-                                      .replace(/ /g, "")
-                                  ] ? new Date(values[
-                                    item["details"]
-                                      .split(";")[0]
-                                      .replace(/ /g, "")
-                                  ]) : null}
+                                <DatePicker
+                                  dateFormat="MMMM dd, yyyy"
+                                  className="form-control"
+                                  selected={
+                                    values[
+                                      item["details"]
+                                        .split(";")[0]
+                                        .replace(/ /g, "")
+                                    ]
+                                      ? new Date(
+                                          values[
+                                            item["details"]
+                                              .split(";")[0]
+                                              .replace(/ /g, "")
+                                          ]
+                                        )
+                                      : null
+                                  }
                                   onChange={(date: Date) => {
                                     const fName = item["details"]
                                       .split(";")[0]
@@ -966,14 +996,13 @@ function NewRequest(props: iNewRequest) {
                           <Form.Row>
                             <Col md={8}>
                               <Form.Group>
-                                <Form.Label className="mb-1 text-600 pr-2">
-                                  {
-                                    currentContext.language === "ar"
-                                      ? item["details"].split(";")[1]
-                                      : item["details"].split(";")[0]
-                                  }
+                                <Form.Label className="">
+                                  {currentContext.language === "ar"
+                                    ? item["details"].split(";")[1]
+                                    : item["details"].split(";")[0]}
                                 </Form.Label>
-                                <Form.Control as="select"
+                                <Form.Control
+                                  as="select"
                                   onChange={async (e) => {
                                     getExtraDetailsValue(
                                       "MOB_REQ_EX_DET_FLD_DEP_BRK,SP_MOB_CUST_DEP_LIST",
@@ -997,39 +1026,41 @@ function NewRequest(props: iNewRequest) {
                           </Form.Row>
                         )}
                         {item["details"].split(";")[2] === "DDL" && (
-                          <Form.Row><Col md={8}><Form.Group>
-                            <Form.Label className="mb-1 text-600 pr-2">
-                              {
-                                currentContext.language === "ar"
-                                  ? item["details"].split(";")[1]
-                                  : item["details"].split(";")[0]
-                              }
-                            </Form.Label>
-                            <Form.Control as="select"
-                              onChange={async (i) => {
-                                setFieldValue(
-                                  item["details"]
-                                    .split(";")[0]
-                                    .replace(/ /g, ""),
-                                  i["value"]
-                                );
-                              }}
-                            >
-                              {getDropDownListValue(
-                                item["details"].split(";")[2],
-                                item["details"].split(";")[3]
-                              )}
-                            </Form.Control>
-                          </Form.Group>
-                          </Col>
+                          <Form.Row>
+                            <Col md={8}>
+                              <Form.Group>
+                                <Form.Label className="">
+                                  {currentContext.language === "ar"
+                                    ? item["details"].split(";")[1]
+                                    : item["details"].split(";")[0]}
+                                </Form.Label>
+                                <Form.Control
+                                  as="select"
+                                  onChange={async (i) => {
+                                    setFieldValue(
+                                      item["details"]
+                                        .split(";")[0]
+                                        .replace(/ /g, ""),
+                                      i["value"]
+                                    );
+                                  }}
+                                >
+                                  {getDropDownListValue(
+                                    item["details"].split(";")[2],
+                                    item["details"].split(";")[3]
+                                  )}
+                                </Form.Control>
+                              </Form.Group>
+                            </Col>
                           </Form.Row>
                         )}
                         {touched[
                           item["details"].split(";")[0].replace(/ /g, "")
                         ] &&
                           errors[
-                          item["details"].split(";")[0].replace(/ /g, "")
-                          ] && InvalidFieldError(local_Strings.GeneralValidation)}
+                            item["details"].split(";")[0].replace(/ /g, "")
+                          ] &&
+                          InvalidFieldError(local_Strings.GeneralValidation)}
                       </div>
                     </Form>
                   ))}
@@ -1045,28 +1076,26 @@ function NewRequest(props: iNewRequest) {
                         if (isValid) {
                           handleSubmit();
                         } else {
-
                           Swal.fire({
-                            position: 'top-end',
-                            icon: 'error',
+                            position: "top-end",
+                            icon: "error",
                             title: local_Strings.formValidationMessage,
                             showConfirmButton: false,
-                            timer: Constant.AlertTimeout
+                            timer: Constant.AlertTimeout,
                           });
                         }
-                      }}>
+                      }}
+                    >
                       Apply
-              </button>
+                    </button>
                   </div>
                 </div>
               </React.Fragment>
             )}
           </Formik>
         </div>
-
       </Modal.Body>
-
-    </Modal >
+    </Modal>
   );
 }
 

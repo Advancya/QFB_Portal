@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
 import successIcon from "../../images/ConfirmationIcon.png";
 import { localStrings as local_Strings } from "../../translations/localStrings";
+import xIcon from "../../images/x-icon.svg";
 
 interface iForgotPasswordStep4 {
   showForgotPasswordStep4Modal: boolean;
@@ -46,7 +47,7 @@ function ForgotPasswordStep4(ForgotPasswordStep4Props: iForgotPasswordStep4) {
           className="close"
           onClick={ForgotPasswordStep4Props.hideForgotPasswordStep4Modal}
         >
-          <span aria-hidden="true">×</span>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
       <Modal.Body>

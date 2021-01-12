@@ -15,6 +15,7 @@ import arrowDown from "../../images/arrow-down.svg";
 import { AuthContext } from "../../providers/AuthProvider";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import Chart from "../../images/Chart.png";
+import xIcon from "../../images/x-icon.svg";
 
 interface iManagmentDetails {
   showManagmentDetailsModal: boolean;
@@ -51,7 +52,7 @@ function ManagmentDetails(managmentDetailsProps: iManagmentDetails) {
     <Modal
       show={managmentDetailsProps.showManagmentDetailsModal}
       onHide={managmentDetailsProps.hideManagmentDetailsModal}
-      size="lg"
+      //    size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       scrollable
@@ -70,7 +71,7 @@ function ManagmentDetails(managmentDetailsProps: iManagmentDetails) {
           className="close"
           onClick={managmentDetailsProps.hideManagmentDetailsModal}
         >
-          <span aria-hidden="true">×</span>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
 

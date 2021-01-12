@@ -15,8 +15,9 @@ import {
 import axios from "axios";
 import * as helper from "../../Helpers/helper";
 import NoResult from "../../shared/NoResult";
-import FilterMoreButtonControl from '../../shared/FilterMoreButtonControl';
+import FilterMoreButtonControl from "../../shared/FilterMoreButtonControl";
 import { InboxContext } from "../../pages/Homepage";
+import xIcon from "../../images/x-icon.svg";
 
 interface iInboxDetails {
   showInboxDetailsModal: boolean;
@@ -30,11 +31,14 @@ function InboxDetails(props: iInboxDetails) {
   local_Strings.setLanguage(currentContext.language);
   const InboxMessages = useContext(InboxContext);
   const [data, setData] = useState<IInboxDetail[]>([emptyInboxDetail]);
-  const [filteredData, setFilteredData] = useState<IInboxDetail[]>([emptyInboxDetail]);
+  const [filteredData, setFilteredData] = useState<IInboxDetail[]>([
+    emptyInboxDetail,
+  ]);
   const rowLimit: number = Constant.RecordPerPage;
-  const [offset, setOffset] = useState<number>(data.length < rowLimit ? data.length : rowLimit);
+  const [offset, setOffset] = useState<number>(
+    data.length < rowLimit ? data.length : rowLimit
+  );
   const [isLoading, setLoading] = useState(true);
-
 
   useEffect(() => {
     let isMounted = true;
@@ -51,7 +55,8 @@ function InboxDetails(props: iInboxDetails) {
         if (responseData && responseData.length > 0 && isMounted) {
           const previousItems = (responseData[0] as IInboxDetail[]).filter(
             (i) =>
-              i.description !== props.item.description && i.pdfName !== props.item.pdfName
+              i.description !== props.item.description &&
+              i.pdfName !== props.item.pdfName
           );
 
           setData(previousItems);
@@ -78,9 +83,7 @@ function InboxDetails(props: iInboxDetails) {
             <img src={dateIcon} className="img-fluid" />
             <span className="mx-1 text-15 color-light-gold">
               {item.adviceDate
-                ? moment(item.adviceDate).format(
-                  "dddd DD MMM YYYY"
-                )
+                ? moment(item.adviceDate).format("dddd DD MMM YYYY")
                 : ""}
             </span>
           </div>
@@ -88,7 +91,11 @@ function InboxDetails(props: iInboxDetails) {
           <div className="text-15">{item.dateRange || ""}</div>
         </div>
         <div className="col-md-4 text-right">
-          <a className="download-link d-inline-block " target="_blank" href={item.pdfUrl || "#"}>
+          <a
+            className="download-link d-inline-block "
+            target="_blank"
+            href={item.pdfUrl || "#"}
+          >
             <i className="mx-1 fa fa-file color-white"></i>
             <i className="mx-1 fa fa-download color-white"></i>
           </a>
@@ -101,7 +108,7 @@ function InboxDetails(props: iInboxDetails) {
     <Modal
       show={props.showInboxDetailsModal}
       onHide={props.hideInboxDetailsModal}
-      size="lg"
+      //size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       scrollable
@@ -130,7 +137,7 @@ function InboxDetails(props: iInboxDetails) {
           className="close"
           onClick={props.hideInboxDetailsModal}
         >
-          <span aria-hidden="true">×</span>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
       <Modal.Body>
@@ -153,16 +160,22 @@ function InboxDetails(props: iInboxDetails) {
                     <span className="mx-1 text-15 color-light-gold">
                       {props.item.adviceDate
                         ? moment(props.item.adviceDate).format(
-                          "dddd DD MMM YYYY"
-                        )
+                            "dddd DD MMM YYYY"
+                          )
                         : ""}
                     </span>
                   </div>
-                  <h6 className="mb-1 text-600">{props.item.description || ""}</h6>
+                  <h6 className="mb-1 text-600">
+                    {props.item.description || ""}
+                  </h6>
                   <div className="text-15">{props.item.dateRange || ""}</div>
                 </div>
                 <div className="col-md-4 text-right">
-                  <a className="download-link d-inline-block " target="_blank" href={props.item.pdfUrl || "#"}>
+                  <a
+                    className="download-link d-inline-block "
+                    target="_blank"
+                    href={props.item.pdfUrl || "#"}
+                  >
                     <i className="mx-1 fa fa-file color-white"></i>
                     <i className="mx-1 fa fa-download color-white"></i>
                   </a>
@@ -173,19 +186,23 @@ function InboxDetails(props: iInboxDetails) {
 
           <ul className="box-list" id="dataList">
             <li className="bg-light-gray pt-3 pb-2">
-              <h4 className="box-list-sub-header">{local_Strings.InboxMessageDetailsPreviousLabel}</h4>
+              <h4 className="box-list-sub-header">
+                {local_Strings.InboxMessageDetailsPreviousLabel}
+              </h4>
             </li>
             {filteredData &&
-              filteredData.length > 0 &&
-              !!filteredData[0].adviceDate ?
-              filteredData.slice(0, offset).map((item, index) => renderItem(item, index)
-              ) : NoResult(local_Strings.NoDataToShow)}
-
+            filteredData.length > 0 &&
+            !!filteredData[0].adviceDate
+              ? filteredData
+                  .slice(0, offset)
+                  .map((item, index) => renderItem(item, index))
+              : NoResult(local_Strings.NoDataToShow)}
           </ul>
         </div>
-        <FilterMoreButtonControl showMore={data.length > rowLimit &&
-          offset < filteredData.length} onClickMore={() => setOffset(offset + 5)} />
-
+        <FilterMoreButtonControl
+          showMore={data.length > rowLimit && offset < filteredData.length}
+          onClickMore={() => setOffset(offset + 5)}
+        />
       </Modal.Body>
     </Modal>
   );

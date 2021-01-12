@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
-import dateIcon from "../../images/calendar-inactive.png";
+import xIcon from "../../images/x-icon.svg";
 import {
   emptyDocumentData,
   IDocumentDetail,
@@ -63,7 +63,7 @@ function DocumentDetails(props: iDocumentDetails) {
     <Modal
       show={props.showDocumentDetailsModal}
       onHide={props.hideDocumentDetailsModal}
-      size="lg"
+      // size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       scrollable
@@ -92,7 +92,7 @@ function DocumentDetails(props: iDocumentDetails) {
           className="close"
           onClick={props.hideDocumentDetailsModal}
         >
-          <span aria-hidden="true">×</span>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
       <Modal.Body>

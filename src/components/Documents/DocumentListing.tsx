@@ -13,6 +13,7 @@ import dateIcon from "../../images/calendar-inactive.png";
 import FilterMoreButtonControl from "../../shared/FilterMoreButtonControl";
 import DocumentDetails from "./DocumentDetails";
 import TextTruncate from "react-text-truncate";
+import xIcon from "../../images/x-icon.svg";
 
 const mime = require("mime");
 
@@ -98,7 +99,7 @@ function DocumentListing() {
       <Modal
         show={openDocumentListing}
         onHide={() => showDocumentListing(false)}
-        size="lg"
+        //  size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
         scrollable
@@ -118,7 +119,7 @@ function DocumentListing() {
             className="close"
             onClick={() => showDocumentListing(false)}
           >
-            <span aria-hidden="true">×</span>
+            <img src={xIcon} width="15" />
           </button>
         </Modal.Header>
         <Modal.Body>

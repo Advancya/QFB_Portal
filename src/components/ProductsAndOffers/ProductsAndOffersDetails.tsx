@@ -4,6 +4,7 @@ import { localStrings as local_Strings } from "../../translations/localStrings";
 import { IProductAndOffersDetail } from "../../Helpers/publicInterfaces";
 import { AuthContext } from "../../providers/AuthProvider";
 import moment from "moment";
+import xIcon from "../../images/x-icon.svg";
 
 interface iProductsAndOffersDetails {
   showProductsAndOffersDetailsModal: boolean;
@@ -48,7 +49,7 @@ function ProductsAndOffersDetails(props: iProductsAndOffersDetails) {
           className="close"
           onClick={props.hideProductsAndOffersDetailsModal}
         >
-          <span aria-hidden="true">×</span>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
       <Modal.Body>

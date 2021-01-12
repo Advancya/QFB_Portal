@@ -65,6 +65,7 @@ html[dir="ltr"], [dir="ltr"] {
 
 ::-webkit-scrollbar {
   width: 10px;
+  height: 10px;
 }
 
 /* Track */
@@ -333,6 +334,21 @@ a:active, a:focus, a:hover {
   text-decoration: underline;
 }
 
+.file {
+  border: 0;
+}
+
+.file .file-custom {
+  border-radius: 1.5rem;
+  box-shadow: none;
+  border: 1px solid #d8d8d8;
+  color: #000;
+}
+
+.file-custom:before {
+  border-radius: 0 1.5rem 1.5rem 0;
+}
+
 input.form-control, select.form-control, select.custom-select, textarea.form-control, .custom-file-label, .custom-file-label {
   border: 1px solid #d8d8d8;
   border-radius: 1rem;
@@ -358,6 +374,14 @@ input.form-control, select.form-control, select.custom-select, textarea.form-con
   font-weight: 400;
   line-height: 1.5;
   background-clip: padding-box;
+}
+
+.react-datepicker-wrapper {
+  display: block;
+}
+
+.react-datepicker-wrapper input {
+  background: url("../images/calendar-inactive.png") no-repeat 96% 41%;
 }
 
 .form-control:disabled[type="date"] {
@@ -1192,7 +1216,16 @@ ul.box-list a:hover h4 small, ul.box-list a:hover p {
   border-radius: 1rem 0 0 0;
 }
 
+[dir="rtl"] .offset-2 {
+  margin-right: 16.666667%;
+  margin-left: 0;
+}
+
 /*.table-box .table-striped tbody tr:nth-of-type(odd)  {background-color: #f6f1ee;}*/
+
+.table-box {
+  overflow: auto;
+}
 
 .table-box .table-striped tbody tr {
   background-color: #FFF;
@@ -1572,27 +1605,72 @@ ul ul {
 
 /* Media Queries */
 
-@media all and (min-width: 576px) {}
+@media all and (min-width: 576px) {
+  [dir="rtl"] .text-sm-right {
+    text-align: left!important;
+  }
+  [dir="rtl"] .text-sm-left {
+    text-align: right!important;
+  }
+  .modal-dialog {
+    max-width: 80%;
+  }
+  .modal-lg {
+    max-width: 70%;
+  }
+  .modal-xl {
+    max-width: 90%;
+  }
+  .offset-sm-0 {
+    margin-left: 0;
+    margin-right: 0!important;
+  }
+}
 
 @media all and (min-width: 768px) {
-  .modal-dialog {
-    max-width: 50%;
-  }
   .navbar-expand-md .navbar-collapse {
     justify-content: flex-end;
+  }
+  .modal-dialog {
+    max-width: 80%;
   }
 }
 
 @media all and (min-width: 992px) {
-  .modal-lg, .modal-xl {
+  .modal-dialog {
+    max-width: 58%;
+  }
+  .modal-lg {
     max-width: 70%;
+  }
+  .modal-xl {
+    max-width: 90%;
   }
 }
 
-@media all and (min-width: 1024px) {}
+@media all and (min-width: 1024px) {
+  .modal-dialog {
+    max-width: 55%;
+  }
+  .modal-lg {
+    max-width: 70%;
+  }
+  .modal-xl {
+    max-width: 90%;
+  }
+}
 
 @media all and (min-width: 1200px) {
   /*.inner-boxes {max-width: 84%;}*/
+  .modal-dialog {
+    max-width: 50%;
+  }
+  .modal-lg {
+    max-width: 70%;
+  }
+  .modal-xl {
+    max-width: 90%;
+  }
 }
 
 @media all and (min-width: 1440px) {
@@ -1619,7 +1697,11 @@ ul ul {
   }
 }
 
-@media all and (max-width: 1199px) {}
+@media all and (max-width: 1199px) {
+  .btn-primary {
+    min-width: auto;
+  }
+}
 
 @media all and (max-width: 1023px) {
   html {
@@ -1632,6 +1714,9 @@ ul ul {
     max-width: 85%;
     margin: 1.75rem auto;
   }
+  .min-h-24 {
+    min-height: auto;
+  }
 }
 
 @media all and (max-width: 767px) {
@@ -1640,18 +1725,18 @@ ul ul {
   }
   .navbar-nav {
     background: rgba(0, 0, 0, 0.1);
-    padding: 1rem;
+    padding: 5px;
     flex-direction: row;
+  }
+  .nav-pills {
+    background-color: transparent;
+  }
+  .resetBtn {
+    margin-top: 5px;
   }
 }
 
 @media all and (max-width: 575px) {
-  [dir="rtl"] .text-sm-right {
-    text-align: left!important;
-  }
-  [dir="rtl"] .text-sm-left {
-    text-align: right!important;
-  }
   html {
     font-size: 13px
   }
@@ -1667,7 +1752,7 @@ ul ul {
   .header .logo {
     align-items: flex-end;
     justify-content: center;
-    margin: 1rem 0;
+    margin: 0;
   }
   .header .navbar-nav .nav-item {
     display: flex;
@@ -1682,5 +1767,10 @@ ul ul {
   }
   .headRow label, .headRow label a, .resetBtn {
     margin-top: 0.5rem;
+  }
+  .btn.btn-primary {
+    width: 100%;
+    margin: 5px 0!important;
+    max-width: 100%;
   }
 }

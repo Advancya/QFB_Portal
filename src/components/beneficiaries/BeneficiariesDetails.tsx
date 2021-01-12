@@ -1,8 +1,12 @@
+import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
+import xIcon from "../../images/x-icon.svg";
 import React, { useContext, useEffect, useState } from "react";
-import { Modal } from "react-bootstrap";
-import { localStrings as local_Strings } from '../../translations/localStrings';
+import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
-import { DeleteDeneficiary, iBeneficiary } from "../../services/transactionService";
+import {
+  DeleteDeneficiary,
+  iBeneficiary,
+} from "../../services/transactionService";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
@@ -17,9 +21,7 @@ interface iBeneficiariesDetails {
   refreshBeneficiariesListing: () => void;
 }
 
-function BeneficiariesDetails(
-  props: iBeneficiariesDetails
-) {
+function BeneficiariesDetails(props: iBeneficiariesDetails) {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
   const [isLoading, setLoading] = useState(false);
@@ -28,7 +30,7 @@ function BeneficiariesDetails(
     <Modal
       show={props.showBeneficiariesDetailsModal}
       onHide={props.hideBeneficiariesDetailsModal}
-      size="lg"
+      //   size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       scrollable
@@ -55,7 +57,7 @@ function BeneficiariesDetails(
           className="close"
           onClick={props.hideBeneficiariesDetailsModal}
         >
-          <span aria-hidden="true">×</span>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
       <Modal.Body>
@@ -64,192 +66,247 @@ function BeneficiariesDetails(
             <li className="pb-3">
               <div className="row align-items-center">
                 <div className="col-sm-8">
-                  <h4>{local_Strings.BeneficiariesListingIDLabel + props.beneficiary?.beneficiaryId}</h4>
-                  <h4 className="text-18">{props.beneficiary?.beneficiaryFullName}</h4>
+                  <h4>
+                    {local_Strings.BeneficiariesListingIDLabel +
+                      props.beneficiary?.beneficiaryId}
+                  </h4>
+                  <h4 className="text-18">
+                    {props.beneficiary?.beneficiaryFullName}
+                  </h4>
                 </div>
                 <div className="col-sm-4 text-sm-right">
-                  <span className="status-badge">{props.beneficiary?.country || ""}</span>
+                  <span className="status-badge">
+                    {props.beneficiary?.country || ""}
+                  </span>
                 </div>
               </div>
             </li>
           </ul>
           <div className="py-2 px-4">
             <div className="row">
-              {props.beneficiary?.typeId === "1" &&
-                <div className=" col-lg-9">
+              {props.beneficiary?.typeId === "1" && (
+                <div className="  col-xl-12">
                   <div className="row mb-5">
                     <div className="col-lg-6 form-group">
                       <label>{local_Strings.BeneficiaryIDLabel}</label>
-                      <div className="readonly">{props.beneficiary.beneficiaryId || ""}</div>
+                      <div className="readonly">
+                        {props.beneficiary.beneficiaryId || ""}
+                      </div>
                     </div>
 
                     <div className="col-lg-6 form-group">
                       <label>{local_Strings.BeneficiaryFullNameLabel}</label>
-                      <div className="readonly">{props.beneficiary.beneficiaryFullName || ""}</div>
+                      <div className="readonly">
+                        {props.beneficiary.beneficiaryFullName || ""}
+                      </div>
                     </div>
                     <div className="col-lg-6 form-group">
                       <label>{local_Strings.BeneficiaryQFBAccountOrIBAN}</label>
 
-                      <div className="readonly">{props.beneficiary.qfbaccount || ""}</div>
+                      <div className="readonly">
+                        {props.beneficiary.qfbaccount || ""}
+                      </div>
                     </div>
                     <div className="col-lg-6 form-group">
                       <label>{local_Strings.TransactionCurrencyLabel}</label>
 
-                      <div className="readonly">{props.beneficiary.beneficiaryCurrency || ""}</div>
+                      <div className="readonly">
+                        {props.beneficiary.beneficiaryCurrency || ""}
+                      </div>
                     </div>
                   </div>
                 </div>
-              }
+              )}
 
-              {props.beneficiary?.typeId === "2" &&
-                <div className="row mb-5">
-                  <div className="col-lg-6 form-group">
-                    <label>{local_Strings.BeneficiaryIDLabel}</label>
-                    <div className="readonly">{props.beneficiary.beneficiaryId || ""}</div>
-                  </div>
-                  <div className="col-lg-6 form-group">
-                    <label>{local_Strings.BeneficiaryFullNameLabel}</label>
-                    <div className="readonly">{props.beneficiary.beneficiaryFullName || ""}</div>
-                  </div>
-                  <div className="col-lg-6 form-group">
-                    <label>{local_Strings.BeneficiaryBankLabel}</label>
-                    <div className="readonly">{props.beneficiary.beneficiaryBank || ""}</div>
-                  </div>
-                  <div className="col-lg-6 form-group">
-                    <label>{local_Strings.BeneficiarySwiftCodeLabel}</label>
-                    <div className="readonly">{props.beneficiary.beneficiaryBankSwiftCode || ""}</div>
-                  </div>
-                  <div className="col-lg-6 form-group">
-                    <label>{local_Strings.BeneficiaryForeignCurrencyLabel}</label>
-                    <div className="readonly">{props.beneficiary.beneficiaryCurrency || ""}</div>
-                  </div>
-                  <div className="col-lg-6 form-group">
-                    <label>{local_Strings.BeneficiaryAddressLabel}</label>
-                    <div className="readonly">
-                      {props.beneficiary.beneficiaryAddress || ""}
+              {props.beneficiary?.typeId === "2" && (
+                <div className="  col-xl-12">
+                  <div className="row mb-5">
+                    <div className="col-lg-6 form-group">
+                      <label>{local_Strings.BeneficiaryIDLabel}</label>
+                      <div className="readonly">
+                        {props.beneficiary.beneficiaryId || ""}
+                      </div>
+                    </div>
+                    <div className="col-lg-6 form-group">
+                      <label>{local_Strings.BeneficiaryFullNameLabel}</label>
+                      <div className="readonly">
+                        {props.beneficiary.beneficiaryFullName || ""}
+                      </div>
+                    </div>
+                    <div className="col-lg-6 form-group">
+                      <label>{local_Strings.BeneficiaryBankLabel}</label>
+                      <div className="readonly">
+                        {props.beneficiary.beneficiaryBank || ""}
+                      </div>
+                    </div>
+                    <div className="col-lg-6 form-group">
+                      <label>{local_Strings.BeneficiarySwiftCodeLabel}</label>
+                      <div className="readonly">
+                        {props.beneficiary.beneficiaryBankSwiftCode || ""}
+                      </div>
+                    </div>
+                    <div className="col-lg-6 form-group">
+                      <label>
+                        {local_Strings.BeneficiaryForeignCurrencyLabel}
+                      </label>
+                      <div className="readonly">
+                        {props.beneficiary.beneficiaryCurrency || ""}
+                      </div>
+                    </div>
+                    <div className="col-lg-6 form-group">
+                      <label>{local_Strings.BeneficiaryAddressLabel}</label>
+                      <div className="readonly">
+                        {props.beneficiary.beneficiaryAddress || ""}
+                      </div>
                     </div>
                   </div>
                 </div>
-              }
+              )}
 
-              {props.beneficiary?.typeId === "3" &&
-                <div className="row mb-5">
-                  <div className="col-lg-6 form-group">
-                    <label>{local_Strings.BeneficiaryIDLabel}</label>
-                    <div className="readonly">{props.beneficiary.beneficiaryId || ""}</div>
-                  </div>
+              {props.beneficiary?.typeId === "3" && (
+                <div className="  col-xl-12">
+                  <div className="row mb-5">
+                    <div className="col-lg-6 form-group">
+                      <label>{local_Strings.BeneficiaryIDLabel}</label>
+                      <div className="readonly">
+                        {props.beneficiary.beneficiaryId || ""}
+                      </div>
+                    </div>
 
-                  <div className="col-lg-6 form-group">
-                    <label>{local_Strings.BeneficiaryFullNameLabel}</label>
-                    <div className="readonly">{props.beneficiary.beneficiaryFullName || ""}</div>
-                  </div>
+                    <div className="col-lg-6 form-group">
+                      <label>{local_Strings.BeneficiaryFullNameLabel}</label>
+                      <div className="readonly">
+                        {props.beneficiary.beneficiaryFullName || ""}
+                      </div>
+                    </div>
 
-                  <div className="col-lg-6 form-group">
-                    <label>{local_Strings.BeneficiarySwiftCodeLabel}</label>
-                    <div className="readonly">{props.beneficiary.beneficiarySwiftCode || ""}</div>
-                  </div>
+                    <div className="col-lg-6 form-group">
+                      <label>{local_Strings.BeneficiarySwiftCodeLabel}</label>
+                      <div className="readonly">
+                        {props.beneficiary.beneficiarySwiftCode || ""}
+                      </div>
+                    </div>
 
-                  <div className="col-lg-6 form-group">
-                    <label>{local_Strings.BeneficiaryBankLabel}</label>
-                    <div className="readonly">{props.beneficiary.beneficiaryBank || ""}</div>
-                  </div>
+                    <div className="col-lg-6 form-group">
+                      <label>{local_Strings.BeneficiaryBankLabel}</label>
+                      <div className="readonly">
+                        {props.beneficiary.beneficiaryBank || ""}
+                      </div>
+                    </div>
 
-                  <div className="col-lg-6 form-group">
-                    <label>{local_Strings.BeneficiaryAccountNumberLabel}</label>
-                    <div className="readonly">{props.beneficiary.beneficiaryAccountNumber || ""}</div>
-                  </div>
-                  <div className="col-lg-6 form-group">
-                    <label>{local_Strings.BeneficiaryIBANLabel}</label>
-                    <div className="readonly">
-                      {props.beneficiary.beneficiaryIban || ""}
+                    <div className="col-lg-6 form-group">
+                      <label>
+                        {local_Strings.BeneficiaryAccountNumberLabel}
+                      </label>
+                      <div className="readonly">
+                        {props.beneficiary.beneficiaryAccountNumber || ""}
+                      </div>
                     </div>
-                  </div>
-                  <div className="col-lg-6 form-group">
-                    <label>{local_Strings.BeneficiaryAddressLabel}</label>
-                    <div className="readonly">
-                      {props.beneficiary.beneficiaryAddress || ""}
+                    <div className="col-lg-6 form-group">
+                      <label>{local_Strings.BeneficiaryIBANLabel}</label>
+                      <div className="readonly">
+                        {props.beneficiary.beneficiaryIban || ""}
+                      </div>
                     </div>
-                  </div>
-                  <div className="col-lg-6 form-group">
-                    <label>{local_Strings.BeneficiaryCountryLabel}</label>
-                    <div className="readonly">
-                      {props.beneficiary.country || ""}
+                    <div className="col-lg-6 form-group">
+                      <label>{local_Strings.BeneficiaryAddressLabel}</label>
+                      <div className="readonly">
+                        {props.beneficiary.beneficiaryAddress || ""}
+                      </div>
                     </div>
-                  </div>
-                  <div className="col-lg-6 form-group">
-                    <label>{local_Strings.BeneficiaryCityLabel}</label>
-                    <div className="readonly">
-                      {props.beneficiary.beneficiaryCity || ""}
+                    <div className="col-lg-6 form-group">
+                      <label>{local_Strings.BeneficiaryCountryLabel}</label>
+                      <div className="readonly">
+                        {props.beneficiary.country || ""}
+                      </div>
                     </div>
-                  </div>
-                  <div className="col-lg-6 form-group">
-                    <label>{local_Strings.BeneficiaryIntermediaryBankSwiftCodeLabel}</label>
-                    <div className="readonly">
-                      {props.beneficiary.intermediaryBankSwiftCode || ""}
+                    <div className="col-lg-6 form-group">
+                      <label>{local_Strings.BeneficiaryCityLabel}</label>
+                      <div className="readonly">
+                        {props.beneficiary.beneficiaryCity || ""}
+                      </div>
                     </div>
-                  </div>
-                  <div className="col-lg-6 form-group">
-                    <label>{local_Strings.BeneficiaryIntermediaryBankLabel}</label>
-                    <div className="readonly">
-                      {props.beneficiary.intermediaryBankName || ""}
-                    </div>
-                  </div>
-                  <div className="col-lg-6 form-group">
-                    <label>{local_Strings.BeneficiaryRoutingNumberLabel}</label>
-                    <div className="readonly">
-                      {props.beneficiary.routingNumber || ""}
-                    </div>
-                  </div>
-                </div>
-              }
-
-              {currentContext.userRole === "CUSTOMER" &&
-                <div className="text-right p-3">
-                  <LoadingOverlay
-                    active={isLoading}
-                    spinner={
-                      <PuffLoader
-                        size={Constant.SpnnerSize}
-                        color={Constant.SpinnerColor}
-                      />
-                    }
-                  />
-                  <button id="applyReqBtn" className="btn btn-primary mx-2"
-                    type="button"
-                    onClick={() => props.showEditBeneficiaryModal()}>
-                    {local_Strings.BeneficiaryEditButton}
-                  </button>
-                  <button id="applyReqBtn" className="btn btn-primary"
-                    type="button"
-                    onClick={(e) => {
-                      Swal.fire({
-                        title: local_Strings.DeleteConfirmationTitle,
-                        text: local_Strings.DeleteConfirmationBody,
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#6b4f44",
-                        confirmButtonText:
-                          local_Strings.OfferDeleteButton,
-                        cancelButtonText: local_Strings.cancelBtn,
-                      }).then(async (result) => {
-                        if (result.isConfirmed) {
-                          setLoading(true);
-                          const res = await DeleteDeneficiary(
-                            props.beneficiary.id
-                          );
-                          if (res) {
-                            setLoading(false);
-                            props.refreshBeneficiariesListing();
-                          }
-                          setLoading(false);
+                    <div className="col-lg-6 form-group">
+                      <label>
+                        {
+                          local_Strings.BeneficiaryIntermediaryBankSwiftCodeLabel
                         }
-                      });
-                    }}>
-                    {local_Strings.BeneficiaryDeleteButton}
-                  </button>
+                      </label>
+                      <div className="readonly">
+                        {props.beneficiary.intermediaryBankSwiftCode || ""}
+                      </div>
+                    </div>
+                    <div className="col-lg-6 form-group">
+                      <label>
+                        {local_Strings.BeneficiaryIntermediaryBankLabel}
+                      </label>
+                      <div className="readonly">
+                        {props.beneficiary.intermediaryBankName || ""}
+                      </div>
+                    </div>
+                    <div className="col-lg-6 form-group">
+                      <label>
+                        {local_Strings.BeneficiaryRoutingNumberLabel}
+                      </label>
+                      <div className="readonly">
+                        {props.beneficiary.routingNumber || ""}
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              }
+              )}
             </div>
+            {currentContext.userRole === "CUSTOMER" && (
+              <div className="text-right">
+                <LoadingOverlay
+                  active={isLoading}
+                  spinner={
+                    <PuffLoader
+                      size={Constant.SpnnerSize}
+                      color={Constant.SpinnerColor}
+                    />
+                  }
+                />
+                <button
+                  id="applyReqBtn"
+                  className="btn btn-primary mx-2"
+                  type="button"
+                  onClick={() => props.showEditBeneficiaryModal()}
+                >
+                  {local_Strings.BeneficiaryEditButton}
+                </button>
+                <button
+                  id="applyReqBtn"
+                  className="btn btn-primary"
+                  type="button"
+                  onClick={(e) => {
+                    Swal.fire({
+                      title: local_Strings.DeleteConfirmationTitle,
+                      text: local_Strings.DeleteConfirmationBody,
+                      icon: "warning",
+                      showCancelButton: true,
+                      confirmButtonColor: "#6b4f44",
+                      confirmButtonText: local_Strings.OfferDeleteButton,
+                      cancelButtonText: local_Strings.cancelBtn,
+                    }).then(async (result) => {
+                      if (result.isConfirmed) {
+                        setLoading(true);
+                        const res = await DeleteDeneficiary(
+                          props.beneficiary.id
+                        );
+                        if (res) {
+                          setLoading(false);
+                          props.refreshBeneficiariesListing();
+                        }
+                        setLoading(false);
+                      }
+                    });
+                  }}
+                >
+                  {local_Strings.BeneficiaryDeleteButton}
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </Modal.Body>

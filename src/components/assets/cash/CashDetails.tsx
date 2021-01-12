@@ -1,24 +1,29 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import excelIcon from "../../../images/excel.svg";
-import FilterCommonControl2 from '../../../shared/FilterCommonControl2';
-import TransactionListing from '../../../shared/TransactionListing';
+import FilterCommonControl2 from "../../../shared/FilterCommonControl2";
+import TransactionListing from "../../../shared/TransactionListing";
 import moment from "moment";
-import { localStrings as local_Strings } from '../../../translations/localStrings';
+import { localStrings as local_Strings } from "../../../translations/localStrings";
 import { AuthContext } from "../../../providers/AuthProvider";
-import { emptyTransaction, ICommonFilter, ITransaction } from "../../../Helpers/publicInterfaces";
+import {
+  emptyTransaction,
+  ICommonFilter,
+  ITransaction,
+} from "../../../Helpers/publicInterfaces";
 import * as helper from "../../../Helpers/helper";
 import { GetCashTransactions } from "../../../services/cmsService";
 import Constant from "../../../constants/defaultData";
-import LoadingOverlay from 'react-loading-overlay';
+import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import ReactExport from "react-export-excel";
+import xIcon from "../../../images/x-icon.svg";
 
 interface iCashDetails {
   showCashDetailsModal: boolean;
   hideCashDetailsModal: () => void;
   backCashListingModal: () => void;
-  params: { accountNumber: string, balance: number }
+  params: { accountNumber: string; balance: number };
 }
 
 function CashDetails(props: iCashDetails) {
@@ -26,7 +31,9 @@ function CashDetails(props: iCashDetails) {
   local_Strings.setLanguage(currentContext.language);
   const [isLoading, setLoading] = useState(false);
   const [data, setData] = useState<ITransaction[]>([emptyTransaction]);
-  const [filteredData, setFilteredData] = useState<ITransaction[]>([emptyTransaction]);
+  const [filteredData, setFilteredData] = useState<ITransaction[]>([
+    emptyTransaction,
+  ]);
   const ExcelFile = ReactExport.ExcelFile;
   const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
   const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
@@ -36,19 +43,23 @@ function CashDetails(props: iCashDetails) {
 
     const initialLoadMethod = async () => {
       setLoading(true);
-      GetCashTransactions(currentContext.selectedCIF, props.params.accountNumber)
+      GetCashTransactions(
+        currentContext.selectedCIF,
+        props.params.accountNumber
+      )
         .then((responseData: ITransaction[]) => {
           if (isMounted && responseData && responseData.length > 0) {
             const _data = responseData.filter(
-              (d) => new Date(d.bookingDate) > moment().add(-3, "months").toDate()
-            )
+              (d) =>
+                new Date(d.bookingDate) > moment().add(-3, "months").toDate()
+            );
             setData(responseData);
             setFilteredData(_data);
           }
         })
         .catch((e: any) => console.log(e))
         .finally(() => setLoading(false));
-    }
+    };
 
     if (!!currentContext.selectedCIF) {
       initialLoadMethod();
@@ -87,7 +98,11 @@ function CashDetails(props: iCashDetails) {
             </div>
             <div className="col-4 col-sm-3">
               <h5>{local_Strings.CurrentBalanceLabel}</h5>
-              <h4>{props.params.balance + " " + currentContext.userSettings.currency}</h4>
+              <h4>
+                {props.params.balance +
+                  " " +
+                  currentContext.userSettings.currency}
+              </h4>
             </div>
           </div>
         </div>
@@ -96,33 +111,36 @@ function CashDetails(props: iCashDetails) {
           className="close"
           onClick={props.hideCashDetailsModal}
         >
-          <span aria-hidden="true">×</span>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
       <Modal.Body>
-        {data && data.length > 0 && !!data[0].bookingDate &&
+        {data && data.length > 0 && !!data[0].bookingDate && (
           <FilterCommonControl2
             CheckBoxTitle={local_Strings.RequestTypeLabel}
             CheckBoxLabels={[
-              local_Strings.CashDetails_Filter_Debit, local_Strings.CashDetails_Filter_Credit
+              local_Strings.CashDetails_Filter_Debit,
+              local_Strings.CashDetails_Filter_Credit,
             ]}
             clearFilter={() => {
               const _data = data.filter(
-                (d) => new Date(d.bookingDate) > moment().add(-3, "months").toDate()
-              )
+                (d) =>
+                  new Date(d.bookingDate) > moment().add(-3, "months").toDate()
+              );
               setFilteredData(_data);
             }}
             applyFilter={(filters: ICommonFilter) => {
               console.log(filters);
-              const _filteredData = helper.filterTransactions(
-                data,
-                filters
-              );
+              const _filteredData = helper.filterTransactions(data, filters);
               setFilteredData(_filteredData);
-            }} />
-        }
+            }}
+          />
+        )}
 
-        <TransactionListing transactions={filteredData} showBalanceField={true} />
+        <TransactionListing
+          transactions={filteredData}
+          showBalanceField={true}
+        />
 
         <LoadingOverlay
           active={isLoading}
@@ -133,20 +151,47 @@ function CashDetails(props: iCashDetails) {
             />
           }
         />
-        {filteredData && filteredData.length > 0 && !!filteredData[0].accountNumber &&
-          <div className="exportExcel">
-            <ExcelFile filename={local_Strings.CashDetailsTitle}
-              element={<a href="#"><img src={excelIcon} className="img-fluid" />
-                {local_Strings.exportToExcel}</a>}>
-              <ExcelSheet data={filteredData} name={local_Strings.CashDetailsTitle}>
-                <ExcelColumn label={local_Strings.AccountNo} value="accountNumber" />
-                <ExcelColumn label={local_Strings.RequestListingFilterDate} value="bookingDate" />
-                <ExcelColumn label={local_Strings.Amount} value="transaction_Amount" />
-                <ExcelColumn label={local_Strings.Description} value={"descriptions"} />
-                <ExcelColumn label={local_Strings.CashDetailsBalanceLabel} value={"balance"} />
-              </ExcelSheet>
-            </ExcelFile>
-          </div>}
+        {filteredData &&
+          filteredData.length > 0 &&
+          !!filteredData[0].accountNumber && (
+            <div className="exportExcel">
+              <ExcelFile
+                filename={local_Strings.CashDetailsTitle}
+                element={
+                  <a href="#">
+                    <img src={excelIcon} className="img-fluid" />
+                    {local_Strings.exportToExcel}
+                  </a>
+                }
+              >
+                <ExcelSheet
+                  data={filteredData}
+                  name={local_Strings.CashDetailsTitle}
+                >
+                  <ExcelColumn
+                    label={local_Strings.AccountNo}
+                    value="accountNumber"
+                  />
+                  <ExcelColumn
+                    label={local_Strings.RequestListingFilterDate}
+                    value="bookingDate"
+                  />
+                  <ExcelColumn
+                    label={local_Strings.Amount}
+                    value="transaction_Amount"
+                  />
+                  <ExcelColumn
+                    label={local_Strings.Description}
+                    value={"descriptions"}
+                  />
+                  <ExcelColumn
+                    label={local_Strings.CashDetailsBalanceLabel}
+                    value={"balance"}
+                  />
+                </ExcelSheet>
+              </ExcelFile>
+            </div>
+          )}
       </Modal.Body>
     </Modal>
   );

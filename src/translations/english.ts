@@ -174,7 +174,7 @@ const en = {
 
   CashDetailsTitle: "Cash Details",
   CashDetailsFilter: "Filter",
-  CashDetailsRemoveFilter: "Remove Filters",
+  CashDetailsRemoveFilter: "Clear Filters",
   CashDetailsFilterDate: "Date",
   CashDetailsFilterTransactionAmount: "Amount",
   CashDetailsFilterType: "Type",
@@ -202,7 +202,7 @@ const en = {
 
   DepositeDetailsRecieved: "Recieved Profit Transactions",
   DepositeDetailsFilter: "Filter",
-  DepositeDetailsRemoveFilter: "Remove Filters",
+  DepositeDetailsRemoveFilter: "Clear Filters",
   DepositeDetailsFilterDate: "Date",
   DepositeDetailsFilterTransactionAmount: "Amount",
   DepositeDetailsFilterType: "Type",
@@ -469,8 +469,7 @@ const en = {
 
   ContactUsNameLabel: "Name",
   ContactUsCountryLabel: "Country",
-  ContactUsMobileLabel:
-    "Mobile Number (Include country code, ex: +97412345678)",
+  ContactUsMobileLabel: "Mobile Number (ex: +97412345678)",
   ContactUsEmailAddressLabel: "Email Address",
   ContactUsQueryLabel: "Query",
   SignupSuccessTitle: "Request Sent",

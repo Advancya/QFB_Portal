@@ -9,9 +9,10 @@ import iRequest, {
   GetRequstByID,
 } from "../../services/requestService";
 import Constant from "../../constants/defaultData";
-import LoadingOverlay from 'react-loading-overlay';
+import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
-import ViewAttachment from '../../shared/AttachmentViewer';
+import ViewAttachment from "../../shared/AttachmentViewer";
+import xIcon from "../../images/x-icon.svg";
 
 interface iRequestsDetails {
   showRequestsDetailsModal: boolean;
@@ -153,7 +154,7 @@ function RequestsDetails(props: iRequestsDetails) {
     <Modal
       show={props.showRequestsDetailsModal}
       onHide={props.hideRequestsDetailsModal}
-      size="lg"
+      //size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       scrollable
@@ -180,7 +181,7 @@ function RequestsDetails(props: iRequestsDetails) {
           className="close"
           onClick={props.hideRequestsDetailsModal}
         >
-          <span aria-hidden="true">×</span>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
 
@@ -212,53 +213,54 @@ function RequestsDetails(props: iRequestsDetails) {
           </ul>
           <LoadingOverlay
             active={isLoading}
-            spinner={<PuffLoader
-              size={Constant.SpnnerSize}
-              color={Constant.SpinnerColor}
-            />}
+            spinner={
+              <PuffLoader
+                size={Constant.SpnnerSize}
+                color={Constant.SpinnerColor}
+              />
+            }
           />
-          {formFields.map((item, index) =>
+          {formFields.map((item, index) => (
             <div key={index} className="py-2 px-3">
               <div className="row">
                 <div className="col-lg-8">
-                  <label>{
-                    currentContext.language === "ar"
+                  <label>
+                    {currentContext.language === "ar"
                       ? item["details"].split(";")[1]
-                      : item["details"].split(";")[0]
-                  }
+                      : item["details"].split(";")[0]}
                   </label>
-                  {item["details"].split(";")[2] !== "FILE_UPLOAD" ?
-                    (
-                      item["details"].split(";")[2] ===
-                        "MULTILINE_TEXT" || (item["details"].split(";")[2] === "READ_ONLY" &&
-                          item["details"].split(";")[3].toString() !==
-                          "NULL") ?
-                        <Form.Control
-                          as="textarea"
-                          readOnly={true}
-                          defaultValue={getRequestFieldValue(
-                            item["details"].split(";")[0].replace(/ /g, ""))
-                          }
-                        /> :
-                        <div
-                          dangerouslySetInnerHTML={{
-                            __html: getRequestFieldValue(
-                              item["details"].split(";")[0].replace(/ /g, ""))
-                          }}
-                          className="request-detail-control" />
+                  {item["details"].split(";")[2] !== "FILE_UPLOAD" ? (
+                    item["details"].split(";")[2] === "MULTILINE_TEXT" ||
+                    (item["details"].split(";")[2] === "READ_ONLY" &&
+                      item["details"].split(";")[3].toString() !== "NULL") ? (
+                      <Form.Control
+                        as="textarea"
+                        readOnly={true}
+                        defaultValue={getRequestFieldValue(
+                          item["details"].split(";")[0].replace(/ /g, "")
+                        )}
+                      />
+                    ) : (
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: getRequestFieldValue(
+                            item["details"].split(";")[0].replace(/ /g, "")
+                          ),
+                        }}
+                        className="request-detail-control"
+                      />
                     )
-                    :
-                    <ViewAttachment showDelete={false}
+                  ) : (
+                    <ViewAttachment
+                      showDelete={false}
                       fileName={getRequestFieldValue("FileName")}
-                      fileContent={getRequestFieldValue(
-                        "FileContent"
-                      )}
+                      fileContent={getRequestFieldValue("FileContent")}
                     />
-                  }
+                  )}
                 </div>
               </div>
             </div>
-          )}
+          ))}
         </div>
       </Modal.Body>
     </Modal>

@@ -1,14 +1,19 @@
 import { GetSettingsByCIF } from "../services/cmsService";
-import { initialSettingsData, IUserSettings, GetUserLocalData, SaveUserDataLocally } from "../Helpers/authHelper";
+import {
+  initialSettingsData,
+  IUserSettings,
+  GetUserLocalData,
+  SaveUserDataLocally,
+} from "../Helpers/authHelper";
 import React, { useEffect, useState } from "react";
 import { authenticate } from "../services/authenticationService";
-import * as helper from '../Helpers/helper';
+import * as helper from "../Helpers/helper";
 import { getUserRole } from "../services/apiServices";
 import Constant from "../constants/defaultData";
 
 export type User = { username: string; password: string; otp: string };
 interface IAppContext {
-  userSettings: IUserSettings,
+  userSettings: IUserSettings;
   userRole: string;
   language: string;
   selectedCIF: string;
@@ -35,10 +40,12 @@ export const AuthContext = React.createContext<IAppContext>({
   selectCIF: (cif) => { },
 });
 
-interface AuthProviderProps { }
+interface AuthProviderProps {}
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [userSettings, setUserSettings] = useState<IUserSettings>(initialSettingsData);
+  const [userSettings, setUserSettings] = useState<IUserSettings>(
+    initialSettingsData
+  );
   const [language, setLanguage] = useState(helper.getLanguage() || "en");
   const [userRole, setUserRole] = useState<string>("");
   const [selectedCIF, setCIF] = useState<string>(initialSettingsData.customerId);
@@ -78,8 +85,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           );
 
           if (resutl) {
-            await GetSettingsByCIF(userData.username)
-              .then(async (settings: any) => {
+            await GetSettingsByCIF(userData.username).then(
+              async (settings: any) => {
                 if (settings && settings.length > 0) {
                   const _userSettings = settings[0];
                   setUserSettings(_userSettings);
@@ -97,7 +104,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                 if (role && !!role) {
                   setUserRole(role.name);
                 }
-              });
+              }
+            );
             return resutl;
           } else {
             return false;

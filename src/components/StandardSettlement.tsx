@@ -3,6 +3,7 @@ import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
 import dateIcon from "../images/calendar-inactive.png";
 import { localStrings as local_Strings } from "../translations/localStrings";
 import { useHistory } from "react-router-dom";
+import xIcon from "../images/x-icon.svg";
 
 import { AuthContext } from "../providers/AuthProvider";
 
@@ -31,7 +32,7 @@ function StandardSettlement(standardSettlementProps: iStandardSettlement) {
       <Modal
         show={showStandardSettlement}
         onHide={handleCloseStandardSettlement}
-        size="lg"
+        size="xl"
         aria-labelledby="contained-modal-title-vcenter"
         centered
         scrollable
@@ -51,7 +52,7 @@ function StandardSettlement(standardSettlementProps: iStandardSettlement) {
             className="close"
             onClick={handleCloseStandardSettlement}
           >
-            <span aria-hidden="true">×</span>
+            <img src={xIcon} width="15" />
           </button>
         </Modal.Header>
         <Modal.Body>

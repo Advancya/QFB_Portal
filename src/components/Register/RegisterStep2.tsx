@@ -14,6 +14,7 @@ import * as yup from "yup";
 import InvalidFieldError from "../../shared/invalid-field-error";
 import Swal from "sweetalert2";
 import { SendOTP } from "../../services/cmsService";
+import xIcon from "../../images/x-icon.svg";
 
 interface iRegisterStep2 {
   showRegisterStep2Modal: boolean;
@@ -76,7 +77,7 @@ function RegisterStep2(props: iRegisterStep2) {
           className="close"
           onClick={props.hideRegisterStep2Modal}
         >
-          <span aria-hidden="true">×</span>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
       <Modal.Body>

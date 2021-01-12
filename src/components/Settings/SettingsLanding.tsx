@@ -7,6 +7,7 @@ import { GetUserWelcomeData } from "../../services/cmsService";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
+import xIcon from "../../images/x-icon.svg";
 
 interface iSettingsLanding {
   showSettingsLandingModal: boolean;
@@ -49,7 +50,7 @@ function SettingsLanding(props: iSettingsLanding) {
         })
         .catch((e: any) => console.log(e))
         .finally(() => setLoading(false));
-    }
+    };
 
     if (!!currentContext.selectedCIF) {
       initialLoadMethod();
@@ -64,7 +65,7 @@ function SettingsLanding(props: iSettingsLanding) {
     <Modal
       show={props.showSettingsLandingModal}
       onHide={props.hideSettingsLandingModal}
-      size="lg"
+      //size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       scrollable
@@ -84,7 +85,7 @@ function SettingsLanding(props: iSettingsLanding) {
           className="close"
           onClick={props.hideSettingsLandingModal}
         >
-          <span aria-hidden="true">×</span>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
       <Modal.Body>
@@ -104,11 +105,16 @@ function SettingsLanding(props: iSettingsLanding) {
                 <div className="row no-gutters align-items-center">
                   <div className="col-md-6">
                     <h6 className="mb-1 text-600 text-18 ">
-                      {userInfo["customerShortName"] || userInfo["rmEmail"] || ""}
+                      {userInfo["customerShortName"] ||
+                        userInfo["rmEmail"] ||
+                        ""}
                     </h6>
-                    <div className="color-gray">{local_Strings.RMSampleAccount + currentContext.selectedCIF}</div>
+                    <div className="color-gray">
+                      {local_Strings.RMSampleAccount +
+                        currentContext.selectedCIF}
+                    </div>
                   </div>
-                  <div className="col-md-6 text-md-right">
+                  <div className="col-md-6 text-right">
                     <a
                       href="tel:+974 00000000"
                       className="mx-1 color-gold text-xs d-block"
@@ -138,7 +144,7 @@ function SettingsLanding(props: iSettingsLanding) {
             <div className="row mb-4">
               <button
                 id="applyReqBtn"
-                className="btn btn-primary col-sm-8 col-md-4   mx-auto"
+                className="btn btn-primary col-sm-8 col-md-5   mx-auto"
                 onClick={props.showChangeCurrencyModal}
               >
                 {local_Strings.SettingsLandingButton1}
@@ -147,7 +153,7 @@ function SettingsLanding(props: iSettingsLanding) {
             <div className="row mb-4">
               <button
                 id="applyReqBtn"
-                className="btn btn-primary col-sm-8 col-md-4   mx-auto"
+                className="btn btn-primary col-sm-8 col-md-5   mx-auto"
                 onClick={props.showChangePasswordModal}
               >
                 {local_Strings.SettingsLandingButton2}
@@ -156,7 +162,7 @@ function SettingsLanding(props: iSettingsLanding) {
             <div className="row mb-4">
               <button
                 id="applyReqBtn"
-                className="btn btn-primary col-sm-8 col-md-4   mx-auto"
+                className="btn btn-primary col-sm-8 col-md-5   mx-auto"
                 onClick={props.showChangeOTPMethodModal}
               >
                 {local_Strings.SettingsLandingButton3}
@@ -165,7 +171,7 @@ function SettingsLanding(props: iSettingsLanding) {
             <div className="row mb-4">
               <button
                 id="applyReqBtn"
-                className="btn btn-primary col-sm-8 col-md-4   mx-auto"
+                className="btn btn-primary col-sm-8 col-md-5   mx-auto"
                 onClick={props.showChangeLanguageModal}
               >
                 {local_Strings.SettingsLandingButton4}

@@ -1,9 +1,9 @@
+import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
+import transactionSentIcon from "../../images/req-sent.svg";
+import xIcon from "../../images/x-icon.svg";
 import React, { useContext, useEffect, useState } from "react";
-import { Modal } from "react-bootstrap";
-import {
-  GetBeneficiariesByCif,
-} from "../../services/transactionService";
-import { localStrings as local_Strings } from '../../translations/localStrings';
+import { GetBeneficiariesByCif } from "../../services/transactionService";
+import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
 import { ITransactionDetail } from "../../Helpers/publicInterfaces";
 import { GetCashListing, SendOTP } from "../../services/cmsService";
@@ -12,15 +12,15 @@ import {
   GetTransactionTypes,
 } from "../../services/commonDataServices";
 import axios from "axios";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 import Constant from "../../constants/defaultData";
-import LoadingOverlay from 'react-loading-overlay';
+import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import moment from "moment";
 import { Formik } from "formik";
 import * as yup from "yup";
-import InvalidFieldError from '../../shared/invalid-field-error';
-import DatePicker from 'react-datepicker';
+import InvalidFieldError from "../../shared/invalid-field-error";
+import DatePicker from "react-datepicker";
 
 interface iNewTransaction {
   showNewTransactionModal: boolean;
@@ -113,7 +113,10 @@ function NewTransaction(props: iNewTransaction) {
     for (let index = 0; index < data.length; index++) {
       const element = data[index];
       result.push({
-        label: currentContext.language === "ar" ? element["nameAr"] : element["name"],
+        label:
+          currentContext.language === "ar"
+            ? element["nameAr"]
+            : element["name"],
         value: element["id"],
       });
     }
@@ -157,8 +160,14 @@ function NewTransaction(props: iNewTransaction) {
     for (let index = 0; index < data.length; index++) {
       const element = data[index];
       result.push({
-        label: currentContext.language === "ar" ? element["nameAr"] : element["name"],
-        value: currentContext.language === "ar" ? element["nameAr"] : element["name"],
+        label:
+          currentContext.language === "ar"
+            ? element["nameAr"]
+            : element["name"],
+        value:
+          currentContext.language === "ar"
+            ? element["nameAr"]
+            : element["name"],
       });
     }
     setCurrencies(result.slice(1));
@@ -186,7 +195,7 @@ function NewTransaction(props: iNewTransaction) {
       fetchTransactionType();
       fetchCurrencies();
       fetchAccountCashList();
-    }
+    };
 
     if (!!currentContext.selectedCIF) {
       initialLoadMethod();
@@ -197,7 +206,7 @@ function NewTransaction(props: iNewTransaction) {
     <Modal
       show={props.showNewTransactionModal}
       onHide={props.hideNewTransactionModal}
-      size="lg"
+      //size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       scrollable
@@ -225,24 +234,20 @@ function NewTransaction(props: iNewTransaction) {
           className="close"
           onClick={props.hideNewTransactionModal}
         >
-          <span aria-hidden="true">×</span>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
       <Modal.Body>
-        <div
-          className="box modal-box"
-          id="applyReqBox"
-        >
+        <div className="box modal-box" id="applyReqBox">
           <div className="container-fluid">
-            <div className="row">
-              <div className="col-lg-9 form-group">
+            <div className="row col-xl-9">
+              <div className="col-lg-12 form-group">
                 <label>{local_Strings.TransactionTransferTypeLabel}</label>
                 <select
                   className="form-control"
                   id="reqTypeSelect"
                   value={transactionTypeId || ""}
                   onChange={(e: any) => {
-
                     setTransactionTypeId(e.target.value);
                     fetchBeneficiariesByCif(e.target.value);
                     setShowFormLocal(false);
@@ -263,9 +268,11 @@ function NewTransaction(props: iNewTransaction) {
                   {transactionTypes &&
                     transactionTypes.length > 0 &&
                     !!transactionTypes[0].label &&
-                    transactionTypes.map((c, i) =>
-                      <option key={i} value={c.value}>{c.label}</option>
-                    )}
+                    transactionTypes.map((c, i) => (
+                      <option key={i} value={c.value}>
+                        {c.label}
+                      </option>
+                    ))}
                 </select>
               </div>
             </div>
@@ -279,7 +286,7 @@ function NewTransaction(props: iNewTransaction) {
               />
             }
           />
-          {showFormWithin &&
+          {showFormWithin && (
             <Formik
               initialValues={initialValuesWithin}
               validationSchema={validationSchemaWithin}
@@ -291,11 +298,11 @@ function NewTransaction(props: iNewTransaction) {
                   props.showOTPValidationFormModal(values);
                 } else {
                   Swal.fire({
-                    position: 'top-end',
-                    icon: 'error',
+                    position: "top-end",
+                    icon: "error",
                     title: local_Strings.GenericErrorMessage,
                     showConfirmButton: false,
-                    timer: Constant.AlertTimeout
+                    timer: Constant.AlertTimeout,
                   });
                 }
                 setLoading(false);
@@ -310,70 +317,93 @@ function NewTransaction(props: iNewTransaction) {
                 touched,
                 setFieldValue,
                 validateForm,
-                isValid
+                isValid,
               }) => (
-                <div
-                  className="newReqFields"
-                  id="newReqFields"
-                >
-                  <div className="py-2">
-                    <div className="row col-lg-9">
+                <div className="newReqFields" id="newReqFields">
+                  <div className="container-fluid py-2">
+                    <div className="row col-xl-9">
                       <div className="col-lg-6 form-group">
-                        <label>{local_Strings.TransactionFromAccountLabel}</label>
-                        <select className="form-control"
+                        <label>
+                          {local_Strings.TransactionFromAccountLabel}
+                        </label>
+                        <select
+                          className="form-control"
                           value={values.transferFromAccount}
                           onBlur={handleBlur("transferFromAccount")}
                           onChange={(e) => {
-                            setFieldValue("transferFromAccount", e.target.value);
-                          }}>
+                            setFieldValue(
+                              "transferFromAccount",
+                              e.target.value
+                            );
+                          }}
+                        >
                           <option value="">{local_Strings.SelectItem}</option>
                           {accounts &&
                             accounts.length > 0 &&
-                            accounts.map((c, i) =>
-                              <option key={i} value={c.value}>{c.label}</option>
-                            )}
+                            accounts.map((c, i) => (
+                              <option key={i} value={c.value}>
+                                {c.label}
+                              </option>
+                            ))}
                         </select>
-                        {touched.transferFromAccount && errors.transferFromAccount && InvalidFieldError(errors.transferFromAccount)}
+                        {touched.transferFromAccount &&
+                          errors.transferFromAccount &&
+                          InvalidFieldError(errors.transferFromAccount)}
                       </div>
-
                       <div className="col-lg-6 form-group">
                         <label>{local_Strings.TransactionToAccountLabel}</label>
-                        <select className="form-control"
+                        <select
+                          className="form-control"
                           value={values.transferToAccount}
                           onBlur={handleBlur("transferToAccount")}
                           onChange={(e) => {
                             setFieldValue("transferToAccount", e.target.value);
-                          }}>
+                          }}
+                        >
                           <option value="">{local_Strings.SelectItem}</option>
                           {accounts &&
                             accounts.length > 0 &&
-                            accounts.filter(
-                              (obj) => obj.label !== values.transferFromAccount
-                            ).map((c, i) =>
-                              <option key={i} value={c.value}>{c.label}</option>
-                            )}
+                            accounts
+                              .filter(
+                                (obj) =>
+                                  obj.label !== values.transferFromAccount
+                              )
+                              .map((c, i) => (
+                                <option key={i} value={c.value}>
+                                  {c.label}
+                                </option>
+                              ))}
                         </select>
-                        {touched.transferToAccount && errors.transferToAccount && InvalidFieldError(errors.transferToAccount)}
+                        {touched.transferToAccount &&
+                          errors.transferToAccount &&
+                          InvalidFieldError(errors.transferToAccount)}
                       </div>
-
                       <div className="col-lg-6 form-group">
                         <label>{local_Strings.TransactionAmountLabel}</label>
                         <input
                           type="text"
                           className="form-control"
                           placeholder=""
-                          pattern="[0-9]*" maxLength={99}
+                          pattern="[0-9]*"
+                          maxLength={99}
                           value={values.amount?.toString()}
                           onBlur={handleBlur("amount")}
                           onChange={(e) => {
-                            if (e.currentTarget.validity.valid && e.currentTarget.value.length <= 99) {
-                              setFieldValue("amount", e.target.value.replace(/[^0-9]*/, ''));
+                            if (
+                              e.currentTarget.validity.valid &&
+                              e.currentTarget.value.length <= 99
+                            ) {
+                              setFieldValue(
+                                "amount",
+                                e.target.value.replace(/[^0-9]*/, "")
+                              );
                             }
                           }}
                         />
-                        {touched.amount && errors.amount && InvalidFieldError(errors.amount)}
+                        {touched.amount &&
+                          errors.amount &&
+                          InvalidFieldError(errors.amount)}
                       </div>
-
                     </div>
                   </div>
 
@@ -391,22 +421,23 @@ function NewTransaction(props: iNewTransaction) {
                           touched.transferToAccount = true;
                           touched.amount = true;
                           Swal.fire({
-                            position: 'top-end',
-                            icon: 'error',
+                            position: "top-end",
+                            icon: "error",
                             title: local_Strings.formValidationMessage,
                             showConfirmButton: false,
-                            timer: Constant.AlertTimeout
+                            timer: Constant.AlertTimeout,
                           });
                         }
-                      }}>
+                      }}
+                    >
                       {local_Strings.TransactionRequestButton}
                     </button>
                   </div>
                 </div>
               )}
             </Formik>
-          }
-          {(showFormLocal || showFormInternational) &&
+          )}
+          {(showFormLocal || showFormInternational) && (
             <Formik
               initialValues={initialValuesLocalOrInternational}
               validationSchema={validationSchemaLocalOrInternational}
@@ -418,11 +449,11 @@ function NewTransaction(props: iNewTransaction) {
                   props.showOTPValidationFormModal(values);
                 } else {
                   Swal.fire({
-                    position: 'top-end',
-                    icon: 'error',
+                    position: "top-end",
+                    icon: "error",
                     title: local_Strings.GenericErrorMessage,
                     showConfirmButton: false,
-                    timer: Constant.AlertTimeout
+                    timer: Constant.AlertTimeout,
                   });
                 }
                 setLoading(false);
@@ -437,35 +468,46 @@ function NewTransaction(props: iNewTransaction) {
                 touched,
                 setFieldValue,
                 validateForm,
-                isValid
+                isValid,
               }) => (
-                <div
-                  className="newReqFields"
-                  id="newReqFields"
-                >
-                  <div className="py-2">
-                    <div className="row col-lg-9">
+                <div className="newReqFields" id="newReqFields">
+                  <div className="py-2 container-fluid">
+                    <div className="row col-xl-9">
                       <div className="col-lg-6 form-group">
-                        <label>{local_Strings.TransactionFromAccountLabel}</label>
-                        <select className="form-control"
+                        <label>
+                          {local_Strings.TransactionFromAccountLabel}
+                        </label>
+                        <select
+                          className="form-control"
                           onBlur={handleBlur("transferFromAccount")}
                           value={values.transferFromAccount}
                           onChange={(e) => {
-                            setFieldValue("transferFromAccount", e.target.value);
-                          }}>
+                            setFieldValue(
+                              "transferFromAccount",
+                              e.target.value
+                            );
+                          }}
+                        >
                           <option value="">{local_Strings.SelectItem}</option>
                           {accounts &&
                             accounts.length > 0 &&
-                            accounts.map((c, i) =>
-                              <option key={i} value={c.value}>{c.label}</option>
-                            )}
+                            accounts.map((c, i) => (
+                              <option key={i} value={c.value}>
+                                {c.label}
+                              </option>
+                            ))}
                         </select>
-                        {touched.transferFromAccount && errors.transferFromAccount && InvalidFieldError(errors.transferFromAccount)}
+                        {touched.transferFromAccount &&
+                          errors.transferFromAccount &&
+                          InvalidFieldError(errors.transferFromAccount)}
                       </div>
 
                       <div className="col-lg-6 form-group">
-                        <label>{local_Strings.TransactionBenficiaryLabel}</label>
-                        <select className="form-control"
+                        <label>
+                          {local_Strings.TransactionBenficiaryLabel}
+                        </label>
+                        <select
+                          className="form-control"
                           onBlur={handleBlur("beneficiaryId")}
                           value={values.beneficiaryId}
                           onChange={(e) => {
@@ -485,33 +527,44 @@ function NewTransaction(props: iNewTransaction) {
                                 ben[0]["beneficiaryCurrency"]
                               );
                             }
-                          }}>
+                          }}
+                        >
                           <option value="">{local_Strings.SelectItem}</option>
                           {beneficiaries &&
                             beneficiaries.length > 0 &&
-                            beneficiaries.map((c, i) =>
-                              <option key={i} value={c.value}>{c.label}</option>
-                            )}
+                            beneficiaries.map((c, i) => (
+                              <option key={i} value={c.value}>
+                                {c.label}
+                              </option>
+                            ))}
                         </select>
-                        {touched.beneficiaryId && errors.beneficiaryId && InvalidFieldError(errors.beneficiaryId)}
+                        {touched.beneficiaryId &&
+                          errors.beneficiaryId &&
+                          InvalidFieldError(errors.beneficiaryId)}
                       </div>
 
                       <div className="col-lg-6 form-group">
                         <label>{local_Strings.TransactionCurrencyLabel}</label>
-                        <select className="form-control"
+                        <select
+                          className="form-control"
                           value={values.currency}
                           onBlur={handleBlur("currency")}
                           onChange={(e) => {
                             setFieldValue("currency", e.target.value);
-                          }}>
+                          }}
+                        >
                           <option value="">{local_Strings.SelectItem}</option>
                           {currencies &&
                             currencies.length > 0 &&
-                            currencies.map((c, i) =>
-                              <option key={i} value={c.value}>{c.label}</option>
-                            )}
+                            currencies.map((c, i) => (
+                              <option key={i} value={c.value}>
+                                {c.label}
+                              </option>
+                            ))}
                         </select>
-                        {touched.currency && errors.currency && InvalidFieldError(errors.currency)}
+                        {touched.currency &&
+                          errors.currency &&
+                          InvalidFieldError(errors.currency)}
                       </div>
 
                       <div className="col-lg-6 form-group">
@@ -520,22 +573,37 @@ function NewTransaction(props: iNewTransaction) {
                           type="text"
                           className="form-control"
                           placeholder=""
-                          pattern="[0-9]*" maxLength={99}
+                          pattern="[0-9]*"
+                          maxLength={99}
                           value={values.amount?.toString()}
                           onBlur={handleBlur("amount")}
                           onChange={(e) => {
-                            if (e.currentTarget.validity.valid && e.currentTarget.value.length <= 99) {
-                              setFieldValue("amount", e.target.value.replace(/[^0-9]*/, ''));
+                            if (
+                              e.currentTarget.validity.valid &&
+                              e.currentTarget.value.length <= 99
+                            ) {
+                              setFieldValue(
+                                "amount",
+                                e.target.value.replace(/[^0-9]*/, "")
+                              );
                             }
                           }}
                         />
-                        {touched.amount && errors.amount && InvalidFieldError(errors.amount)}
+                        {touched.amount &&
+                          errors.amount &&
+                          InvalidFieldError(errors.amount)}
                       </div>
 
-                      <div className="col-lg-6 form-group customDate pr-2">
-                        <label className="pr-2">{local_Strings.TransactionDateLabel}</label>
-                        <DatePicker dateFormat="MMMM dd, yyyy"
-                          selected={values.transactionDate ? new Date(values.transactionDate) : null}
+                      <div className="col-lg-6 form-group customDate ">
+                        <label>{local_Strings.TransactionDateLabel}</label>
+                        <DatePicker
+                          className="form-control"
+                          dateFormat="MMMM dd, yyyy"
+                          selected={
+                            values.transactionDate
+                              ? new Date(values.transactionDate)
+                              : null
+                          }
                           onBlur={handleBlur("transactionDate")}
                           onChange={(date: Date) => {
                             setFieldValue(
@@ -545,17 +613,24 @@ function NewTransaction(props: iNewTransaction) {
                             );
                           }}
                         />
-                        {touched.transactionDate && errors.transactionDate && InvalidFieldError(errors.transactionDate)}
+                        {touched.transactionDate &&
+                          errors.transactionDate &&
+                          InvalidFieldError(errors.transactionDate)}
                       </div>
                       <div className="col-lg-12">
-                        <label>{local_Strings.TransactionDescriptionLabel}</label>
-                        <textarea className="form-control"
+                        <label>
+                          {local_Strings.TransactionDescriptionLabel}
+                        </label>
+                        <textarea
+                          className="form-control"
                           value={values.description}
                           rows={3}
                           onBlur={handleBlur("description")}
                           onChange={handleChange("description")}
                         />
-                        {touched.description && errors.description && InvalidFieldError(errors.description)}
+                        {touched.description &&
+                          errors.description &&
+                          InvalidFieldError(errors.description)}
                       </div>
                     </div>
                   </div>
@@ -576,21 +651,22 @@ function NewTransaction(props: iNewTransaction) {
                           touched.amount = true;
                           touched.description = true;
                           Swal.fire({
-                            position: 'top-end',
-                            icon: 'error',
+                            position: "top-end",
+                            icon: "error",
                             title: local_Strings.formValidationMessage,
                             showConfirmButton: false,
-                            timer: Constant.AlertTimeout
+                            timer: Constant.AlertTimeout,
                           });
                         }
-                      }}>
+                      }}
+                    >
                       {local_Strings.TransactionRequestButton}
                     </button>
                   </div>
                 </div>
               )}
             </Formik>
-          }
+          )}
         </div>
       </Modal.Body>
     </Modal>

@@ -1,27 +1,34 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
 import dateIcon from "../../images/calendar-inactive.png";
-import { localStrings as local_Strings } from '../../translations/localStrings';
+import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
-import { AddProductsAndOffers, UpdateProductsAndOffers } from "../../services/cmsService";
+import {
+  AddProductsAndOffers,
+  UpdateProductsAndOffers,
+} from "../../services/cmsService";
 import moment from "moment";
 import { Formik } from "formik";
 import * as yup from "yup";
-import InvalidFieldError from '../../shared/invalid-field-error';
-import CKEditor from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import '@ckeditor/ckeditor5-build-classic/build/translations/ar.js';
+import InvalidFieldError from "../../shared/invalid-field-error";
+import CKEditor from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import "@ckeditor/ckeditor5-build-classic/build/translations/ar.js";
 //import Base64UploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/base64uploadadapter';
-import DatePicker from 'react-datepicker';
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { emptyProductAndOffersData, IProductAndOffersDetail } from "../../Helpers/publicInterfaces";
+import {
+  emptyProductAndOffersData,
+  IProductAndOffersDetail,
+} from "../../Helpers/publicInterfaces";
 import Constant from "../../constants/defaultData";
-import LoadingOverlay from 'react-loading-overlay';
+import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
+import xIcon from "../../images/x-icon.svg";
 
 interface DetailsProps {
-  item?: IProductAndOffersDetail
+  item?: IProductAndOffersDetail;
   show: boolean;
   editable: boolean;
   OnHide: () => void;
@@ -35,7 +42,9 @@ function ProductsAndOffersForm(props: DetailsProps) {
   };
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
-  const [data, setData] = useState<IProductAndOffersDetail>(emptyProductAndOffersData);
+  const [data, setData] = useState<IProductAndOffersDetail>(
+    emptyProductAndOffersData
+  );
   const [isLoading, setLoading] = useState(false);
   const formValidationSchema = yup.object({
     name: yup.string().nullable().required("Name is required"),
@@ -44,36 +53,40 @@ function ProductsAndOffersForm(props: DetailsProps) {
   });
 
   const submitTheRecord = async (values: IProductAndOffersDetail) => {
-
     setLoading(true);
-    const item = data.id > 0 ? values : {
-      name: values.name,
-      nameAr: values.nameAr,
-      createdDate: moment().utc(true),
-      expiryDate: moment(values.expiryDate).utc(true),
-      details: values.details,
-      detailsAr: values.detailsAr,
-    };
+    const item =
+      data.id > 0
+        ? values
+        : {
+            name: values.name,
+            nameAr: values.nameAr,
+            createdDate: moment().utc(true),
+            expiryDate: moment(values.expiryDate).utc(true),
+            details: values.details,
+            detailsAr: values.detailsAr,
+          };
 
-    const x = data.id > 0 ? await UpdateProductsAndOffers(item) : await AddProductsAndOffers(item);
+    const x =
+      data.id > 0
+        ? await UpdateProductsAndOffers(item)
+        : await AddProductsAndOffers(item);
     if (x) {
-      
       Swal.fire({
-        position: 'top-end',
-        icon: 'success',
+        position: "top-end",
+        icon: "success",
         title: local_Strings.ProductsAndOffersSavedMessage,
         showConfirmButton: false,
-        timer: Constant.AlertTimeout
+        timer: Constant.AlertTimeout,
       });
       props.refreshList();
       props.OnHide();
     } else {
       Swal.fire({
-        position: 'top-end',
-        icon: 'error',
+        position: "top-end",
+        icon: "error",
         title: local_Strings.GenericErrorMessage,
         showConfirmButton: false,
-        timer: Constant.AlertTimeout
+        timer: Constant.AlertTimeout,
       });
     }
     setLoading(false);
@@ -99,35 +112,31 @@ function ProductsAndOffersForm(props: DetailsProps) {
         <div className="modal-header-text">
           <div className="d-flex align-items-center">
             <div className="ib-icon">
-              <a
-                href="#"
-                onClick={props.OnBack}
-                className="backToAccountsList"
-              >
+              <a href="#" onClick={props.OnBack} className="backToAccountsList">
                 <i className="fa fa-chevron-left"></i>
               </a>
             </div>
             <div className="ib-text">
-              <h4 id="newReqTxt">{local_Strings.ProductsAndOffersDetailsTitle}</h4>
+              <h4 id="newReqTxt">
+                {local_Strings.ProductsAndOffersDetailsTitle}
+              </h4>
             </div>
           </div>
         </div>
 
-        <button
-          type="button"
-          className="close"
-          onClick={props.OnHide}
-        >
-          <span aria-hidden="true">×</span>
+        <button type="button" className="close" onClick={props.OnHide}>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
       <Modal.Body>
         <LoadingOverlay
           active={isLoading}
-          spinner={<PuffLoader
-            size={Constant.SpnnerSize}
-            color={Constant.SpinnerColor}
-          />}
+          spinner={
+            <PuffLoader
+              size={Constant.SpnnerSize}
+              color={Constant.SpinnerColor}
+            />
+          }
         />
         <Formik
           initialValues={data}
@@ -146,116 +155,182 @@ function ProductsAndOffersForm(props: DetailsProps) {
             errors,
             touched,
             isValid,
-            validateForm
+            validateForm,
           }) => (
             <div className="box modal-box py-0 mb-0 scrollabel-modal-box">
               <div className="box-body">
                 <div className="form-group">
-                  <label className="mb-1 text-600">{local_Strings.ProductsAndOffersNameLabel}</label>
-                  <input type="text" className="form-control"
+                  <label className="mb-1 text-600">
+                    {local_Strings.ProductsAndOffersNameLabel}
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
                     readOnly={!props.editable}
                     value={values.name || ""}
                     onChange={handleChange("name")}
-                    onBlur={handleBlur("name")} />
-                  {touched.name && errors.name && InvalidFieldError(errors.name)}
+                    onBlur={handleBlur("name")}
+                  />
+                  {touched.name &&
+                    errors.name &&
+                    InvalidFieldError(errors.name)}
                 </div>
                 <div className="form-group">
-                  <label className="mb-1 text-600">{local_Strings.ProductsAndOffersArNameLabel}</label>
-                  <input type="text" className="form-control"
+                  <label className="mb-1 text-600">
+                    {local_Strings.ProductsAndOffersArNameLabel}
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
                     readOnly={!props.editable}
                     value={values.nameAr || ""}
                     onChange={handleChange("nameAr")}
-                    onBlur={handleBlur("nameAr")} />
-                  {touched.nameAr && errors.nameAr && InvalidFieldError(errors.nameAr)}
+                    onBlur={handleBlur("nameAr")}
+                  />
+                  {touched.nameAr &&
+                    errors.nameAr &&
+                    InvalidFieldError(errors.nameAr)}
                 </div>
-                <div className="form-group">
-                  <label className="mb-1 text-600">{local_Strings.ProductsAndOffersExpireLabel}</label>
+                <div className="form-group customDate">
+                  <label className="mb-1 text-600">
+                    {local_Strings.ProductsAndOffersExpireLabel}
+                  </label>
 
-                  <DatePicker name="expiryDate"
-                    selected={!!values.expiryDate ? new Date(values.expiryDate) : null}
+                  <DatePicker
+                    name="expiryDate"
+                    selected={
+                      !!values.expiryDate ? new Date(values.expiryDate) : null
+                    }
+                    className="form-control"
                     onChange={(date: Date) => setFieldValue("expiryDate", date)}
                     onBlur={handleBlur("expiryDate")}
                     placeholderText={""}
                     readOnly={!props.editable}
                     minDate={new Date()}
-                    dateFormat="MMMM dd, yyyy" />
-                  {touched.expiryDate && errors.expiryDate && InvalidFieldError(errors.expiryDate)}
+                    dateFormat="MMMM dd, yyyy"
+                  />
+                  {touched.expiryDate &&
+                    errors.expiryDate &&
+                    InvalidFieldError(errors.expiryDate)}
                 </div>
                 <div className="form-group">
-                  <label className="mb-1 text-600">{local_Strings.ProductsAndOffersDescrLabel}</label>
-                  {props.editable ? <CKEditor
-                    editor={ClassicEditor}
-                    readOnly={!props.editable}
-                    data={values.details || ""}
-                    onChange={(event: any, editor: any) => {
-                      const _text = editor.getData();
-                      setFieldValue("details", _text);
-                    }}
-                    config={{
-                      //plugins: [Base64UploadAdapter],
-                      toolbar: ['heading', '|', 'bold', 'italic', '|', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo'],
-                      allowedContent: true,
-                      extraAllowedContent: 'div(*)',
-                      language: "en",
-                      content: "en",
-                    }}
-                  /> : <span className="box-brief mb-3">
+                  <label className="mb-1 text-600">
+                    {local_Strings.ProductsAndOffersDescrLabel}
+                  </label>
+                  {props.editable ? (
+                    <CKEditor
+                      editor={ClassicEditor}
+                      readOnly={!props.editable}
+                      data={values.details || ""}
+                      onChange={(event: any, editor: any) => {
+                        const _text = editor.getData();
+                        setFieldValue("details", _text);
+                      }}
+                      config={{
+                        //plugins: [Base64UploadAdapter],
+                        toolbar: [
+                          "heading",
+                          "|",
+                          "bold",
+                          "italic",
+                          "|",
+                          "link",
+                          "bulletedList",
+                          "numberedList",
+                          "blockQuote",
+                          "|",
+                          "undo",
+                          "redo",
+                        ],
+                        allowedContent: true,
+                        extraAllowedContent: "div(*)",
+                        language: "en",
+                        content: "en",
+                      }}
+                    />
+                  ) : (
+                    <span className="box-brief mb-3">
                       <div
                         dangerouslySetInnerHTML={{
-                          __html: values.details
-                        }} />
-                    </span>}
+                          __html: values.details,
+                        }}
+                      />
+                    </span>
+                  )}
                 </div>
                 <div className="form-group">
-                  <label className="mb-1 text-600">{local_Strings.ProductsAndOffersArDescrLabel}</label>
-                  {props.editable ? <CKEditor
-                    editor={ClassicEditor}
-                    readOnly={!props.editable}
-                    data={values.detailsAr || ""}
-                    onChange={(event: any, editor: any) => {
-                      const _text = editor.getData();
-                      setFieldValue("detailsAr", _text);
-                    }}
-                    config={{
-                      //plugins: [Base64UploadAdapter],
-                      toolbar: ['heading', '|', 'bold', 'italic', '|', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo'],
-                      allowedContent: true,
-                      extraAllowedContent: 'div(*)',
-                      language: "ar",
-                      content: "ar",
-                    }}
-                  /> : <span className="box-brief mb-3">
+                  <label className="mb-1 text-600">
+                    {local_Strings.ProductsAndOffersArDescrLabel}
+                  </label>
+                  {props.editable ? (
+                    <CKEditor
+                      editor={ClassicEditor}
+                      readOnly={!props.editable}
+                      data={values.detailsAr || ""}
+                      onChange={(event: any, editor: any) => {
+                        const _text = editor.getData();
+                        setFieldValue("detailsAr", _text);
+                      }}
+                      config={{
+                        //plugins: [Base64UploadAdapter],
+                        toolbar: [
+                          "heading",
+                          "|",
+                          "bold",
+                          "italic",
+                          "|",
+                          "link",
+                          "bulletedList",
+                          "numberedList",
+                          "blockQuote",
+                          "|",
+                          "undo",
+                          "redo",
+                        ],
+                        allowedContent: true,
+                        extraAllowedContent: "div(*)",
+                        language: "ar",
+                        content: "ar",
+                      }}
+                    />
+                  ) : (
+                    <span className="box-brief mb-3">
                       <div
                         dangerouslySetInnerHTML={{
-                          __html: values.detailsAr
-                        }} />
-                    </span>}
+                          __html: values.detailsAr,
+                        }}
+                      />
+                    </span>
+                  )}
                 </div>
-                {props.editable &&
+                {props.editable && (
                   <div className="form-group">
-
-                    <button className="btn btn-sm btn-primary mt-1" type="submit" style={{ float: "right", margin: 20 }}
+                    <button
+                      className="btn btn-sm btn-primary mt-1"
+                      type="submit"
+                      style={{ float: "right", margin: 20 }}
                       onClick={(e) => {
                         validateForm(values);
                         if (isValid) {
                           handleSubmit();
                         } else {
-                          
                           Swal.fire({
-                            position: 'top-end',
-                            icon: 'error',
+                            position: "top-end",
+                            icon: "error",
                             title: local_Strings.formValidationMessage,
                             showConfirmButton: false,
-                            timer: Constant.AlertTimeout
+                            timer: Constant.AlertTimeout,
                           });
                           touched.name = true;
                           touched.nameAr = true;
                           touched.expiryDate = true;
                         }
-                      }}>
-                      {local_Strings.ProductsAndOffersSaveButton}</button>
+                      }}
+                    >
+                      {local_Strings.ProductsAndOffersSaveButton}
+                    </button>
                   </div>
-                }
+                )}
               </div>
             </div>
           )}

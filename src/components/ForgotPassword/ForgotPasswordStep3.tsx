@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { localStrings as local_Strings } from "../../translations/localStrings";
+import xIcon from "../../images/x-icon.svg";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
@@ -42,7 +43,10 @@ function ForgotPasswordStep3(props: iForgotPasswordStep3) {
     confirmPassword: yup
       .string()
       .required(local_Strings.ChangePassword_ConfirmRequiredMsg)
-      .oneOf([yup.ref("password"), ""], local_Strings.ChangePassword_MustMatchMsg),
+      .oneOf(
+        [yup.ref("password"), ""],
+        local_Strings.ChangePassword_MustMatchMsg
+      ),
   });
 
   return (
@@ -78,7 +82,7 @@ function ForgotPasswordStep3(props: iForgotPasswordStep3) {
           className="close"
           onClick={props.hideForgotPasswordStep3Modal}
         >
-          <span aria-hidden="true">×</span>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
       <Modal.Body>
@@ -89,7 +93,10 @@ function ForgotPasswordStep3(props: iForgotPasswordStep3) {
             onSubmit={async (values) => {
               setLoading(true);
 
-              const res = await resetPassword(props.customerId, values.password);
+              const res = await resetPassword(
+                props.customerId,
+                values.password
+              );
               if (res) {
                 Swal.fire({
                   position: "top-end",
@@ -124,7 +131,9 @@ function ForgotPasswordStep3(props: iForgotPasswordStep3) {
 
                 <div className="mb-3 row">
                   <div className="col-lg-12 form-group">
-                    <label>{local_Strings.PasswordResetRequestEnterPassword}</label>
+                    <label>
+                      {local_Strings.PasswordResetRequestEnterPassword}
+                    </label>
                     <input
                       type="text"
                       className="form-control"

@@ -17,6 +17,7 @@ import PuffLoader from "react-spinners/PuffLoader";
 import FilterMoreButtonControl from "../../../shared/FilterMoreButtonControl";
 import { PortfolioContext } from "../../../pages/Homepage";
 import investIcon from "../../../images/invest-icon.svg";
+import xIcon from "../../../images/x-icon.svg";
 
 interface iInvestmentsListing {
   showInvestmentsListingModal: boolean;
@@ -80,7 +81,7 @@ function InvestmentsListing(props: iInvestmentsListing) {
             {item.securityCCY || ""}
           </strong>
           <br />
-          <strong className="color-gold text-xs">
+          <strong className="color-gold text-xs mx-2">
             {item.profitRate || ""}
           </strong>
         </div>
@@ -118,7 +119,7 @@ function InvestmentsListing(props: iInvestmentsListing) {
             className="close"
             onClick={props.hideInvestmentsListingModal}
           >
-            <span aria-hidden="true">×</span>
+            <img src={xIcon} width="15" />
           </button>
         </Modal.Header>
         <Modal.Body>

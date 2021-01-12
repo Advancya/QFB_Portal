@@ -2,17 +2,21 @@ import React, { useContext, useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
-import { initialSettingsData, IUserSettings, GetUserLocalData, SaveUserDataLocally } from "../../Helpers/authHelper";
 import {
-  ChangeUserPassword
-} from "../../services/cmsService";
+  initialSettingsData,
+  IUserSettings,
+  GetUserLocalData,
+  SaveUserDataLocally,
+} from "../../Helpers/authHelper";
+import { ChangeUserPassword } from "../../services/cmsService";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 import { Formik } from "formik";
 import * as yup from "yup";
-import InvalidFieldError from '../../shared/invalid-field-error';
+import InvalidFieldError from "../../shared/invalid-field-error";
+import xIcon from "../../images/x-icon.svg";
 
 interface iChangePassword {
   showChangePasswordModal: boolean;
@@ -22,7 +26,9 @@ interface iChangePassword {
 function ChangePassword(props: iChangePassword) {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
-  const [userSettings, setUserSettings] = useState<IUserSettings>(initialSettingsData);
+  const [userSettings, setUserSettings] = useState<IUserSettings>(
+    initialSettingsData
+  );
   const [isLoading, setLoading] = useState(false);
   const [showError, setShowError] = React.useState(false);
 
@@ -73,7 +79,7 @@ function ChangePassword(props: iChangePassword) {
     <Modal
       show={props.showChangePasswordModal}
       onHide={props.hideChangePasswordModal}
-      size="lg"
+      // size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       scrollable
@@ -100,7 +106,7 @@ function ChangePassword(props: iChangePassword) {
           className="close"
           onClick={props.hideChangePasswordModal}
         >
-          <span aria-hidden="true">×</span>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
       <Modal.Body>
@@ -123,15 +129,19 @@ function ChangePassword(props: iChangePassword) {
                   };
                   SaveUserDataLocally(_userData);
                   Swal.fire({
-                    position: 'top-end',
-                    icon: 'success',
+                    position: "top-end",
+                    icon: "success",
                     title: local_Strings.ConfirmationTitle,
                     html: local_Strings.ConfirmationDesc,
                     showConfirmButton: false,
-                    timer: Constant.AlertTimeout
+                    timer: Constant.AlertTimeout,
                   });
                 } else {
-                  Swal.fire('Oops...', local_Strings.GenericErrorMessage, 'error');
+                  Swal.fire(
+                    "Oops...",
+                    local_Strings.GenericErrorMessage,
+                    "error"
+                  );
                   setShowError(true);
                 }
               })
@@ -170,7 +180,9 @@ function ChangePassword(props: iChangePassword) {
                     onChange={handleChange("currentPassword")}
                     onBlur={handleBlur("currentPassword")}
                   />
-                  {touched.currentPassword && errors.currentPassword && InvalidFieldError(errors.currentPassword)}
+                  {touched.currentPassword &&
+                    errors.currentPassword &&
+                    InvalidFieldError(errors.currentPassword)}
                 </div>
               </div>
               <div className="row">
@@ -184,7 +196,9 @@ function ChangePassword(props: iChangePassword) {
                     onChange={handleChange("newPassword")}
                     onBlur={handleBlur("newPassword")}
                   />
-                  {touched.newPassword && errors.newPassword && InvalidFieldError(errors.newPassword)}
+                  {touched.newPassword &&
+                    errors.newPassword &&
+                    InvalidFieldError(errors.newPassword)}
                 </div>
               </div>
               <div className="row">
@@ -198,7 +212,9 @@ function ChangePassword(props: iChangePassword) {
                     onChange={handleChange("confirmPassword")}
                     onBlur={handleBlur("confirmPassword")}
                   />
-                  {touched.confirmPassword && errors.confirmPassword && InvalidFieldError(errors.confirmPassword)}
+                  {touched.confirmPassword &&
+                    errors.confirmPassword &&
+                    InvalidFieldError(errors.confirmPassword)}
                 </div>
               </div>
               <div className="text-xs color-grey">
@@ -206,8 +222,11 @@ function ChangePassword(props: iChangePassword) {
               </div>
 
               <div className="text-right p-3 ">
-                <button id="applyReqBtn" className="btn btn-primary mx-2"
-                  onClick={() => handleSubmit()}>
+                <button
+                  id="applyReqBtn"
+                  className="btn btn-primary mx-2"
+                  onClick={() => handleSubmit()}
+                >
                   {local_Strings.SettingSaveButton}
                 </button>
                 <button

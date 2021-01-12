@@ -3,7 +3,7 @@ import { Modal, Tab, Tabs } from "react-bootstrap";
 import moment from "moment";
 import { localStrings as local_Strings } from "../translations/localStrings";
 import { AuthContext } from "../providers/AuthProvider";
-import Chart from "../images/Chart.png";
+import xIcon from "../images/x-icon.svg";
 import networthIcon from "../images/net-worth-icon.svg";
 import Constant from "../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
@@ -18,9 +18,7 @@ interface iTotalNetWorthDetails {
   hideTotalNetWorthDetailsModal: () => void;
 }
 
-function TotalNetWorthDetails(
-  props: iTotalNetWorthDetails
-) {
+function TotalNetWorthDetails(props: iTotalNetWorthDetails) {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
   const userPortfolio = useContext(PortfolioContext);
@@ -36,7 +34,7 @@ function TotalNetWorthDetails(
       <Modal
         show={props.showTotalNetWorthDetailsModal}
         onHide={props.hideTotalNetWorthDetailsModal}
-        size="lg"
+        // size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
         scrollable
@@ -56,7 +54,7 @@ function TotalNetWorthDetails(
             className="close"
             onClick={props.hideTotalNetWorthDetailsModal}
           >
-            <span aria-hidden="true">×</span>
+            <img src={xIcon} width="15" />
           </button>
         </Modal.Header>
         <Modal.Body>
@@ -72,7 +70,8 @@ function TotalNetWorthDetails(
                       <div className="ib-text">
                         <h4>{local_Strings.PortfolioTotalNetWorth}</h4>
                         <h5>
-                          {userPortfolio.networth + " " +
+                          {userPortfolio.networth +
+                            " " +
                             currentContext.userSettings.currency}
                         </h5>
                       </div>

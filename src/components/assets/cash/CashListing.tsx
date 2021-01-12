@@ -1,17 +1,21 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import cashIcon from "../../../images/cash-icon.svg";
-import { emptyAccountBalance, IAccountBalance } from "../../../Helpers/publicInterfaces";
-import { localStrings as local_Strings } from '../../../translations/localStrings';
+import {
+  emptyAccountBalance,
+  IAccountBalance,
+} from "../../../Helpers/publicInterfaces";
+import { localStrings as local_Strings } from "../../../translations/localStrings";
 import { AuthContext } from "../../../providers/AuthProvider";
 import * as helper from "../../../Helpers/helper";
 import NoResult from "../../../shared/NoResult";
 import { GetCashListing } from "../../../services/cmsService";
 import Constant from "../../../constants/defaultData";
-import LoadingOverlay from 'react-loading-overlay';
+import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
-import FilterMoreButtonControl from '../../../shared/FilterMoreButtonControl';
+import FilterMoreButtonControl from "../../../shared/FilterMoreButtonControl";
 import { PortfolioContext } from "../../../pages/Homepage";
+import xIcon from "../../../images/x-icon.svg";
 
 interface iCashListing {
   showCashListingModal: boolean;
@@ -44,7 +48,7 @@ function CashListing(props: iCashListing) {
         })
         .catch((e: any) => console.log(e))
         .finally(() => setLoading(false));
-    }
+    };
 
     if (!!currentContext.selectedCIF) {
       initialLoadMethod();
@@ -60,10 +64,14 @@ function CashListing(props: iCashListing) {
       <a
         href="#"
         className="row align-items-center"
-        onClick={() => props.showCashDetailsModal(item.accountNumber, item.balance)}
+        onClick={() =>
+          props.showCashDetailsModal(item.accountNumber, item.balance)
+        }
       >
         <div className="col-2 col-sm-1">
-          <span className="curr-icon">{item.currency || currentContext.userSettings.currency}</span>
+          <span className="curr-icon">
+            {item.currency || currentContext.userSettings.currency}
+          </span>
         </div>
         <div className="col-8 col-sm-4">
           <h5>{local_Strings.AccountNo}</h5>
@@ -71,7 +79,11 @@ function CashListing(props: iCashListing) {
         </div>
         <div className="col-8 offset-2 offset-sm-0 col-sm-6">
           <h5>{local_Strings.CashDetailsBalanceLabel}</h5>
-          <h4>{helper.ConvertToQfbNumberFormat(item.balance) + " " + item.currency}</h4>
+          <h4>
+            {helper.ConvertToQfbNumberFormat(item.balance) +
+              " " +
+              item.currency}
+          </h4>
         </div>
         <div className="col-2 col-sm-1 text-right">
           <i className="fa fa-chevron-right"></i>
@@ -80,13 +92,12 @@ function CashListing(props: iCashListing) {
     </li>
   );
 
-
   return (
     <div>
       <Modal
         show={props.showCashListingModal}
         onHide={props.hideCashListingModal}
-        size="lg"
+        //size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
         scrollable
@@ -99,7 +110,11 @@ function CashListing(props: iCashListing) {
             </div>
             <div className="ib-text">
               <h4>{local_Strings.CashListingCash}</h4>
-              <h5>{(userPortfolio.totalCash || "0") + " " + (currentContext.userSettings.currency || "")}</h5>
+              <h5>
+                {(userPortfolio.totalCash || "0") +
+                  " " +
+                  (currentContext.userSettings.currency || "")}
+              </h5>
             </div>
           </div>
           <button
@@ -107,21 +122,23 @@ function CashListing(props: iCashListing) {
             className="close"
             onClick={props.hideCashListingModal}
           >
-            <span aria-hidden="true">×</span>
+            <img src={xIcon} width="15" />
           </button>
         </Modal.Header>
         <Modal.Body>
           <div className="box modal-box">
             <ul className="box-list" id="dataList">
-              {data &&
-                data.length > 0 &&
-                !!data[0].accountNumber ?
-                data.slice(0, offset).map((item, index) => renderItem(item, index)
-                ) : NoResult(local_Strings.CashListing_NoData)}
+              {data && data.length > 0 && !!data[0].accountNumber
+                ? data
+                    .slice(0, offset)
+                    .map((item, index) => renderItem(item, index))
+                : NoResult(local_Strings.CashListing_NoData)}
             </ul>
           </div>
-          <FilterMoreButtonControl showMore={data && data.length > rowLimit &&
-            offset < data.length} onClickMore={() => setOffset(offset + 5)} />
+          <FilterMoreButtonControl
+            showMore={data && data.length > rowLimit && offset < data.length}
+            onClickMore={() => setOffset(offset + 5)}
+          />
           <LoadingOverlay
             active={isLoading}
             spinner={

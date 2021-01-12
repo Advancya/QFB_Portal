@@ -12,6 +12,7 @@ import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import { GetInvestmentsDetails } from "../../../services/cmsService";
 import * as helper from "../../../Helpers/helper";
+import xIcon from "../../../images/x-icon.svg";
 
 interface iInvestmentsDetails {
   showInvestmentsDetailsModal: boolean;
@@ -80,7 +81,7 @@ function InvestmentsDetails(props: iInvestmentsDetails) {
           className="close"
           onClick={props.hideInvestmentsDetailsModal}
         >
-          <span aria-hidden="true">×</span>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
       <Modal.Body>

@@ -16,12 +16,12 @@ import {
 } from "../../Helpers/publicInterfaces";
 import * as helper from "../../Helpers/helper";
 import NoResult from "../../shared/NoResult";
-import {
-  GetAllRequestTypes
-} from "../../services/cmsService";
+import { GetAllRequestTypes } from "../../services/cmsService";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
+import axios from "axios";
+import xIcon from "../../images/x-icon.svg";
 
 interface IRequestType {
   id: number;
@@ -150,7 +150,7 @@ function RequestsListing(props: iRequestsListing) {
       <Modal
         show={props.showRequestsListingModal}
         onHide={props.hideRequestsListingModal}
-        size="lg"
+        // size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
         scrollable
@@ -181,7 +181,7 @@ function RequestsListing(props: iRequestsListing) {
             className="close"
             onClick={props.hideRequestsListingModal}
           >
-            <span aria-hidden="true">×</span>
+            <img src={xIcon} width="15" />
           </button>
         </Modal.Header>
         <Modal.Body>
