@@ -2,11 +2,9 @@ import React, {
   createRef,
   useContext,
   useEffect,
-  useRef,
   useState,
 } from "react";
-import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
-import dateIcon from "../../images/calendar-inactive.png";
+import { Modal } from "react-bootstrap";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
 import {

@@ -62,7 +62,8 @@
   color: #6B4F44;
 }
 
-.paging-block .page-link:hover, .paging-block .page-item.active .page-link {
+.paging-block .page-link:hover,
+.paging-block .page-item.active .page-link {
   color: #FFF;
   background-color: #6B4F44;
   border-radius: 0.25rem;
@@ -172,4 +173,11 @@
   line-height: 1.5;
   transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
   background-clip: padding-box;
+}
+
+.admin-top-link {
+  width: auto !important;
+  padding: 0px 10px;
+  border: 0 !important;
+  font-weight: 500;
 }

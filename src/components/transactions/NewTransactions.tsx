@@ -1,5 +1,4 @@
-import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
-import transactionSentIcon from "../../images/req-sent.svg";
+import { Modal } from "react-bootstrap";
 import xIcon from "../../images/x-icon.svg";
 import React, { useContext, useEffect, useState } from "react";
 import { GetBeneficiariesByCif } from "../../services/transactionService";
@@ -11,12 +10,10 @@ import {
   GetCurrencies,
   GetTransactionTypes,
 } from "../../services/commonDataServices";
-import axios from "axios";
 import Swal from "sweetalert2";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
-import moment from "moment";
 import { Formik } from "formik";
 import * as yup from "yup";
 import InvalidFieldError from "../../shared/invalid-field-error";
@@ -48,9 +45,7 @@ function NewTransaction(props: iNewTransaction) {
   const [showFormWithin, setShowFormWithin] = useState(false);
   const [showFormLocal, setShowFormLocal] = useState(false);
   const [showFormInternational, setShowInternational] = useState(false);
-  const [selectedCurrency, setSelectedCurrency] = useState(
-    local_Strings.SelectItem
-  );
+  
   let controller;
   const initialValuesWithin: ITransactionDetail = {
     amount: undefined,
@@ -328,7 +323,7 @@ function NewTransaction(props: iNewTransaction) {
                         </label>
                         <select
                           className="form-control"
-                          value={values.transferFromAccount}
+                          value={values.transferFromAccount || ""}
                           onBlur={handleBlur("transferFromAccount")}
                           onChange={(e) => {
                             setFieldValue(
@@ -354,7 +349,7 @@ function NewTransaction(props: iNewTransaction) {
                         <label>{local_Strings.TransactionToAccountLabel}</label>
                         <select
                           className="form-control"
-                          value={values.transferToAccount}
+                          value={values.transferToAccount || ""}
                           onBlur={handleBlur("transferToAccount")}
                           onChange={(e) => {
                             setFieldValue("transferToAccount", e.target.value);
@@ -386,7 +381,7 @@ function NewTransaction(props: iNewTransaction) {
                           placeholder=""
                           pattern="[0-9]*"
                           maxLength={99}
-                          value={values.amount?.toString()}
+                          value={values.amount?.toString() || ""}
                           onBlur={handleBlur("amount")}
                           onChange={(e) => {
                             if (
@@ -480,7 +475,7 @@ function NewTransaction(props: iNewTransaction) {
                         <select
                           className="form-control"
                           onBlur={handleBlur("transferFromAccount")}
-                          value={values.transferFromAccount}
+                          value={values.transferFromAccount || ""}
                           onChange={(e) => {
                             setFieldValue(
                               "transferFromAccount",
@@ -509,7 +504,7 @@ function NewTransaction(props: iNewTransaction) {
                         <select
                           className="form-control"
                           onBlur={handleBlur("beneficiaryId")}
-                          value={values.beneficiaryId}
+                          value={values.beneficiaryId || ""}
                           onChange={(e) => {
                             setFieldValue("beneficiaryId", e.target.value);
                             var ben = beneficiariesData.filter(
@@ -519,10 +514,7 @@ function NewTransaction(props: iNewTransaction) {
                               setFieldValue(
                                 "currency",
                                 ben[0]["beneficiaryCurrency"]
-                              );
-                              setSelectedCurrency(
-                                ben[0]["beneficiaryCurrency"]
-                              );
+                              );                              
                               controller.selectItem(
                                 ben[0]["beneficiaryCurrency"]
                               );
@@ -547,7 +539,7 @@ function NewTransaction(props: iNewTransaction) {
                         <label>{local_Strings.TransactionCurrencyLabel}</label>
                         <select
                           className="form-control"
-                          value={values.currency}
+                          value={values.currency || ""}
                           onBlur={handleBlur("currency")}
                           onChange={(e) => {
                             setFieldValue("currency", e.target.value);
@@ -575,7 +567,7 @@ function NewTransaction(props: iNewTransaction) {
                           placeholder=""
                           pattern="[0-9]*"
                           maxLength={99}
-                          value={values.amount?.toString()}
+                          value={values.amount?.toString() || ""}
                           onBlur={handleBlur("amount")}
                           onChange={(e) => {
                             if (
@@ -623,7 +615,7 @@ function NewTransaction(props: iNewTransaction) {
                         </label>
                         <textarea
                           className="form-control"
-                          value={values.description}
+                          value={values.description || ""}
                           rows={3}
                           onBlur={handleBlur("description")}
                           onChange={handleChange("description")}

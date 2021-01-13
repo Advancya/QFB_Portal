@@ -857,7 +857,7 @@ function NewRequest(props: iNewRequest) {
                                       item["details"]
                                         .split(";")[0]
                                         .replace(/ /g, "")
-                                    ]
+                                    ] || ""
                                   }
                                   onChange={(e) => {
                                     const fName = item["details"]
@@ -890,7 +890,7 @@ function NewRequest(props: iNewRequest) {
                                       item["details"]
                                         .split(";")[0]
                                         .replace(/ /g, "")
-                                    ]
+                                    ] || ""
                                   }
                                   onChange={(e) => {
                                     const fName = item["details"]
@@ -923,7 +923,7 @@ function NewRequest(props: iNewRequest) {
                                       item["details"]
                                         .split(";")[0]
                                         .replace(/ /g, "")
-                                    ]
+                                    ]  || ""
                                   }
                                   onChange={(e) => {
                                     const fName = item["details"]

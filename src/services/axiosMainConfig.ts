@@ -3,6 +3,7 @@ import createAuthRefreshInterceptor from "axios-auth-refresh";
 import defaultData from "../constants/defaultData";
 import oidc from "./oidc-config.json";
 import queryString from "query-string";
+import jwtDecode, { JwtPayload } from "jwt-decode";
 
 const identityInstance = axios.create({
   baseURL: defaultData.IdentityBaseUrl,
@@ -16,6 +17,11 @@ const apiInstance = axios.create({
 
 apiInstance.interceptors.request.use(async (config: any) => {
   const token = localStorage.getItem(defaultData.AccessTokenStorageKey);
+  if (!token || jwtDecode<JwtPayload>(token).exp < Date.now() / 1000) {
+    //session expired and required login
+    //await authenticate("xxx", "xxxxxxxx");
+  }
+
   config.headers.Authorization = `Bearer ${token}`;
   
   return config;
@@ -59,6 +65,44 @@ const refreshAuthLogic = async (failedRequest: any) => {
     "Authorization"
   ] = `Bearer ${token}`;
 };
+
+async function authenticate(username: string, password: string) {
+  try {
+    const requestOptions = {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    };
+    const response = await identityInstance.post(
+      "connect/token",
+      queryString.stringify({
+        client_id: oidc.config.client_id,
+        client_secret: oidc.config.client_secret,
+        scope: oidc.config.scope,
+        grant_type: "password",
+        username: username,
+        password: password,
+      }),
+      requestOptions
+    );
+
+    if (response.status === 200) {
+      const access_token = response.data["access_token"];
+      
+      localStorage.setItem(defaultData.AccessTokenStorageKey, access_token);
+      localStorage.setItem(defaultData.RefreshTokenStorageKey, response.data["refresh_token"]);      
+      
+      console.log("token is saved on local storage");
+
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.log("error " + error);
+    return false;
+  }
+}
 
 createAuthRefreshInterceptor(apiInstance, refreshAuthLogic);
 

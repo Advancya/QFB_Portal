@@ -127,7 +127,7 @@ function RegisterStep1(props: iRegisterStep1) {
                         type="text"
                         className="form-control"
                         placeholder=""
-                        value={values.oneTimePassword}
+                        value={values.oneTimePassword || ""}
                         onChange={handleChange("oneTimePassword")}
                         onBlur={async () => {
                           setLoading(true);
@@ -160,7 +160,7 @@ function RegisterStep1(props: iRegisterStep1) {
                         type="text"
                         className="form-control"
                         placeholder=""
-                        value={values.cif}
+                        value={values.cif || ""}
                         onChange={handleChange("cif")}
                         onBlur={async () => {
                           setLoading(true);
@@ -212,7 +212,7 @@ function RegisterStep1(props: iRegisterStep1) {
                         type="text"
                         className="form-control"
                         placeholder=""
-                        value={values.email}
+                        value={values.email || ""}
                         onChange={handleChange("email")}
                         onBlur={async () => {
                           setLoading(true);
@@ -259,7 +259,7 @@ function RegisterStep1(props: iRegisterStep1) {
                         type="text"
                         className="form-control"
                         placeholder=""
-                        value={values.mobile}
+                        value={values.mobile || ""}
                         onChange={handleChange("mobile")}
                         onBlur={async () => {
                           setLoading(true);

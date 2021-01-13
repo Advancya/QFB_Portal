@@ -3,11 +3,12 @@ import { Modal } from "react-bootstrap";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { useHistory } from "react-router-dom";
 import { AuthContext } from "../../providers/AuthProvider";
-import { GetUserWelcomeData } from "../../services/cmsService";
+import { GetRmDisplayName, GetUserWelcomeData } from "../../services/cmsService";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import xIcon from "../../images/x-icon.svg";
+import { GetUserLocalData } from "../../Helpers/authHelper";
 
 interface iSettingsLanding {
   showSettingsLandingModal: boolean;
@@ -30,18 +31,45 @@ function SettingsLanding(props: iSettingsLanding) {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
   const [isLoading, setLoading] = useState(false);
+  const [allowEdit, setAllowEdit] = useState<boolean>(false);
+  const [rmName, setRmName] = React.useState("");
   const [userInfo, setUserInfo] = useState<IUserInfo>({
     name: "",
     telephone: "",
     rmEmail: "",
     customerShortName: "",
   });
+  const fetchRmName = async () => {
+    const res = await GetRmDisplayName(currentContext.selectedCIF);
+    setRmName(res);
+  };
+
+  useEffect(() => {
+    let isMounted = true;
+    const initialLoadMethod = async () => {
+      const userData = await GetUserLocalData();
+      if (userData) {
+        if (isMounted && userData.customerId === currentContext.selectedCIF) {
+          setAllowEdit(true);
+        }
+      }
+    };
+
+    if (!!currentContext.selectedCIF) {
+      initialLoadMethod();
+    }
+
+    return () => {
+      isMounted = false;
+    }; // use effect cleanup to set flag false, if unmounted
+  }, [currentContext.selectedCIF]);
 
   useEffect(() => {
     let isMounted = true;
 
     const initialLoadMethod = async () => {
       setLoading(true);
+      fetchRmName();
       GetUserWelcomeData(currentContext.selectedCIF)
         .then((responseData: any) => {
           if (responseData && responseData.length > 0 && isMounted) {
@@ -105,12 +133,16 @@ function SettingsLanding(props: iSettingsLanding) {
                 <div className="row no-gutters align-items-center">
                   <div className="col-md-6">
                     <h6 className="mb-1 text-600 text-18 ">
-                      {userInfo["customerShortName"] ||
+                      {currentContext.userRole === Constant.RM
+                        ? rmName
+                        : userInfo["customerShortName"] ||
                         userInfo["rmEmail"] ||
                         ""}
                     </h6>
                     <div className="color-gray">
-                      {local_Strings.RMSampleAccount +
+                      {(currentContext.userRole === Constant.RM ?
+                       local_Strings.RMSampleAccount : (currentContext.userRole === Constant.Management ?
+                        local_Strings.ManagementSampleAccount : local_Strings.CustomerSampleAccount)) +
                         currentContext.selectedCIF}
                     </div>
                   </div>
@@ -146,6 +178,7 @@ function SettingsLanding(props: iSettingsLanding) {
                 id="applyReqBtn"
                 className="btn btn-primary col-sm-8 col-md-5   mx-auto"
                 onClick={props.showChangeCurrencyModal}
+                disabled={!allowEdit}
               >
                 {local_Strings.SettingsLandingButton1}
               </button>
@@ -155,6 +188,7 @@ function SettingsLanding(props: iSettingsLanding) {
                 id="applyReqBtn"
                 className="btn btn-primary col-sm-8 col-md-5   mx-auto"
                 onClick={props.showChangePasswordModal}
+                disabled={!allowEdit}
               >
                 {local_Strings.SettingsLandingButton2}
               </button>
@@ -164,6 +198,7 @@ function SettingsLanding(props: iSettingsLanding) {
                 id="applyReqBtn"
                 className="btn btn-primary col-sm-8 col-md-5   mx-auto"
                 onClick={props.showChangeOTPMethodModal}
+                disabled={!allowEdit}
               >
                 {local_Strings.SettingsLandingButton3}
               </button>
@@ -173,6 +208,7 @@ function SettingsLanding(props: iSettingsLanding) {
                 id="applyReqBtn"
                 className="btn btn-primary col-sm-8 col-md-5   mx-auto"
                 onClick={props.showChangeLanguageModal}
+                disabled={!allowEdit}
               >
                 {local_Strings.SettingsLandingButton4}
               </button>

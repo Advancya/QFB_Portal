@@ -5,13 +5,14 @@ import * as yup from "yup";
 import { AuthContext, User } from "../providers/AuthProvider";
 import InvalidFieldError from '../shared/invalid-field-error';
 import { localStrings as local_Strings } from '../translations/localStrings';
-import * as helper from '../Helpers/helper';
 import { SendOTP, ValidateOTP } from "../services/cmsService";
 import { getUserRole } from "../services/apiServices";
 import Constant from "../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import Swal from 'sweetalert2';
+
+
 interface iPasswordResetOTP {
   otp: string;
 }
@@ -23,6 +24,7 @@ const SubmitOTP: React.FC<IProps> = ({ userDetail }) => {
   const history = useHistory();
   const currentContext = useContext(AuthContext);
   const [isLoading, setLoading] = useState(false);
+  
   local_Strings.setLanguage(currentContext.language);
   const initialValues: iPasswordResetOTP = {
     otp: "",
@@ -31,38 +33,20 @@ const SubmitOTP: React.FC<IProps> = ({ userDetail }) => {
     otp: yup.string().required(local_Strings.GeneralValidation),
   });
   const [showErrorMessage, setShowErrorMessage] = useState(false);
+
   const submitOTP = async (values: iPasswordResetOTP) => {
 
     setLoading(true);
     setShowErrorMessage(false);
     const isValidateOTP = await ValidateOTP(userDetail.username, values.otp);
     if (isValidateOTP) {
+
       const loginResponse = await currentContext.login({ ...userDetail, otp: values.otp });
       if (loginResponse) {
-        const role = await getUserRole(userDetail.username)
-          .finally(() => {
-            setLoading(false);
-          });
-        if (role && role !== undefined) {
-          if (role.name === Constant.Customer) {
-            history.push(`/${currentContext.language}/Home`);
-          } else if (role.name === Constant.RM) {
-            history.push(`/${currentContext.language}/RMLanding`);
-          } else if (role.name === Constant.Management) {
-            history.push(`/${currentContext.language}/Managment`);
-          } else {
-            Swal.fire({
-              position: 'top-end',
-              icon: 'error',
-              title: local_Strings.GenericErrorMessage,
-              showConfirmButton: false,
-              timer: Constant.AlertTimeout
-            });
-          }
-        }
+        redirectUser();        
       } else {
         setLoading(false);
-        
+
         Swal.fire({
           position: 'top-end',
           icon: 'error',
@@ -73,7 +57,7 @@ const SubmitOTP: React.FC<IProps> = ({ userDetail }) => {
       }
     } else {
       setLoading(false);
-      
+
       Swal.fire({
         position: 'top-end',
         icon: 'error',
@@ -84,6 +68,31 @@ const SubmitOTP: React.FC<IProps> = ({ userDetail }) => {
       setShowErrorMessage(true);
     }
   };
+
+  const redirectUser = async () => {
+
+    const role = await getUserRole(userDetail.username)
+      .finally(() => {
+        setLoading(false);
+      });
+    if (role && role !== undefined) {
+      if (role.name === Constant.Customer) {
+        history.push(`/${currentContext.language}/Home`);
+      } else if (role.name === Constant.RM) {
+        history.push(`/${currentContext.language}/RMLanding`);
+      } else if (role.name === Constant.Management) {
+        history.push(`/${currentContext.language}/Managment`);
+      } else {
+        Swal.fire({
+          position: 'top-end',
+          icon: 'error',
+          title: local_Strings.GenericErrorMessage,
+          showConfirmButton: false,
+          timer: Constant.AlertTimeout
+        });
+      }
+    }
+  }
 
   return (
     <div className="col-lg-4 col-container">
@@ -147,6 +156,7 @@ const SubmitOTP: React.FC<IProps> = ({ userDetail }) => {
           )}
         </Formik>
       </div>
+      
     </div>
   );
 }

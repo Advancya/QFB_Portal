@@ -20,7 +20,7 @@ import { GetAllRequestTypes } from "../../services/cmsService";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
-import axios from "axios";
+import { GetUserLocalData } from "../../Helpers/authHelper";
 import xIcon from "../../images/x-icon.svg";
 
 interface IRequestType {
@@ -61,13 +61,36 @@ function RequestsListing(props: iRequestsListing) {
       nameAr: "",
     },
   ]);
+  const [allowEdit, setAllowEdit] = useState<boolean>(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    const initialLoadMethod = async () => {
+      const userData = await GetUserLocalData();
+      if (userData) {
+        if (isMounted && userData.customerId === currentContext.selectedCIF) {
+          setAllowEdit(true);
+        }
+      }
+    };
+
+    if (!!currentContext.selectedCIF) {
+      initialLoadMethod();
+    }
+
+    return () => {
+      isMounted = false;
+    }; // use effect cleanup to set flag false, if unmounted
+  }, [currentContext.selectedCIF]);
 
   useEffect(() => {
     setFilteredData(props.requests);
     if (props.requests && props.requests.length > 0 && props.requests.length < rowLimit) {
       setOffset(props.requests.length);
+    } else {
+      setOffset(rowLimit);
     }
-  }, [props.requests]);
+  }, [props.requests, props.reloading]);
 
   useEffect(() => {
     let isMounted = true;
@@ -163,7 +186,7 @@ function RequestsListing(props: iRequestsListing) {
             </div>
             <div className="ib-text d-flex align-items-center">
               <h4>{local_Strings.RequestListingTitle}</h4>
-              {currentContext.userRole === Constant.Customer && (
+              {allowEdit && currentContext.userRole === Constant.Customer && (
                 <a
                   className="btnOutlineWhite"
                   href="#"

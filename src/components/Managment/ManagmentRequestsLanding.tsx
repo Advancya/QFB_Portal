@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import depositIcon from "../../../images/deposit-icon.svg";
 import { Button, Modal } from "react-bootstrap";
 import ManagmentRequestListing from "./ManagmentRequestListing";
-import ManagmentDetails from "./ManagmentDetails";
+import PositionAnalysis from "./PositionAnalysis";
 interface iManagment {
   showManagmentListingModal?: () => void;
 }
@@ -24,15 +24,15 @@ function Managment(managmentProps: iManagment) {
     // handleShowTransactionsListing();
   };
 
-  const [showManagmentDetails, setshowManagmentDetails] = useState(false);
+  const [showPositionAnalysis, setshowPositionAnalysis] = useState(false);
 
-  const handleCloseManagmentDetails = () => setshowManagmentDetails(false);
-  const handleShowManagmentDetails = () => {
+  const handleClosePositionAnalysis = () => setshowPositionAnalysis(false);
+  const handleShowPositionAnalysis = () => {
     handleCloseManagmentListing();
-    setshowManagmentDetails(true);
+    setshowPositionAnalysis(true);
   };
-  const handleBackManagmentDetails = () => {
-    setshowManagmentDetails(false);
+  const handleBackPositionAnalysis = () => {
+    setshowPositionAnalysis(false);
 
     handleShowManagmentListing();
   };
@@ -57,14 +57,14 @@ function Managment(managmentProps: iManagment) {
       <ManagmentRequestListing
         showManagmentRequestListingModal={showManagmentListing}
         hideManagmentRequestListingModal={handleCloseManagmentListing}
-        showManagmentDetailsModal={handleShowManagmentDetails}
+        showPositionAnalysisModal={handleShowPositionAnalysis}
         backManagmentRequestListingModal={handleBackManagmentListing}
         showNewBeneficiaryModal={handleShowNewBeneficiary}
       />
-      <ManagmentDetails
-        showManagmentDetailsModal={showManagmentDetails}
-        hideManagmentDetailsModal={handleCloseManagmentDetails}
-        backManagmentDetailsgModal={handleBackManagmentDetails}
+      <PositionAnalysis
+        showPositionAnalysisModal={showPositionAnalysis}
+        hidePositionAnalysisModal={handleClosePositionAnalysis}
+        backPositionAnalysisgModal={handleBackPositionAnalysis}
         showNewBeneficiaryModal={handleShowNewBeneficiary}
       />
     </div>

@@ -16,7 +16,7 @@ interface IRequestType {
 interface iManagmentRequestListing {
   showManagmentRequestListingModal: boolean;
   hideManagmentRequestListingModal: () => void;
-  showManagmentDetailsModal: () => void;
+  showPositionAnalysisModal: () => void;
   showNewBeneficiaryModal: () => void;
   backManagmentRequestListingModal: () => void;
 }
@@ -71,7 +71,7 @@ function ManagmentRequestListing(
             <button
               id="submitOTPBtn"
               className="btn btn-primary"
-              onClick={managmentRequestListingProps.showManagmentDetailsModal}
+              onClick={managmentRequestListingProps.showPositionAnalysisModal}
             >
               {local_Strings.ViewPositionAnalysisTitle}
             </button>
@@ -116,7 +116,7 @@ function ManagmentRequestListing(
                           </h6>
                         </div>
                         <div className="col-sm-3 text-sm-right">
-                          <span className="status-badge-small ">{helper.ConvertToQfbNumberFormat(data["sukukNetAverageRate"] || "") + "%" || ""}</span>
+                          <span className="status-badge-small ">{helper.ConvertToQfbNumberFormatWithFraction(data["sukukNetAverageRate"] || "") + "%" || ""}</span>
                         </div>
                       </div>
                     </a>
@@ -142,7 +142,7 @@ function ManagmentRequestListing(
                           </h6>
                         </div>
                         <div className="col-sm-3 text-sm-right">
-                          <span className="status-badge-small ">{helper.ConvertToQfbNumberFormat(data["mmFundAverageRate"] || "") + "%" || ""}</span>
+                          <span className="status-badge-small ">{helper.ConvertToQfbNumberFormatWithFraction(data["mmFundAverageRate"] || "") + "%" || ""}</span>
                         </div>
                       </div>
                     </a>
@@ -170,7 +170,7 @@ function ManagmentRequestListing(
                           </h6>
                         </div>
                         <div className="col-sm-3 text-sm-right">
-                          <span className="status-badge-small ">{helper.ConvertToQfbNumberFormat(data["treasuryPlacementsAverageRate"] || "") + "%" || ""}</span>
+                          <span className="status-badge-small ">{helper.ConvertToQfbNumberFormatWithFraction(data["treasuryPlacementsAverageRate"] || "") + "%" || ""}</span>
                         </div>
                       </div>
                     </a>
@@ -212,7 +212,7 @@ function ManagmentRequestListing(
                     <a className="d-block p-0">
                       <div className="row align-items-center  ">
                         <div className="col-sm-6">
-                          <h4>{local_Strings.BankPositionsTotalAssetSub5} </h4>
+                          <h4>{local_Strings.BankPositionsTotalAssetSub7} </h4>
                         </div>
                         <div className="col-sm-6 text-sm-right">
                           <h4 className="justify-content-end">
@@ -222,6 +222,16 @@ function ManagmentRequestListing(
                           </h4>
                         </div>
                       </div>
+                      <div className="row align-items-center">
+                        <div className="col-sm-9">
+                          <h6 className="text-15 mb-0">
+                            {local_Strings.NetAverageRate}
+                          </h6>
+                        </div>
+                        <div className="col-sm-3 text-sm-right">
+                          <span className="status-badge-small ">{helper.ConvertToQfbNumberFormatWithFraction(data["holdingCompanyLoansAvreageRate"] || "") + "%"}</span>
+                        </div>
+                      </div>
                     </a>
                   </li>
 
@@ -229,7 +239,7 @@ function ManagmentRequestListing(
                     <a className="d-block p-0">
                       <div className="row align-items-center  ">
                         <div className="col-sm-6">
-                          <h4>{local_Strings.BankPositionsTotalAssetSub7} </h4>
+                          <h4>{local_Strings.BankPositionsTotalAssetSub6} </h4>
                         </div>
                         <div className="col-sm-6 text-sm-right">
                           <h4 className="justify-content-end">
@@ -247,7 +257,7 @@ function ManagmentRequestListing(
                           </h6>
                         </div>
                         <div className="col-sm-3 text-sm-right">
-                          <span className="status-badge-small ">{helper.ConvertToQfbNumberFormat(data["privateBankLoansAvreageRate"] || "") + "%" || ""}</span>
+                          <span className="status-badge-small ">{helper.ConvertToQfbNumberFormatWithFraction(data["privateBankLoansAvreageRate"] || "") + "%"}</span>
                         </div>
                       </div>
                     </a>
@@ -324,7 +334,7 @@ function ManagmentRequestListing(
                         </div>
                         <div className="col-sm-3 text-sm-right">
                           <span className="status-badge-small ">
-                            {helper.ConvertToQfbNumberFormat(data["depositsNetAverageRate"] || "") + "%" || ""}</span>
+                            {helper.ConvertToQfbNumberFormatWithFraction(data["depositsNetAverageRate"] || "") + "%"}</span>
                         </div>
                       </div>
                     </a>

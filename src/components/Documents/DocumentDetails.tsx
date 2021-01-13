@@ -1,11 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import xIcon from "../../images/x-icon.svg";
 import {
   emptyDocumentData,
   IDocumentDetail,
 } from "../../Helpers/publicInterfaces";
-import moment from "moment";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
 import * as helper from "../../Helpers/helper";

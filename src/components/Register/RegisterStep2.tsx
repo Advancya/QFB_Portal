@@ -144,7 +144,7 @@ function RegisterStep2(props: iRegisterStep2) {
                       type="password"
                       className="form-control"
                       placeholder=""
-                      value={values.password}
+                      value={values.password || ""}
                       onChange={handleChange("password")}
                       onBlur={handleBlur("password")}
                     />

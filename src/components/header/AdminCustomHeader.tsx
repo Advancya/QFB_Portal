@@ -10,8 +10,8 @@ function AdminCustomHeader() {
       <div className="topHeader">
         <div className="container-fluid">
           <div className="row align-items-center">
-            <ToolBarLeft></ToolBarLeft>
-            <AdminToolBarRight></AdminToolBarRight>
+            <ToolBarLeft/>
+            <AdminToolBarRight/>
           </div>
         </div>
       </div>
@@ -19,8 +19,8 @@ function AdminCustomHeader() {
       <header className="header">
         <div className="container-fluid">
           <div className="row align-items-center">
-            <Logo></Logo>
-            <AdminNavigation></AdminNavigation>
+            <Logo/>
+            <AdminNavigation/>
           </div>
         </div>
       </header>

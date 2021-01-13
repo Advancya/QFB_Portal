@@ -137,7 +137,7 @@ function ForgotPasswordStep3(props: iForgotPasswordStep3) {
                     <input
                       type="text"
                       className="form-control"
-                      value={values.password}
+                      value={values.password || ""}
                       onBlur={handleBlur("password")}
                       onChange={handleChange("password")}
                     />
@@ -152,7 +152,7 @@ function ForgotPasswordStep3(props: iForgotPasswordStep3) {
                     <input
                       type="text"
                       className="form-control"
-                      value={values.confirmPassword}
+                      value={values.confirmPassword || ""}
                       onBlur={handleBlur("confirmPassword")}
                       onChange={handleChange("confirmPassword")}
                     />

@@ -102,7 +102,7 @@ function ChangeLanguage(props: iChangeLanguage) {
                 id="customRadio1"
                 name="customRadio"
                 className="custom-control-input"
-                value={userSettings.language}
+                value={userSettings.language || ""}
                 onChange={(e) =>
                   setUserSettings({ ...userSettings, language: e.target.value })
                 }

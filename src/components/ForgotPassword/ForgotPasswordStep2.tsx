@@ -123,7 +123,7 @@ function ForgotPasswordStep2(props: iForgotPasswordStep2) {
                     <input
                       type="text"
                       className="form-control"
-                      value={values.otp}
+                      value={values.otp || ""}
                       onChange={handleChange("otp")}
                       onBlur={handleBlur("otp")}
                     />

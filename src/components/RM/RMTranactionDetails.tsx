@@ -11,6 +11,7 @@ import ViewAttachment from '../../shared/AttachmentViewer';
 import Swal from 'sweetalert2';
 import { emptyTransactionDetail, ITransactionDetail } from "../../Helpers/publicInterfaces";
 import { GetTransactionById } from "../../services/cmsService";
+import xIcon from "../../images/x-icon.svg";
 
 interface iRMDetails {
   showRMDetailsModal: boolean;
@@ -51,7 +52,7 @@ function RMTranactionDetails(props: iRMDetails) {
     <Modal
       show={props.showRMDetailsModal}
       onHide={props.hideRMDetailsModal}
-      size="lg"
+      //size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       scrollable
@@ -70,7 +71,7 @@ function RMTranactionDetails(props: iRMDetails) {
           className="close"
           onClick={props.hideRMDetailsModal}
         >
-          <span aria-hidden="true">×</span>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
 
@@ -173,10 +174,12 @@ function RMTranactionDetails(props: iRMDetails) {
                 type="submit"
                 onClick={async (e) => {
                   if (!!selectedStatus) {
+                    setLoading(true);
                     const result = await RmTranasctionUpdateStatus(
                       props.itemId.toString(),
                       selectedStatus
                     );
+                    setLoading(false);
                     if (result) {
                       Swal.fire({
                         position: 'top-end',

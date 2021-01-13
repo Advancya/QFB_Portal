@@ -1219,6 +1219,55 @@ const GetManagementBankPoistion = async () => {
   }
 };
 
+
+async function AddAcceptTermsStatusForCustomer(cif: string) {
+  try {
+    const result = await apiInstance.post("/api/TermsAcceptanceStatus/Add", {
+      id: 0,
+      acceptanceStatus: true,
+      acceptanceDate: new Date(),
+      deviceId: "QFB portal",
+      customerId: Number(cif),
+    });
+    
+    if (result.data) {
+      localStorage.setItem(defaultData.CustomerTermsAcceptanceStorageKey, "Terms Accepted");
+    }
+    return result.data;
+  } catch (err) {
+    return false;
+  }
+}
+
+async function AddAcceptTermsStatusForAnonymous() {
+  try {
+    const token = await generateRegistrationToken();
+    const result = await axios.post(
+      `${defaultData.ApiBaseUrl}/api/TermsAcceptanceStatus/Add`,
+      {
+        id: 0,
+        acceptanceStatus: true,
+        acceptanceDate: new Date(),
+        deviceId: "QFB portal",
+        customerId: 0,
+      },
+      {
+        timeout: 30000,
+        headers: {
+          Authorization: `Bearer ${token["access_token"]}`,
+        },
+      }
+    );
+    if (result.data) {
+      
+      localStorage.setItem(defaultData.AnonymousTermsAcceptanceStorageKey, "Terms Accepted");
+    }
+    return result.data;
+  } catch (err) {
+    return false;
+  }
+}
+
 export {
   GetStockData,
   ValidateRegisterData,
@@ -1311,4 +1360,6 @@ export {
   GetManagementClinetList,
   GetManagementBankPoistion,
   GetRmTransactionList,
+  AddAcceptTermsStatusForCustomer,
+  AddAcceptTermsStatusForAnonymous
 };

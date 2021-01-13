@@ -405,7 +405,7 @@ const en = {
   BeneficiaryCancelButton: "Cancel",
   BeneficiaryEditButton: "Edit",
   BeneficiaryDeleteButton: "Delete",
-  BeneficiaryInvalidIban: "Invalid IBAN number",
+  BeneficiaryInvalidIban: "Invalid Account Number or IBAN number ",
   BeneficiaryIDLabelInternational: "Beneficiary ID(system assigned)",
   DeleteConfirmationTitle: "Confiramtion Message",
   DeleteConfirmationBody: "Are you sure?",
@@ -433,7 +433,6 @@ const en = {
 
   SearchText: "Search",
   RMClientsRequestListingTitle: "Clients Request Listing",
-  RMSampleAccount: "CIF | ",
   RMSampleTitle: "Account Statement",
   RMIsRegisterAccount: "Registered",
   RMIsNotRegisterAccount: "Not Registered",
@@ -588,13 +587,13 @@ const en = {
   Last6Quarters: "Last 6 Quarters",
   Last3Years: "Last 3 Years",
   CustomerInvestments: "Customer Investments",
-  FinancingBalancesandratesPBandHC: "Financing Balances and rates PB and HC",
-  PastDuesPBandHC: "Past Dues PB and HC",
-  CustomersDepositsandrates: "Customers Deposits and rates",
-  BankCashBalances: "Bank Cash Balances",
-  MMFUNDBalances: "MM FUND Balances",
-  SUKUKBalances: "SUKUK Balances",
-  TreasuryPlacementsBalances: "Treasury Placements Balances",
+  FinancingBalancesandratesPBandHC: "Loans",
+  PastDuesPBandHC: "Past Dues",
+  CustomersDepositsandrates: "Customers Deposits",
+  BankCashBalances: "Bank Cash",
+  MMFUNDBalances: "FI Borrowings",
+  SUKUKBalances: "Sukuks Investments/Sukuks Funds",
+  TreasuryPlacementsBalances: "Treasury Placements/MM Fund",
   TotalCash: "Total Cash",
   TotalInvestments: "Total Investments",
   TotalDeposits: "Total Deposits",
@@ -610,7 +609,7 @@ const en = {
   BankPositionsTotalAssetSub2: "MM Fund",
   BankPositionsTotalAssetSub3: "Placements",
   BankPositionsTotalAssetSub4: "Past Dues",
-  BankPositionsTotalAssetSub5: "Investments",
+  BankPositionsTotalAssetSub5: "Cash Balances",
   BankPositionsTotalAssetSub6: "Private Bank Loans Balances",
   BankPositionsTotalAssetSub7: "Loans",
 
@@ -743,7 +742,7 @@ const en = {
 
   navigationUserMessage: "Welcome, Ahmed Mohamed Ahmed Mohamed",
   navigationItem1: "Holdings",
-  navigationItem2: "Transactions",
+  navigationItem2: "Transfer",
   navigationItem3: "Offers",
   navigationItem4: "Requests",
   navigationItem5: "Messages",
@@ -790,6 +789,23 @@ const en = {
 
   AccessDeniedMsgTitle: "Access Denied",
   AccessDeniedMessage: "Your are not authorize to accesss this section.",
+
+  ChartProfitRecieved: "Received Profit",
+  ChartDepositsAmount: "Deposit Amount ",
+  
+  NoLiveHoldingsMesageDeposit: "No Live Holdings Yet for Deposit",
+  NoLiveHoldingsMesageInvestment: "No Live Holdings Yet for Investment",
+  NoClosedHoldingsMesageInvestment: "No Closed Holdings Yet for Investment",  
+  NoClosedHoldingsMesageDeposit: "No Closed Holdings Yet for Deposit",
+  BreadcrumbLandingTitle: "Landing",
+  BreadcrumbAdminTitle: "Admin",  
+  
+  RMSampleAccount: "RM | ",
+  CustomerSampleAccount: "CIF | ",
+  ManagementSampleAccount: "Management | ",
+
+  ChartDepositProfitRecieved: "Deposit Received Profit",
+  ChartDrillDownHint: "Click to view the profit received",
 };
 
 export default en;

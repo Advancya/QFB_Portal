@@ -158,7 +158,7 @@ function ForgotPasswordStep1(props: iForgotPasswordStep1) {
                       <input
                         type="text"
                         className="form-control"
-                        value={values.mobile}
+                        value={values.mobile || ""}
                         onChange={handleChange("mobile")}
                         onBlur={handleBlur("mobile")}
                       />
@@ -172,7 +172,7 @@ function ForgotPasswordStep1(props: iForgotPasswordStep1) {
                       <input
                         type="text"
                         className="form-control"
-                        value={values.email}
+                        value={values.email || ""}
                         onChange={handleChange("email")}
                         onBlur={handleBlur("email")}
                       />

@@ -17,6 +17,7 @@ import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import xIcon from "../../images/x-icon.svg";
+import { GetUserLocalData } from "../../Helpers/authHelper";
 
 interface iTransactionsListing {
   showTransactionsListingModal: boolean;
@@ -34,13 +35,36 @@ function TransactionsListing(props: iTransactionsListing) {
   const rowLimit: number = Constant.RecordPerPage;
   const [offset, setOffset] = useState<number>(rowLimit);
   const [filteredData, setFilteredData] = useState<ITransactionDetail[]>([emptyTransactionDetail]);
+  const [allowEdit, setAllowEdit] = useState<boolean>(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    const initialLoadMethod = async () => {
+      const userData = await GetUserLocalData();
+      if (userData) {
+        if (isMounted && userData.customerId === currentContext.selectedCIF) {
+          setAllowEdit(true);
+        }
+      }
+    };
+
+    if (!!currentContext.selectedCIF) {
+      initialLoadMethod();
+    }
+
+    return () => {
+      isMounted = false;
+    }; // use effect cleanup to set flag false, if unmounted
+  }, [currentContext.selectedCIF]);
 
   useEffect(() => {
     setFilteredData(props.transactions);
     if (props.transactions && props.transactions.length > 0 && props.transactions.length < rowLimit) {
       setOffset(props.transactions.length);
+    } else {
+      setOffset(rowLimit);
     }
-  }, [props.transactions]);
+  }, [props.transactions, props.reloading]);
 
   const renderItem = (item: ITransactionDetail, index: number) => (
     <li className="shown" key={index}>
@@ -98,7 +122,7 @@ function TransactionsListing(props: iTransactionsListing) {
             </div>
             <div className="ib-text d-flex align-items-center">
               <h4>{local_Strings.TransactionsListingTitle}</h4>
-              {currentContext.userRole === Constant.Customer && (
+              {allowEdit && currentContext.userRole === Constant.Customer && (
                 <a
                   className="btnOutlineWhite"
                   href="#"
@@ -151,11 +175,11 @@ function TransactionsListing(props: iTransactionsListing) {
           <div className="box modal-box">
             <ul className="box-list" id="reqList">
               {filteredData &&
-              filteredData.length > 0 &&
-              !!filteredData[0].transactionDate
+                filteredData.length > 0 &&
+                !!filteredData[0].transactionDate
                 ? filteredData
-                    .slice(0, offset)
-                    .map((item, index) => renderItem(item, index))
+                  .slice(0, offset)
+                  .map((item, index) => renderItem(item, index))
                 : NoResult(local_Strings.NoDataToShow)}
             </ul>
           </div>

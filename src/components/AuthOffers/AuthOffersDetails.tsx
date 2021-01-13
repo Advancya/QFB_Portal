@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
-import dateIcon from "../../images/calendar-inactive.png";
+import { Modal } from "react-bootstrap";
 import { emptyOfferData, IOfferDetail } from "../../Helpers/publicInterfaces";
 import moment from "moment";
 import { localStrings as local_Strings } from "../../translations/localStrings";
@@ -12,6 +11,7 @@ import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import { saveAs } from "file-saver";
 import xIcon from "../../images/x-icon.svg";
+import { GetUserLocalData } from "../../Helpers/authHelper";
 
 const mime = require("mime");
 
@@ -28,6 +28,27 @@ function AuthOffersDetails(props: iAuthOffersDetails) {
   local_Strings.setLanguage(currentContext.language);
   const [isLoading, setLoading] = useState(true);
   const [item, setDetail] = useState<IOfferDetail>(null);
+  const [allowEdit, setAllowEdit] = useState<boolean>(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    const initialLoadMethod = async () => {
+      const userData = await GetUserLocalData();
+      if (userData) {
+        if (isMounted && userData.customerId === currentContext.selectedCIF) {
+          setAllowEdit(true);
+        }
+      }
+    };
+
+    if (!!currentContext.selectedCIF) {
+      initialLoadMethod();
+    }
+
+    return () => {
+      isMounted = false;
+    }; // use effect cleanup to set flag false, if unmounted
+  }, [currentContext.selectedCIF]);
 
   useEffect(() => {
     let isMounted = true;
@@ -130,7 +151,7 @@ function AuthOffersDetails(props: iAuthOffersDetails) {
                     onClick={downloadAttachment}
                   >
                     <a className="download-link d-inline-block " href="#">
-                      <i className="mx-1 fa fa-file color-white"></i>
+                      {/* <i className="mx-1 fa fa-file color-white"></i> */}
                       <i className="mx-1 fa fa-download color-white"></i>
                     </a>
                   </div>
@@ -149,7 +170,7 @@ function AuthOffersDetails(props: iAuthOffersDetails) {
               }}
             />
           )}
-          {item && currentContext.userRole === Constant.Customer && (
+          {item && allowEdit && currentContext.userRole === Constant.Customer && (
             <div className="text-right p-3">
               <button
                 id="applyReqBtn"

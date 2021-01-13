@@ -1,10 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
-import dateIcon from "../../images/calendar-inactive.png";
+import { Modal } from "react-bootstrap";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
 import {
-  GetAllCustomerList,
   SendNotificationsToCIFs,
   SendNotificationsToAll,
 } from "../../services/cmsService";
@@ -20,8 +18,6 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import "@ckeditor/ckeditor5-build-classic/build/translations/ar.js";
 //import Base64UploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/base64uploadadapter';
 import {
-  emptyCustomer,
-  ICustomer,
   emptyNotificationsDetail,
   INotificationsDetail,
 } from "../../Helpers/publicInterfaces";

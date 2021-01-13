@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import dateIcon from "../../images/calendar-inactive.png";
 import {
-  initialINotification,
   IInboxFilter,
   INotificationDetail,
 } from "../../Helpers/publicInterfaces";
@@ -47,8 +46,10 @@ function NotficationsListing(props: iNotficationsListing) {
     setFilteredData(props.notfications);
     if (props.notfications && props.notfications.length > 0 && props.notfications.length < rowLimit) {
       setOffset(props.notfications.length);
+    } else {
+      setOffset(rowLimit);
     }
-  }, [props.notfications]);
+  }, [props.notfications, props.reloading]);
 
   const renderItem = (item: INotificationDetail, index: number) => (
     <li className="shown" key={index}>

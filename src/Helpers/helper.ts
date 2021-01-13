@@ -503,59 +503,67 @@ export const transformingTransactionDetail = (
   return JSON.parse(outputJSONStr);
 };
 
-export const prepareDepositHoldings1stDrill = (
-  chartData: any,
-  title: string,
-  rtl = false
-) => {
-  let series: any = [];
-  let values: any = [];
+export const prepareDepositHoldings1stDrill = (chartData: any, language: string) => {
+  local_Strings.setLanguage(language);
 
-  chartData.map((item: any) => {
-    values.push({
-      y: item.totalProfitRecieved || item.totalClosedProfit,
+  let sdata = [
+    {
+      name: local_Strings.ChartDepositsAmount,
+      y: chartData[0].totalDepositsAmount || chartData[0].totalClosedDeposits,
+      amount: ConvertToQfbNumberFormat(
+        chartData[0].totalDepositsAmount || chartData[0].totalClosedDeposits
+      ),
+      color: "#724B44",
+    },
+    {
+      name: local_Strings.ChartProfitRecieved,
+      y: chartData[0].totalProfitRecieved || chartData[0].totalClosedProfit,
+      amount: ConvertToQfbNumberFormat(
+        chartData[0].totalProfitRecieved || chartData[0].totalClosedProfit
+      ),
       color: "#B39758",
-      name: item.totalDepositsAmount || item.totalClosedDeposits,
-    });
-  });
+    },
+  ];
 
-  series.push({
-    colorByPoint: true,
-    data: values,
-  });
+  let series = [
+    {
+      name: "",
+      data: sdata,
+    },
+  ];
 
   let data = {
     chart: {
-      type: "column",
+      type: "pie",
     },
     title: {
-      text: "Deposit",
+      text: local_Strings.ChartDepositProfitRecieved,
     },
     tooltip: {
       enabled: false,
-    },
-    xAxis: {
-      type: "category",
-    },
-    yAxis: {
-      title: {
-        text: "",
-      },
     },
     credits: {
       enabled: false,
     },
     legend: {
-      rtl: rtl,
+      rtl: language === "ar",
     },
     plotOptions: {
-      column: {
+      pie: {
+        allowPointSelect: false,
+        cursor: "pointer",
+        enableMouseTracking: false,
         dataLabels: {
           enabled: true,
-          format: "<b>{point.y}</b>",
+          format: `{point.amount:.f}`,
           useHTML: true,
         },
-        showInLegend: false,
+        events: {
+          click: function (event) {
+            window.ReactNativeWebView.postMessage(event.point.amount);
+          },
+        },
+        showInLegend: true,
       },
     },
     series: series,
@@ -567,8 +575,9 @@ export const prepareDepositHoldings1stDrill = (
 export const prepareInvestmentHoldings1stDrill = (
   chartData: any,
   title: string,
-  rtl = false
+  language: string
 ) => {
+  local_Strings.setLanguage(language);
   let series: any = [];
 
   for (var i = 0; i < 2; i++) {
@@ -604,6 +613,9 @@ export const prepareInvestmentHoldings1stDrill = (
     title: {
       text: title,
     },
+    subtitle: {
+      text: local_Strings.ChartDrillDownHint,
+    },
     tooltip: {
       enabled: false,
     },
@@ -620,7 +632,7 @@ export const prepareInvestmentHoldings1stDrill = (
       enabled: false,
     },
     legend: {
-      rtl: rtl,
+      rtl: language === "ar",
     },
     plotOptions: {
       column: {
@@ -693,31 +705,31 @@ export const prepareTotalNetWorth = (
     {
       name: local_Strings.TotalCash,
       y: !!chartData.totalCash ? parseFloat(chartData.totalCash) : 0,
-      amount: chartData.totalCash.toLocaleString(),
+      amount: ConvertToQfbNumberFormat(chartData.totalCash),
       color: "#493026",
     },
     {
       name: local_Strings.TotalInvestments,
       y: !!chartData.totalInvestment ? parseFloat(chartData.totalInvestment) : 0,
-      amount: chartData.totalInvestment.toLocaleString(),
+      amount: ConvertToQfbNumberFormat(chartData.totalInvestment),
       color: "#6C544B",
     },
     {
       name: local_Strings.TotalDeposits,
       y: !!chartData.totalDeposits ? parseFloat(chartData.totalDeposits) : 0,
-      amount: chartData.totalDeposits.toLocaleString(),
+      amount: ConvertToQfbNumberFormat(chartData.totalDeposits),
       color: "#97877F",
     },
     {
       name: local_Strings.TotalLoans,
       y: !!chartData.totalLoans ? parseFloat(chartData.totalLoans) : 0,
-      amount: chartData.totalLoans.toLocaleString(),
+      amount: ConvertToQfbNumberFormat(chartData.totalLoans),
       color: "#CBC4C1",
     },
     {
       name: local_Strings.BankGurantees,
       y: !!chartData.totalGuarantees ? parseFloat(chartData.totalGuarantees) : 0,
-      amount: chartData.totalGuarantees.toLocaleString(),
+      amount: ConvertToQfbNumberFormat(chartData.totalGuarantees),
       color: "#A79A94",
     }
   ];
@@ -744,7 +756,6 @@ export const prepareTotalNetWorth = (
     },
     legend: {
       rtl: rtl,
-      floating: true
     },
     plotOptions: {
       pie: {
@@ -786,15 +797,168 @@ export const b64toBlob = (b64Data: any, contentType = '', sliceSize = 512) => {
 
 export const ConvertToQfbNumberFormat = (amount: any) => {
   try {
-    let number = Number(parseInt(!!amount ? amount : "0").toFixed(2)).toLocaleString(
-      "en",
-      {
-        minimumFractionDigits: 0,
-      }
-    );
+    let number = Number(parseInt(amount ? amount.toString() : "0").toFixed(2));
+    let finalNumber = number.toLocaleString("en", {
+      minimumFractionDigits: 0,
+    });
 
-    return (number === "NaN" || number === "NaN") ? amount : number;
+    return finalNumber.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+
   } catch (err) {
     return amount;
   }
 }
+
+export const ConvertToQfbNumberFormatWithFraction = (amount: any) => {
+  try {
+
+    let number = Number(parseFloat(!!amount ? amount.toString() : "0").toFixed(2));
+    let finalNumber = number.toLocaleString("en", {
+      minimumFractionDigits: 0,
+    });
+
+    return finalNumber.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+
+  } catch (err) {
+    console.log("error", err);
+    return amount;
+  }
+}
+
+export const prepareManagementData = (
+  chartData: any,
+  type: string,
+  language: string
+) => {
+
+  local_Strings.setLanguage(language);
+  let series: any = [];
+  let values: any = [];
+  let categories: string = "";
+  let legend: Boolean = false;
+
+  if (type === "CustomerInvestmentDashboard") {
+    chartData.map((item) => {
+      values.push({
+        y: Math.round(
+          ((item.totalBalances + Number.EPSILON) * 100) / (1000000 * 100)
+        ),
+        amount: ConvertToQfbNumberFormat(
+          Math.round(
+            ((item.totalBalances + Number.EPSILON) * 100) / (1000000 * 100)
+          )
+        ),
+        color: "#724B44",
+        symbol: "M",
+      });
+    });
+    series.push({
+      data: values,
+    });
+    categories = chartData.map((c) => moment(c.rpT_DATE).format("DD-MM-YYYY"));
+  } else if (
+    type === "FinancingBalancesAndRatesPBAndHCDashboard" ||
+    type === "CustomersDepositsAndRatesDashboard" ||
+    type === "MMFUNDBalancesDashboard" ||
+    type === "SUKUKBalancesDashboard" ||
+    type === "TreasuryPlacementsBalancesDashboard"
+  ) {
+    for (var i = 0; i < 2; i++) {
+      let data: any = [];
+      chartData.map((item) => {
+        i === 0
+          ? data.push({
+            y: Math.round(
+              ((item.totalBalances + Number.EPSILON) * 100) / (1000000 * 100)
+            ),
+            amount: ConvertToQfbNumberFormat(
+              Math.round(
+                ((item.totalBalances + Number.EPSILON) * 100) /
+                (1000000 * 100)
+              )
+            ),
+            color: "#724B44",
+            symbol: "M",
+          })
+          : data.push({
+            y: Number(Number.parseInt(item.netAverageRate).toFixed(1)),
+            amount: Number(Number.parseInt(item.netAverageRate).toFixed(1)),
+            color: "#f5f5dc",
+            symbol: "%",
+          });
+      });
+
+      series.push({
+        name: i === 0 ? local_Strings.TotalBalances : local_Strings.NetAverageRate,
+        color: i === 0 ? "#724B44" : "#f5f5dc",
+        data: data,
+      });
+    }
+    legend = true;
+    categories = chartData.map((c) =>
+      moment(c.reportinG_DATE).format("DD-MM-YYYY")
+    );
+  } else if (
+    type === "PastDuesPBAndHCDashboard" ||
+    type === "BankCashBalancesDashboard"
+  ) {
+    chartData.map((item) => {
+      values.push({
+        y: Math.round(
+          ((item.totalBalances + Number.EPSILON) * 100) / (1000000 * 100)
+        ),
+        amount: ConvertToQfbNumberFormat(
+          Math.round(
+            ((item.totalBalances + Number.EPSILON) * 100) / (1000000 * 100)
+          )
+        ),
+        color: "#724B44",
+        symbol: "M",
+      });
+    });
+    series.push({
+      data: values,
+    });
+    categories = chartData.map((c) =>
+      moment(c.reportinG_DATE).format("DD-MM-YYYY")
+    );
+  }
+
+  let data = {
+    chart: {
+      type: "column",
+    },
+    title: {
+      text: "",
+    },
+    tooltip: {
+      enabled: false,
+    },
+    xAxis: {
+      categories: categories,
+    },
+    yAxis: {
+      title: {
+        text: "",
+      },
+    },
+    credits: {
+      enabled: false,
+    },
+    legend: {
+      rtl: language === "ar",
+    },
+    plotOptions: {
+      column: {
+        dataLabels: {
+          enabled: true,
+          format: "<b>{point.amount}{point.symbol}</b>",
+        },
+        showInLegend: legend,
+      },
+    },
+    series: series,
+  };
+
+  return data;
+};

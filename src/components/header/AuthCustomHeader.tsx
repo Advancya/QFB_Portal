@@ -10,8 +10,8 @@ function AuthCustomHeader() {
       <div className="topHeader">
         <div className="container-fluid">
           <div className="row align-items-center">
-            <ToolBarLeft></ToolBarLeft>
-            <ToolBarRight></ToolBarRight>
+            <ToolBarLeft/>
+            <ToolBarRight/>
           </div>
         </div>
       </div>
@@ -19,8 +19,8 @@ function AuthCustomHeader() {
       <header className="header">
         <div className="container-fluid">
           <div className="row align-items-center">
-            <Logo></Logo>
-            <Navigation></Navigation>
+            <Logo/>
+            <Navigation/>
           </div>
         </div>
       </header>

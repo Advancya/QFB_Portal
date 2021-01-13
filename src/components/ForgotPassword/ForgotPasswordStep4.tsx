@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import successIcon from "../../images/ConfirmationIcon.png";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import xIcon from "../../images/x-icon.svg";

@@ -159,7 +159,7 @@ function RegisterStep3(props: iRegisterStep3) {
                       type="password"
                       className="form-control"
                       placeholder=""
-                      value={values.otp}
+                      value={values.otp || ""}
                       onChange={handleChange("otp")}
                       onBlur={handleBlur("otp")}
                     />

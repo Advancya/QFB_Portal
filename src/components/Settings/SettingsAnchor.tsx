@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import dateIcon from "../../images/calendar-inactive.png";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { useHistory } from "react-router-dom";

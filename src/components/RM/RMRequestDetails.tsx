@@ -13,6 +13,7 @@ import iRequest, {
 } from "../../services/requestService";
 import ViewAttachment from '../../shared/AttachmentViewer';
 import Swal from 'sweetalert2';
+import xIcon from "../../images/x-icon.svg";
 
 interface iRMDetails {
   showRMDetailsModal: boolean;
@@ -154,13 +155,13 @@ function RMRequestDetails(props: iRMDetails) {
 
   useEffect(() => {
     fetchFormData();
-  }, [props.itemId]);
+  }, [props.itemId, props.showRMDetailsModal]);
 
   return (
     <Modal
       show={props.showRMDetailsModal}
       onHide={props.hideRMDetailsModal}
-      size="lg"
+      //size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       scrollable
@@ -179,7 +180,7 @@ function RMRequestDetails(props: iRMDetails) {
           className="close"
           onClick={props.hideRMDetailsModal}
         >
-          <span aria-hidden="true">×</span>
+          <img src={xIcon} width="15" />
         </button>
       </Modal.Header>
 
@@ -217,50 +218,48 @@ function RMRequestDetails(props: iRMDetails) {
             />}
           />
           {formFields.map((item, index) =>
-            <div key={index} className="py-2 px-3">
-              <div className="row">
-                <div className="col-lg-8">
-                  <label>{
-                    currentContext.language === "ar"
-                      ? item["details"].split(";")[1]
-                      : item["details"].split(";")[0]
-                  }
-                  </label>
-                  {item["details"].split(";")[2] !== "FILE_UPLOAD" ?
-                    (
-                      item["details"].split(";")[2] ===
-                        "MULTILINE_TEXT" || (item["details"].split(";")[2] === "READ_ONLY" &&
-                          item["details"].split(";")[3].toString() !==
-                          "NULL") ?
-                        <Form.Control
-                          as="textarea"
-                          readOnly={true}
-                          defaultValue={getRequestFieldValue(
-                            item["details"].split(";")[0].replace(/ /g, ""))
-                          }
-                        /> :
-                        <div
-                          dangerouslySetInnerHTML={{
-                            __html: getRequestFieldValue(
-                              item["details"].split(";")[0].replace(/ /g, ""))
-                          }}
-                          className="request-detail-control" />
-                    )
-                    :
-                    <ViewAttachment showDelete={false}
-                      fileName={getRequestFieldValue("FileName")}
-                      fileContent={getRequestFieldValue(
-                        "FileContent"
-                      )}
-                    />
-                  }
-                </div>
-              </div>
-            </div>
-          )}
-          <div className="row py-2 px-3">
 
-            <div className="col-lg-4">
+            <div key={index} className="px-3 py-3 col-lg-8">
+              <label>{
+                currentContext.language === "ar"
+                  ? item["details"].split(";")[1]
+                  : item["details"].split(";")[0]
+              }
+              </label>
+              {item["details"].split(";")[2] !== "FILE_UPLOAD" ?
+                (
+                  item["details"].split(";")[2] ===
+                    "MULTILINE_TEXT" || (item["details"].split(";")[2] === "READ_ONLY" &&
+                      item["details"].split(";")[3].toString() !==
+                      "NULL") ?
+                    <Form.Control
+                      as="textarea"
+                      readOnly={true}
+                      defaultValue={getRequestFieldValue(
+                        item["details"].split(";")[0].replace(/ /g, ""))
+                      }
+                    /> :
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: getRequestFieldValue(
+                          item["details"].split(";")[0].replace(/ /g, ""))
+                      }}
+                      className="request-detail-control" />
+                )
+                :
+                <ViewAttachment showDelete={false}
+                  fileName={getRequestFieldValue("FileName")}
+                  fileContent={getRequestFieldValue(
+                    "FileContent"
+                  )}
+                />
+              }
+            </div>
+
+          )}
+          <div className="py-3 row col-xl-12 mb-5">
+
+            <div className="col-lg-6">
               <label>{local_Strings.RMDetailsChangeRequestStatusLabel}</label>
               <select className="form-control"
                 value={selectedStatus || ""}
@@ -283,45 +282,47 @@ function RMRequestDetails(props: iRMDetails) {
                 </option>
               </select>
             </div>
-            <div className="col-lg-4 text-right py-2 px-3">
+            <div className="col-lg-6 text-right py-2 px-3">
               <button id="submitOTPBtn" className="btn btn-primary"
-              type="submit"
-              onClick={async (e) => {
-                if (!!selectedStatus) {
-                  const result = await RmUpdateStatus(
-                    props.itemId.toString(),
-                    selectedStatus
-                  );
-                  if (result) {
-                    Swal.fire({
-                      position: 'top-end',
-                      icon: 'success',
-                      title: local_Strings.ConfirmationTitle,
-                      html: local_Strings.ConfirmationDesc,
-                      showConfirmButton: false,
-                      timer: Constant.AlertTimeout
-                    });
-                    props.backRMDetailsgModal();
+                type="submit"
+                onClick={async (e) => {
+                  if (!!selectedStatus) {
+                    setLoading(true);
+                    const result = await RmUpdateStatus(
+                      props.itemId.toString(),
+                      selectedStatus
+                    );
+                    setLoading(false);
+                    if (result) {
+                      Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: local_Strings.ConfirmationTitle,
+                        html: local_Strings.ConfirmationDesc,
+                        showConfirmButton: false,
+                        timer: Constant.AlertTimeout
+                      });
+                      props.backRMDetailsgModal();
+                    } else {
+                      Swal.fire({
+                        position: 'top-end',
+                        icon: 'error',
+                        title: local_Strings.GenericErrorMessage,
+                        showConfirmButton: false,
+                        timer: Constant.AlertTimeout
+                      });
+                    }
                   } else {
+
                     Swal.fire({
                       position: 'top-end',
                       icon: 'error',
-                      title: local_Strings.GenericErrorMessage,
+                      title: local_Strings.formValidationMessage,
                       showConfirmButton: false,
                       timer: Constant.AlertTimeout
                     });
                   }
-                } else {
-                  
-                  Swal.fire({
-                    position: 'top-end',
-                    icon: 'error',
-                    title: local_Strings.formValidationMessage,
-                    showConfirmButton: false,
-                    timer: Constant.AlertTimeout
-                  });
-                }
-              }}>
+                }}>
                 {local_Strings.RMDetailsbutton}
               </button>
             </div>

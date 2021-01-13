@@ -100,7 +100,7 @@ function ChangeOTPMethod(props: iChangeOTPMethod) {
                 id="customRadio1"
                 name="customRadio"
                 className="custom-control-input"
-                value={userSettings.otp}
+                value={userSettings.otp || ""}
                 onChange={(e) =>
                   setUserSettings({ ...userSettings, otp: e.target.value })
                 }
@@ -118,7 +118,7 @@ function ChangeOTPMethod(props: iChangeOTPMethod) {
                 id="customRadio2"
                 name="customRadio"
                 className="custom-control-input"
-                value={userSettings.otp}
+                value={userSettings.otp || ""}
                 onChange={(e) =>
                   setUserSettings({ ...userSettings, otp: e.target.value })
                 }
@@ -136,7 +136,7 @@ function ChangeOTPMethod(props: iChangeOTPMethod) {
                 id="customRadio3"
                 name="customRadio"
                 className="custom-control-input"
-                value={userSettings.otp}
+                value={userSettings.otp || ""}
                 onChange={(e) =>
                   setUserSettings({ ...userSettings, otp: e.target.value })
                 }

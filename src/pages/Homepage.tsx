@@ -12,8 +12,8 @@ import { useHistory } from "react-router-dom";
 import { AuthContext } from "../providers/AuthProvider";
 import { localStrings as local_Strings } from "../translations/localStrings";
 import axios from "axios";
-import { GetUserLocalData } from "../Helpers/authHelper";
-import { GetInboxByCIF, GetUserPortfolio, GetGuarantees, GetNotificationsByCIF } from "../services/cmsService";
+import { AddAcceptTermsStatusForCustomer, GetInboxByCIF, GetUserPortfolio, GetGuarantees }
+ from "../services/cmsService";
 import {
   emptyInboxDetail,
   IInboxDetail,
@@ -24,6 +24,8 @@ import Constant from "../constants/defaultData";
 import * as helper from "../Helpers/helper";
 import { getUserRole } from "../services/apiServices";
 import Swal from 'sweetalert2';
+import AuthTerms from "../components/Terms/AuthTerms";
+
 export interface IUserPortfolio {
   customerCode: string;
   customerName: string;
@@ -66,11 +68,12 @@ export const InboxContext = createContext<IInboxProps>(
   }
 );
 
-function HomePage() {
+const HomePage = () => {
   const history = useHistory();
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
 
+  const [showAuthTerms, setShowAuthTerms] = useState(false);
   const [messages, setInboxListing] = useState<IInboxDetail[]>([emptyInboxDetail]);
   const [message, setMessageDetail] = useState<IInboxDetail>(emptyInboxDetail);
 
@@ -96,12 +99,25 @@ function HomePage() {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
+
+    const initialLoadMethod = async () => {
+      const termsAccepted = localStorage.getItem(Constant.CustomerTermsAcceptanceStorageKey);
+      if (termsAccepted === null || !termsAccepted) {
+        setShowAuthTerms(true);
+      }
+    }
+
+    initialLoadMethod();
+
+  }, []);
+
+  useEffect(() => {
     let isMounted = true;
 
     const initialLoadMethod = async () => {
 
       const role = await getUserRole(currentContext.selectedCIF);
-      console.log(currentContext.selectedCIF + " " + role);
+      
       if (role && !!role) {
         if (!(role && role.name === Constant.Customer)) {
           if (role.name === Constant.RM) {
@@ -128,54 +144,55 @@ function HomePage() {
               history.push(`/${currentContext.language}`);
             });
           }
+        } else {
+          const requestOne = GetUserPortfolio(
+            currentContext.selectedCIF,
+            currentContext.userSettings.currency
+          );
+          const requestTwo = GetGuarantees(
+            currentContext.selectedCIF,
+            currentContext.userSettings.currency
+          );
+          const requestThree = GetInboxByCIF(
+            currentContext.selectedCIF
+          );
+
+          axios
+            .all([requestOne, requestTwo, requestThree])
+            .then((responseData: any) => {
+              if (isMounted && responseData && responseData.length > 0) {
+
+                if (responseData[0] && responseData[0][0]) {
+                  let _userPortfolio = responseData[0][0] as IUserPortfolio;
+                  _userPortfolio = {
+                    ..._userPortfolio,
+                    totalAssets: helper.ConvertToQfbNumberFormat(_userPortfolio.totalAssets),
+                    totalCash: helper.ConvertToQfbNumberFormat(_userPortfolio.totalCash),
+                    totalDeposits: helper.ConvertToQfbNumberFormat(_userPortfolio.totalDeposits),
+                    totalInvestment: helper.ConvertToQfbNumberFormat(_userPortfolio.totalInvestment),
+                    totalLoans: helper.ConvertToQfbNumberFormat(_userPortfolio.totalLoans),
+                    networth: helper.ConvertToQfbNumberFormat(_userPortfolio.networth),
+                    totalLiabilities: helper.ConvertToQfbNumberFormat(_userPortfolio.totalLiabilities),
+                    totalGuarantees: ""
+                  };
+
+                  if (responseData[1].length > 0) {
+                    setUserPortfolio({
+                      ..._userPortfolio,
+                      totalGuarantees: helper.ConvertToQfbNumberFormat(responseData[1][0].totalGurQAR),
+                    });
+                  } else {
+                    setUserPortfolio(_userPortfolio);
+                  }
+                }
+
+                setInboxListing(responseData[2]);
+              }
+            })
+            .catch((e: any) => console.log(e))
+            .finally(() => setLoading(false));
         }
       }
-      const requestOne = GetUserPortfolio(
-        currentContext.selectedCIF,
-        currentContext.userSettings.currency
-      );
-      const requestTwo = GetGuarantees(
-        currentContext.selectedCIF,
-        currentContext.userSettings.currency
-      );
-      const requestThree = GetInboxByCIF(
-        currentContext.selectedCIF
-      );
-
-      axios
-        .all([requestOne, requestTwo, requestThree])
-        .then((responseData: any) => {
-          if (isMounted && responseData && responseData.length > 0) {
-
-            if (responseData[0] && responseData[0][0]) {
-              let _userPortfolio = responseData[0][0] as IUserPortfolio;
-              _userPortfolio = {
-                ..._userPortfolio,
-                totalAssets: helper.ConvertToQfbNumberFormat(_userPortfolio.totalAssets),
-                totalCash: helper.ConvertToQfbNumberFormat(_userPortfolio.totalCash),
-                totalDeposits: helper.ConvertToQfbNumberFormat(_userPortfolio.totalDeposits),
-                totalInvestment: helper.ConvertToQfbNumberFormat(_userPortfolio.totalInvestment),
-                totalLoans: helper.ConvertToQfbNumberFormat(_userPortfolio.totalLoans),
-                networth: helper.ConvertToQfbNumberFormat(_userPortfolio.networth),
-                totalLiabilities: helper.ConvertToQfbNumberFormat(_userPortfolio.totalLiabilities),
-                totalGuarantees: ""
-              };
-
-              if (responseData[1].length > 0) {
-                setUserPortfolio({
-                  ..._userPortfolio,
-                  totalGuarantees: helper.ConvertToQfbNumberFormat(responseData[1][0].totalGurQAR),
-                });
-              } else {
-                setUserPortfolio(_userPortfolio);
-              }
-            }
-
-            setInboxListing(responseData[2]);
-          }
-        })
-        .catch((e: any) => console.log(e))
-        .finally(() => setLoading(false));
     }
 
     if (!!currentContext.selectedCIF) {
@@ -207,7 +224,7 @@ function HomePage() {
       <InboxContext.Provider value={{ messages, refreshInbox }}>
         <PortfolioContext.Provider value={userPortfolio}>
           <AuthCustomHeader />
-          {/* <Breadcrumb pageName={""} /> */}
+          <Breadcrumb pageName={local_Strings.PortfolioTitle} />
           <section id="main-section" className="main-section">
             <LoadingOverlay
               active={isLoading}
@@ -253,6 +270,13 @@ function HomePage() {
             />}
         </PortfolioContext.Provider>
       </InboxContext.Provider>
+      <AuthTerms
+        showAuthTermsModal={showAuthTerms}
+        hideAuthTermsModal={async () => {
+          await AddAcceptTermsStatusForCustomer(currentContext.selectedCIF);
+          setShowAuthTerms(false);
+        }}
+      />
     </div>
   );
 }

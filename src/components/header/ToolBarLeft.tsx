@@ -1,20 +1,20 @@
 import React, { useContext, useEffect, useState } from "react";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCogs, faHome } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
+import { faHome } from "@fortawesome/free-solid-svg-icons";
 import { useHistory } from "react-router-dom";
 import * as helper from "../../Helpers/helper";
 import { AuthContext } from "../../providers/AuthProvider";
 import { getUserRole } from "../../services/apiServices";
 import Constant from "../../constants/defaultData";
 import { GetUserLocalData } from "../../Helpers/authHelper";
+import { Link } from "react-router-dom";
 
 function ToolBarLeft() {
   const history = useHistory();
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
-  const [homeLink, setHomeLink] = useState<string>(`/${currentContext.language}`);
+  const [adminLink, setAdminLink] = useState<boolean>(false);
 
   const switchLanguage = (language: string) => {
     if (language === "en") {
@@ -30,19 +30,34 @@ function ToolBarLeft() {
     }
   };
 
+  const redirectToHome = async () => {
+    const userData = await GetUserLocalData();
+    if (userData) {
+      const role = await getUserRole(userData.customerId);
+      currentContext.selectCIF(userData.customerId);
+      setTimeout(() => {
+        if (role && role.name === Constant.Customer) {
+          history.push(`/${currentContext.language}/Home`);
+        } else if (role && role.name === Constant.RM) {
+          history.push(`/${currentContext.language}/RMLanding`);
+        } else if (role && role.name === Constant.Management) {
+          history.push(`/${currentContext.language}/Managment`);
+        } else {
+          history.push(`/${currentContext.language}`);
+        }
+      }, 500);
+    }
+  }
+
   useEffect(() => {
     const initialLoadMethod = async () => {
       const userData = await GetUserLocalData();
       if (userData) {
         const role = await getUserRole(userData.customerId);
-        if (role && role.name === Constant.Customer) {
-          setHomeLink(`/${currentContext.language}/Home`);
-        } else if (role && role.name === Constant.RM) {
-          setHomeLink(`/${currentContext.language}/RMLanding`);
-        } else if (role && role.name === Constant.Management) {
-          setHomeLink(`/${currentContext.language}/Managment`);
+        if (role && role.name === Constant.Management) {
+          setAdminLink(true);
         } else {
-          setHomeLink(`/${currentContext.language}`);
+          setAdminLink(false);
         }
       }
     }
@@ -55,9 +70,12 @@ function ToolBarLeft() {
   return (
     <div className="col-md-3">
       <div className="topLeftIcons">
-        <Link to={homeLink}>
+        <a
+          onClick={redirectToHome}
+          style={{ cursor: "pointer" }}
+        >
           <FontAwesomeIcon icon={faHome} />
-        </Link>
+        </a>
         <a
           onClick={() => switchLanguage(currentContext.language)}
           style={{ cursor: "pointer" }}
@@ -66,6 +84,11 @@ function ToolBarLeft() {
             ? local_Strings.arabic
             : local_Strings.english}
         </a>
+        {adminLink &&
+          <Link to={`/${currentContext.language}/Admin`} className="admin-top-link">
+            {local_Strings.BreadcrumbAdminTitle}
+          </Link>
+        }
       </div>
     </div>
   );

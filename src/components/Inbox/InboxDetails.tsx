@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import dateIcon from "../../images/calendar-inactive.png";
 import { emptyInboxDetail, IInboxDetail } from "../../Helpers/publicInterfaces";
 import Constant from "../../constants/defaultData";
@@ -12,12 +12,11 @@ import {
   GetInboxByCIFAndType,
   SetInboxItemAsRead,
 } from "../../services/cmsService";
-import axios from "axios";
-import * as helper from "../../Helpers/helper";
 import NoResult from "../../shared/NoResult";
 import FilterMoreButtonControl from "../../shared/FilterMoreButtonControl";
 import { InboxContext } from "../../pages/Homepage";
 import xIcon from "../../images/x-icon.svg";
+import { GetUserLocalData } from "../../Helpers/authHelper";
 
 interface iInboxDetails {
   showInboxDetailsModal: boolean;
@@ -42,18 +41,19 @@ function InboxDetails(props: iInboxDetails) {
 
   useEffect(() => {
     let isMounted = true;
+    setLoading(true);
 
-    const requestOne = GetInboxByCIFAndType(
+    if (!!currentContext.selectedCIF) {
+      setThisInboxItemAsRead();
+    }
+    
+    GetInboxByCIFAndType(
       currentContext.selectedCIF,
       props.item.adviceType
-    );
-    const requestTwo = SetInboxItemAsRead({ ...props.item, isRead: true });
-
-    axios
-      .all([requestOne, requestTwo])
-      .then((responseData: any) => {
+    )
+      .then((responseData: IInboxDetail[]) => {
         if (responseData && responseData.length > 0 && isMounted) {
-          const previousItems = (responseData[0] as IInboxDetail[]).filter(
+          const previousItems = responseData.filter(
             (i) =>
               i.description !== props.item.description &&
               i.pdfName !== props.item.pdfName
@@ -64,7 +64,6 @@ function InboxDetails(props: iInboxDetails) {
           if (previousItems.length < rowLimit) {
             setOffset(previousItems.length);
           }
-          InboxMessages.refreshInbox();
         }
       })
       .catch((e: any) => console.log(e))
@@ -74,6 +73,16 @@ function InboxDetails(props: iInboxDetails) {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
   }, [props.item.description]);
+
+  const setThisInboxItemAsRead = async () => {
+    const userData = await GetUserLocalData();
+    if (userData) {
+      if (userData.customerId === currentContext.selectedCIF) {
+        await SetInboxItemAsRead({ ...props.item, isRead: true });
+        InboxMessages.refreshInbox();
+      }
+    }
+  }
 
   const renderItem = (item: IInboxDetail, index: number) => (
     <li className="shown" key={index}>
@@ -96,7 +105,7 @@ function InboxDetails(props: iInboxDetails) {
             target="_blank"
             href={item.pdfUrl || "#"}
           >
-            <i className="mx-1 fa fa-file color-white"></i>
+            {/* <i className="mx-1 fa fa-file color-white"></i> */}
             <i className="mx-1 fa fa-download color-white"></i>
           </a>
         </div>
@@ -160,8 +169,8 @@ function InboxDetails(props: iInboxDetails) {
                     <span className="mx-1 text-15 color-light-gold">
                       {props.item.adviceDate
                         ? moment(props.item.adviceDate).format(
-                            "dddd DD MMM YYYY"
-                          )
+                          "dddd DD MMM YYYY"
+                        )
                         : ""}
                     </span>
                   </div>
@@ -176,7 +185,7 @@ function InboxDetails(props: iInboxDetails) {
                     target="_blank"
                     href={props.item.pdfUrl || "#"}
                   >
-                    <i className="mx-1 fa fa-file color-white"></i>
+                    {/* <i className="mx-1 fa fa-file color-white"></i> */}
                     <i className="mx-1 fa fa-download color-white"></i>
                   </a>
                 </div>
@@ -191,11 +200,11 @@ function InboxDetails(props: iInboxDetails) {
               </h4>
             </li>
             {filteredData &&
-            filteredData.length > 0 &&
-            !!filteredData[0].adviceDate
+              filteredData.length > 0 &&
+              !!filteredData[0].adviceDate
               ? filteredData
-                  .slice(0, offset)
-                  .map((item, index) => renderItem(item, index))
+                .slice(0, offset)
+                .map((item, index) => renderItem(item, index))
               : NoResult(local_Strings.NoDataToShow)}
           </ul>
         </div>

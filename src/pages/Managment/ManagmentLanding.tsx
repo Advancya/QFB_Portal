@@ -15,12 +15,16 @@ import Breadcrumb from "../../components/Breadcrumb";
 import ClientPortfolioListing from "../../shared/ClientPortfolioListing";
 import AdminCustomHeader from "../../components/header/AdminCustomHeader";
 import { GetUserLocalData } from "../../Helpers/authHelper";
+import { AddAcceptTermsStatusForCustomer } from "../../services/cmsService";
+import AuthTerms from "../../components/Terms/AuthTerms";
 
 export const CustomerListContext = createContext<ICustomer[]>([emptyCustomer]);
 
-function ManagmentLanding() {
+const ManagmentLanding = () => {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
+
+  const [showAuthTerms, setShowAuthTerms] = useState(false);
   currentContext.language === "en"
     ? document.getElementsByTagName("html")[0].setAttribute("dir", "ltr")
     : document.getElementsByTagName("html")[0].setAttribute("dir", "rtl");
@@ -41,13 +45,26 @@ function ManagmentLanding() {
   const history = useHistory();
 
   useEffect(() => {
+
+    const initialLoadMethod = async () => {
+      const termsAccepted = localStorage.getItem(Constant.CustomerTermsAcceptanceStorageKey);
+      if (termsAccepted === null || !termsAccepted) {
+        setShowAuthTerms(true);
+      }
+    }
+
+    initialLoadMethod();
+
+  }, []);
+
+  useEffect(() => {
     let isMounted = true;
 
     const initialLoadMethod = async () => {
       setLoading(true);
       const userData = await GetUserLocalData();
       if (userData) {
-        
+
         const role = await getUserRole(userData.customerId);
         if (!(role && role.name === Constant.Management)) {
           let timerInterval: any;
@@ -72,7 +89,7 @@ function ManagmentLanding() {
           });
         } else {
           if (userData.customerId !== currentContext.selectedCIF) {
-            currentContext.selectCIF(userData.customerId);
+            //currentContext.selectCIF(userData.customerId);
           }
         }
       }
@@ -92,7 +109,7 @@ function ManagmentLanding() {
     <div>
       <AdminCustomHeader />
       <div className="my-2">
-        <Breadcrumb pageName={""} />
+        <Breadcrumb pageName={local_Strings.BreadcrumbLandingTitle} />
       </div>
       <div>
         <div id="main-section" className="main-section pt-4">
@@ -120,13 +137,20 @@ function ManagmentLanding() {
                     />
                   }
                 />
-                <ClientPortfolioListing/>
+                <ClientPortfolioListing />
               </div>
             </div>
           </div>
         </div>
       </div>
       <Footer />
+      <AuthTerms
+        showAuthTermsModal={showAuthTerms}
+        hideAuthTermsModal={async () => {
+          await AddAcceptTermsStatusForCustomer(currentContext.selectedCIF);
+          setShowAuthTerms(false);
+        }}
+      />
     </div>
   );
 }

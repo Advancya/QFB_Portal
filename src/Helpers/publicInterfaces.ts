@@ -259,6 +259,7 @@ export interface IRequestFilter {
 
 
 export interface IUserInfo {
+  id: string;
   name: string;
   customerShortName: string;
   telephone: string;
@@ -266,6 +267,7 @@ export interface IUserInfo {
 }
 
 export const emptyUserInfo = {
+  id: "",
   name: "",
   telephone: "",
   rmEmail: "",

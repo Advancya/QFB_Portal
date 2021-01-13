@@ -17,12 +17,12 @@ import { useHistory } from "react-router-dom";
 import Swal from 'sweetalert2';
 import axios from "axios";
 import { GetUserLocalData } from "../../Helpers/authHelper";
-
+import Breadcrumb from "../../components/Breadcrumb";
 export const CustomerListContext = createContext<ICustomer[]>(
   [emptyCustomer]
 );
 
-function Landing() {
+const Landing = () => {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
   const [isLoading, setLoading] = useState<boolean>(false);
@@ -105,6 +105,7 @@ function Landing() {
   return (
     <div>
       <AuthCustomHeader />
+      <Breadcrumb pageName={local_Strings.BreadcrumbAdminTitle} />
       <div>
         <div id="main-section" className="main-section pt-4">
           <div className="container-fluid">

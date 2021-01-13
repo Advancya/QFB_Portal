@@ -1,5 +1,4 @@
-import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
-import beneficiarySentIcon from "../../images/req-sent.svg";
+import { Modal } from "react-bootstrap";
 import xIcon from "../../images/x-icon.svg";
 import React, { useContext, useEffect, useState } from "react";
 import { localStrings as local_Strings } from "../../translations/localStrings";
@@ -314,29 +313,29 @@ function NewBeneficiary(props: iNewBeneficiary) {
               </li>
             </ul>
           ) : (
-            <div className="container-fluid">
-              <div className="row  col-xl-12">
-                <div className="col-lg-12 form-group">
-                  <label>Beneficiary Type</label>
-                  <select
-                    className="form-control"
-                    id="reqTypeSelect"
-                    onChange={(e: any) => setTransactionTypeId(e.target.value)}
-                  >
-                    <option value="">{local_Strings.SelectItem}</option>
-                    {transactionTypes &&
-                      transactionTypes.length > 0 &&
-                      !!transactionTypes[0].label &&
-                      transactionTypes.map((c, i) => (
-                        <option key={i} value={c.value}>
-                          {c.label}
-                        </option>
-                      ))}
-                  </select>
+              <div className="container-fluid">
+                <div className="row  col-xl-12">
+                  <div className="col-lg-12 form-group">
+                    <label>Beneficiary Type</label>
+                    <select
+                      className="form-control"
+                      id="reqTypeSelect"
+                      onChange={(e: any) => setTransactionTypeId(e.target.value)}
+                    >
+                      <option value="">{local_Strings.SelectItem}</option>
+                      {transactionTypes &&
+                        transactionTypes.length > 0 &&
+                        !!transactionTypes[0].label &&
+                        transactionTypes.map((c, i) => (
+                          <option key={i} value={c.value}>
+                            {c.label}
+                          </option>
+                        ))}
+                    </select>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
           {transactionTypeId.toString() === "1" && (
             <Formik
@@ -387,7 +386,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
               }) => (
                 <div className="newReqFields" id="newReqFields">
                   <div className="container-fluid py-2">
-                    <div className="row  col-xl-12 mb-5">
+                    <div className="row col-xl-12 mb-5">
                       <div className="col-lg-6 form-group">
                         <label>{local_Strings.BeneficiaryIDLabel}</label>
                         <input
@@ -558,60 +557,58 @@ function NewBeneficiary(props: iNewBeneficiary) {
                   className="newReqFields"
                   id="newReqFields"
                 >
-                  <div className="py-2">
-                    <div className=" col-lg-9">
-                      <div className="row mb-5">
-                        <div className="col-lg-6 form-group">
-                          <label>{local_Strings.BeneficiaryIDLabel}</label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            placeholder=""
-                            defaultValue={values.beneficiaryId || ""}
-                            readOnly
-                          />
-                        </div>
-                        <div className="col-lg-6 form-group">
-                          <label>{local_Strings.BeneficiaryFullNameLabel}</label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            placeholder=""
-                            value={values.beneficiaryFullName || ""}
-                            onChange={handleChange("beneficiaryFullName")}
-                            onBlur={handleBlur("beneficiaryFullName")}
-                          />
-                          {touched.beneficiaryFullName && errors.beneficiaryFullName && InvalidFieldError(errors.beneficiaryFullName)}
-                        </div>
-                        <div className="col-lg-6 form-group">
-                          <label>{local_Strings.BeneficiaryBankLabel}</label>
-                          <select className="form-control"
-                            onBlur={handleBlur("beneficiaryBank")}
-                            value={values.beneficiaryBankSwiftCode || ""}
-                            onChange={(e) => {
-                              const index = e.target.selectedIndex;
-                              setFieldValue("beneficiaryBank", e.target[index].innerText);
-                              setFieldValue( "beneficiaryBankSwiftCode", e.target.value);
-                            }}>
-                            <option value="">{local_Strings.SelectItem}</option>
-                            {banks &&
-                              banks.length > 0 &&
-                              banks.map((c, i) =>
-                                <option key={i} value={c.value}>{c.label}</option>
-                              )}
-                          </select>
-                          {touched.beneficiaryBank && errors.beneficiaryBank && InvalidFieldError(errors.beneficiaryBank)}
-                        </div>
-                        <div className="col-lg-6 form-group">
-                          <label>{local_Strings.BeneficiarySwiftCodeLabel}</label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            placeholder=""
-                            value={values.beneficiaryBankSwiftCode || ""}
-                            readOnly
-                          />
-                        </div>
+                  <div className="container-fluid py-2">
+                    <div className="row col-xl-12 mb-5">
+                      <div className="col-lg-6 form-group">
+                        <label>{local_Strings.BeneficiaryIDLabel}</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder=""
+                          defaultValue={values.beneficiaryId || ""}
+                          readOnly
+                        />
+                      </div>
+                      <div className="col-lg-6 form-group">
+                        <label>{local_Strings.BeneficiaryFullNameLabel}</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder=""
+                          value={values.beneficiaryFullName || ""}
+                          onChange={handleChange("beneficiaryFullName")}
+                          onBlur={handleBlur("beneficiaryFullName")}
+                        />
+                        {touched.beneficiaryFullName && errors.beneficiaryFullName && InvalidFieldError(errors.beneficiaryFullName)}
+                      </div>
+                      <div className="col-lg-6 form-group">
+                        <label>{local_Strings.BeneficiaryBankLabel}</label>
+                        <select className="form-control"
+                          onBlur={handleBlur("beneficiaryBank")}
+                          value={values.beneficiaryBankSwiftCode || ""}
+                          onChange={(e) => {
+                            const index = e.target.selectedIndex;
+                            setFieldValue("beneficiaryBank", e.target[index].innerText);
+                            setFieldValue("beneficiaryBankSwiftCode", e.target.value);
+                          }}>
+                          <option value="">{local_Strings.SelectItem}</option>
+                          {banks &&
+                            banks.length > 0 &&
+                            banks.map((c, i) =>
+                              <option key={i} value={c.value}>{c.label}</option>
+                            )}
+                        </select>
+                        {touched.beneficiaryBank && errors.beneficiaryBank && InvalidFieldError(errors.beneficiaryBank)}
+                      </div>
+                      <div className="col-lg-6 form-group">
+                        <label>{local_Strings.BeneficiarySwiftCodeLabel}</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder=""
+                          value={values.beneficiaryBankSwiftCode || ""}
+                          readOnly
+                        />
                       </div>
                       <div className="col-lg-6 form-group">
                         <label>{local_Strings.BeneficiaryFullNameLabel}</label>
@@ -828,20 +825,6 @@ function NewBeneficiary(props: iNewBeneficiary) {
                   <div className="container-fluid py-2">
                     <div className="row  col-xl-12 mb-5">
                       <div className="col-lg-6 form-group">
-                        <label>{local_Strings.BeneficiaryFullNameLabel}</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder=""
-                          value={values.beneficiaryFullName}
-                          onChange={handleChange("beneficiaryFullName")}
-                          onBlur={handleBlur("beneficiaryFullName")}
-                        />
-                        {touched.beneficiaryFullName &&
-                          errors.beneficiaryFullName &&
-                          InvalidFieldError(errors.beneficiaryFullName)}
-                      </div>
-                      <div className="col-lg-6 form-group">
                         <label>
                           {local_Strings.BeneficiaryIDLabelInternational}
                         </label>
@@ -854,12 +837,26 @@ function NewBeneficiary(props: iNewBeneficiary) {
                         />
                       </div>
                       <div className="col-lg-6 form-group">
+                        <label>{local_Strings.BeneficiaryFullNameLabel}</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder=""
+                          value={values.beneficiaryFullName || ""}
+                          onChange={handleChange("beneficiaryFullName")}
+                          onBlur={handleBlur("beneficiaryFullName")}
+                        />
+                        {touched.beneficiaryFullName &&
+                          errors.beneficiaryFullName &&
+                          InvalidFieldError(errors.beneficiaryFullName)}
+                      </div>
+                      <div className="col-lg-6 form-group">
                         <label>{local_Strings.BeneficiarySwiftCodeLabel}</label>
                         <input
                           type="text"
                           className="form-control"
                           placeholder=""
-                          value={values.beneficiarySwiftCode}
+                          value={values.beneficiarySwiftCode || ""}
                           onChange={handleChange("beneficiarySwiftCode")}
                           onBlur={async () => {
                             if (!!values.beneficiarySwiftCode) {
@@ -884,7 +881,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           InvalidFieldError(errors.beneficiarySwiftCode)}
                       </div>
                       <div className="col-lg-6 form-group">
-                        <label>{local_Strings.TransactionCurrencyLabel}</label>
+                        <label>{local_Strings.BeneficiaryForeignCurrencyLabel}</label>
                         <select
                           className="form-control"
                           value={values.beneficiaryCurrency || ""}
@@ -908,6 +905,37 @@ function NewBeneficiary(props: iNewBeneficiary) {
                       </div>
                     </div>
                     <div className="row  col-xl-12 mb-5">
+                      <div className="col-lg-12">
+                        <label>{local_Strings.BeneficiaryAddressLabel}</label>
+                        <textarea
+                          className="form-control"
+                          value={values.beneficiaryAddress || ""}
+                          rows={4}
+                          onBlur={handleBlur("beneficiaryAddress")}
+                          onChange={handleChange("beneficiaryAddress")}
+                        />
+                      </div>
+                      <div className="col-lg-6 form-group">
+                        <label>{local_Strings.BeneficiaryCountryLabel}</label>
+                        <select
+                          className="form-control"
+                          onBlur={handleBlur("country")}
+                          value={values.country || ""}
+                          onChange={handleChange("country")}
+                        >
+                          <option value="">{local_Strings.SelectItem}</option>
+                          {countries &&
+                            countries.length > 0 &&
+                            countries.map((c, i) => (
+                              <option key={i} value={c.value}>
+                                {c.label}
+                              </option>
+                            ))}
+                        </select>
+                        {touched.country &&
+                          errors.country &&
+                          InvalidFieldError(errors.country)}
+                      </div>
                       <div className="col-lg-6 form-group">
                         <label>
                           {local_Strings.BeneficiaryAccountNumberLabel}
@@ -916,7 +944,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           type="text"
                           className="form-control"
                           placeholder=""
-                          value={values.beneficiaryAccountNumber}
+                          value={values.beneficiaryAccountNumber || ""}
                           onBlur={handleBlur("beneficiaryAccountNumber")}
                           onChange={handleChange("beneficiaryAccountNumber")}
                         />
@@ -932,7 +960,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           type="text"
                           className="form-control"
                           placeholder=""
-                          value={values.beneficiaryIban}
+                          value={values.beneficiaryIban || ""}
                           onBlur={async () => {
                             if (!!values.beneficiaryIban) {
                               setLoading(true);
@@ -954,13 +982,14 @@ function NewBeneficiary(props: iNewBeneficiary) {
                         {!isValidIban &&
                           InvalidFieldError(local_Strings.GeneralValidation)}
                       </div>
+
                       <div className="col-lg-6 form-group">
                         <label>{local_Strings.BeneficiaryCityLabel}</label>
                         <input
                           type="text"
                           className="form-control"
                           placeholder=""
-                          value={values.beneficiaryCity}
+                          value={values.beneficiaryCity || ""}
                           onBlur={handleBlur("beneficiaryCity")}
                           onChange={handleChange("beneficiaryCity")}
                         />
@@ -978,7 +1007,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           type="text"
                           className="form-control"
                           placeholder=""
-                          value={values.intermediaryBankSwiftCode}
+                          value={values.intermediaryBankSwiftCode || ""}
                           onBlur={async () => {
                             if (!!values.beneficiaryIban) {
                               setLoading(true);
@@ -1009,7 +1038,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           type="text"
                           className="form-control"
                           placeholder=""
-                          value={values.intermediaryBankName}
+                          value={values.intermediaryBankName || ""}
                           onBlur={handleBlur("intermediaryBankName")}
                           onChange={handleChange("intermediaryBankName")}
                         />
@@ -1025,7 +1054,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           type="text"
                           className="form-control"
                           placeholder=""
-                          value={values.routingNumber}
+                          value={values.routingNumber || ""}
                           onBlur={handleBlur("routingNumber")}
                           onChange={handleChange("routingNumber")}
                         />

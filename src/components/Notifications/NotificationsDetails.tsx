@@ -4,18 +4,8 @@ import { INotificationDetail } from "../../Helpers/publicInterfaces";
 import moment from "moment";
 import { AuthContext } from "../../providers/AuthProvider";
 import { localStrings as local_Strings } from "../../translations/localStrings";
-import dumyimg from "../../images/NewsImg.jpg";
+import { GetUserLocalData } from "../../Helpers/authHelper";
 import xIcon from "../../images/x-icon.svg";
-
-import {
-  GetInboxByCIFAndType,
-  SetInboxItemAsRead,
-} from "../../services/cmsService";
-import axios from "axios";
-import * as helper from "../../Helpers/helper";
-import NoResult from "../../shared/NoResult";
-import FilterMoreButtonControl from "../../shared/FilterMoreButtonControl";
-import { InboxContext } from "../../pages/Homepage";
 import { SetNotificationItemAsRead } from "../../services/cmsService";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
@@ -28,21 +18,41 @@ interface iNotficationDetail {
   item: INotificationDetail;
 }
 
-function NotficationDetail(props: iNotficationDetail) {
+const NotficationDetail = (props: iNotficationDetail) => {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
-    SetNotificationItemAsRead(props.item.id)
-      .then((responseData: boolean) => {
-        if (!responseData) {
-          console.log("Failed to set notificaion as read");
+
+    let isMounted = true;
+    const initialLoadMethod = async () => {
+      const userData = await GetUserLocalData();
+      if (userData) {
+        if (userData["customerId"] === currentContext.selectedCIF) {
+          setLoading(true);
+          SetNotificationItemAsRead(props.item.id)
+            .then((responseData: boolean) => {
+              if (!responseData) {
+                console.log("Failed to set notificaion as read");
+              }
+            })
+            .catch((e: any) => console.log(e))
+            .finally(() => setLoading(false));
+        } else {
+          setLoading(false);
         }
-      })
-      .catch((e: any) => console.log(e))
-      .finally(() => setLoading(false));
+      }
+    };
+
+    if (!!currentContext.selectedCIF) {
+      initialLoadMethod();
+    }
+
+    return () => {
+      isMounted = false;
+    }; // use effect cleanup to set flag false, if unmounted
+
   }, [props.item.id]);
 
   return (
@@ -101,8 +111,8 @@ function NotficationDetail(props: iNotficationDetail) {
                       <span className="mx-1 text-15 color-grey">
                         {!!props.item.messageSendDate
                           ? moment(props.item.messageSendDate).format(
-                              "DD/MM/YYYY"
-                            )
+                            "DD/MM/YYYY"
+                          )
                           : ""}
                       </span>
                     </div>

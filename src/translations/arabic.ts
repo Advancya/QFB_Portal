@@ -429,7 +429,6 @@ const ar = {
 
   SearchText: "بحث",
   RMClientsRequestListingTitle: "طلب قائمة العملاء",
-  RMSampleAccount: "رقم العميل | ",
   RMSampleTitle: "كشف حساب",
   RMIsRegisterAccount: "مسجل",
   RMIsNotRegisterAccount: "غير مسجل",
@@ -786,6 +785,23 @@ const ar = {
   
   AccessDeniedMsgTitle: "Access Denied",
   AccessDeniedMessage: "Your are not authorize to accesss this section.",
+
+  ChartProfitRecieved: "الارباح",
+  ChartDepositsAmount: "المبالغ",
+  
+  NoLiveHoldingsMesageDeposit: "No Live Holdings Yet for Deposit",
+  NoLiveHoldingsMesageInvestment: "No Live Holdings Yet for Investment",
+  NoClosedHoldingsMesageInvestment: "No Closed Holdings Yet for Investment",  
+  NoClosedHoldingsMesageDeposit: "No Closed Holdings Yet for Deposit",
+  
+  BreadcrumbLandingTitle: "Landing",
+  BreadcrumbAdminTitle: "Admin",
+  
+  RMSampleAccount: "رقم تعريف مدير العلاقة | ",
+  CustomerSampleAccount: "رقم تعريف العميل | ",
+  ManagementSampleAccount: "الادارة | ",
+  ChartDepositProfitRecieved: "Deposit Received Profit",
+  ChartDrillDownHint: "Click to view the profit received",
 };
 
 export default ar;

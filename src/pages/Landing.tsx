@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import CustomHeader from "../components/header/CustomHeader";
 import Footer from "../components/Footer";
 import Login from "../components/Login";
@@ -9,11 +9,16 @@ import ContactUsLanding from "../components/ContactUs/ContactUsLanding";
 import ProductsAndOffersLanding from "../components/ProductsAndOffers/ProductsAndOffersLanding";
 import { AuthContext, User } from "../providers/AuthProvider";
 import { localStrings as local_Strings } from "../translations/localStrings";
+import Constant from "../constants/defaultData";
+import { useHistory } from "react-router-dom";
+import { GetUserLocalData } from "../Helpers/authHelper";
+import AnnonymousTerms from "../components/Terms/AnnonymousTerms";
 
 const initialUserData = { username: "", password: "", otp: "" };
-function Landing() {
+const Landing = () => {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
+  const history = useHistory();
 
   const [loginData, setUserDetail] = useState<User>(initialUserData);
   const [showValidateOTP, setOTPSubmissionRequired] = useState<boolean>(false);
@@ -23,6 +28,32 @@ function Landing() {
   currentContext.language === "en"
     ? document.getElementsByTagName("html")[0].setAttribute("lang", "en")
     : document.getElementsByTagName("html")[0].setAttribute("lang", "ar");
+  const [showAnnonymousTerms, setShowAnnonymousTerms] = useState(false);
+
+  useEffect(() => {
+
+    const initialLoadMethod = async () => {
+
+      const data = await GetUserLocalData();
+      if (data !== null) {
+        const role = currentContext.userRole;
+        if (!!role) {
+          if (role === Constant.Customer) {
+            history.push(`/${currentContext.language}/Home`);
+          } else if (role === Constant.RM) {
+            history.push(`/${currentContext.language}/RMLanding`);
+          } else if (role === Constant.Management) {
+            history.push(`/${currentContext.language}/Managment`);
+          }
+        }
+      } else {
+        setShowAnnonymousTerms(true);
+      }
+    }
+
+    initialLoadMethod();
+
+  }, []);
 
   return (
     <div>
@@ -34,11 +65,11 @@ function Landing() {
               {showValidateOTP ? (
                 <SubmitOTP userDetail={loginData} />
               ) : (
-                <Login
-                  setUserCredentials={setUserDetail}
-                  showOTP={setOTPSubmissionRequired}
-                />
-              )}
+                  <Login
+                    setUserCredentials={setUserDetail}
+                    showOTP={setOTPSubmissionRequired}
+                  />
+                )}
               <div className="col-lg-4 col-container flex-column">
                 <RegisterLanding />
                 <AppBox />
@@ -52,6 +83,10 @@ function Landing() {
         </div>
       </div>
       <Footer />
+      <AnnonymousTerms
+        showAnnonymousTermsModal={showAnnonymousTerms}
+        hideAnnonymousTermsModal={() => setShowAnnonymousTerms(false)}
+      />
     </div>
   );
 }

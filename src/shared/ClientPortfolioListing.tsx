@@ -49,13 +49,18 @@ const ClientPortfolioListing = () => {
 
   const renderItem = (item: any, index: number) => (
     <li className="shown border-0 py-2" key={index}>
-      <div className="d-block p-0 cursor-pointer"
-        onClick={() => {
-          currentContext.selectCIF(item.id);
-          history.push(`/${currentContext.language}/Home`);
-        }}>
+      <div className="d-block p-0">
         <div className="row align-items-center">
-          <div className="col-md-6 col-lg-7">
+          <div className="col-md-6 col-lg-7 cursor-pointer"
+            onClick={() => {
+              setLoading(true);
+              currentContext.selectCIF(item.id);
+              setTimeout(() => {
+                history.push(`/${currentContext.language}/Home`);
+                setLoading(false);
+              }, 2000);
+            }}
+          >
             <span className="text-600 ">
               {local_Strings.RMSampleAccount + item["id"]}
             </span>

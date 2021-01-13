@@ -241,6 +241,7 @@ function ContactUsForm(props: iContactUsForm) {
                               <Form.Control
                                 as="select"
                                 placeholder=""
+                                value={values.country || ""}
                                 onChange={handleChange("country")}
                                 onBlur={handleBlur("country")}
                               >

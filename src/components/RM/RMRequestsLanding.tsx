@@ -17,74 +17,95 @@ const RM = () => {
   const [showRMListing, setShowRMListing] = useState(true);
   const [showRequestDetail, setRequestDetail] = useState(false);
   const [showTransactionDetail, setTransactionDetail] = useState(false);
-  const [requestList, setRequestList] = React.useState<iRmRequests[]>([]);
+  const [requests, setRequests] = React.useState<iRmRequests[]>([]);
+  const [tranactions, setTransactions] = React.useState<iRmRequests[]>([]);
   const [itemId, selectItemId] = useState<number>(0);
+
   useEffect(() => {
+    const initialLoadMethod = async () => {
+
+      await fetchRequestsForRM();
+      await fetchTransactionsForRM();
+
+    };
 
     if (!!currentContext.selectedCIF) {
-      fetchRequestsForRM();
+      initialLoadMethod();
     }
 
   }, [currentContext.selectedCIF]);
 
   const fetchRequestsForRM = async () => {
     setLoading(true);
-    const items: iRmRequests[] = [];
+    const requestsItems: iRmRequests[] = [];
+
+    GetRmRequestList(currentContext.selectedCIF)
+      .then((requests: []) => {
+        if (requests && requests.length > 0) {
+          for (let index = 0; index < requests.length; index++) {
+            requestsItems.push({
+              cif: requests[index]["cif"],
+              requestCreateDate: requests[index]["crequestCreateDate"],
+              customerMobile: requests[index]["customerMobile"],
+              customerName: requests[index]["customerName"],
+              id: requests[index]["id"],
+              requestStatus: requests[index]["requestStatus"],
+              requestStatusAr: requests[index]["requestStatusAr"],
+              requestSubject: requests[index]["requestSubject"],
+              requestSubjectAr: requests[index]["requestSubjectAr"],
+              type: "Request",
+              requestTypeId: requests[index]["requestTypeId"],
+              isRead:
+                requests[index]["isRead"] !== null
+                  ? requests[index]["isRead"]
+                  : false,
+            });
+          }
+          setRequests(requestsItems);
+        }
+      })
+      .catch((e: any) => console.log(e))
+      .finally(() => setLoading(false));
+  };
+
+  const fetchTransactionsForRM = async () => {
+    setLoading(true);
     const tranactionItems: iRmRequests[] = [];
-    setRequestList([]);
 
-    const requests = await GetRmRequestList(currentContext.selectedCIF);
-    if (requests && requests.length > 0) {
-      for (let index = 0; index < requests.length; index++) {
-        items.push({
-          cif: requests[index]["cif"],
-          requestCreateDate: requests[index]["crequestCreateDate"],
-          customerMobile: requests[index]["customerMobile"],
-          customerName: requests[index]["customerName"],
-          id: requests[index]["id"],
-          requestStatus: requests[index]["requestStatus"],
-          requestStatusAr: requests[index]["requestStatusAr"],
-          requestSubject: requests[index]["requestSubject"],
-          requestSubjectAr: requests[index]["requestSubjectAr"],
-          type: "Request",
-          requestTypeId: requests[index]["requestTypeId"],
-          isRead:
-            requests[index]["isRead"] !== null
-              ? requests[index]["isRead"]
-              : false,
-        });
-      }
-    }
-    const transactions = await GetRmTransactionList(currentContext.selectedCIF);
-    if (transactions && transactions.length > 0) {
-      for (let index = 0; index < transactions.length; index++) {
-        tranactionItems.push({
-          cif: transactions[index]["cif"],
-          requestCreateDate: transactions[index]["transactionDate"],
-          customerMobile: transactions[index]["customerMobile"],
-          customerName: transactions[index]["customerName"],
-          id: transactions[index]["id"],
-          requestStatus: transactions[index]["requestStatus"],
-          requestStatusAr: transactions[index]["requestStatusAR"],
-          requestSubject: transactions[index]["requestSubject"],
-          requestSubjectAr: transactions[index]["requestSubjectAR"],
-          type: "Tranasction",
-          requestTypeId: transactions[index]["requestTypeId"],
-          isRead:
-            transactions[index]["isRead"] !== null
-              ? transactions[index]["isRead"]
-              : false,
-        });
-      }
-    }
-
-    setRequestList([...items, ...tranactionItems]);
-    setLoading(false);
+    GetRmTransactionList(currentContext.selectedCIF)
+      .then((transactions: []) => {
+        if (transactions && transactions.length > 0) {
+          for (let index = 0; index < transactions.length; index++) {
+            tranactionItems.push({
+              cif: transactions[index]["cif"],
+              requestCreateDate: transactions[index]["transactionDate"],
+              customerMobile: transactions[index]["customerMobile"],
+              customerName: transactions[index]["customerName"],
+              id: transactions[index]["id"],
+              requestStatus: transactions[index]["requestStatus"],
+              requestStatusAr: transactions[index]["requestStatusAR"],
+              requestSubject: transactions[index]["requestSubject"],
+              requestSubjectAr: transactions[index]["requestSubjectAR"],
+              type: "Tranasction",
+              requestTypeId: transactions[index]["requestTypeId"],
+              isRead:
+                transactions[index]["isRead"] !== null
+                  ? transactions[index]["isRead"]
+                  : false,
+            });
+          }
+          setTransactions(tranactionItems);
+        }
+      })
+      .catch((e: any) => console.log(e))
+      .finally(() => setLoading(false));
   };
 
   return (
     <div>
-      {requestList && requestList.length > 0 &&
+      {((requests && requests.length > 0)
+        || (tranactions && tranactions.length > 0))
+        &&
         <RMRequestListing
           showRMRequestListingModal={showRMListing}
           hideRMRequestListingModal={() => setShowRMListing(false)}
@@ -99,7 +120,7 @@ const RM = () => {
             selectItemId(itemId);
           }}
           backRMRequestListingModal={() => setShowRMListing(false)}
-          requests={requestList}
+          requests={[...requests, ...tranactions]}
           reloading={isLoading}
         />
       }
@@ -122,12 +143,12 @@ const RM = () => {
             showRMDetailsModal={showTransactionDetail}
             hideRMDetailsModal={() => {
               setTransactionDetail(false);
-              fetchRequestsForRM();
+              fetchTransactionsForRM();
             }}
             backRMDetailsgModal={() => {
               setTransactionDetail(false);
               setShowRMListing(true);
-              fetchRequestsForRM();
+              fetchTransactionsForRM();
             }}
             itemId={itemId}
           />

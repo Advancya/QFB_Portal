@@ -12,7 +12,7 @@ import {
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
 import moment from "moment";
-import { emptyOfferData, IOfferDetail } from "../../Helpers/publicInterfaces";
+import { IOfferDetail } from "../../Helpers/publicInterfaces";
 import axios from "axios";
 import { Formik } from "formik";
 import * as yup from "yup";

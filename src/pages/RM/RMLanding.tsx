@@ -15,12 +15,16 @@ import Breadcrumb from "../../components/Breadcrumb";
 import ClientPortfolioListing from "../../shared/ClientPortfolioListing";
 import AdminCustomHeader from "../../components/header/AdminCustomHeader";
 import { GetUserLocalData } from "../../Helpers/authHelper";
+import { AddAcceptTermsStatusForCustomer } from "../../services/cmsService";
+import AuthTerms from "../../components/Terms/AuthTerms";
 
 export const CustomerListContext = createContext<ICustomer[]>([emptyCustomer]);
 
 const RMLanding = () => {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
+  const [showAuthTerms, setShowAuthTerms] = useState(false);
+
   currentContext.language === "en"
     ? document.getElementsByTagName("html")[0].setAttribute("dir", "ltr")
     : document.getElementsByTagName("html")[0].setAttribute("dir", "rtl");
@@ -28,8 +32,20 @@ const RMLanding = () => {
     ? document.getElementsByTagName("html")[0].setAttribute("lang", "en")
     : document.getElementsByTagName("html")[0].setAttribute("lang", "ar");
 
-  const [isLoading, setLoading] = useState<boolean>(false);
   const history = useHistory();
+
+  useEffect(() => {
+
+    const initialLoadMethod = async () => {
+      const termsAccepted = localStorage.getItem(Constant.CustomerTermsAcceptanceStorageKey);
+      if (termsAccepted === null || !termsAccepted) {
+        setShowAuthTerms(true);
+      }
+    }
+
+    initialLoadMethod();
+
+  }, []);
 
   useEffect(() => {
     let isMounted = true;
@@ -38,7 +54,6 @@ const RMLanding = () => {
 
       const userData = await GetUserLocalData();
       if (userData) {
-        setLoading(true);
         const role = await getUserRole(userData.customerId);
         if (!(role && role.name === Constant.RM)) {
           let timerInterval: any;
@@ -63,7 +78,7 @@ const RMLanding = () => {
           });
         } else {
           if (userData.customerId !== currentContext.selectedCIF) {
-            currentContext.selectCIF(userData.customerId);
+            //currentContext.selectCIF(userData.customerId);
           }
         }
       }
@@ -82,34 +97,16 @@ const RMLanding = () => {
     <div>
       <AdminCustomHeader />
       <div className="my-2">
-        <Breadcrumb pageName={""} />
+        <Breadcrumb pageName={local_Strings.BreadcrumbLandingTitle} />
       </div>
       <div>
         <div id="main-section" className="main-section pt-4">
           <div className="container-fluid">
             <div className="row">
               <div className="col-lg-6 col-container flex-column">
-                <LoadingOverlay
-                  active={isLoading}
-                  spinner={
-                    <PuffLoader
-                      size={Constant.SpnnerSize}
-                      color={Constant.SpinnerColor}
-                    />
-                  }
-                />
                 <RMRequestsLanding />
               </div>
               <div className="col-lg-6 col-container flex-column loginSideBoxBoxes">
-                <LoadingOverlay
-                  active={isLoading}
-                  spinner={
-                    <PuffLoader
-                      size={Constant.SpnnerSize}
-                      color={Constant.SpinnerColor}
-                    />
-                  }
-                />
                 <ClientPortfolioListing />
               </div>
             </div>
@@ -117,6 +114,13 @@ const RMLanding = () => {
         </div>
       </div>
       <Footer />
+      <AuthTerms
+        showAuthTermsModal={showAuthTerms}
+        hideAuthTermsModal={async () => {
+          await AddAcceptTermsStatusForCustomer(currentContext.selectedCIF);
+          setShowAuthTerms(false);
+        }}
+      />
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { Accordion, Button, Card, Collapse, Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import xIcon from "../../images/x-icon.svg";
 import React, { useContext, useEffect, useState } from "react";
 import { localStrings as local_Strings } from "../../translations/localStrings";
@@ -11,7 +11,7 @@ import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import Swal from "sweetalert2";
-
+import { GetUserLocalData } from "../../Helpers/authHelper";
 interface iBeneficiariesDetails {
   showBeneficiariesDetailsModal: boolean;
   hideBeneficiariesDetailsModal: () => void;
@@ -25,6 +25,27 @@ function BeneficiariesDetails(props: iBeneficiariesDetails) {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
   const [isLoading, setLoading] = useState(false);
+  const [allowEdit, setAllowEdit] = useState<boolean>(false);
+  
+  useEffect(() => {
+    let isMounted = true;
+    const initialLoadMethod = async () => {
+      const userData = await GetUserLocalData();
+      if (userData) {
+        if (isMounted && userData.customerId === currentContext.selectedCIF) {
+          setAllowEdit(true);
+        }
+      }
+    };
+
+    if (!!currentContext.selectedCIF) {
+      initialLoadMethod();
+    }
+
+    return () => {
+      isMounted = false;
+    }; // use effect cleanup to set flag false, if unmounted
+  }, [currentContext.selectedCIF]);
 
   return (
     <Modal
@@ -256,7 +277,7 @@ function BeneficiariesDetails(props: iBeneficiariesDetails) {
                 </div>
               )}
             </div>
-            {currentContext.userRole === "CUSTOMER" && (
+            {allowEdit && currentContext.userRole === Constant.Customer && (
               <div className="text-right">
                 <LoadingOverlay
                   active={isLoading}

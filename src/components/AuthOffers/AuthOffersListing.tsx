@@ -5,7 +5,6 @@ import { emptyOfferData, IOfferDetail } from "../../Helpers/publicInterfaces";
 import moment from "moment";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
-import * as helper from "../../Helpers/helper";
 import NoResult from "../../shared/NoResult";
 import { GetOfferAll } from "../../services/cmsService";
 import Constant from "../../constants/defaultData";

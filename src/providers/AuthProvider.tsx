@@ -40,7 +40,7 @@ export const AuthContext = React.createContext<IAppContext>({
   selectCIF: (cif) => { },
 });
 
-interface AuthProviderProps {}
+interface AuthProviderProps { }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [userSettings, setUserSettings] = useState<IUserSettings>(
@@ -58,7 +58,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         const role = await getUserRole(userData.customerId || initialSettingsData.customerId);
         if (role && !!role) {
           setCIF(userData.customerId);
-          setUserRole(role.name);          
+          setUserRole(role.name);
         } else {
           setCIF(initialSettingsData.customerId);
         }
@@ -91,13 +91,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                   const _userSettings = settings[0];
                   setUserSettings(_userSettings);
                   setCIF(userData.username);
-                  await SaveUserDataLocally(_userSettings);                  
+                  await SaveUserDataLocally(_userSettings);
 
-                } else {                 
-                  const _userData = {...initialSettingsData, customerId: userData.username}; 
+                } else {
+                  const _userData = { ...initialSettingsData, customerId: userData.username };
                   setUserSettings(_userData);
                   setCIF(userData.username);
-                  await SaveUserDataLocally(_userData);                  
+                  await SaveUserDataLocally(_userData);
                 }
 
                 const role = await getUserRole(userData.username);
@@ -112,15 +112,28 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           }
         },
         logout: async () => {
-          setCIF(initialSettingsData.customerId);
+          setCIF(null);
           setUserRole("");
-          setUserSettings(initialSettingsData);
-          await SaveUserDataLocally(initialSettingsData);
+          setUserSettings(null);
+          await SaveUserDataLocally(null);
+          localStorage.removeItem(Constant.CustomerTermsAcceptanceStorageKey);
           window.location.href = `/${language}`;
         },
         changeLanguage: setLanguage,
         changeUserSettings: setUserSettings,
-        selectCIF: setCIF
+        selectCIF: (selectedCustomer) => {
+          GetSettingsByCIF(selectedCustomer).then(
+            (settings: any) => {
+              if (settings && settings.length > 0) {
+                setUserSettings(settings[0]);
+              } else {
+                const _userData = { ...initialSettingsData, customerId: selectedCustomer };
+                setUserSettings(_userData);
+              }
+              setCIF(selectedCustomer);
+            }
+          );
+        }
       }}
     >
       {children}

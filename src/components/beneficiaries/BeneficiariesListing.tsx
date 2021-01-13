@@ -15,6 +15,7 @@ import PuffLoader from "react-spinners/PuffLoader";
 import NoResult from "../../shared/NoResult";
 import FilterMoreButtonControl from "../../shared/FilterMoreButtonControl";
 import xIcon from "../../images/x-icon.svg";
+import { GetUserLocalData } from "../../Helpers/authHelper";
 
 interface iBeneficiariesListing {
   showBeneficiariesListingModal: boolean;
@@ -32,8 +33,36 @@ function BeneficiariesListing(props: iBeneficiariesListing) {
   const [filteredData, setFilteredData] = useState<iBeneficiary[]>([]);
   const rowLimit: number = Constant.RecordPerPage;
   const [offset, setOffset] = useState<number>(rowLimit);
+  const [allowEdit, setAllowEdit] = useState<boolean>(false);
+  
+  useEffect(() => {
+    let isMounted = true;
+    const initialLoadMethod = async () => {
+      const userData = await GetUserLocalData();
+      if (userData) {
+        if (isMounted && userData.customerId === currentContext.selectedCIF) {
+          setAllowEdit(true);
+        }
+      }
+    };
 
-  useEffect(() => setFilteredData(props.beneficiaries), [props.beneficiaries]);
+    if (!!currentContext.selectedCIF) {
+      initialLoadMethod();
+    }
+
+    return () => {
+      isMounted = false;
+    }; // use effect cleanup to set flag false, if unmounted
+  }, [currentContext.selectedCIF]);
+
+  useEffect(() => {
+    setFilteredData(props.beneficiaries);
+    if (props.beneficiaries && props.beneficiaries.length > 0 && props.beneficiaries.length < rowLimit) {
+      setOffset(props.beneficiaries.length);
+    } else {
+      setOffset(rowLimit);
+    }
+  }, [props.beneficiaries, props.reloading]);
 
   const renderItem = (item: iBeneficiary, index: number) => (
     <li className="shown" key={index}>
@@ -82,7 +111,7 @@ function BeneficiariesListing(props: iBeneficiariesListing) {
             </div>
             <div className="ib-text d-flex align-items-center">
               <h4>{local_Strings.BeneficiariesListingTitle}</h4>
-              {currentContext.userRole === "CUSTOMER" && (
+              {allowEdit && currentContext.userRole === Constant.Customer && (
                 <a
                   className="btnOutlineWhite"
                   href="#"

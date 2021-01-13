@@ -103,7 +103,7 @@ function RMRequestListing(props: iRMRequestListing) {
     if (props.requests && props.requests.length > 0 && props.requests.length < rowLimit) {
       setOffset(props.requests.length);
     }
-  }, [props.requests]);
+  }, [props.requests, props.reloading]);
 
   const renderItem = (item: iRmRequests, index: number) => (
     <li className="shown border-0 py-2" key={index}>
@@ -288,8 +288,7 @@ function RMRequestListing(props: iRMRequestListing) {
           />
           <ul className="box-list" id="reqList">
             {filteredData &&
-              filteredData.length > 0 &&
-              !!filteredData[0].cif
+              filteredData.length > 0
               ? filteredData
                 .slice(0, offset)
                 .map((item, index) => renderItem(item, index))
