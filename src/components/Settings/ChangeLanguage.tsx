@@ -154,6 +154,8 @@ function ChangeLanguage(props: iChangeLanguage) {
                         showConfirmButton: false,
                         timer: Constant.AlertTimeout,
                       });
+                      props.backSettingsLandingModal();
+                      
                     } else {
                       Swal.fire(
                         "Oops...",

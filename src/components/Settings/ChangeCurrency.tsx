@@ -30,6 +30,7 @@ interface iChangeCurrency {
   hideChangeCurrencyModal: () => void;
   backSettingsLandingModal: () => void;
 }
+
 function ChangeCurrency(props: iChangeCurrency) {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
@@ -177,6 +178,8 @@ function ChangeCurrency(props: iChangeCurrency) {
                         showConfirmButton: false,
                         timer: Constant.AlertTimeout,
                       });
+                      props.backSettingsLandingModal();
+                      
                     } else {
                       Swal.fire(
                         "Oops...",

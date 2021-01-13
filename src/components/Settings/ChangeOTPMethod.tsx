@@ -167,6 +167,8 @@ function ChangeOTPMethod(props: iChangeOTPMethod) {
                         showConfirmButton: false,
                         timer: Constant.AlertTimeout,
                       });
+                      props.backSettingsLandingModal();
+                      
                     } else {
                       Swal.fire(
                         "Oops...",

@@ -13,7 +13,7 @@ import { AuthContext } from "../providers/AuthProvider";
 import { localStrings as local_Strings } from "../translations/localStrings";
 import axios from "axios";
 import { AddAcceptTermsStatusForCustomer, GetInboxByCIF, GetUserPortfolio, GetGuarantees }
- from "../services/cmsService";
+  from "../services/cmsService";
 import {
   emptyInboxDetail,
   IInboxDetail,
@@ -117,9 +117,10 @@ const HomePage = () => {
     const initialLoadMethod = async () => {
 
       const role = await getUserRole(currentContext.selectedCIF);
-      
+
       if (role && !!role) {
         if (!(role && role.name === Constant.Customer)) {
+          setLoading(false);
           if (role.name === Constant.RM) {
             history.push(`/${currentContext.language}/RMLanding`);
           } else if (role.name === Constant.Management) {
@@ -192,6 +193,24 @@ const HomePage = () => {
             .catch((e: any) => console.log(e))
             .finally(() => setLoading(false));
         }
+      } else {
+        let timerInterval: any;
+        Swal.fire({
+          title: 'Unable to fetch role for the customer - ' + currentContext.selectedCIF,
+          icon: 'warning',
+          iconColor: "red",
+          timer: Constant.AlertTimeout,
+          timerProgressBar: true,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+          willClose: () => {
+            clearInterval(timerInterval);
+            window.location.reload();
+          }
+        }).then((result) => {
+          window.location.reload();
+        });
       }
     }
 

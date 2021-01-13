@@ -136,6 +136,8 @@ function ChangePassword(props: iChangePassword) {
                     showConfirmButton: false,
                     timer: Constant.AlertTimeout,
                   });
+                  props.backSettingsLandingModal();
+
                 } else {
                   Swal.fire(
                     "Oops...",
