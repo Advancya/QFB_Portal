@@ -6,7 +6,10 @@ import AuthOffersLanding from "../AuthOffers/AuthOffersLanding";
 import { AuthContext } from "../../providers/AuthProvider";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { emptyUserInfo, IUserInfo } from "../../Helpers/publicInterfaces";
-import { GetUserWelcomeData, GetRmDisplayName } from "../../services/cmsService";
+import {
+  GetUserWelcomeData,
+  GetRmDisplayName,
+} from "../../services/cmsService";
 import HoldingsLanding from "../HoldingsLanding";
 import usericon from "../../images/user-icon.svg";
 import Notfications from "../Notifications/Notifications";
@@ -18,11 +21,10 @@ const Navigation = () => {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
   const [userInfo, setUserInfo] = useState<IUserInfo>(emptyUserInfo);
-  
+
   useEffect(() => {
     let isMounted = true;
     const initialLoadMethod = async () => {
-
       if (currentContext)
         GetUserWelcomeData(currentContext.selectedCIF)
           .then((responseData: any) => {
@@ -32,22 +34,23 @@ const Navigation = () => {
           })
           .catch((e: any) => console.log(e));
     };
-  
+
     if (!!currentContext.selectedCIF) {
       initialLoadMethod();
     }
-    
+
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
   }, [currentContext.selectedCIF]);
 
-  
   return (
     <div className="col-md-7">
-      <div className="welcomeText text-right">
+      <div className="welcomeText text-right mt-3">
         <span>
-          {local_Strings.navigationUserMessage + (userInfo.customerShortName || "") + " "}
+          {local_Strings.navigationUserMessage +
+            (userInfo.customerShortName || "") +
+            " "}
           <img className="mx-1" width="20" src={usericon} />
         </span>
         &nbsp;
@@ -70,7 +73,7 @@ const Navigation = () => {
             <Transactions></Transactions>
             <AuthOffersLanding></AuthOffersLanding>
             <Requests></Requests>
-            <li className="nav-item">
+            <li className="nav-item mt-3">
               <Inbox />
               <Notfications />
             </li>
@@ -79,6 +82,6 @@ const Navigation = () => {
       </Navbar>
     </div>
   );
-}
+};
 
 export default Navigation;
