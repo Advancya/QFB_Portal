@@ -12,18 +12,19 @@ import { useHistory } from "react-router-dom";
 import { AuthContext } from "../providers/AuthProvider";
 import { localStrings as local_Strings } from "../translations/localStrings";
 import axios from "axios";
-import { AddAcceptTermsStatusForCustomer, GetInboxByCIF, GetUserPortfolio, GetGuarantees }
-  from "../services/cmsService";
 import {
-  emptyInboxDetail,
-  IInboxDetail,
-} from "../Helpers/publicInterfaces";
+  AddAcceptTermsStatusForCustomer,
+  GetInboxByCIF,
+  GetUserPortfolio,
+  GetGuarantees,
+} from "../services/cmsService";
+import { emptyInboxDetail, IInboxDetail } from "../Helpers/publicInterfaces";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import Constant from "../constants/defaultData";
 import * as helper from "../Helpers/helper";
 import { getUserRole } from "../services/apiServices";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 import AuthTerms from "../components/Terms/AuthTerms";
 
 export interface IUserPortfolio {
@@ -61,12 +62,10 @@ export interface IInboxProps {
   refreshInbox: () => void;
 }
 
-export const InboxContext = createContext<IInboxProps>(
-  {
-    messages: [emptyInboxDetail],
-    refreshInbox: () => { }
-  }
-);
+export const InboxContext = createContext<IInboxProps>({
+  messages: [emptyInboxDetail],
+  refreshInbox: () => {},
+});
 
 const HomePage = () => {
   const history = useHistory();
@@ -74,7 +73,9 @@ const HomePage = () => {
   local_Strings.setLanguage(currentContext.language);
 
   const [showAuthTerms, setShowAuthTerms] = useState(false);
-  const [messages, setInboxListing] = useState<IInboxDetail[]>([emptyInboxDetail]);
+  const [messages, setInboxListing] = useState<IInboxDetail[]>([
+    emptyInboxDetail,
+  ]);
   const [message, setMessageDetail] = useState<IInboxDetail>(emptyInboxDetail);
 
   const [showInboxDetails, setshowInboxDetails] = useState(false);
@@ -99,23 +100,22 @@ const HomePage = () => {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-
     const initialLoadMethod = async () => {
-      const termsAccepted = localStorage.getItem(Constant.CustomerTermsAcceptanceStorageKey);
+      const termsAccepted = localStorage.getItem(
+        Constant.CustomerTermsAcceptanceStorageKey
+      );
       if (termsAccepted === null || !termsAccepted) {
         setShowAuthTerms(true);
       }
-    }
+    };
 
     initialLoadMethod();
-
   }, []);
 
   useEffect(() => {
     let isMounted = true;
 
     const initialLoadMethod = async () => {
-
       const role = await getUserRole(currentContext.selectedCIF);
 
       if (role && !!role) {
@@ -128,9 +128,9 @@ const HomePage = () => {
           } else {
             Swal.fire({
               title: local_Strings.SessionTimeOutMessage,
-              icon: 'warning',
+              icon: "warning",
               iconColor: "red",
-              html: 'Please login again',
+              html: "Please login again",
               timer: Constant.AlertTimeout,
               timerProgressBar: true,
               didOpen: () => {
@@ -138,7 +138,7 @@ const HomePage = () => {
               },
               willClose: () => {
                 history.push(`/${currentContext.language}`);
-              }
+              },
             }).then((result) => {
               history.push(`/${currentContext.language}`);
             });
@@ -152,33 +152,46 @@ const HomePage = () => {
             currentContext.selectedCIF,
             currentContext.userSettings.currency
           );
-          const requestThree = GetInboxByCIF(
-            currentContext.selectedCIF
-          );
+          const requestThree = GetInboxByCIF(currentContext.selectedCIF);
 
           axios
             .all([requestOne, requestTwo, requestThree])
             .then((responseData: any) => {
               if (isMounted && responseData && responseData.length > 0) {
-
                 if (responseData[0] && responseData[0][0]) {
                   let _userPortfolio = responseData[0][0] as IUserPortfolio;
                   _userPortfolio = {
                     ..._userPortfolio,
-                    totalAssets: helper.ConvertToQfbNumberFormat(_userPortfolio.totalAssets),
-                    totalCash: helper.ConvertToQfbNumberFormat(_userPortfolio.totalCash),
-                    totalDeposits: helper.ConvertToQfbNumberFormat(_userPortfolio.totalDeposits),
-                    totalInvestment: helper.ConvertToQfbNumberFormat(_userPortfolio.totalInvestment),
-                    totalLoans: helper.ConvertToQfbNumberFormat(_userPortfolio.totalLoans),
-                    networth: helper.ConvertToQfbNumberFormat(_userPortfolio.networth),
-                    totalLiabilities: helper.ConvertToQfbNumberFormat(_userPortfolio.totalLiabilities),
-                    totalGuarantees: ""
+                    totalAssets: helper.ConvertToQfbNumberFormat(
+                      _userPortfolio.totalAssets
+                    ),
+                    totalCash: helper.ConvertToQfbNumberFormat(
+                      _userPortfolio.totalCash
+                    ),
+                    totalDeposits: helper.ConvertToQfbNumberFormat(
+                      _userPortfolio.totalDeposits
+                    ),
+                    totalInvestment: helper.ConvertToQfbNumberFormat(
+                      _userPortfolio.totalInvestment
+                    ),
+                    totalLoans: helper.ConvertToQfbNumberFormat(
+                      _userPortfolio.totalLoans
+                    ),
+                    networth: helper.ConvertToQfbNumberFormat(
+                      _userPortfolio.networth
+                    ),
+                    totalLiabilities: helper.ConvertToQfbNumberFormat(
+                      _userPortfolio.totalLiabilities
+                    ),
+                    totalGuarantees: "",
                   };
 
                   if (responseData[1].length > 0) {
                     setUserPortfolio({
                       ..._userPortfolio,
-                      totalGuarantees: helper.ConvertToQfbNumberFormat(responseData[1][0].totalGurQAR),
+                      totalGuarantees: helper.ConvertToQfbNumberFormat(
+                        responseData[1][0].totalGurQAR
+                      ),
                     });
                   } else {
                     setUserPortfolio(_userPortfolio);
@@ -193,8 +206,10 @@ const HomePage = () => {
         }
       } else {
         Swal.fire({
-          title: 'Unable to fetch role for the customer - ' + currentContext.selectedCIF,
-          icon: 'warning',
+          title:
+            "Unable to fetch role for the customer - " +
+            currentContext.selectedCIF,
+          icon: "warning",
           iconColor: "red",
           timer: Constant.AlertTimeout,
           timerProgressBar: true,
@@ -203,12 +218,12 @@ const HomePage = () => {
           },
           willClose: () => {
             window.location.reload();
-          }
+          },
         }).then((result) => {
           window.location.reload();
         });
       }
-    }
+    };
 
     if (!!currentContext.selectedCIF) {
       initialLoadMethod();
@@ -226,7 +241,6 @@ const HomePage = () => {
   }, [currentContext.selectedCIF]);
 
   const refreshInbox = () => {
-
     setLoading(true);
     GetInboxByCIF(currentContext.selectedCIF)
       .then((responseData: IInboxDetail[]) => {
@@ -236,31 +250,29 @@ const HomePage = () => {
       })
       .catch((e: any) => console.log(e))
       .finally(() => setLoading(false));
-  }
+  };
 
   return (
     <div>
-      <LoadingOverlay
-        active={isLoading}
-        spinner={
-          <PuffLoader
-            size={Constant.SpnnerSize}
-            color={Constant.SpinnerColor}
-          />
-        }
-      />
-      {!!currentContext.selectedCIF &&
-        <section id="main-section" className="main-section">
-          <InboxContext.Provider value={{ messages, refreshInbox }}>
-            <PortfolioContext.Provider value={userPortfolio}>
-              <AuthCustomHeader />
-              <Breadcrumb pageName={local_Strings.PortfolioTitle} />
-
-              {!isLoading &&
+      {!!currentContext.selectedCIF && (
+        <InboxContext.Provider value={{ messages, refreshInbox }}>
+          <PortfolioContext.Provider value={userPortfolio}>
+            <AuthCustomHeader />
+            <Breadcrumb pageName={local_Strings.PortfolioTitle} />
+            <LoadingOverlay
+              active={isLoading}
+              spinner={
+                <PuffLoader
+                  size={Constant.SpnnerSize}
+                  color={Constant.SpinnerColor}
+                />
+              }
+            />
+            <section id="main-section" className="main-section">
+              {!isLoading && (
                 <div className="container-fluid">
                   <div className="row">
                     <div className="col-lg-9">
-
                       <div className="main-container">
                         <AssetsLanding />
                         <div className="row">
@@ -268,31 +280,34 @@ const HomePage = () => {
                           <TotalNetWorth />
                         </div>
                       </div>
-
                     </div>
                     <div className="col-lg-3">
                       <div className="sidebar-container">
-                        <InboxLanding showInboxDetailsModal={handleShowInboxDetails} />
+                        <InboxLanding
+                          showInboxDetailsModal={handleShowInboxDetails}
+                        />
                         <RelationManger />
                       </div>
                     </div>
                   </div>
                 </div>
-              }
+              )}
 
-              {message && !!message.adviceDate &&
+              {message && !!message.adviceDate && (
                 <InboxDetails
                   item={message}
                   showInboxDetailsModal={showInboxDetails}
                   hideInboxDetailsModal={handleCloseInboxDetails}
                   backInboxListingModal={handleBackInboxDetails}
-                />}
-            </PortfolioContext.Provider>
-          </InboxContext.Provider>
-        </section>
-      }
+                />
+              )}
+            </section>
+          </PortfolioContext.Provider>
+        </InboxContext.Provider>
+      )}
 
       <Footer />
+
       <AuthTerms
         showAuthTermsModal={showAuthTerms}
         hideAuthTermsModal={async () => {
@@ -300,8 +315,8 @@ const HomePage = () => {
           setShowAuthTerms(false);
         }}
       />
-    </div >
+    </div>
   );
-}
+};
 
 export default HomePage;

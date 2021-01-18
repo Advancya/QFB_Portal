@@ -6,6 +6,7 @@ import { PortfolioContext } from "../pages/Homepage";
 import { localStrings as local_Strings } from "../translations/localStrings";
 import TotalNetWorthDetails from "./TotalNetWorthDetails";
 import xIcon from "../images/x-icon.svg";
+import TotalNetWorthLanding from "./TotalNetWorthLanding";
 
 const TotalNetWorth = () => {
   const currentContext = useContext(AuthContext);
@@ -27,7 +28,7 @@ const TotalNetWorth = () => {
           onClick={() => setShowTotalNetWorthDetails(true)}
           className="chart-block"
         >
-          <TotalNetWorthDetails />
+          <TotalNetWorthLanding />
         </a>
       </div>
 
@@ -65,6 +66,6 @@ const TotalNetWorth = () => {
       </React.Fragment>
     </div>
   );
-}
+};
 
 export default TotalNetWorth;
