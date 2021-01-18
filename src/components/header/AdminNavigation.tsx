@@ -40,7 +40,7 @@ function AdminNavigation() {
 
   return (
     <div className="col-md-7">
-      <div className="welcomeText text-right">
+      <div className="welcomeText text-right mt-3">
         <span>
           {(rmName || userInfo.name) + " "}
           <i className="fa fa-user-circle-o"></i>
