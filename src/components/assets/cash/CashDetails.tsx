@@ -49,12 +49,12 @@ function CashDetails(props: iCashDetails) {
       )
         .then((responseData: ITransaction[]) => {
           if (isMounted && responseData && responseData.length > 0) {
-            const _data = responseData.filter(
-              (d) =>
-                new Date(d.bookingDate) > moment().add(-3, "months").toDate()
-            );
+            // const _data = responseData.filter(
+            //   (d) =>
+            //     new Date(d.bookingDate) > moment().add(-3, "months").toDate()
+            // );
             setData(responseData);
-            setFilteredData(_data);
+            setFilteredData(responseData);
           }
         })
         .catch((e: any) => console.log(e))
@@ -123,14 +123,14 @@ function CashDetails(props: iCashDetails) {
               local_Strings.CashDetails_Filter_Credit,
             ]}
             clearFilter={() => {
-              const _data = data.filter(
-                (d) =>
-                  new Date(d.bookingDate) > moment().add(-3, "months").toDate()
-              );
-              setFilteredData(_data);
+              // const _data = data.filter(
+              //   (d) =>
+              //     new Date(d.bookingDate) > moment().add(-3, "months").toDate()
+              // );
+              setFilteredData(data);
             }}
             applyFilter={(filters: ICommonFilter) => {
-              console.log(filters);
+              
               const _filteredData = helper.filterTransactions(data, filters);
               setFilteredData(_filteredData);
             }}

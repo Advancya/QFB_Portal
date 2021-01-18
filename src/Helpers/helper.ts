@@ -704,35 +704,39 @@ export const prepareTotalNetWorth = (
   let sdata = [
     {
       name: local_Strings.TotalCash,
-      y: !!chartData.totalCash ? parseFloat(chartData.totalCash) : 0,
-      amount: ConvertToQfbNumberFormat(chartData.totalCash),
+      y: !!chartData.totalCash ? parseFloat(chartData.totalCash.replaceAll(",","")) : 0,
+      amount: chartData.totalCash,
       color: "#493026",
     },
     {
       name: local_Strings.TotalInvestments,
-      y: !!chartData.totalInvestment ? parseFloat(chartData.totalInvestment) : 0,
-      amount: ConvertToQfbNumberFormat(chartData.totalInvestment),
+      y: !!chartData.totalInvestment ? parseFloat(chartData.totalInvestment.replaceAll(",","")) : 0,
+      amount: chartData.totalInvestment,
       color: "#6C544B",
     },
     {
       name: local_Strings.TotalDeposits,
-      y: !!chartData.totalDeposits ? parseFloat(chartData.totalDeposits) : 0,
-      amount: ConvertToQfbNumberFormat(chartData.totalDeposits),
+      y: !!chartData.totalDeposits ? parseFloat(chartData.totalDeposits.replaceAll(",","")) : 0,
+      amount: chartData.totalDeposits,
       color: "#97877F",
     },
     {
       name: local_Strings.TotalLoans,
-      y: !!chartData.totalLoans ? parseFloat(chartData.totalLoans) : 0,
-      amount: ConvertToQfbNumberFormat(chartData.totalLoans),
+      y: !!chartData.totalLoans ? parseFloat(chartData.totalLoans.replaceAll(",","")) : 0,
+      amount: chartData.totalLoans,
       color: "#CBC4C1",
-    },
-    {
-      name: local_Strings.BankGurantees,
-      y: !!chartData.totalGuarantees ? parseFloat(chartData.totalGuarantees) : 0,
-      amount: ConvertToQfbNumberFormat(chartData.totalGuarantees),
-      color: "#A79A94",
     }
   ];
+
+  if (!!chartData.totalGuarantees && chartData.totalGuarantees !== "0") {
+    sdata.push({
+      name: local_Strings.BankGurantees,
+      y: parseFloat(chartData.totalGuarantees.replaceAll(",","")),
+      amount: chartData.totalGuarantees,
+      color: "#A79A94",
+    });
+  }
+
 
   let series = [
     {
@@ -744,6 +748,7 @@ export const prepareTotalNetWorth = (
   let data = {
     chart: {
       type: "pie",
+      height: 340,
     },
     title: {
       text: "",
@@ -796,9 +801,12 @@ export const b64toBlob = (b64Data: any, contentType = '', sliceSize = 512) => {
 }
 
 export const ConvertToQfbNumberFormat = (amount: any) => {
+
+  //moment.locale() === "en" ? "en-US" : "ar-QA"
+
   try {
     let number = Number(parseInt(amount ? amount.toString() : "0").toFixed(2));
-    let finalNumber = number.toLocaleString("en", {
+    let finalNumber = number.toLocaleString("en-US", {
       minimumFractionDigits: 0,
     });
 
@@ -813,7 +821,7 @@ export const ConvertToQfbNumberFormatWithFraction = (amount: any) => {
   try {
 
     let number = Number(parseFloat(!!amount ? amount.toString() : "0").toFixed(2));
-    let finalNumber = number.toLocaleString("en", {
+    let finalNumber = number.toLocaleString("en-US", {
       minimumFractionDigits: 0,
     });
 

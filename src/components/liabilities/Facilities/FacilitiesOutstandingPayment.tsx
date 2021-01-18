@@ -51,13 +51,13 @@ function FacilitiesOutstandingPayment(props: iFacilitiesOutstandingPayment) {
       )
         .then((responseData: ITransaction[]) => {
           if (isMounted && responseData && responseData.length > 0) {
-            const _data = responseData.filter(
-              (d) =>
-                new Date(d.installmentDate) >
-                moment().add(-3, "months").toDate()
-            );
+            // const _data = responseData.filter(
+            //   (d) =>
+            //     new Date(d.installmentDate) >
+            //     moment().add(-3, "months").toDate()
+            // );
             setData(responseData);
-            setFilteredData(_data);
+            setFilteredData(responseData);
           }
         })
         .catch((e: any) => console.log(e))
@@ -136,7 +136,7 @@ function FacilitiesOutstandingPayment(props: iFacilitiesOutstandingPayment) {
         </div>
         <TransactionListing
           transactions={filteredData}
-          descriptionLabel={local_Strings.RequestTypeLabel}
+          descriptionLabel={local_Strings.DepositeDetailsFilterType}
           showBalanceField={false}
         />
 
@@ -171,7 +171,7 @@ function FacilitiesOutstandingPayment(props: iFacilitiesOutstandingPayment) {
                   name={local_Strings.OutstandingPaymentsText}
                 >
                   <ExcelColumn
-                    label={local_Strings.AccountNo}
+                    label={local_Strings.LoanNo}
                     value="dealReference"
                   />
                   <ExcelColumn

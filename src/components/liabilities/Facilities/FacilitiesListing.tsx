@@ -66,7 +66,7 @@ function FacilitiesListing(props: iFacilitiesListing) {
       >
         <div className="col-sm-9 col-lg-10 mb-2">
           <h3 className="text-capitalize color-gold text-16">
-            {local_Strings.LoanNo} {item.ldReference || ""}
+            {item.ldReference || ""}
           </h3>
           <h3 className="text-18">
             {helper.ConvertToQfbNumberFormat(item.productBalance)}

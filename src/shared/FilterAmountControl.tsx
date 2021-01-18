@@ -31,16 +31,12 @@ const FilterAmountControl: React.FC<IFilterAmountControlProps> = (props) => {
             </select>
             &nbsp;&nbsp;
             <input
-                type="text"
-                pattern="[0-9]*"
+                type="number"
+                //pattern="[0-9]*"
                 className="form-control w-50"
                 placeholder={local_Strings.Amount}
                 value={props.Amount || ""}
-                onChange={(e) => {
-                    if (e.currentTarget.validity.valid) {
-                        props.onChangeAmount(e.target.value.replace(/[^0-9]*/, ''));
-                    }
-                }}
+                onChange={(e) => props.onChangeAmount(e.target.value.replace(/[^0-9]*/, ''))}
             />
         </React.Fragment>
     );

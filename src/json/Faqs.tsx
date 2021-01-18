@@ -8,23 +8,7 @@ const Data = {
             "What are the services available in QFB Digital Application?",
           Answer:
             "The QFB digital Application contains the below services <br/> 1-Assets and liabilities portfolio details and balances <br/>2-Transactions and earnings history<br/>3-Transactions instructions and beneficiary management <br/>4-Live and closed holdings dashboards and key performance indicators <br/>5-Customers requests management <br/>6-Ability to view and download all received statements and notifications sent by the bank<br/>7-A digital channel for communication between the bank and it’s customers through notifications and personalized offers ",
-        },
-        {
-          Question: "Does QFB mobile app support tablets?",
-          Answer:
-            "Yes, the QFB mobile application supports all kind of digital devices ",
-        },
-        {
-          Question: "Does QFB mobile app support Arabic language?",
-          Answer:
-            "Yes, the QFB mobile application supports Arabic language, you may switch to Arabic language by following the below procedure <br/><br/>* Click on the top left corner panel <br/>* Click on switch to Arabic",
-        },
-        {
-          Question:
-            "Can I install QFB mobile application on more than one device?",
-          Answer:
-            "Yes, the QFB mobile application can be installed on multiple devices",
-        },
+        },        
       ],
     },
 

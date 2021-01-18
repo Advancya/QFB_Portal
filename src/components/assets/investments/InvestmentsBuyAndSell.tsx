@@ -48,12 +48,12 @@ function InvestmentsBuyAndSell(props: iInvestmentsBuyAndSell) {
       GetBuyAndSellTransactions(currentContext.selectedCIF, props.investment.Id)
         .then((responseData: ITransaction[]) => {
           if (isMounted && responseData && responseData.length > 0) {
-            const _data = responseData.filter(
-              (d) =>
-                new Date(d.bookingDate) > moment().add(-3, "months").toDate()
-            );
+            // const _data = responseData.filter(
+            //   (d) =>
+            //     new Date(d.bookingDate) > moment().add(-3, "months").toDate()
+            // );
             setData(responseData);
-            setFilteredData(_data);
+            setFilteredData(responseData);
           }
         })
         .catch((e: any) => console.log(e))
@@ -113,11 +113,11 @@ function InvestmentsBuyAndSell(props: iInvestmentsBuyAndSell) {
               local_Strings.BuyAndSellTransactions_Status_Sell,
             ]}
             clearFilter={() => {
-              const _data = data.filter(
-                (d) =>
-                  new Date(d.bookingDate) > moment().add(-3, "months").toDate()
-              );
-              setFilteredData(_data);
+              // const _data = data.filter(
+              //   (d) =>
+              //     new Date(d.bookingDate) > moment().add(-3, "months").toDate()
+              // );
+              setFilteredData(data);
             }}
             applyFilter={(filters: ICommonFilter) => {
               console.log(filters);
@@ -171,7 +171,7 @@ function InvestmentsBuyAndSell(props: iInvestmentsBuyAndSell) {
                   name={local_Strings.ViewBuySellTransactions}
                 >
                   <ExcelColumn
-                    label={local_Strings.AccountNo}
+                    label={local_Strings.InvestmentNo}
                     value="accountNo"
                   />
                   <ExcelColumn

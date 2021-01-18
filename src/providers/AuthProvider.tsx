@@ -10,6 +10,8 @@ import { authenticate } from "../services/authenticationService";
 import * as helper from "../Helpers/helper";
 import { getUserRole } from "../services/apiServices";
 import Constant from "../constants/defaultData";
+import moment from "moment";
+import "moment/min/locales";
 
 export type User = { username: string; password: string; otp: string };
 interface IAppContext {
@@ -49,7 +51,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [language, setLanguage] = useState(helper.getLanguage() || "en");
   const [userRole, setUserRole] = useState<string>("");
   const [selectedCIF, setCIF] = useState<string>(initialSettingsData.customerId);
-
+  moment.locale(language);
+  
   useEffect(() => {
     const getUserData = async () => {
       const userData = await GetUserLocalData();

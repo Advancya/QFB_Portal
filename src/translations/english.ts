@@ -174,7 +174,7 @@ const en = {
   CashListingAccountNumberLabel: "Account No | ",
 
   CashDetailsTitle: "Cash Detail",
-  CashDetailsFilter: "Filter",
+  CashDetailsFilter: "Apply",
   CashDetailsRemoveFilter: "Remove Filters",
   CashDetailsFilterDate: "Date",
   CashDetailsFilterTransactionAmount: "Amount",
@@ -248,10 +248,10 @@ const en = {
   NoDataToShow: "No Data to Show",
   OfferList_NoData: "No data available",
 
-  DepositNo: "Deposit No | ",
-  AccountNo: "Account No | ",
-  InvestmentNo: "Investment No | ",
-  LoanNo: "Facility No | ",
+  DepositNo: "Deposit No.",
+  AccountNo: "Account No.",
+  InvestmentNo: "Investment No.",
+  LoanNo: "Facility No.",
   Amount: "Amount",
   Description: "Description",
   Cash: "Cash",
@@ -420,7 +420,7 @@ const en = {
   BeneficiariesDetailsTitle: "Beneficiary Detail",
 
   DocumentsListingTitle: "Documents Listing",
-  DocumentsDetailsTitle: "Documents Detail",
+  DocumentsDetailsTitle: "Document Details",
   DocumentsDetailsDownloadButton: "Download",
   DocumentTitleSample: "Document Number one",
 

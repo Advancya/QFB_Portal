@@ -27,7 +27,7 @@ const TransactionListing: React.FC<ITransactionListingProps> = (props) => {
   const [isLoading, setLoading] = useState(false);
   const rowLimit: number = Constant.RecordPerPage;
   const [offset, setOffset] = useState<number>(rowLimit);
-  const [isCollapsible, setCollapsible] = useState(false);
+  const [collapsibleId, setCollapsibleId] = useState<string>("-1");
   const filteredData = props.transactions;
   // useEffect(() => {
 
@@ -56,7 +56,7 @@ const TransactionListing: React.FC<ITransactionListingProps> = (props) => {
           as="tr"
           eventKey={index}
           className="clickRow"
-          onClick={() => setCollapsible(!isCollapsible)}
+          onClick={() => setCollapsibleId(collapsibleId === index ? "-1": index)}
         >
           <td colSpan={1}>
             {moment(
@@ -87,19 +87,19 @@ const TransactionListing: React.FC<ITransactionListingProps> = (props) => {
             {transactionsDetails && (
               <i
                 className={
-                  (isCollapsible ? "fa fa-caret-down" : "fa fa-caret-right") +
+                  (collapsibleId === index ? "fa fa-caret-down" : "fa fa-caret-right") +
                   " color-gray"
                 }
               ></i>
             )}
           </td>
         </Accordion.Toggle>
-        {transactionsDetails && isCollapsible && (
+        {transactionsDetails && (
           <tr>
             <td colSpan={9} className="p-0">
               <Accordion.Collapse eventKey={index} className="collapseRow">
                 <div className="px-3 py-2">
-                  {transactionsDetails.TransactionReference && (
+                  {transactionsDetails.TransactionReference && !!transactionsDetails.TransactionReference.value.trim() && (
                     <div className="item-row py-2">
                       <div className="color-black">
                         {transactionsDetails.TransactionReference.label}
@@ -109,7 +109,7 @@ const TransactionListing: React.FC<ITransactionListingProps> = (props) => {
                       </div>
                     </div>
                   )}
-                  {transactionsDetails.DepositReference && (
+                  {transactionsDetails.DepositReference && !!transactionsDetails.DepositReference.value.trim() && (
                     <div className="item-row py-2">
                       <div className="color-black">
                         {transactionsDetails.DepositReference.label}
@@ -119,7 +119,7 @@ const TransactionListing: React.FC<ITransactionListingProps> = (props) => {
                       </div>
                     </div>
                   )}
-                  {transactionsDetails.TransferReference && (
+                  {transactionsDetails.TransferReference && !!transactionsDetails.TransferReference.value.trim() && (
                     <div className="item-row py-2">
                       <div className="color-black">
                         {transactionsDetails.TransferReference.label}
@@ -129,7 +129,7 @@ const TransactionListing: React.FC<ITransactionListingProps> = (props) => {
                       </div>
                     </div>
                   )}
-                  {transactionsDetails.InvestmentDescription && (
+                  {transactionsDetails.InvestmentDescription && !!transactionsDetails.InvestmentDescription.value.trim() && (
                     <div className="item-row py-2">
                       <div className="color-black">
                         {transactionsDetails.InvestmentDescription.label}
@@ -139,7 +139,7 @@ const TransactionListing: React.FC<ITransactionListingProps> = (props) => {
                       </div>
                     </div>
                   )}
-                  {transactionsDetails.SecurityName && (
+                  {transactionsDetails.SecurityName && !!transactionsDetails.SecurityName.value.trim() && (
                     <div className="item-row py-2">
                       <div className="color-black">
                         {transactionsDetails.SecurityName.label}
@@ -149,7 +149,7 @@ const TransactionListing: React.FC<ITransactionListingProps> = (props) => {
                       </div>
                     </div>
                   )}
-                  {transactionsDetails.TransferDetails && (
+                  {transactionsDetails.TransferDetails && !!transactionsDetails.TransferDetails.value.trim() && (
                     <div className="item-row py-2">
                       <div className="color-black">
                         {transactionsDetails.TransferDetails.label}
@@ -159,7 +159,7 @@ const TransactionListing: React.FC<ITransactionListingProps> = (props) => {
                       </div>
                     </div>
                   )}
-                  {transactionsDetails.BeneficiaryCustomer && (
+                  {transactionsDetails.BeneficiaryCustomer && !!transactionsDetails.BeneficiaryCustomer.value.trim() && (
                     <div className="item-row py-2">
                       <div className="color-black">
                         {transactionsDetails.BeneficiaryCustomer.label}
@@ -169,7 +169,7 @@ const TransactionListing: React.FC<ITransactionListingProps> = (props) => {
                       </div>
                     </div>
                   )}
-                  {transactionsDetails.BeneficiaryAccount && (
+                  {transactionsDetails.BeneficiaryAccount && !!transactionsDetails.BeneficiaryAccount.value.trim() && (
                     <div className="item-row py-2">
                       <div className="color-black">
                         {transactionsDetails.BeneficiaryAccount.label}

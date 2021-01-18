@@ -50,12 +50,12 @@ function InvestmentsRecievedProfit(props: iInvestmentsRecievedProfit) {
       )
         .then((responseData: ITransaction[]) => {
           if (isMounted && responseData && responseData.length > 0) {
-            const _data = responseData.filter(
-              (d) =>
-                new Date(d.bookingDate) > moment().add(-3, "months").toDate()
-            );
+            // const _data = responseData.filter(
+            //   (d) =>
+            //     new Date(d.bookingDate) > moment().add(-3, "months").toDate()
+            // );
             setData(responseData);
-            setFilteredData(_data);
+            setFilteredData(responseData);
           }
         })
         .catch((e: any) => console.log(e))
@@ -110,11 +110,11 @@ function InvestmentsRecievedProfit(props: iInvestmentsRecievedProfit) {
         {data && data.length > 0 && !!data[0].bookingDate && (
           <FilterCommonControl
             clearFilter={() => {
-              const _data = data.filter(
-                (d) =>
-                  new Date(d.bookingDate) > moment().add(-3, "months").toDate()
-              );
-              setFilteredData(_data);
+              // const _data = data.filter(
+              //   (d) =>
+              //     new Date(d.bookingDate) > moment().add(-3, "months").toDate()
+              // );
+              setFilteredData(data);
             }}
             applyFilter={(filters: ICommonFilter) => {
               console.log(filters);
@@ -167,7 +167,7 @@ function InvestmentsRecievedProfit(props: iInvestmentsRecievedProfit) {
                   name={local_Strings.ViewReceivedProfitTransactions}
                 >
                   <ExcelColumn
-                    label={local_Strings.AccountNo}
+                    label={local_Strings.InvestmentNo}
                     value="accountNo"
                   />
                   <ExcelColumn

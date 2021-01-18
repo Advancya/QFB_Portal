@@ -16,7 +16,7 @@ interface IFilterCommonControl2Props {
     CheckBoxLabels?: string[];
 }
 
-const FilterCommonControl2: React.FC<IFilterCommonControl2Props> = (props) => {
+const FilterCommonControl2 = (props: IFilterCommonControl2Props) => {
 
     const currentContext = useContext(AuthContext);
     local_Strings.setLanguage(currentContext.language);
@@ -43,15 +43,11 @@ const FilterCommonControl2: React.FC<IFilterCommonControl2Props> = (props) => {
                                 name="radioType"
                                 className="custom-control-input"
                                 id="customCheck1"
-                                value={
-                                    filters.OptionalCheck[0]
-                                        ? filters.OptionalCheck[0].value
-                                        : false
-                                }
-                                onChange={(_value) => {
+                                value={filters.OptionalCheck[0].value}
+                                onChange={(e) => {
                                     const OptionalCheck = [...filters.OptionalCheck];
                                     OptionalCheck[0].label = props.CheckBoxLabels[0];
-                                    OptionalCheck[0].value = !OptionalCheck[0].value;
+                                    OptionalCheck[0].value = e.target.checked;
 
                                     setFilter({
                                         ...filters, OptionalCheck
@@ -66,15 +62,11 @@ const FilterCommonControl2: React.FC<IFilterCommonControl2Props> = (props) => {
                                 name="radioType"
                                 className="custom-control-input"
                                 id="customCheck2"
-                                value={
-                                    filters.OptionalCheck[1]
-                                        ? filters.OptionalCheck[1].value
-                                        : false
-                                }
-                                onChange={(_value) => {
+                                value={filters.OptionalCheck[1].value}
+                                onChange={(e) => {
                                     const OptionalCheck = [...filters.OptionalCheck];
                                     OptionalCheck[1].label = props.CheckBoxLabels[1];
-                                    OptionalCheck[1].value = !OptionalCheck[1].value;
+                                    OptionalCheck[1].value = e.target.checked;
 
                                     setFilter({
                                         ...filters, OptionalCheck

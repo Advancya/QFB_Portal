@@ -105,48 +105,19 @@ function DocumentDetails(props: iDocumentDetails) {
               />
             }
           />
-          <ul className="box-list mb-0">
-            <li className="shown">
-              <div className="row align-items-center py-2">
-                <div className="col-md-8 col-sm-8 ">
-                  {/*  <div className="text-xs color-grey">
-                    <img src={dateIcon} className="img-fluid" />
-                    {item.documentDate
-                      ? moment(item.documentDate).format(
-                        "dddd DD MM YYYY"
-                      )
-                      : ""}
-                  </div> */}
-                  <h6 className="mb-1 text-600 text-18 ">
-                    {currentContext.language === "en"
-                      ? item.documentName
-                      : item.documentNameAr}
-                  </h6>
-                </div>
-                {/*  <div
-                  className="col-md-4 text-right"
-                  onClick={downloadAttachment}
-                >
-                  <a className="download-link d-inline-block " href="#">
-                    <i className="mx-1 fa fa-file color-white"></i>
-                    <i className="mx-1 fa fa-download color-white"></i>
-                  </a>
-                </div> */}
-              </div>
-            </li>
-          </ul>
+
           <div
             className="p-3 mb-4 color-grey"
             dangerouslySetInnerHTML={{
               __html:
-                currentContext.language === "en"
+                isLoading ? "" : (currentContext.language === "en"
                   ? item.documentDescription
-                  : item.documentDescriptionAr,
+                  : item.documentDescriptionAr),
             }}
           />
-
           <div className="text-right p-3">
-            <button onClick={downloadAttachment} className="btn btn-primary">
+            <button onClick={downloadAttachment} className="btn btn-primary"
+              disabled={isLoading}>
               {local_Strings.DocumentsDetailsDownloadButton}
             </button>
           </div>

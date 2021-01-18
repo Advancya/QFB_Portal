@@ -133,7 +133,7 @@ function FacilitiesHistoricalPayment(props: iFacilitiesHistoricalPayment) {
         <TransactionListing
           transactions={filteredData}
           showBalanceField={false}
-          descriptionLabel={local_Strings.RequestTypeLabel}
+          descriptionLabel={local_Strings.DepositeDetailsFilterType}
         />
 
         <LoadingOverlay
@@ -167,7 +167,7 @@ function FacilitiesHistoricalPayment(props: iFacilitiesHistoricalPayment) {
                   name={local_Strings.HistoricalPaymentsText}
                 >
                   <ExcelColumn
-                    label={local_Strings.AccountNo}
+                    label={local_Strings.LoanNo}
                     value="ourReference"
                   />
                   <ExcelColumn
