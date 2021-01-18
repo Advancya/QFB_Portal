@@ -86,7 +86,8 @@ function NewTransaction(props: iNewTransaction) {
     amount: yup
       .string()
       .required(local_Strings.GeneralValidation)
-      .matches(/^[0-9]*$/),
+      .matches(/^[0-9]*$/,
+        local_Strings.Transactions_Amount_Validation),
   });
 
   const validationSchemaLocalOrInternational = yup.object({
@@ -95,7 +96,8 @@ function NewTransaction(props: iNewTransaction) {
     amount: yup
       .string()
       .required(local_Strings.GeneralValidation)
-      .matches(/^[0-9]*$/),
+      .matches(/^[0-9]*$/,
+        local_Strings.Transactions_Amount_Validation),
     requestDate: yup.string().required(local_Strings.GeneralValidation),
     beneficiaryId: yup.string().required(local_Strings.GeneralValidation),
     description: yup.string().required(local_Strings.GeneralValidation),
@@ -619,6 +621,7 @@ function NewTransaction(props: iNewTransaction) {
                           rows={3}
                           onBlur={handleBlur("description")}
                           onChange={handleChange("description")}
+                          maxLength={500}
                         />
                         {touched.description &&
                           errors.description &&

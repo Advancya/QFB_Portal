@@ -47,7 +47,7 @@ const Navigation = () => {
     <div className="col-md-7">
       <div className="welcomeText text-right">
         <span>
-          {(userInfo.customerShortName || "") + " "}
+          {local_Strings.navigationUserMessage + (userInfo.customerShortName || "") + " "}
           <img className="mx-1" width="20" src={usericon} />
         </span>
         &nbsp;

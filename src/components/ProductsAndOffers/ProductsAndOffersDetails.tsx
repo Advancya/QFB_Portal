@@ -64,9 +64,9 @@ function ProductsAndOffersDetails(props: iProductsAndOffersDetails) {
                       : ""}
                   </div>
                   <h6 className="mb-1 text-600 text-18 ">
-                    {currentContext.language === "en"
+                    {(currentContext.language === "en"
                       ? props.item.name
-                      : props.item.nameAr}
+                      : props.item.nameAr) + " | " + props.item.id}
                   </h6>
                 </div>
               </div>

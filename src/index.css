@@ -181,3 +181,10 @@
   border: 0 !important;
   font-weight: 500;
 }
+[dir="ltr"] input[type="email"] {
+  text-align: start!important;
+}
+[dir="rtl"] input[type="email"] {
+  text-align: end!important;
+  direction: ltr;
+}

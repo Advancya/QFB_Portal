@@ -802,6 +802,21 @@ const ar = {
   ManagementSampleAccount: "الادارة | ",
   ChartDepositProfitRecieved: "Deposit Received Profit",
   ChartDrillDownHint: "Click to view the profit received",
+
+  ContactUs_Mobile_Format_Validation_Message: "Mobile number should contain country code like +974xxxxxxxx",
+
+  Signup_Autherization_Code: "Autherization code is not valid",
+  Signup_CIF_Message: "Identification Number is not valid",
+  Signup_Email_Message: "Email is not valid",
+  Signup_Mobile_Number_Message: "Mobile Number is not Valid",
+
+  Transactions_Amount_Validation: "Only number accepted",
+  BeneficiaryInvalidAccountOrIban: "Invalid Account Number or IBAN",
+  BeneficiaryInvalidSwiftCode: "Invalid Swift Code",
+  
+  NoDepositsHoldingsFound: "No Deposits Holdings Found",
+  NoInvestmentsHoldingsFound: "No Investments Holdings Found",
+  InvalidEmail: "Please enter a valid email address",
 };
 
 export default ar;

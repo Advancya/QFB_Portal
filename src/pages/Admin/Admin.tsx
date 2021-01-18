@@ -42,29 +42,39 @@ const Landing = () => {
       const userData = await GetUserLocalData();
       if (userData) {
         setLoading(true);
-        const requestOne = await getUserRole(userData.customerId);
-        const requestTwo = await GetAllCustomerList();
-        axios
-          .all([requestOne, requestTwo])
-          .then((responseData: any) => {
+        const role = await getUserRole(userData.customerId);
 
-            if (responseData && responseData.length > 0 && isMounted) {
+        if (role && !!role) {
+          const requestOne = await getUserRole(userData.customerId);
+          const requestTwo = await GetAllCustomerList();
+          axios
+            .all([requestOne, requestTwo])
+            .then((responseData: any) => {
 
-              const role = responseData[0];
-              if (!(role && role.name === Constant.Management)) {
-                let timerInterval: any;
-                Swal.fire({
-                  title: local_Strings.AccessDeniedMsgTitle,
-                  icon: 'warning',
-                  iconColor: "red",
-                  text: local_Strings.AccessDeniedMessage,
-                  timer: Constant.AlertTimeout,
-                  timerProgressBar: true,
-                  didOpen: () => {
-                    Swal.showLoading();
-                  },
-                  willClose: () => {
-                    clearInterval(timerInterval);
+              if (responseData && responseData.length > 0 && isMounted) {
+
+                const role = responseData[0];
+                if (!(role && role.name === Constant.Management)) {
+                  Swal.fire({
+                    title: local_Strings.AccessDeniedMsgTitle,
+                    icon: 'warning',
+                    iconColor: "red",
+                    text: local_Strings.AccessDeniedMessage,
+                    timer: Constant.AlertTimeout,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                      Swal.showLoading();
+                    },
+                    willClose: () => {
+                      if (role.name === Constant.Customer) {
+                        history.push(`/${currentContext.language}/Home`);
+                      } else if (role.name === Constant.RM) {
+                        history.push(`/${currentContext.language}/RMLanding`);
+                      } else {
+                        history.push(`/${currentContext.language}`);
+                      }
+                    }
+                  }).then((result) => {
                     if (role.name === Constant.Customer) {
                       history.push(`/${currentContext.language}/Home`);
                     } else if (role.name === Constant.RM) {
@@ -72,28 +82,44 @@ const Landing = () => {
                     } else {
                       history.push(`/${currentContext.language}`);
                     }
-                  }
-                }).then((result) => {
-                  if (role.name === Constant.Customer) {
-                    history.push(`/${currentContext.language}/Home`);
-                  } else if (role.name === Constant.RM) {
-                    history.push(`/${currentContext.language}/RMLanding`);
-                  } else {
-                    history.push(`/${currentContext.language}`);
-                  }
-                });
-              }
+                  });
+                }
 
-              setCustomerList(responseData[1]);
+                setCustomerList(responseData[1]);
+              }
+            })
+            .catch((e: any) => console.log(e))
+            .finally(() => setLoading(false));
+        } else {
+          Swal.fire({
+            title: local_Strings.AccessDeniedMsgTitle,
+            icon: 'warning',
+            iconColor: "red",
+            text: local_Strings.AccessDeniedMessage,
+            timerProgressBar: true,
+            didOpen: () => {
+              Swal.showLoading();
+            },
+            willClose: () => {
+              history.push(`/${currentContext.language}`);
             }
-          })
-          .catch((e: any) => console.log(e))
-          .finally(() => setLoading(false));
+          }).then((result) => {
+            history.push(`/${currentContext.language}`);
+          });
+        }
+      } else {
+        history.push(`/${currentContext.language}`);
       }
     }
 
     if (!!currentContext.selectedCIF) {
       initialLoadMethod();
+    } else {
+      setTimeout(() => {
+        if (!currentContext.selectedCIF) {
+          history.push(`/${currentContext.language}`);
+        }
+      }, 3000);
     }
 
     return () => {
@@ -108,100 +134,102 @@ const Landing = () => {
       <Breadcrumb pageName={local_Strings.BreadcrumbAdminTitle} />
       <div>
         <div id="main-section" className="main-section pt-4">
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-lg-8 col-container flex-column">
-                <LoadingOverlay
-                  active={isLoading}
-                  spinner={<PuffLoader
-                    size={Constant.SpnnerSize}
-                    color={Constant.SpinnerColor}
-                  />}
-                />
-                <CustomerListContext.Provider value={customerList}>
-                  {showLeftSection.ProductsAndOffers && (
-                    <ProductsAndOffersListing />
-                  )}
-                  {showLeftSection.Notifications && <NotificationsListing />}
-                  {showLeftSection.Offers && <OffersListing />}
-                  {showLeftSection.Documents && <DocumentsListing />}
-                </CustomerListContext.Provider>
-              </div>
-              <div className="col-lg-4 col-container flex-column loginSideBoxBoxes">
-                <div className="box pb-0 min-h-16">
-                  <div className="box-header">
-                    <h3>Admin Sections</h3>
+          {!!currentContext.selectedCIF &&
+            <div className="container-fluid">
+              <div className="row">
+                <div className="col-lg-8 col-container flex-column">
+                  <LoadingOverlay
+                    active={isLoading}
+                    spinner={<PuffLoader
+                      size={Constant.SpnnerSize}
+                      color={Constant.SpinnerColor}
+                    />}
+                  />
+                  <CustomerListContext.Provider value={customerList}>
+                    {showLeftSection.ProductsAndOffers && (
+                      <ProductsAndOffersListing />
+                    )}
+                    {showLeftSection.Notifications && <NotificationsListing />}
+                    {showLeftSection.Offers && <OffersListing />}
+                    {showLeftSection.Documents && <DocumentsListing />}
+                  </CustomerListContext.Provider>
+                </div>
+                <div className="col-lg-4 col-container flex-column loginSideBoxBoxes">
+                  <div className="box pb-0 min-h-16">
+                    <div className="box-header">
+                      <h3>Admin Sections</h3>
+                    </div>
+                    <ul className="box-list" id="dataList">
+                      <li className="shown">
+                        <a
+                          href="#"
+                          className="row align-items-center"
+                          onClick={() =>
+                            setLeftSection({
+                              ProductsAndOffers: true,
+                              Notifications: false,
+                              Offers: false,
+                              Documents: false,
+                            })
+                          }
+                        >
+                          <h6 className="mb-1">Manage Products And Offers</h6>
+                        </a>
+                      </li>
+                      <li className="shown">
+                        <a
+                          href="#"
+                          className="row align-items-center"
+                          onClick={() =>
+                            setLeftSection({
+                              ProductsAndOffers: false,
+                              Notifications: true,
+                              Offers: false,
+                              Documents: false,
+                            })
+                          }
+                        >
+                          <h6 className="mb-1">Manage Notifications</h6>
+                        </a>
+                      </li>
+                      <li className="shown">
+                        <a
+                          href="#"
+                          className="row align-items-center"
+                          onClick={() =>
+                            setLeftSection({
+                              ProductsAndOffers: false,
+                              Notifications: false,
+                              Offers: true,
+                              Documents: false,
+                            })
+                          }
+                        >
+                          <h6 className="mb-1">Manage Offers</h6>
+                        </a>
+                      </li>
+                      <li className="shown">
+                        <a
+                          href="#"
+                          className="row align-items-center"
+                          onClick={() =>
+                            setLeftSection({
+                              ProductsAndOffers: false,
+                              Notifications: false,
+                              Offers: false,
+                              Documents: true,
+                            })
+                          }
+                        >
+                          <h6 className="mb-1">Manage Documents</h6>
+                        </a>
+                      </li>
+                    </ul>
                   </div>
-                  <ul className="box-list" id="dataList">
-                    <li className="shown">
-                      <a
-                        href="#"
-                        className="row align-items-center"
-                        onClick={() =>
-                          setLeftSection({
-                            ProductsAndOffers: true,
-                            Notifications: false,
-                            Offers: false,
-                            Documents: false,
-                          })
-                        }
-                      >
-                        <h6 className="mb-1">Manage Products And Offers</h6>
-                      </a>
-                    </li>
-                    <li className="shown">
-                      <a
-                        href="#"
-                        className="row align-items-center"
-                        onClick={() =>
-                          setLeftSection({
-                            ProductsAndOffers: false,
-                            Notifications: true,
-                            Offers: false,
-                            Documents: false,
-                          })
-                        }
-                      >
-                        <h6 className="mb-1">Manage Notifications</h6>
-                      </a>
-                    </li>
-                    <li className="shown">
-                      <a
-                        href="#"
-                        className="row align-items-center"
-                        onClick={() =>
-                          setLeftSection({
-                            ProductsAndOffers: false,
-                            Notifications: false,
-                            Offers: true,
-                            Documents: false,
-                          })
-                        }
-                      >
-                        <h6 className="mb-1">Manage Offers</h6>
-                      </a>
-                    </li>
-                    <li className="shown">
-                      <a
-                        href="#"
-                        className="row align-items-center"
-                        onClick={() =>
-                          setLeftSection({
-                            ProductsAndOffers: false,
-                            Notifications: false,
-                            Offers: false,
-                            Documents: true,
-                          })
-                        }
-                      >
-                        <h6 className="mb-1">Manage Documents</h6>
-                      </a>
-                    </li>
-                  </ul>
                 </div>
               </div>
             </div>
-          </div>
+          }
         </div>
       </div>
       <Footer />

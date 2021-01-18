@@ -126,7 +126,6 @@ const HomePage = () => {
           } else if (role.name === Constant.Management) {
             history.push(`/${currentContext.language}/Managment`);
           } else {
-            let timerInterval: any;
             Swal.fire({
               title: local_Strings.SessionTimeOutMessage,
               icon: 'warning',
@@ -138,7 +137,6 @@ const HomePage = () => {
                 Swal.showLoading();
               },
               willClose: () => {
-                clearInterval(timerInterval);
                 history.push(`/${currentContext.language}`);
               }
             }).then((result) => {
@@ -194,7 +192,6 @@ const HomePage = () => {
             .finally(() => setLoading(false));
         }
       } else {
-        let timerInterval: any;
         Swal.fire({
           title: 'Unable to fetch role for the customer - ' + currentContext.selectedCIF,
           icon: 'warning',
@@ -205,7 +202,6 @@ const HomePage = () => {
             Swal.showLoading();
           },
           willClose: () => {
-            clearInterval(timerInterval);
             window.location.reload();
           }
         }).then((result) => {
@@ -217,7 +213,11 @@ const HomePage = () => {
     if (!!currentContext.selectedCIF) {
       initialLoadMethod();
     } else {
-      //history.push(`/${currentContext.language}`);
+      setTimeout(() => {
+        if (!currentContext.selectedCIF) {
+          history.push(`/${currentContext.language}`);
+        }
+      }, 5000);
     }
 
     return () => {
@@ -240,55 +240,59 @@ const HomePage = () => {
 
   return (
     <div>
-      <InboxContext.Provider value={{ messages, refreshInbox }}>
-        <PortfolioContext.Provider value={userPortfolio}>
-          <AuthCustomHeader />
-          <Breadcrumb pageName={local_Strings.PortfolioTitle} />
-          <section id="main-section" className="main-section">
-            <LoadingOverlay
-              active={isLoading}
-              spinner={
-                <PuffLoader
-                  size={Constant.SpnnerSize}
-                  color={Constant.SpinnerColor}
-                />
-              }
-            />
-            {!isLoading &&
-              <div className="container-fluid">
-                <div className="row">
-                  <div className="col-lg-9">
+      <LoadingOverlay
+        active={isLoading}
+        spinner={
+          <PuffLoader
+            size={Constant.SpnnerSize}
+            color={Constant.SpinnerColor}
+          />
+        }
+      />
+      {!!currentContext.selectedCIF &&
+        <section id="main-section" className="main-section">
+          <InboxContext.Provider value={{ messages, refreshInbox }}>
+            <PortfolioContext.Provider value={userPortfolio}>
+              <AuthCustomHeader />
+              <Breadcrumb pageName={local_Strings.PortfolioTitle} />
 
-                    <div className="main-container">
-                      <AssetsLanding />
-                      <div className="row">
-                        <LiabilitiesLanding />
-                        <TotalNetWorth />
+              {!isLoading &&
+                <div className="container-fluid">
+                  <div className="row">
+                    <div className="col-lg-9">
+
+                      <div className="main-container">
+                        <AssetsLanding />
+                        <div className="row">
+                          <LiabilitiesLanding />
+                          <TotalNetWorth />
+                        </div>
                       </div>
-                    </div>
 
-                  </div>
-                  <div className="col-lg-3">
-                    <div className="sidebar-container">
-                      <InboxLanding showInboxDetailsModal={handleShowInboxDetails} />
-                      <RelationManger />
+                    </div>
+                    <div className="col-lg-3">
+                      <div className="sidebar-container">
+                        <InboxLanding showInboxDetailsModal={handleShowInboxDetails} />
+                        <RelationManger />
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            }
-          </section>
+              }
 
-          <Footer />
-          {message && !!message.adviceDate &&
-            <InboxDetails
-              item={message}
-              showInboxDetailsModal={showInboxDetails}
-              hideInboxDetailsModal={handleCloseInboxDetails}
-              backInboxListingModal={handleBackInboxDetails}
-            />}
-        </PortfolioContext.Provider>
-      </InboxContext.Provider>
+              {message && !!message.adviceDate &&
+                <InboxDetails
+                  item={message}
+                  showInboxDetailsModal={showInboxDetails}
+                  hideInboxDetailsModal={handleCloseInboxDetails}
+                  backInboxListingModal={handleBackInboxDetails}
+                />}
+            </PortfolioContext.Provider>
+          </InboxContext.Provider>
+        </section>
+      }
+
+      <Footer />
       <AuthTerms
         showAuthTermsModal={showAuthTerms}
         hideAuthTermsModal={async () => {
@@ -296,7 +300,7 @@ const HomePage = () => {
           setShowAuthTerms(false);
         }}
       />
-    </div>
+    </div >
   );
 }
 

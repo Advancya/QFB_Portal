@@ -5,10 +5,8 @@ import { GoogleMap, LoadScript, Marker, InfoBox } from "@react-google-maps/api";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
-import moment from "moment";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
-import * as helper from "../../Helpers/helper";
 import { GetCountries } from "../../services/cmsService";
 import { AddContactUs, iContactUs } from "../../services/authenticationService";
 import { Formik } from "formik";
@@ -16,6 +14,7 @@ import * as yup from "yup";
 import InvalidFieldError from "../../shared/invalid-field-error";
 import Swal from "sweetalert2";
 import xIcon from "../../images/x-icon.svg";
+import deleteIcon from "../../images/delete-icon.svg";
 
 interface ICountry {
   id: number;
@@ -82,12 +81,15 @@ function ContactUsForm(props: iContactUsForm) {
   }, []);
 
   const conactUsVlidationSchema = yup.object({
-    email: yup.string().required(local_Strings.GeneralValidation).email(),
+    email: yup
+      .string()
+      .required(local_Strings.GeneralValidation)
+      .email(local_Strings.InvalidEmail),
     country: yup.string().required(local_Strings.GeneralValidation),
     mobile: yup
       .string()
       .required(local_Strings.GeneralValidation)
-      .matches(/^[+]*[/0-9]{0,16}$/),
+      .matches(/^[+]*[/0-9]{0,16}$/, local_Strings.ContactUs_Mobile_Format_Validation_Message),
     name: yup.string().required(local_Strings.GeneralValidation).min(1),
     query: yup.string().required(local_Strings.GeneralValidation),
   });
@@ -105,7 +107,7 @@ function ContactUsForm(props: iContactUsForm) {
         <Modal.Header>
           <div className="d-flex align-items-center">
             <div className="ib-icon">
-              <img src={callIcon} className="img-fluid" />
+              <img alt="" src={callIcon} className="img-fluid" />
             </div>
             <div className="ib-text">
               <h4>{local_Strings.ContactUsTite}</h4>
@@ -116,7 +118,7 @@ function ContactUsForm(props: iContactUsForm) {
             className="close"
             onClick={props.hideContactUsFormModal}
           >
-            <img src={xIcon} width="15" />
+            <img alt="" src={xIcon} width="15" />
           </button>
         </Modal.Header>
         <Modal.Body>
@@ -148,7 +150,7 @@ function ContactUsForm(props: iContactUsForm) {
                     position={item.location}
                   >
                     <InfoBox
-                      onLoad={(_v) => {}}
+                      onLoad={(_v) => { }}
                       options={{
                         closeBoxURL: "",
                         enableEventPropagation: true,
@@ -211,6 +213,7 @@ function ContactUsForm(props: iContactUsForm) {
                 setFieldValue,
                 isValid,
                 validateForm,
+                handleReset,
               }) => (
                 <div className="container-fluid">
                   <div className="row my-4">
@@ -225,8 +228,11 @@ function ContactUsForm(props: iContactUsForm) {
                               <Form.Control
                                 type="text"
                                 placeholder=""
-                                onChange={handleChange("name")}
+                                onChange={(e) => setFieldValue("name",
+                                  e.target.value.replace(/[^a-zA-Z_\sء-ي]+/g, ''))}
                                 onBlur={handleBlur("name")}
+                                value={values.name || ""}
+                                maxLength={100}
                               />
                               {touched.name &&
                                 errors.name &&
@@ -246,7 +252,7 @@ function ContactUsForm(props: iContactUsForm) {
                                 onBlur={handleBlur("country")}
                               >
                                 <option value="">
-                                  {local_Strings.ContactUsSelectCountry}
+                                  {local_Strings.SelectItem}
                                 </option>
                                 {countries &&
                                   countries.length > 0 &&
@@ -276,6 +282,8 @@ function ContactUsForm(props: iContactUsForm) {
                                 placeholder=""
                                 onChange={handleChange("mobile")}
                                 onBlur={handleBlur("mobile")}
+                                value={values.mobile || ""}
+                                maxLength={16}
                               />
                               {touched.mobile &&
                                 errors.mobile &&
@@ -292,6 +300,8 @@ function ContactUsForm(props: iContactUsForm) {
                                 placeholder=""
                                 onChange={handleChange("email")}
                                 onBlur={handleBlur("email")}
+                                value={values.email || ""}
+                                maxLength={50}
                               />
                               {touched.email &&
                                 errors.email &&
@@ -310,6 +320,9 @@ function ContactUsForm(props: iContactUsForm) {
                                 placeholder=""
                                 onChange={handleChange("query")}
                                 onBlur={handleBlur("query")}
+                                rows={5}
+                                maxLength={350}
+                                value={values.query || ""}
                               />
                               {touched.query &&
                                 errors.query &&
@@ -319,7 +332,17 @@ function ContactUsForm(props: iContactUsForm) {
                         </div>
                       </Form>
                     </div>
-                    <div className="offset-md-2 col-md-2"></div>
+                    <div className="col-lg-3 text-right pl-5">
+                      <button
+                        id="resetFilter"
+                        type="reset"
+                        className="resetBtn text-right pl-5"
+                        onClick={handleReset}
+                      >
+                        {local_Strings.ContactUsClearButton}{" "}
+                        <img className="mx-1" src={deleteIcon} />
+                      </button>
+                    </div>
                   </div>
 
                   <div className="text-right pb-3">

@@ -67,7 +67,6 @@ const ManagmentLanding = () => {
 
         const role = await getUserRole(userData.customerId);
         if (!(role && role.name === Constant.Management)) {
-          let timerInterval: any;
           Swal.fire({
             title: local_Strings.AccessDeniedMsgTitle,
             icon: 'warning',
@@ -79,7 +78,6 @@ const ManagmentLanding = () => {
               Swal.showLoading();
             },
             willClose: () => {
-              clearInterval(timerInterval);
               history.push(`/${currentContext.language}`);
             }
           }).then((result) => {
@@ -92,12 +90,20 @@ const ManagmentLanding = () => {
             //currentContext.selectCIF(userData.customerId);
           }
         }
+      } else {
+        history.push(`/${currentContext.language}`);
       }
       setLoading(false);
     };
 
     if (!!currentContext.selectedCIF) {
       initialLoadMethod();
+    } else {
+      setTimeout(() => {
+        if (!currentContext.selectedCIF) {
+          history.push(`/${currentContext.language}`);
+        }
+      }, 3000);
     }
 
     return () => {
@@ -113,34 +119,36 @@ const ManagmentLanding = () => {
       </div>
       <div>
         <div id="main-section" className="main-section pt-4">
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-xl-6 col-container flex-column">
-                <LoadingOverlay
-                  active={isLoading}
-                  spinner={
-                    <PuffLoader
-                      size={Constant.SpnnerSize}
-                      color={Constant.SpinnerColor}
-                    />
-                  }
-                />
-                <ManagmentRequestsLanding></ManagmentRequestsLanding>
-              </div>
-              <div className="col-xl-6 col-container flex-column loginSideBoxBoxes">
-                <LoadingOverlay
-                  active={isLoading}
-                  spinner={
-                    <PuffLoader
-                      size={Constant.SpnnerSize}
-                      color={Constant.SpinnerColor}
-                    />
-                  }
-                />
-                <ClientPortfolioListing />
+          {!!currentContext.selectedCIF &&
+            <div className="container-fluid">
+              <div className="row">
+                <div className="col-xl-6 col-container flex-column">
+                  <LoadingOverlay
+                    active={isLoading}
+                    spinner={
+                      <PuffLoader
+                        size={Constant.SpnnerSize}
+                        color={Constant.SpinnerColor}
+                      />
+                    }
+                  />
+                  <ManagmentRequestsLanding></ManagmentRequestsLanding>
+                </div>
+                <div className="col-xl-6 col-container flex-column loginSideBoxBoxes">
+                  <LoadingOverlay
+                    active={isLoading}
+                    spinner={
+                      <PuffLoader
+                        size={Constant.SpnnerSize}
+                        color={Constant.SpinnerColor}
+                      />
+                    }
+                  />
+                  <ClientPortfolioListing />
+                </div>
               </div>
             </div>
-          </div>
+          }
         </div>
       </div>
       <Footer />

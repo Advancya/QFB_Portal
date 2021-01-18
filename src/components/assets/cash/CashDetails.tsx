@@ -117,7 +117,7 @@ function CashDetails(props: iCashDetails) {
       <Modal.Body>
         {data && data.length > 0 && !!data[0].bookingDate && (
           <FilterCommonControl2
-            CheckBoxTitle={local_Strings.RequestTypeLabel}
+            CheckBoxTitle={local_Strings.CashDetailsFilterType}
             CheckBoxLabels={[
               local_Strings.CashDetails_Filter_Debit,
               local_Strings.CashDetails_Filter_Credit,

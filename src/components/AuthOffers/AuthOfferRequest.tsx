@@ -65,7 +65,7 @@ function AuthOfferRequest(props: iAuthOfferRequest) {
     amount: yup
       .string()
       .required(local_Strings.GeneralValidation)
-      .matches(/^[0-9]*$/),
+      .matches(/^[0-9]*$/, local_Strings.Transactions_Amount_Validation),
     currency: yup.string().required(local_Strings.GeneralValidation),
   });
 

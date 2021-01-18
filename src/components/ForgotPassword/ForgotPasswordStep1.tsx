@@ -37,12 +37,13 @@ function ForgotPasswordStep1(props: iForgotPasswordStep1) {
 
   const resetPasswordValidationSchema = yup.object({
     username: yup.string().required(local_Strings.GeneralValidation),
-    mobile: yup
+    email: yup
       .string()
       .required(local_Strings.GeneralValidation)
-      .min(11)
-      .matches(/^[+]*[/0-9]{0,16}$/),
-    email: yup.string().email().required(local_Strings.GeneralValidation),
+      .email(local_Strings.InvalidEmail),
+    mobile: yup.string().required(local_Strings.GeneralValidation)
+      .matches(/^[+]*[/0-9]{0,16}$/,
+        local_Strings.ContactUs_Mobile_Format_Validation_Message),
   });
 
   const getRegisterData = async (cif: string) => {

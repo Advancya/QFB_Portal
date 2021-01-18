@@ -6,7 +6,7 @@ const en = {
   FooterItem3: "Products",
   FooterItem4: "Contact Us",
   FooterItem5: "Holdings",
-  FooterItem6: "Transactions",
+  FooterItem6: "Transfer",
   FooterItem7: "Requests",
   FooterItem8: "Offers",
   FooterItem9: "Clients Portfolio ",
@@ -84,6 +84,8 @@ const en = {
   LoginWithCredentialsLoginButton: "Login",
   GeneralValidation: "You must set a value for this field",
   LoginWithCredentialsErrorMessage: "Incorrect username or password.",
+  LoginWithCredentialsLockedErrorMessage:
+    "Your username is locked, please contact QFB",
 
   PasswordResetTitle: "Password Reset",
   PasswordResetHint: "Kindly fill below fields to reset your password",
@@ -133,27 +135,27 @@ const en = {
   SignUpStep3Button: "Complete signup",
   SignUpStep3Pager: "Step 3 of 3",
 
-  otpErrorMessage: "Incorrect OTP code",
+  otpErrorMessage: "Incorrect OTP",
 
   DrawerContentHomeLabel: "Home",
   DrawerContentSwitchLangLabel: "العربية",
-  WelcomeScreenTitle: "Welcome",
+  WelcomeScreenTitle: "Relation Manager",
   WelcomeScreenMsg:
     "Welcome {0} to QFB bank, we are glade to serve you and have you as a customer, we hope to satisfy all your needs..",
   WelcomeScreenPopUpTitle: "CALL ME BACK RREQUSET",
-  WelcomeScreenPopUpMessage: "Your request has been sent to ",
+  WelcomeScreenPopUpMessage: "Your request has been sent.",
   WelcomeScreenClose: "Close",
   WelcomeScreenCall: "Call",
   WelcomeScreenSMS: "SMS",
   WelcomeScreenEmail: "Email",
   WelcomeScreenCallMeBackLabel: "CALL ME BACK",
   WelcomeScreenRMNameLabel: "RM Name",
-  WelcomeScreenRMPhoneLabel: "RM Office Number",
-  WelcomeScreenRMMobileLabel: "RM Mobile",
-  WelcomeScreenRMEmailLabel: "RM Email",
+  WelcomeScreenRMPhoneLabel: "Phone Number",
+  WelcomeScreenRMMobileLabel: "Mobile Number",
+  WelcomeScreenRMEmailLabel: "Email",
   WelcomeScreenViewPorfolioLabel: "View Your Portfolio",
 
-  PortfolioTitle: "Portofolio",
+  PortfolioTitle: "Portfolio",
   PortfolioAssetsTitle: "Assets",
   PortfolioAssetsOption1: "Cash",
   PortfolioAssetsOption2: "Investments",
@@ -161,7 +163,6 @@ const en = {
   PortfolioLiabilitiesTitle: "Liabilities",
   PortfolioLiabilitiesOption1: "Facilities",
   PortfolioLiabilitiesOption2: "Guarantees",
-  //Intersection2PortfolioBG: require("../../assets/images/Intersection2.png"),
   PortfolioCurrencyType: "QAR",
   PortfolioTotalNetWorth: "Total Net Worth",
 
@@ -172,9 +173,9 @@ const en = {
   CashListingCurrency: "QAR",
   CashListingAccountNumberLabel: "Account No | ",
 
-  CashDetailsTitle: "Cash Details",
+  CashDetailsTitle: "Cash Detail",
   CashDetailsFilter: "Filter",
-  CashDetailsRemoveFilter: "Clear Filters",
+  CashDetailsRemoveFilter: "Remove Filters",
   CashDetailsFilterDate: "Date",
   CashDetailsFilterTransactionAmount: "Amount",
   CashDetailsFilterType: "Type",
@@ -190,7 +191,7 @@ const en = {
   CashDetailsTransactionRefrence: "Transaction Reference",
   CashDetailsBeneficiaryName: "Beneficiary Name",
   CashDetailsBeneficiaryAccount: "Beneficiary Account",
-  CashDetailsPaymentDetails: "Payment Details",
+  CashDetailsPaymentDetails: "Payment Detail",
 
   ScrollForMoreLabel: "Scroll for More",
   CaretIconRight: "caretright",
@@ -202,14 +203,14 @@ const en = {
 
   DepositeDetailsRecieved: "Recieved Profit Transactions",
   DepositeDetailsFilter: "Filter",
-  DepositeDetailsRemoveFilter: "Clear Filters",
+  DepositeDetailsRemoveFilter: "Remove Filters",
   DepositeDetailsFilterDate: "Date",
   DepositeDetailsFilterTransactionAmount: "Amount",
   DepositeDetailsFilterType: "Type",
   DepositeDetailsFilterButton: "Apply",
   DepositeDetailsFilterSelect: "Select",
 
-  DepositeDetailsTitle: "Deposite Details",
+  DepositeDetailsTitle: "Deposite Detail",
   DepositeDetailsFromLabel: "From",
   DepositeDetailsMaturityDateLabel: "Maturity Date",
   DepositeDetailsExpectedProfiteRate: "Expected Profite Rate",
@@ -223,9 +224,9 @@ const en = {
   DepositeDetailsTransactionRefrence: "Transaction Reference",
   DepositeDetailsBeneficiaryName: "Beneficiary Name",
   DepositeDetailsBeneficiaryAccount: "Beneficiary Account",
-  DepositeDetailsPaymentDetails: "Payment Details",
+  DepositeDetailsPaymentDetails: "Payment Detail",
 
-  InvestmentsListingTitle: "Investments Account Listing",
+  InvestmentsListingTitle: "Investments Listing",
   InvestmentsListingCash: "Investments",
   InvestmentsListingCurrency: "QAR",
   InvestmentsListingAccountNumberLabel: "Investment No | ",
@@ -236,8 +237,8 @@ const en = {
   InvestmentDetail: "Investment Details",
   LoanDetail: "Facilities Details",
 
-  BuyAndSellTransactionsListing_NoData: "No transactions found",
-  ReceivedProfitTransactionsListing_NoData: "No profit transactions found",
+  BuyAndSellTransactionsListing_NoData: "No Data to Show",
+  ReceivedProfitTransactionsListing_NoData: "No Received Profit Found",
   CashListing_NoData: "No Data to Show",
   DepositDetail_NoData: "No Data to Show",
   DepositListing_NoData: "No Deposit transactions found",
@@ -265,6 +266,12 @@ const en = {
   HistoricalPayments_SettlemenOfPayment: "Settlement of Payment",
   OutstandingPayments_PastDueSettlement: "Past Due Payment",
   OutstandingPayments_SettlemenOfPayment: "Payment of Facility",
+
+  DepositsAndReceivedProfit: "Deposits and Received Profit",
+  ClickToViewTheAccumulatedProfitReceived:
+    "Click to view the accumulated profit received",
+  CumulativeProfitReceived: "Cumulative Profit Received",
+
   ReceivedProfitText: "Profit Received",
   ViewReceivedProfit: "View Received Profit",
   ViewReceivedProfitTransactions: "View Received Profit Transactions to date",
@@ -274,7 +281,7 @@ const en = {
   HistoricalPaymentsText: "Historical Payment",
   ViewHistoricalPayments: "View Historical Payment",
   OutstandingPaymentsText: "Outstanding Payment",
-  ViewOutstandingPayments: "View Outstanding Payments",
+  ViewOutstandingPayments: "View Outstanding Payment",
 
   TransactionScreenFilter_None: "Select",
   TransactionScreenFilter_LastWeek: "Last week",
@@ -294,8 +301,8 @@ const en = {
   BankGuarantee: "Bank Guarantee",
   GuaranteeNo: "Guarantee No | ",
   BankGuaranteeListing: "Bank Guarantee Listing",
-  BankGuaranteeDetails: "Bank Guarantee Details",
-  InvestmentsDetailsTitle: "Investments Details",
+  BankGuaranteeDetails: "Bank Guarantee Detail",
+  InvestmentsDetailsTitle: "Investments Detail",
   InvestmentsDetailsFromLabel: "From",
   InvestmentsDetailsLocationLabel: "Location",
   InvestmentsDetailsDateLabel: "Start Date",
@@ -309,10 +316,10 @@ const en = {
   NewsListingDateSample: "08-08-2020",
   NewsListingTitleSample:
     "Qatar First Bank acquires BSN Sports’ HQ Building “Varsity Brands” located in Texas",
-  NewsDetailsTitle: "QFP Public News Details",
+  NewsDetailsTitle: "QFP Public News Detail",
 
   OffersListingTitle: "Offers Listing",
-  OffersDetailsTitle: "Offers Details",
+  OffersDetailsTitle: "Offers Detail",
   OffersDetailsButton: "Request to subscribe",
 
   OfferRequest: "Offer Request",
@@ -330,7 +337,7 @@ const en = {
   RequestListingFilterType: "Request Type",
   RequestListingFilterSubmitButton: "Apply",
   RequestListingFilterSelect: "Select",
-  RequestDetailsTitle: "Request Details",
+  RequestDetailsTitle: "Request Detail",
   NewRequestTitle: "New Request",
 
   RequestFromLabel: "From",
@@ -358,7 +365,7 @@ const en = {
   TransactionsListingNewButton: "New",
   TransactionsListingTitleSample: "Transfer to Ahmed Mohamed",
   TransactionsListingStatus: "Cancelled",
-  TransactionsDetailsTitle: "Transactions Details",
+  TransactionsDetailsTitle: "Transactions Detail",
   NewTransactionTitle: "New Transaction",
 
   TransactionFromAccountLabel: "Transfer From Account",
@@ -367,7 +374,7 @@ const en = {
   TransactionAmountLabel: "Amount",
   TransactionBenficiaryLabel: "Beneficiary",
   TransactionDateLabel: "Request Date",
-  TransactionDescriptionLabel: "Purpose of Transfer ",
+  TransactionDescriptionLabel: "Description / Purpose of Payment",
   TransactionTransferTypeLabel: "Transfer Type",
   TransactionRequestButton: "Submit",
 
@@ -384,7 +391,7 @@ const en = {
   BeneficiaryNickNameLabel: "Nickname",
   BeneficiaryQFBAccountOrIBAN: "Beneficiary QFB account Number or IBAN",
   BeneficiaryBankLabel: "Beneficiary Bank",
-  BeneficiarySwiftCodeLabel: "Beneficiary Bank Swift Code(auto populate)",
+  BeneficiarySwiftCodeLabel: "Beneficiary Bank Swift Code",
   BeneficiaryFullNameLabel: "Beneficiary Full Name",
   BeneficiaryAccountNumberLabel: "Beneficiary Account Number",
   BeneficiaryStreetNumberLabel: "Beneficiary Street Number",
@@ -405,15 +412,15 @@ const en = {
   BeneficiaryCancelButton: "Cancel",
   BeneficiaryEditButton: "Edit",
   BeneficiaryDeleteButton: "Delete",
-  BeneficiaryInvalidIban: "Invalid Account Number or IBAN number ",
+  BeneficiaryInvalidIban: "Invalid IBAN Number",
   BeneficiaryIDLabelInternational: "Beneficiary ID(system assigned)",
   DeleteConfirmationTitle: "Confiramtion Message",
   DeleteConfirmationBody: "Are you sure?",
 
-  BeneficiariesDetailsTitle: "Beneficiary Details",
+  BeneficiariesDetailsTitle: "Beneficiary Detail",
 
   DocumentsListingTitle: "Documents Listing",
-  DocumentsDetailsTitle: "Documents Details",
+  DocumentsDetailsTitle: "Documents Detail",
   DocumentsDetailsDownloadButton: "Download",
   DocumentTitleSample: "Document Number one",
 
@@ -426,10 +433,10 @@ const en = {
   RMLandingClientsPortofoliosLabel: "Clients Portfolio ",
   RMLandingBankPositionsAnchorText: "View all requests to take action on them",
   RMLandingClientsPortofoliosAnchorText:
-    "View all portofolio's of your clients here",
+    "View all portfolio's of your clients here",
 
   ConfirmationDone: "Done",
-  RecievedProfit: "Profit Recieved",
+  RecievedProfit: "Recieved Profit",
 
   SearchText: "Search",
   RMClientsRequestListingTitle: "Clients Request Listing",
@@ -443,23 +450,23 @@ const en = {
   RMDetailsCIFLabel: "CIF",
   RMDetailsNameLabel: "Name",
   RMDetailsMobileLabel: "Mobile Number",
-  RMDetailsRequestDetailsLabel: "Request Details",
+  RMDetailsRequestDetailsLabel: "Request Detail",
   RMDetailsChangeRequestStatusLabel: "Change Request Status",
   RMDetailsbutton: "Save",
 
   InboxMessageListingTitle: "Inbox Message Listing",
   InboxMessageListingFilterWithLabel: "Filter With",
   InboxMessageListingAsOfLabel: "As Of: ",
-  InboxMessageDetailsTitle: "Inbox Message Details",
+  InboxMessageDetailsTitle: "Inbox Message Detail",
   InboxMessgaesSampleDate: "Wednesday 22July 2020",
   InboxMessageDetailsFromLabel: "From: ",
   InboxMessageDetailsToLabel: "To: ",
   InboxMessageDetailsPreviousLabel: "Previous Statements",
 
-  ProductsAndOffersListingTitle: "Product and Offers Listing",
+  ProductsAndOffersListingTitle: "Product and Offers",
   ProductsAndOffersListingNumberLabel: "Product Number | ",
   ProductsAndOffersListingNameLabel: "Product Name | ",
-  ProductsAndOffersDetailsTitle: "Product and Offers Details",
+  ProductsAndOffersDetailsTitle: "Product and Offers Detail",
 
   ContactUsTite: "Contact Us",
   ContactUsSubmitButton: "Submit",
@@ -468,7 +475,8 @@ const en = {
 
   ContactUsNameLabel: "Name",
   ContactUsCountryLabel: "Country",
-  ContactUsMobileLabel: "Mobile Number (ex: +97412345678)",
+  ContactUsMobileLabel:
+    "Mobile Number (Include country code, ex: +97412345678)",
   ContactUsEmailAddressLabel: "Email Address",
   ContactUsQueryLabel: "Query",
   SignupSuccessTitle: "Request Sent",
@@ -480,17 +488,19 @@ const en = {
     "Your request has been submitted, we will get in touch with you soon",
 
   PasswordResetSuccessTitle: "Request Sent",
-  PasswordResetSuccessMessage: "Your Password reset is done",
+  PasswordResetSuccessMessage:
+    "Your Password reset is done, click here to login",
+
 
   GenericErrorMessage: "Something went wrong, please try again later",
   NewRequestSubmitRequiredMessage:
     "Please enter all required field and make sure at least one field is filled",
   NewRequestSubmitInvalidDate: "To date must be greater than from date",
-  ManagementLandingTitle: "Management",
+  ManagementLandingTitle: "Welcome Management",
   ManagementLandingItem1Title: "Bank Positions",
-  ManagementLandingItem2Title: "Client's Portofolios",
+  ManagementLandingItem2Title: "Client's Portfolios",
   ManagementLandingItem1Desc: "Click here to see all bank position metrics",
-  ManagementLandingItem2Desc: "View all bank's clients portofolios here",
+  ManagementLandingItem2Desc: "View all bank's clients portfolios here",
 
   SettingsLandingTitle: "Settings",
   SettingsLandingNameSample: "Ahmed Hammad Nasser",
@@ -534,7 +544,7 @@ const en = {
   InvalidOTP: "Invalid OTP code, Please try again",
 
   NotificationsListingTitle: "Notifications",
-  NotificationsDetailsTitle: "Notifications Details",
+  NotificationsDetailsTitle: "Notifications Detail",
   NotificationsListingFilter: "Filter Notifications",
   ChangePassword_CurrentRequiredMsg: "Current password is required",
   ChangePassword_RequiredMsg: "Password is required",
@@ -547,7 +557,7 @@ const en = {
   DrawerAnonymoudRegister: "Register",
   DrawerAnonymoudNews: "News",
   DrawerAnonymoudHome: "Home",
-  DrawerAnonymoudeProductsAndOffers: "Products & Offers",
+  DrawerAnonymoudeProductsAndOffers: "Products & Offerings",
   DrawerAnonymoudeContactUs: "Contact Us",
   DrawerAuthDocuments: "Documents",
   DrawerAuthSignout: "Logout",
@@ -555,12 +565,12 @@ const en = {
   DrawerAuthContactUS: "Contact Us",
   DrawerAuthTerms: "Terms & Conditions",
   DrawerAuthInstructions: "Standard Instructions",
-  DrawerAuthFaqs: "FAQS",
+  DrawerAuthFaqs: "FAQ",
   DrawerAuthSettings: "Settings",
 
   SelectItem: "Select",
 
-  FaqsTitle: "FAQS",
+  FaqsTitle: "FAQ",
   PositionAnalysisTitle: "Position Analysis Page",
   BankPositionsTitle: "Bank Positions Page",
 
@@ -570,7 +580,7 @@ const en = {
   ManagementLandingLiabilitiesTitle: "Liabilities",
   NotificationListingTitle: "Notifications",
   NotificationFilter_All: "All",
-  RequestListingFilterStatusOption1: "Awaiting Acknowledgement",
+  RequestListingFilterStatusOption1: "Awaiting Review",
   RequestListingFilterStatusOption2: "Closed",
   RequestListingFilterStatusOption3: "In Progress",
   RequestListingFilterStatusOption4: "Cancelled",
@@ -579,10 +589,10 @@ const en = {
   MessageFilter_UnRead: "Unread",
   MessageFilter_All: "All Messages",
 
-  MyBeneficiariesAddNew: "Add Beneficiary",
+  MyBeneficiariesAddNew: "New",
   landingPageInvaildBiometric: "Biometric Couldn't be verfied",
   selectPeriod: "Select a Period",
-  Last6Weeks: "Last 6 Weeks",
+  Last6Weeks: "Past 6 Weeks",
   Last6Months: "Last 6 Months",
   Last6Quarters: "Last 6 Quarters",
   Last3Years: "Last 3 Years",
@@ -615,7 +625,7 @@ const en = {
 
   BankPositionsTotalLiabilitiesSub1: "Client’s Cash",
   BankPositionsTotalLiabilitiesSub2: "Deposits",
-  BankPositionsTotalLiabilitiesSub3: "Cash Balance",
+  BankPositionsTotalLiabilitiesSub3: "FI Borrowings",
 
   StandardSettlementTitle: "Standard Settlement Instructions",
   StandardSettlementDesc:
@@ -740,7 +750,7 @@ const en = {
   pagingNext: "Next",
   pagingPrevious: "Previous",
 
-  navigationUserMessage: "Welcome, Ahmed Mohamed Ahmed Mohamed",
+  navigationUserMessage: "Welcome, ",
   navigationItem1: "Holdings",
   navigationItem2: "Transfer",
   navigationItem3: "Offers",
@@ -754,7 +764,7 @@ const en = {
   topBarRightItem4: "Contact Us",
 
   landingInboxTitle: "Inbox",
-  landingMore: "View More",
+  landingMore: "View All",
   dummyTitle: "Title Goes Here",
   dummyDesc: "Lorem ipsum dolor sit amet, consectetur adipi.",
   dummyDate: "Wednesday 22 Nov 2020",
@@ -792,20 +802,35 @@ const en = {
 
   ChartProfitRecieved: "Received Profit",
   ChartDepositsAmount: "Deposit Amount ",
-  
+
   NoLiveHoldingsMesageDeposit: "No Live Holdings Yet for Deposit",
   NoLiveHoldingsMesageInvestment: "No Live Holdings Yet for Investment",
-  NoClosedHoldingsMesageInvestment: "No Closed Holdings Yet for Investment",  
+  NoClosedHoldingsMesageInvestment: "No Closed Holdings Yet for Investment",
   NoClosedHoldingsMesageDeposit: "No Closed Holdings Yet for Deposit",
   BreadcrumbLandingTitle: "Landing",
-  BreadcrumbAdminTitle: "Admin",  
-  
+  BreadcrumbAdminTitle: "Admin",
+
   RMSampleAccount: "RM | ",
   CustomerSampleAccount: "CIF | ",
   ManagementSampleAccount: "Management | ",
 
   ChartDepositProfitRecieved: "Deposit Received Profit",
   ChartDrillDownHint: "Click to view the profit received",
+
+  ContactUs_Mobile_Format_Validation_Message: "Mobile number should contain country code like +974xxxxxxxx",
+
+  Signup_Autherization_Code: "Autherization code is not valid",
+  Signup_CIF_Message: "Identification Number is not valid",
+  Signup_Email_Message: "Email is not valid",
+  Signup_Mobile_Number_Message: "Mobile Number is not Valid",
+
+  Transactions_Amount_Validation: "Only number accepted",
+  BeneficiaryInvalidAccountOrIban: "Invalid Account Number or IBAN",
+  BeneficiaryInvalidSwiftCode: "Invalid Swift Code",
+
+  NoDepositsHoldingsFound: "No Deposits Holdings Found",
+  NoInvestmentsHoldingsFound: "No Investments Holdings Found",
+  InvalidEmail: "Please enter a valid email address",
 };
 
 export default en;

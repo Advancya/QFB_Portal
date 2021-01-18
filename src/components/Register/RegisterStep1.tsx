@@ -32,6 +32,13 @@ function RegisterStep1(props: iRegisterStep1) {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
   const [isLoading, setLoading] = useState(false);
+
+  const [field1ShowError, setField1ShowError] = React.useState(false);
+  const [field2ShowError, setField2ShowError] = React.useState(false);
+  const [field22ShowError, setField22ShowError] = React.useState(false);
+  const [field3ShowError, setField3ShowError] = React.useState(false);
+  const [field4ShowError, setField4ShowError] = React.useState(false);
+
   const [registerData, setRegisterData] = React.useState("");
   const [field2Editable, setField2Editable] = React.useState(false);
   const [field3Editable, setField3Editable] = React.useState(false);
@@ -47,11 +54,13 @@ function RegisterStep1(props: iRegisterStep1) {
   const registerFormStep1ValidationSchema = yup.object({
     oneTimePassword: yup.string().required(local_Strings.GeneralValidation),
     cif: yup.string().required(local_Strings.GeneralValidation),
-    mobile: yup
+    email: yup
       .string()
       .required(local_Strings.GeneralValidation)
-      .matches(/^[+]*[/0-9]{0,16}$/),
-    email: yup.string().required(local_Strings.GeneralValidation).email(),
+      .email(local_Strings.InvalidEmail),
+    mobile: yup.string().required(local_Strings.GeneralValidation)
+      .matches(/^[+]*[/0-9]{0,16}$/,
+        local_Strings.ContactUs_Mobile_Format_Validation_Message),
   });
 
   return (
@@ -134,17 +143,12 @@ function RegisterStep1(props: iRegisterStep1) {
                           const data = await ValidateOneTimeRegisterCode(
                             values.oneTimePassword
                           );
-                          if (!data) {
+                          if (data) {
                             setField2Editable(true);
+                            setField1ShowError(false);
                           } else {
                             setField2Editable(false);
-                            Swal.fire({
-                              position: "top-end",
-                              icon: "error",
-                              title: local_Strings.GeneralValidation,
-                              showConfirmButton: false,
-                              timer: Constant.AlertTimeout,
-                            });
+                            setField1ShowError(true);
                           }
                           setLoading(false);
                           handleBlur("oneTimePassword");
@@ -153,6 +157,7 @@ function RegisterStep1(props: iRegisterStep1) {
                       {touched.oneTimePassword &&
                         errors.oneTimePassword &&
                         InvalidFieldError(errors.oneTimePassword)}
+                      {field1ShowError && !errors.oneTimePassword && InvalidFieldError(local_Strings.Signup_Autherization_Code)}
                     </div>
                     <div className="col-lg-6 form-group">
                       <label>{local_Strings.registerStep1Label2}</label>
@@ -174,36 +179,31 @@ function RegisterStep1(props: iRegisterStep1) {
                             );
                             if (isRegisterBeforeResponse === false) {
                               setField3Editable(true);
+                              setField2ShowError(false);
+                              setField22ShowError(false);
                             } else {
                               setField3Editable(false);
                               setShowSubmitButton(false);
-                              Swal.fire({
-                                position: "top-end",
-                                icon: "error",
-                                title:
-                                  local_Strings.SignUpStep1CIFRegisterBefore,
-                                showConfirmButton: false,
-                                timer: Constant.AlertTimeout,
-                              });
+                              setField2ShowError(false);
+                              setField22ShowError(true);
                             }
                           } else {
                             setField3Editable(false);
+                            setField2ShowError(true);
                             setShowSubmitButton(false);
-                            Swal.fire({
-                              position: "top-end",
-                              icon: "error",
-                              title: local_Strings.GeneralValidation,
-                              showConfirmButton: false,
-                              timer: Constant.AlertTimeout,
-                            });
                           }
                           setLoading(false);
                           handleBlur("cif");
                         }}
+                        readOnly={!field2Editable}
                       />
                       {touched.cif &&
                         errors.cif &&
                         InvalidFieldError(errors.cif)}
+                      {field1ShowError && !errors.oneTimePassword
+                        && InvalidFieldError(local_Strings.Signup_CIF_Message)}
+                      {field1ShowError && !errors.cif
+                        && InvalidFieldError(local_Strings.SignUpStep1CIFRegisterBefore)}
                     </div>
 
                     <div className="col-lg-6 form-group">
@@ -223,35 +223,26 @@ function RegisterStep1(props: iRegisterStep1) {
                               data[0]["Email"].toLowerCase()
                             ) {
                               setField4Editable(true);
+                              setField3ShowError(false);
                             } else {
                               setField4Editable(false);
-                              setShowSubmitButton(false);
-                              Swal.fire({
-                                position: "top-end",
-                                icon: "error",
-                                title: local_Strings.GeneralValidation,
-                                showConfirmButton: false,
-                                timer: Constant.AlertTimeout,
-                              });
+                              setField3ShowError(true);
                             }
                           } else {
                             setField4Editable(false);
+                            setField3ShowError(false);
                             setShowSubmitButton(false);
-                            Swal.fire({
-                              position: "top-end",
-                              icon: "error",
-                              title: local_Strings.GeneralValidation,
-                              showConfirmButton: false,
-                              timer: Constant.AlertTimeout,
-                            });
                           }
                           setLoading(false);
                           handleBlur("email");
                         }}
+                        readOnly={!field3Editable}
                       />
                       {touched.email &&
                         errors.email &&
                         InvalidFieldError(errors.email)}
+                      {field3ShowError && !errors.email
+                        && InvalidFieldError(local_Strings.Signup_Email_Message)}
                     </div>
                     <div className="col-lg-6 form-group">
                       <label>{local_Strings.registerStep1Label4}</label>
@@ -269,34 +260,28 @@ function RegisterStep1(props: iRegisterStep1) {
                               values.mobile.toLowerCase() ===
                               data[0]["SMS"].toLowerCase()
                             ) {
+                              setField4ShowError(false);
                               setShowSubmitButton(true);
                             } else {
+                              setField4ShowError(true);
                               setShowSubmitButton(false);
-                              Swal.fire({
-                                position: "top-end",
-                                icon: "error",
-                                title: local_Strings.GeneralValidation,
-                                showConfirmButton: false,
-                                timer: Constant.AlertTimeout,
-                              });
+                              setShowSubmitButton(false);
                             }
                           } else {
+                            setField4ShowError(false);
                             setShowSubmitButton(false);
-                            Swal.fire({
-                              position: "top-end",
-                              icon: "error",
-                              title: local_Strings.GeneralValidation,
-                              showConfirmButton: false,
-                              timer: Constant.AlertTimeout,
-                            });
+                            setShowSubmitButton(false);
                           }
                           setLoading(false);
                           handleBlur("mobile");
                         }}
+                        readOnly={!field4Editable}
                       />
                       {touched.mobile &&
                         errors.mobile &&
                         InvalidFieldError(local_Strings.GeneralValidation)}
+                      {field4ShowError && !errors.mobile &&
+                        InvalidFieldError(local_Strings.Signup_Mobile_Number_Message)}
                     </div>
                   </div>
                   {showSubmitButton && (

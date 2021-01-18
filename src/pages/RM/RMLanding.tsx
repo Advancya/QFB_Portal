@@ -56,7 +56,6 @@ const RMLanding = () => {
       if (userData) {
         const role = await getUserRole(userData.customerId);
         if (!(role && role.name === Constant.RM)) {
-          let timerInterval: any;
           Swal.fire({
             title: local_Strings.AccessDeniedMsgTitle,
             icon: 'warning',
@@ -68,7 +67,6 @@ const RMLanding = () => {
               Swal.showLoading();
             },
             willClose: () => {
-              clearInterval(timerInterval);
               history.push(`/${currentContext.language}`);
             }
           }).then((result) => {
@@ -81,11 +79,19 @@ const RMLanding = () => {
             //currentContext.selectCIF(userData.customerId);
           }
         }
+      } else {
+        history.push(`/${currentContext.language}`);
       }
     };
 
     if (!!currentContext.selectedCIF) {
       initialLoadMethod();
+    } else {
+      setTimeout(() => {
+        if (!currentContext.selectedCIF) {
+          history.push(`/${currentContext.language}`);
+        }
+      }, 3000);
     }
 
     return () => {
@@ -99,20 +105,22 @@ const RMLanding = () => {
       <div className="my-2">
         <Breadcrumb pageName={local_Strings.BreadcrumbLandingTitle} />
       </div>
-      <div>
-        <div id="main-section" className="main-section pt-4">
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-lg-6 col-container flex-column">
-                <RMRequestsLanding />
-              </div>
-              <div className="col-lg-6 col-container flex-column loginSideBoxBoxes">
-                <ClientPortfolioListing />
+      {!!currentContext.selectedCIF &&
+        <div>
+          <div id="main-section" className="main-section pt-4">
+            <div className="container-fluid">
+              <div className="row">
+                <div className="col-lg-6 col-container flex-column">
+                  <RMRequestsLanding />
+                </div>
+                <div className="col-lg-6 col-container flex-column loginSideBoxBoxes">
+                  <ClientPortfolioListing />
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      }
       <Footer />
       <AuthTerms
         showAuthTermsModal={showAuthTerms}

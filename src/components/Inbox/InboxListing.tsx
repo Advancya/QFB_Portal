@@ -61,7 +61,10 @@ function InboxListing(props: iInboxListing) {
                 : ""}
             </span>
           </div>
-          <h6 className="mb-1 text-600">{item.description || ""}</h6>
+          <h6 className="mb-1 text-600"><span className={!item.isRead
+            ? "unread" : ""}>{item.adviceType || ""}</span>
+          </h6>
+
           <div className="text-15">{item.dateRange || ""}</div>
         </div>
       </a>
@@ -166,11 +169,11 @@ function InboxListing(props: iInboxListing) {
           <div className="box modal-box py-0 mb-0 scrollabel-modal-box">
             <ul className="box-list" id="dataList">
               {filteredData &&
-              filteredData.length > 0 &&
-              !!filteredData[0].adviceDate
+                filteredData.length > 0 &&
+                !!filteredData[0].adviceDate
                 ? filteredData
-                    .slice(0, offset)
-                    .map((item, index) => renderItem(item, index))
+                  .slice(0, offset)
+                  .map((item, index) => renderItem(item, index))
                 : NoResult(local_Strings.NoDataToShow)}
             </ul>
           </div>

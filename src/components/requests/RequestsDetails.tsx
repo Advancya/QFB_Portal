@@ -239,6 +239,7 @@ function RequestsDetails(props: iRequestsDetails) {
                         defaultValue={getRequestFieldValue(
                           item["details"].split(";")[0].replace(/ /g, "")
                         )}
+                        maxLength={500}
                       />
                     ) : (
                       <div

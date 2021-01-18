@@ -238,6 +238,7 @@ function RMRequestDetails(props: iRMDetails) {
                       defaultValue={getRequestFieldValue(
                         item["details"].split(";")[0].replace(/ /g, ""))
                       }
+                      maxLength={400}
                     /> :
                     <div
                       dangerouslySetInnerHTML={{

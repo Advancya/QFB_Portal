@@ -7,6 +7,8 @@ import { Carousel } from "react-bootstrap";
 import { AuthContext } from "../providers/AuthProvider";
 import { GetUserWelcomeData } from "../services/cmsService";
 import { localStrings as local_Strings } from "../translations/localStrings";
+import { RequestCallback } from "../services/requestService";
+import Swal from "sweetalert2";
 
 interface IUserInfo {
   accountOfficer?: string;
@@ -123,8 +125,27 @@ function RelationManger() {
                 </li>
               </ul>
               <div className="text-center px-3">
-                <a className="btn btn-primary btn-block" href="#">
-                  {local_Strings.WelcomeScreenEmail}
+                <a className="btn btn-primary btn-block" href="#"
+                  onClick={() => {
+                    if (currentContext.userRole === "CUSTOMER") {
+                      RequestCallback(
+                        item.name || "",
+                        currentContext.selectedCIF || "",
+                        item.customerShortName || "",
+                        item.rmEmail || "",
+                        item.rmMobile || ""
+                      );
+                      Swal.fire({
+                        position: "center",
+                        icon: "success",                        
+                        title: local_Strings.WelcomeScreenPopUpTitle,
+                        text: local_Strings.WelcomeScreenPopUpMessage,
+                        showConfirmButton: true,
+                        cancelButtonText: local_Strings.WelcomeScreenClose,
+                      });
+                    }
+                  }}>
+                  {local_Strings.WelcomeScreenCallMeBackLabel}
                 </a>
               </div>
             </div>

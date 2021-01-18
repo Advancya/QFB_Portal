@@ -448,7 +448,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           InvalidFieldError(errors.qfbaccount)}
                         {!isValidIban &&
                           InvalidFieldError(
-                            local_Strings.BeneficiaryInvalidIban
+                            local_Strings.BeneficiaryInvalidAccountOrIban
                           )}
                       </div>
                       <div className="col-lg-6 form-group">
@@ -723,6 +723,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           className="form-control"
                           value={values.beneficiaryAddress || ""}
                           rows={4}
+                          maxLength={500}
                           onBlur={handleBlur("beneficiaryAddress")}
                           onChange={handleChange("beneficiaryAddress")}
                         />
@@ -980,7 +981,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           onChange={handleChange("beneficiaryIban")}
                         />
                         {!isValidIban &&
-                          InvalidFieldError(local_Strings.GeneralValidation)}
+                          InvalidFieldError(local_Strings.BeneficiaryInvalidIban)}
                       </div>
 
                       <div className="col-lg-6 form-group">

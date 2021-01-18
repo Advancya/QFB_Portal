@@ -63,7 +63,7 @@ const TransactionListing: React.FC<ITransactionListingProps> = (props) => {
               !!item.bookingDate ? item.bookingDate : item.installmentDate
             ).format("DD/MM/YYYY")}{" "}
           </td>
-          <td colSpan={2}>
+          <td colSpan={2} className={(item.amount || item.transaction_Amount) < 0 ? "color-red" : ""}>
             {(item.amount || item.transaction_Amount) +
               " " +
               currentContext.userSettings.currency}
