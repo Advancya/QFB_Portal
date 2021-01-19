@@ -17,6 +17,7 @@ import FilterMoreButtonControl from "../../shared/FilterMoreButtonControl";
 import { InboxContext } from "../../pages/Homepage";
 import xIcon from "../../images/x-icon.svg";
 import { GetUserLocalData } from "../../Helpers/authHelper";
+import { saveAs } from "file-saver";
 
 interface iInboxDetails {
   showInboxDetailsModal: boolean;
@@ -107,8 +108,9 @@ function InboxDetails(props: iInboxDetails) {
             </a>
             <a
               className="d-inline-block "
-              target="_blank"
-              href={item.pdfUrl || "#"}
+              target="_self"
+              href="#"
+              onClick={() => downloadAttachment(item.pdfUrl, item.pdfName)}
             >
               <i className="mx-1 fa fa-download color-white"></i>
             </a>
@@ -117,6 +119,21 @@ function InboxDetails(props: iInboxDetails) {
       </div>
     </li>
   );
+
+
+  const downloadAttachment = (pdfUrl: string, fileName: string) => {
+    if (!!pdfUrl) {
+      setLoading(true);
+      const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+      fetch(proxyUrl + pdfUrl)
+        .then(res => res.blob())
+        .then((blob) => {
+          saveAs(blob, fileName);
+        })
+        .catch((e: any) => console.log(e))
+        .finally(() => setLoading(false));
+    }
+  };
 
   return (
     <Modal
@@ -174,8 +191,8 @@ function InboxDetails(props: iInboxDetails) {
                     <span className="mx-1 text-15 color-light-gold">
                       {props.item.adviceDate
                         ? moment(props.item.adviceDate).format(
-                            "dddd DD MMM YYYY"
-                          )
+                          "dddd DD MMM YYYY"
+                        )
                         : ""}
                     </span>
                   </div>
@@ -195,8 +212,9 @@ function InboxDetails(props: iInboxDetails) {
                     </a>
                     <a
                       className="d-inline-block "
-                      target="_blank"
-                      href={props.item.pdfUrl || "#"}
+                      target="_self"
+                      href="#"
+                      onClick={() => downloadAttachment(props.item.pdfUrl, props.item.pdfName)}
                     >
                       <i className="mx-1 fa fa-download color-white"></i>
                     </a>
@@ -213,11 +231,11 @@ function InboxDetails(props: iInboxDetails) {
               </h4>
             </li>
             {filteredData &&
-            filteredData.length > 0 &&
-            !!filteredData[0].adviceDate
+              filteredData.length > 0 &&
+              !!filteredData[0].adviceDate
               ? filteredData
-                  .slice(0, offset)
-                  .map((item, index) => renderItem(item, index))
+                .slice(0, offset)
+                .map((item, index) => renderItem(item, index))
               : NoResult(local_Strings.NoDataToShow)}
           </ul>
         </div>

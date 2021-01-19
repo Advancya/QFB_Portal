@@ -31,21 +31,28 @@ function ChangeOTPMethod(props: iChangeOTPMethod) {
 
   useEffect(() => {
     let isMounted = true;
-    setLoading(true);
 
-    GetUserLocalData()
-      .then((settings: any) => {
-        if (isMounted && settings && settings.length > 0) {
-          setUserSettings(JSON.parse(settings));
-        }
-      })
-      .catch((e: any) => console.log(e))
-      .finally(() => setLoading(false));
+    if (props.showChangeOTPMethodModal) {
+      setLoading(true);
+
+      GetUserLocalData()
+        .then((settings: IUserSettings) => {
+          if (isMounted && settings) {
+            if (!!settings.otp) {
+              setUserSettings(settings);
+            } else {
+              setUserSettings(initialSettingsData);
+            }
+          }
+        })
+        .catch((e: any) => console.log(e))
+        .finally(() => setLoading(false));
+    }
 
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [currentContext.selectedCIF]);
+  }, [currentContext.selectedCIF, props.showChangeOTPMethodModal]);
 
   return (
     <Modal
@@ -100,9 +107,14 @@ function ChangeOTPMethod(props: iChangeOTPMethod) {
                 id="customRadio1"
                 name="customRadio"
                 className="custom-control-input"
-                value={userSettings.otp || ""}
+                checked={userSettings.otp === local_Strings.ChangeOTPSMS}
                 onChange={(e) =>
-                  setUserSettings({ ...userSettings, otp: e.target.value })
+                  e.target.checked
+                    ? setUserSettings({
+                      ...userSettings,
+                      otp: local_Strings.ChangeOTPSMS
+                    })
+                    : {}
                 }
               />
               <label
@@ -118,9 +130,14 @@ function ChangeOTPMethod(props: iChangeOTPMethod) {
                 id="customRadio2"
                 name="customRadio"
                 className="custom-control-input"
-                value={userSettings.otp || ""}
+                checked={userSettings.otp === local_Strings.ChangeOTPEmail}
                 onChange={(e) =>
-                  setUserSettings({ ...userSettings, otp: e.target.value })
+                  e.target.checked
+                    ? setUserSettings({
+                      ...userSettings,
+                      otp: local_Strings.ChangeOTPEmail
+                    })
+                    : {}
                 }
               />
               <label
@@ -136,9 +153,14 @@ function ChangeOTPMethod(props: iChangeOTPMethod) {
                 id="customRadio3"
                 name="customRadio"
                 className="custom-control-input"
-                value={userSettings.otp || ""}
+                checked={userSettings.otp === local_Strings.ChangeOTPSMSAndEMail}
                 onChange={(e) =>
-                  setUserSettings({ ...userSettings, otp: e.target.value })
+                  e.target.checked
+                    ? setUserSettings({
+                      ...userSettings,
+                      otp: local_Strings.ChangeOTPSMSAndEMail
+                    })
+                    : {}
                 }
               />
               <label
@@ -168,7 +190,7 @@ function ChangeOTPMethod(props: iChangeOTPMethod) {
                         timer: Constant.AlertTimeout,
                       });
                       props.backSettingsLandingModal();
-                      
+
                     } else {
                       Swal.fire(
                         "Oops...",

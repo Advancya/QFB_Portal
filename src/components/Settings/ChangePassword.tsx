@@ -2,12 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
-import {
-  initialSettingsData,
-  IUserSettings,
-  GetUserLocalData,
-  SaveUserDataLocally,
-} from "../../Helpers/authHelper";
 import { ChangeUserPassword } from "../../services/cmsService";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
@@ -25,12 +19,8 @@ interface iChangePassword {
 }
 function ChangePassword(props: iChangePassword) {
   const currentContext = useContext(AuthContext);
-  local_Strings.setLanguage(currentContext.language);
-  const [userSettings, setUserSettings] = useState<IUserSettings>(
-    initialSettingsData
-  );
+  local_Strings.setLanguage(currentContext.language);  
   const [isLoading, setLoading] = useState(false);
-  const [showError, setShowError] = React.useState(false);
 
   const initialValuesWithin = {
     cif: currentContext.selectedCIF,
@@ -56,24 +46,6 @@ function ChangePassword(props: iChangePassword) {
         local_Strings.ChangePassword_MustMatchMsg
       ),
   });
-
-  useEffect(() => {
-    let isMounted = true;
-    setLoading(true);
-
-    GetUserLocalData()
-      .then((settings: any) => {
-        if (isMounted && settings && settings.length > 0) {
-          setUserSettings(JSON.parse(settings));
-        }
-      })
-      .catch((e: any) => console.log(e))
-      .finally(() => setLoading(false));
-
-    return () => {
-      isMounted = false;
-    }; // use effect cleanup to set flag false, if unmounted
-  }, [currentContext.selectedCIF]);
 
   return (
     <Modal
@@ -115,7 +87,6 @@ function ChangePassword(props: iChangePassword) {
           validationSchema={validationSchemaWithin}
           onSubmit={async (values) => {
             setLoading(true);
-            setShowError(false);
             ChangeUserPassword({
               cif: values.cif,
               currentPassword: values.currentPassword,
@@ -123,11 +94,7 @@ function ChangePassword(props: iChangePassword) {
             })
               .then((response) => {
                 if (response) {
-                  const _userData = {
-                    ...userSettings,
-                    language: values.newPassword,
-                  };
-                  SaveUserDataLocally(_userData);
+                  
                   Swal.fire({
                     position: "top-end",
                     icon: "success",
@@ -136,15 +103,17 @@ function ChangePassword(props: iChangePassword) {
                     showConfirmButton: false,
                     timer: Constant.AlertTimeout,
                   });
+                  
                   props.backSettingsLandingModal();
 
                 } else {
-                  Swal.fire(
-                    "Oops...",
-                    local_Strings.GenericErrorMessage,
-                    "error"
-                  );
-                  setShowError(true);
+                  Swal.fire({
+                    position: "top-end",
+                    icon: "error",
+                    title: local_Strings.SettingChangePasswordError,
+                    showConfirmButton: false,
+                    timer: Constant.AlertTimeout,
+                  });
                 }
               })
               .catch((e: any) => console.log(e))
@@ -159,7 +128,6 @@ function ChangePassword(props: iChangePassword) {
             handleSubmit,
             errors,
             touched,
-            setFieldValue,
           }) => (
             <div className="box modal-box p-4  scrollabel-modal-box ">
               <LoadingOverlay
@@ -175,7 +143,7 @@ function ChangePassword(props: iChangePassword) {
                 <div className="col-lg-5 form-group">
                   <label>{local_Strings.ChangePasswordCurrentLabel}</label>
                   <input
-                    type="text"
+                    type="password"
                     className="form-control"
                     placeholder=""
                     value={values.currentPassword || ""}

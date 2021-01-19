@@ -102,11 +102,12 @@ export const filterTransactions = (
     case "4":
       filteredTransactions = transactions.filter(
         (t) =>
-          moment(t.bookingDate ? t.bookingDate : t.installmentDate).toDate() >=
-          moment(filter.StartDate).toDate() &&
-          moment(t.bookingDate ? t.bookingDate : t.installmentDate).toDate() <=
-          moment(filter.EndDate).toDate()
+          moment(t.bookingDate ? t.bookingDate : t.installmentDate).isBetween(
+            moment(filter.StartDate).toDate(),
+            moment(filter.EndDate).toDate(),
+            'days', '[]')
       );
+
       break;
     default:
       filteredTransactions = transactions;
@@ -224,10 +225,10 @@ export const filterRequests = (
     case "4":
       filteredRequests = transactions.filter(
         (t) =>
-          moment(t.requestCreateDate).toDate() >=
-          moment(filter.StartDate).toDate() &&
-          moment(t.requestCreateDate).toDate() <=
-          moment(filter.EndDate).toDate()
+          moment(t.requestCreateDate).isBetween(
+            moment(filter.StartDate).toDate(),
+            moment(filter.EndDate).toDate(),
+            'days', '[]')
       );
       break;
     default:
@@ -286,10 +287,10 @@ export const filterRMRequests = (
     case "4":
       filteredRequests = transactions.filter(
         (t) =>
-          moment(t.requestCreateDate).toDate() >=
-          moment(filter.StartDate).toDate() &&
-          moment(t.requestCreateDate).toDate() <=
-          moment(filter.EndDate).toDate()
+          moment(t.requestCreateDate).isBetween(
+            moment(filter.StartDate).toDate(),
+            moment(filter.EndDate).toDate(),
+            'days', '[]')
       );
       break;
     default:
@@ -348,9 +349,10 @@ export const filterTransactionList = (
     case "4":
       filteredTransactions = transactions.filter(
         (t) =>
-          moment(t.transactionDate).toDate() >=
-          moment(filter.StartDate).toDate() &&
-          moment(t.transactionDate).toDate() <= moment(filter.EndDate).toDate()
+          moment(t.transactionDate).isBetween(
+            moment(filter.StartDate).toDate(),
+            moment(filter.EndDate).toDate(),
+            'days', '[]')
       );
       break;
     default:

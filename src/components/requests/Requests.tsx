@@ -9,7 +9,7 @@ import {
   emptyRequestDetail,
   IRequestDetail,
 } from "../../Helpers/publicInterfaces";
-import { GetRequestsByCIF } from "../../services/cmsService";
+import { SendOTP, GetRequestsByCIF } from "../../services/cmsService";
 import { AuthContext } from "../../providers/AuthProvider";
 
 function Requests() {
@@ -68,15 +68,16 @@ function Requests() {
           setshowRequestsDetails(true);
           setDetail(detail);
         }}
-        showNewRequestModal={() => {
-          setShowRequestsListing(false);
-          setShowNewRequest(true);
-          // setLoading(true);
-          // const optResult = await SendOTP(currentContext.cif);
-          // if (optResult === true) {
-          //showValidateOTPForm(true);
-          // }
-          // setLoading(false);
+        showNewRequestModal={async () => {
+          
+          //setShowNewRequest(true);
+          setLoading(true);
+          const optResult = await SendOTP(currentContext.selectedCIF);
+          if (optResult === true) {
+            showValidateOTPForm(true);
+            setShowRequestsListing(false);
+          }
+          setLoading(false);
         }}
         requests={requests}
         reloading={isLoading}

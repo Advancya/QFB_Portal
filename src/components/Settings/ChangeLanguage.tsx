@@ -21,6 +21,7 @@ interface iChangeLanguage {
   hideChangeLanguageModal: () => void;
   backSettingsLandingModal: () => void;
 }
+
 function ChangeLanguage(props: iChangeLanguage) {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
@@ -31,21 +32,27 @@ function ChangeLanguage(props: iChangeLanguage) {
 
   useEffect(() => {
     let isMounted = true;
-    setLoading(true);
 
-    GetUserLocalData()
-      .then((settings: any) => {
-        if (isMounted && settings && settings.length > 0) {
-          setUserSettings(JSON.parse(settings));
-        }
-      })
-      .catch((e: any) => console.log(e))
-      .finally(() => setLoading(false));
+    if (props.showChangeLanguageModal) {
+      setLoading(true);
 
+      GetUserLocalData()
+        .then((settings: IUserSettings) => {
+          if (isMounted && settings) {            
+            if (!!settings.language) {
+              setUserSettings(settings);
+            } else {
+              setUserSettings(initialSettingsData);
+            }
+          }
+        })
+        .catch((e: any) => console.log(e))
+        .finally(() => setLoading(false));
+    }
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [currentContext.selectedCIF]);
+  }, [currentContext.selectedCIF, props.showChangeLanguageModal]);
 
   return (
     <Modal
@@ -103,8 +110,14 @@ function ChangeLanguage(props: iChangeLanguage) {
                 name="customRadio"
                 className="custom-control-input"
                 value={userSettings.language || ""}
+                checked={userSettings.language === "ar"}
                 onChange={(e) =>
-                  setUserSettings({ ...userSettings, language: e.target.value })
+                  e.target.checked
+                    ? setUserSettings({
+                      ...userSettings,
+                      language: "ar"
+                    })
+                    : {}
                 }
               />
               <label
@@ -121,8 +134,14 @@ function ChangeLanguage(props: iChangeLanguage) {
                 name="customRadio"
                 className="custom-control-input"
                 value={userSettings.language}
+                checked={userSettings.language === "en"}
                 onChange={(e) =>
-                  setUserSettings({ ...userSettings, language: e.target.value })
+                  e.target.checked
+                    ? setUserSettings({
+                      ...userSettings,
+                      language: "en"
+                    })
+                    : {}
                 }
               />
               <label
@@ -155,7 +174,7 @@ function ChangeLanguage(props: iChangeLanguage) {
                         timer: Constant.AlertTimeout,
                       });
                       props.backSettingsLandingModal();
-                      
+
                     } else {
                       Swal.fire(
                         "Oops...",

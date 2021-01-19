@@ -60,18 +60,35 @@ function ChangeCurrency(props: iChangeCurrency) {
       .catch((e: any) => console.log(e))
       .finally(() => setLoading(false));
 
-    GetUserLocalData()
-      .then((settings: any) => {
-        if (isMounted && settings && settings.length > 0) {
-          setUserSettings(JSON.parse(settings));
-        }
-      })
-      .catch((e: any) => console.log(e));
-
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [currentContext.selectedCIF]);
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    if (props.showChangeCurrencyModal) {
+      setLoading(true);
+
+      GetUserLocalData()
+        .then((settings: IUserSettings) => {
+          if (isMounted && settings) {            
+            if (!!settings.currency) {
+              setUserSettings(settings);
+            } else {
+              setUserSettings(initialSettingsData);
+            }
+          }
+        })
+        .catch((e: any) => console.log(e))
+        .finally(() => setLoading(false));
+    }
+    
+    return () => {
+      isMounted = false;
+    }; // use effect cleanup to set flag false, if unmounted
+  }, [currentContext.selectedCIF, props.showChangeCurrencyModal]);
 
   return (
     <Modal
@@ -139,12 +156,12 @@ function ChangeCurrency(props: iChangeCurrency) {
                     onChange={(e) =>
                       e.target.checked
                         ? setUserSettings({
-                            ...userSettings,
-                            currency:
-                              currentContext.language === "en"
-                                ? c.name
-                                : c.nameAr,
-                          })
+                          ...userSettings,
+                          currency:
+                            currentContext.language === "en"
+                              ? c.name
+                              : c.nameAr,
+                        })
                         : {}
                     }
                   />
@@ -179,7 +196,7 @@ function ChangeCurrency(props: iChangeCurrency) {
                         timer: Constant.AlertTimeout,
                       });
                       props.backSettingsLandingModal();
-                      
+
                     } else {
                       Swal.fire(
                         "Oops...",

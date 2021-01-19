@@ -153,8 +153,7 @@ function OTPValidationForm(props: iOTPValidationForm) {
                               title: local_Strings.OTPSentMessage,
                               showConfirmButton: false,
                               timer: Constant.AlertTimeout
-                            });
-                            props.hideOTPValidationFormModal();
+                            });                            
                           } else {
                             Swal.fire({
                               position: 'top-end',

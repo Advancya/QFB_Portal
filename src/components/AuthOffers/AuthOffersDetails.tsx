@@ -71,12 +71,25 @@ function AuthOffersDetails(props: iAuthOffersDetails) {
     }; // use effect cleanup to set flag false, if unmounted
   }, [props.itemID]);
 
+  const previewAttachment = () => {
+    if (item) {
+      const blob = helper.b64toBlob(
+        item.fileContent,
+        mime.getType(item.fileName)
+      );
+
+      const fileURL = URL.createObjectURL(blob);
+      window.open(fileURL);
+    }
+  };
+
   const downloadAttachment = () => {
     if (item) {
       const blob = helper.b64toBlob(
         item.fileContent,
         mime.getType(item.fileName)
       );
+
       saveAs(blob, item.fileName);
     }
   };
@@ -152,13 +165,13 @@ function AuthOffersDetails(props: iAuthOffersDetails) {
                         className="d-inline-block "
                         target="_blank"
                         href="#"
-                        onClick={downloadAttachment}
+                        onClick={previewAttachment}
                       >
                         <i className="mx-1 fa fa-file color-white"></i>
                       </a>
                       <a
                         className="d-inline-block "
-                        target="_blank"
+                        target="_self"
                         href="#"
                         onClick={downloadAttachment}
                       >

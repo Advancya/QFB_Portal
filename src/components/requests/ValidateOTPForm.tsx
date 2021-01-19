@@ -92,15 +92,7 @@ function OTPValidationForm(props: iOTPValidationForm) {
                 values.otp
               );
 
-              if (otpRes === true) {
-                Swal.fire({
-                  position: "top-end",
-                  icon: "success",
-                  title: local_Strings.SignupSuccessTitle,
-                  html: local_Strings.SignupSuccessMessage,
-                  showConfirmButton: false,
-                  timer: Constant.AlertTimeout,
-                });
+              if (otpRes === true) {                
                 props.showNewRequestModal();
               } else {
                 Swal.fire({
@@ -159,8 +151,7 @@ function OTPValidationForm(props: iOTPValidationForm) {
                               title: local_Strings.OTPSentMessage,
                               showConfirmButton: false,
                               timer: Constant.AlertTimeout,
-                            });
-                            props.hideOTPValidationFormModal();
+                            });                            
                           } else {
                             Swal.fire({
                               position: "top-end",

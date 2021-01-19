@@ -147,7 +147,7 @@ function RequestsListing(props: iRequestsListing) {
   const statusFilterOptions = [
     {
       label: local_Strings.RequestListingFilterStatusOption1,
-      value: "Awaiting acknowledgement",
+      value: "Awaiting Review",
     },
     { label: local_Strings.RequestListingFilterStatusOption2, value: "Closed" },
     {
@@ -290,7 +290,7 @@ function RequestsListing(props: iRequestsListing) {
                 ? filteredData
                     .slice(0, offset)
                     .map((item, index) => renderItem(item, index))
-                : NoResult(local_Strings.NoDataToShow)}
+                : NoResult(local_Strings.OfferList_NoData)}
             </ul>
           </div>
 
