@@ -3,13 +3,13 @@ import { Modal } from "react-bootstrap";
 import excelIcon from "../../../images/excel.svg";
 import FilterCommonControl from "../../../shared/FilterCommonControl";
 import TransactionListing from "../../../shared/TransactionListing";
-import moment from "moment";
 import { localStrings as local_Strings } from "../../../translations/localStrings";
 import { AuthContext } from "../../../providers/AuthProvider";
 import {
   emptyTransaction,
   ICommonFilter,
   ITransaction,
+  IDeposit
 } from "../../../Helpers/publicInterfaces";
 import * as helper from "../../../Helpers/helper";
 import { GetDepositsReceivedProfit } from "../../../services/cmsService";
@@ -17,19 +17,17 @@ import Constant from "../../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import ReactExport from "react-export-excel";
-import { PortfolioContext } from "../../../pages/Homepage";
 import xIcon from "../../../images/x-icon.svg";
 
 interface iDepositeRecievedProfit {
   showDepositeRecievedProfitModal: boolean;
   hideDepositeRecievedProfitModal: () => void;
   backDepositeRecievedProfitModal: () => void;
-  depositNumber: string;
+  depositItem: IDeposit;
 }
 
 function DepositeRecievedProfit(props: iDepositeRecievedProfit) {
   const currentContext = useContext(AuthContext);
-  const userPortfolio = useContext(PortfolioContext);
   local_Strings.setLanguage(currentContext.language);
   const [isLoading, setLoading] = useState(false);
   const [data, setData] = useState<ITransaction[]>([emptyTransaction]);
@@ -45,7 +43,7 @@ function DepositeRecievedProfit(props: iDepositeRecievedProfit) {
 
     const initialLoadMethod = async () => {
       setLoading(true);
-      GetDepositsReceivedProfit(currentContext.selectedCIF, props.depositNumber)
+      GetDepositsReceivedProfit(currentContext.selectedCIF, props.depositItem.contractNumber)
         .then((responseData: ITransaction[]) => {
           if (isMounted && responseData && responseData.length > 0) {
             // const _data = responseData.filter(
@@ -67,7 +65,7 @@ function DepositeRecievedProfit(props: iDepositeRecievedProfit) {
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [props.depositNumber]);
+  }, [props.depositItem]);
 
   return (
     <Modal
@@ -125,17 +123,19 @@ function DepositeRecievedProfit(props: iDepositeRecievedProfit) {
           <h5>
             {local_Strings.Deposit +
               ": " +
-              props.depositNumber +
+              props.depositItem.contractNumber +
               " " +
               local_Strings.RecievedProfit +
               " (" +
-              currentContext.userSettings.currency +
+              props.depositItem.currency +
               ")"}
           </h5>
         </div>
         <TransactionListing
           transactions={filteredData}
           showBalanceField={false}
+          currency={props.depositItem.currency}
+          NoDataMessage={local_Strings.ReceivedProfitTransactionsListing_NoData}
         />
 
         <LoadingOverlay
@@ -162,7 +162,7 @@ function DepositeRecievedProfit(props: iDepositeRecievedProfit) {
               >
                 <ExcelSheet
                   data={filteredData}
-                  name={local_Strings.ViewReceivedProfit}
+                  name={props.depositItem.contractNumber + " - Received Profit Transactions"}
                 >                  
                   <ExcelColumn
                     label={local_Strings.RequestListingFilterDate}

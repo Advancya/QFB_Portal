@@ -10,6 +10,7 @@ import {
   emptyTransaction,
   ICommonFilter,
   ITransaction,
+  IInvestment
 } from "../../../Helpers/publicInterfaces";
 import * as helper from "../../../Helpers/helper";
 import { GetBuyAndSellTransactions } from "../../../services/cmsService";
@@ -24,7 +25,7 @@ interface iInvestmentsBuyAndSell {
   showInvestmentsBuyAndSellModal: boolean;
   hideInvestmentsBuyAndSellModal: () => void;
   backInvestmentsBuyAndSellModal: () => void;
-  investment: { Id: number; name: string };
+  investment: IInvestment;
 }
 
 function InvestmentsBuyAndSell(props: iInvestmentsBuyAndSell) {
@@ -45,7 +46,7 @@ function InvestmentsBuyAndSell(props: iInvestmentsBuyAndSell) {
 
     const initialLoadMethod = async () => {
       setLoading(true);
-      GetBuyAndSellTransactions(currentContext.selectedCIF, props.investment.Id)
+      GetBuyAndSellTransactions(currentContext.selectedCIF, props.investment.subAssetID)
         .then((responseData: ITransaction[]) => {
           if (isMounted && responseData && responseData.length > 0) {
             // const _data = responseData.filter(
@@ -67,7 +68,7 @@ function InvestmentsBuyAndSell(props: iInvestmentsBuyAndSell) {
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [props.investment.Id]);
+  }, [props.investment.subAssetID]);
 
   return (
     <Modal
@@ -130,11 +131,11 @@ function InvestmentsBuyAndSell(props: iInvestmentsBuyAndSell) {
           <h5>
             {local_Strings.Investment +
               ": " +
-              props.investment.name +
-              " " +
+              props.investment.secDesciption +
+              " | " +
               local_Strings.BuyAndSellText +
               " (" +
-              currentContext.userSettings.currency +
+              props.investment.securityCCY +
               ")"}
           </h5>
         </div>
@@ -142,6 +143,8 @@ function InvestmentsBuyAndSell(props: iInvestmentsBuyAndSell) {
           transactions={filteredData}
           showBalanceField={false}
           descriptionLabel={local_Strings.RequestTypeLabel}
+          currency={props.investment.securityCCY}
+          NoDataMessage={local_Strings.BuyAndSellTransactionsListing_NoData}
         />
 
         <LoadingOverlay
@@ -168,7 +171,7 @@ function InvestmentsBuyAndSell(props: iInvestmentsBuyAndSell) {
               >
                 <ExcelSheet
                   data={filteredData}
-                  name={local_Strings.ViewBuySellTransactions}
+                  name={props.investment.subAssetID + " - Buy and Sell Transactions"}
                 >
                   <ExcelColumn
                     label={local_Strings.InvestmentNo}
@@ -180,8 +183,8 @@ function InvestmentsBuyAndSell(props: iInvestmentsBuyAndSell) {
                   />
                   <ExcelColumn label={local_Strings.Amount} value="amount" />
                   <ExcelColumn
-                    label={local_Strings.RequestTypeLabel}
-                    value={"transactionType"}
+                    label={local_Strings.RequestListingFilterStatus}
+                    value="transactionType"
                   />
                 </ExcelSheet>
               </ExcelFile>

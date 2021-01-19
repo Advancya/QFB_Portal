@@ -6,7 +6,7 @@ import moment from "moment";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
 import NoResult from "../../shared/NoResult";
-import { GetOfferAll } from "../../services/cmsService";
+import { GetOffersByCIF } from "../../services/cmsService";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
@@ -30,20 +30,26 @@ function AuthOffersListing(props: iAuthOffersListing) {
   useEffect(() => {
     let isMounted = true;
 
-    GetOfferAll()
-      .then((responseData: IOfferDetail[]) => {
-        if (isMounted && responseData && responseData.length > 0) {
-          const _data = responseData.filter(
-            (d) => new Date(d.expireDate) > new Date()
-          );
-          setData(_data);
-          if (_data.length < rowLimit) {
-            setOffset(_data.length);
+    const initialLoadMethod = async () => {
+      await GetOffersByCIF(currentContext.selectedCIF)
+        .then((responseData: IOfferDetail[]) => {
+          if (isMounted && responseData && responseData.length > 0) {
+            const _data = responseData.filter(
+              (d) => new Date(d.expireDate) > new Date()
+            );
+            setData(_data);
+            if (_data.length < rowLimit) {
+              setOffset(_data.length);
+            }
           }
-        }
-      })
-      .catch((e: any) => console.log(e))
-      .finally(() => setLoading(false));
+        })
+        .catch((e: any) => console.log(e))
+        .finally(() => setLoading(false));
+    };
+
+    if (!!currentContext.selectedCIF) {
+      initialLoadMethod();
+    }
 
     return () => {
       isMounted = false;
@@ -103,9 +109,9 @@ function AuthOffersListing(props: iAuthOffersListing) {
             <ul className="box-list" id="dataList">
               {data && data.length > 0 && data[0].id > 0
                 ? data
-                    .slice(0, offset)
-                    .map((item, index) => renderItem(item, index))
-                : NoResult(local_Strings.NoDataToShow)}
+                  .slice(0, offset)
+                  .map((item, index) => renderItem(item, index))
+                : NoResult(local_Strings.OfferList_NoData)}
             </ul>
           </div>
 

@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import investIcon from "../../../images/invest-icon.svg";
-import { Button, Modal } from "react-bootstrap";
 import InvestmentsListing from "./InvestmentsListing";
 import InvestmentsDetails from "./InvestmentsDetails";
 import InvestmentsRecievedProfit from "./InvestmentsRecievedProfit";
@@ -8,11 +7,14 @@ import InvestmentsBuyAndSell from "./InvestmentsBuyAndSell";
 import { AuthContext } from "../../../providers/AuthProvider";
 import { PortfolioContext } from "../../../pages/Homepage";
 import { localStrings as local_Strings } from "../../../translations/localStrings";
+import {
+  IInvestment,
+} from "../../../Helpers/publicInterfaces";
 
 function Investments() {
   const currentContext = useContext(AuthContext);
   const userPortfolio = useContext(PortfolioContext);
-  const [selectedInvestment, setInvestmentDetail] = useState<{ Id: number, name: string }>(null);
+  const [selectedInvestment, setInvestmentDetail] = useState<IInvestment>(null);
 
   const [showInvestmentsListing, setShowInvestmentsListing] = useState(false);
   const [showInvestmentsDetails, setshowInvestmentsDetails] = useState(false);
@@ -50,13 +52,13 @@ function Investments() {
       <InvestmentsListing
         showInvestmentsListingModal={showInvestmentsListing}
         hideInvestmentsListingModal={() => setShowInvestmentsListing(false)}
-        showInvestmentsDetailsModal={(Id: number, name: string) => {
+        showInvestmentsDetailsModal={(item: IInvestment) => {
           setShowInvestmentsListing(false);
           setshowInvestmentsDetails(true);
-          setInvestmentDetail({Id, name});
+          setInvestmentDetail(item);
         }}
       />
-      {selectedInvestment && !!selectedInvestment.name &&
+      {selectedInvestment && !!selectedInvestment.subAssetID &&
         <React.Fragment>
           <InvestmentsDetails
             showInvestmentsDetailsModal={showInvestmentsDetails}

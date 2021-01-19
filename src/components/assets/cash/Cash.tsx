@@ -6,14 +6,14 @@ import CashDetails from "./CashDetails";
 import { AuthContext } from "../../../providers/AuthProvider";
 import { PortfolioContext } from "../../../pages/Homepage";
 import { localStrings as local_Strings } from "../../../translations/localStrings";
+import {
+  IAccountBalance,
+} from "../../../Helpers/publicInterfaces";
 
 function Cash() {
   const currentContext = useContext(AuthContext);
   const userPortfolio = useContext(PortfolioContext);
-  const [params, setDetailScreenParams] = useState<{
-    accountNumber: string;
-    balance: number;
-  }>({ accountNumber: "", balance: 0 });
+  const [cashItem, setDetailScreenParams] = useState<IAccountBalance>(null);
   const [showCashListing, setShowCashListing] = useState(false);
 
   const handleCloseCashListing = () => {
@@ -26,10 +26,10 @@ function Cash() {
   const [showCashDetails, setshowCashDetails] = useState(false);
 
   const handleCloseCashDetails = () => setshowCashDetails(false);
-  const handleShowCashDetails = (accountNumber: string, balance: number) => {
+  const handleShowCashDetails = (selectedItem: IAccountBalance) => {
     handleCloseCashListing();
     setshowCashDetails(true);
-    setDetailScreenParams({ accountNumber, balance });
+    setDetailScreenParams(selectedItem);
   };
   const handleBackCashDetails = () => {
     setshowCashDetails(false);
@@ -59,12 +59,12 @@ function Cash() {
         hideCashListingModal={handleCloseCashListing}
         showCashDetailsModal={handleShowCashDetails}
       />
-      {!!params.accountNumber && (
+      {cashItem && !!cashItem.accountNumber && (
         <CashDetails
           showCashDetailsModal={showCashDetails}
           hideCashDetailsModal={handleCloseCashDetails}
           backCashListingModal={handleBackCashDetails}
-          params={params}
+          cashItem={cashItem}
         />
       )}
     </div>

@@ -432,7 +432,7 @@ const ar = {
   RMLandingClientsPortofoliosAnchorText: "عرض جميع بورتوفوليو لعملائك هنا",
 
   ConfirmationDone: "تم",
-  RecievedProfit: "Recieved Profit",
+  RecievedProfit: "معاملات الأرباح المستلمة",
 
   SearchText: "بحث",
   RMClientsRequestListingTitle: "طلب قائمة العملاء",

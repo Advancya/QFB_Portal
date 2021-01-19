@@ -10,6 +10,7 @@ import {
   emptyTransaction,
   ICommonFilter,
   ITransaction,
+  IInvestment
 } from "../../../Helpers/publicInterfaces";
 import * as helper from "../../../Helpers/helper";
 import { GetInvestmentsReceivedProfit } from "../../../services/cmsService";
@@ -24,7 +25,7 @@ interface iInvestmentsRecievedProfit {
   showInvestmentsRecievedProfitModal: boolean;
   hideInvestmentsRecievedProfitModal: () => void;
   backInvestmentsRecievedProfitModal: () => void;
-  investment: { Id: number; name: string };
+  investment: IInvestment;
 }
 function InvestmentsRecievedProfit(props: iInvestmentsRecievedProfit) {
   const currentContext = useContext(AuthContext);
@@ -46,7 +47,7 @@ function InvestmentsRecievedProfit(props: iInvestmentsRecievedProfit) {
       setLoading(true);
       GetInvestmentsReceivedProfit(
         currentContext.selectedCIF,
-        props.investment.Id
+        props.investment.subAssetID
       )
         .then((responseData: ITransaction[]) => {
           if (isMounted && responseData && responseData.length > 0) {
@@ -69,7 +70,7 @@ function InvestmentsRecievedProfit(props: iInvestmentsRecievedProfit) {
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [props.investment.Id]);
+  }, [props.investment.subAssetID]);
 
   return (
     <Modal
@@ -127,17 +128,19 @@ function InvestmentsRecievedProfit(props: iInvestmentsRecievedProfit) {
           <h5>
             {local_Strings.Investment +
               ": " +
-              props.investment.name +
-              " " +
+              props.investment.secDesciption +
+              " | " +
               local_Strings.RecievedProfit +
               " (" +
-              currentContext.userSettings.currency +
+              props.investment.securityCCY +
               ")"}
           </h5>
         </div>
         <TransactionListing
           transactions={filteredData}
           showBalanceField={false}
+          currency={props.investment.securityCCY}
+          NoDataMessage={local_Strings.ReceivedProfitTransactionsListing_NoData}
         />
 
         <LoadingOverlay
@@ -164,7 +167,7 @@ function InvestmentsRecievedProfit(props: iInvestmentsRecievedProfit) {
               >
                 <ExcelSheet
                   data={filteredData}
-                  name={local_Strings.ViewReceivedProfitTransactions}
+                  name={props.investment.subAssetID + " - Received Profit Transactions"}
                 >
                   <ExcelColumn
                     label={local_Strings.InvestmentNo}

@@ -3,13 +3,13 @@ import { Modal } from "react-bootstrap";
 import excelIcon from "../../../images/excel.svg";
 import FilterCommonControl2 from "../../../shared/FilterCommonControl2";
 import TransactionListing from "../../../shared/TransactionListing";
-import moment from "moment";
 import { localStrings as local_Strings } from "../../../translations/localStrings";
 import { AuthContext } from "../../../providers/AuthProvider";
 import {
   emptyTransaction,
   ICommonFilter,
   ITransaction,
+  ILoanItem
 } from "../../../Helpers/publicInterfaces";
 import * as helper from "../../../Helpers/helper";
 import { GetViewHistoricalPayments } from "../../../services/cmsService";
@@ -24,7 +24,7 @@ interface iFacilitiesHistoricalPayment {
   showFacilitiesHistoricalPaymentModal: boolean;
   hideFacilitiesHistoricalPaymentModal: () => void;
   backFacilitiesHistoricalPaymentModal: () => void;
-  facilityNumber: string;
+  facilityItem: ILoanItem;
 }
 function FacilitiesHistoricalPayment(props: iFacilitiesHistoricalPayment) {
   const currentContext = useContext(AuthContext);
@@ -46,7 +46,7 @@ function FacilitiesHistoricalPayment(props: iFacilitiesHistoricalPayment) {
       setLoading(true);
       GetViewHistoricalPayments(
         currentContext.selectedCIF,
-        props.facilityNumber
+        props.facilityItem.ldReference
       )
         .then((responseData: ITransaction[]) => {
           if (isMounted && responseData && responseData.length > 0) {
@@ -68,7 +68,7 @@ function FacilitiesHistoricalPayment(props: iFacilitiesHistoricalPayment) {
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [props.facilityNumber]);
+  }, [props.facilityItem.ldReference]);
 
   return (
     <Modal
@@ -127,13 +127,15 @@ function FacilitiesHistoricalPayment(props: iFacilitiesHistoricalPayment) {
         )}
         <div className="col-12 col-sm-12">
           <h5>
-            {props.facilityNumber + " " + local_Strings.HistoricalPaymentsText}
+            {props.facilityItem.ldReference + " " + local_Strings.HistoricalPaymentsText}
           </h5>
         </div>
         <TransactionListing
           transactions={filteredData}
           showBalanceField={false}
           descriptionLabel={local_Strings.DepositeDetailsFilterType}
+          currency={props.facilityItem.currency}
+          NoDataMessage={local_Strings.HistoricalPayments_NoData}
         />
 
         <LoadingOverlay
@@ -151,7 +153,7 @@ function FacilitiesHistoricalPayment(props: iFacilitiesHistoricalPayment) {
             <div className="exportExcel">
               <ExcelFile
                 filename={
-                  props.facilityNumber +
+                  props.facilityItem.ldReference +
                   " " +
                   local_Strings.HistoricalPaymentsText
                 }
@@ -164,7 +166,7 @@ function FacilitiesHistoricalPayment(props: iFacilitiesHistoricalPayment) {
               >
                 <ExcelSheet
                   data={filteredData}
-                  name={local_Strings.HistoricalPaymentsText}
+                  name={props.facilityItem.ldReference + " - Historical Payment"}
                 >
                   <ExcelColumn
                     label={local_Strings.LoanNo}

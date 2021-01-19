@@ -1,11 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import investmentsIcon from "../../../images/invest-icon.svg";
 import {
   emptyInvestment,
   IInvestment,
 } from "../../../Helpers/publicInterfaces";
-import moment from "moment";
 import { localStrings as local_Strings } from "../../../translations/localStrings";
 import { AuthContext } from "../../../providers/AuthProvider";
 import * as helper from "../../../Helpers/helper";
@@ -22,7 +21,7 @@ import xIcon from "../../../images/x-icon.svg";
 interface iInvestmentsListing {
   showInvestmentsListingModal: boolean;
   hideInvestmentsListingModal: () => void;
-  showInvestmentsDetailsModal: (Id: number, name: string) => void;
+  showInvestmentsDetailsModal: (item: IInvestment) => void;
 }
 function InvestmentsListing(props: iInvestmentsListing) {
   const currentContext = useContext(AuthContext);
@@ -65,7 +64,7 @@ function InvestmentsListing(props: iInvestmentsListing) {
         href="#"
         className="row align-items-center"
         onClick={() =>
-          props.showInvestmentsDetailsModal(item.subAssetID, item.secDesciption)
+          props.showInvestmentsDetailsModal(item)
         }
       >
         <div className="col-sm-9 col-lg-10 mb-2">
