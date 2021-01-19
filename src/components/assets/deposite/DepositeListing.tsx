@@ -19,7 +19,7 @@ import xIcon from "../../../images/x-icon.svg";
 interface iDepositeListing {
   showDepositeListingModal: boolean;
   hideDepositeListingModal: () => void;
-  showDepositeDetailsModal: (depositNumber: string) => void;
+  showDepositeDetailsModal: (depositItem: IDeposit) => void;
 }
 
 function DepositeListing(props: iDepositeListing) {
@@ -62,7 +62,7 @@ function DepositeListing(props: iDepositeListing) {
       <a
         href="#"
         className="row align-items-center"
-        onClick={() => props.showDepositeDetailsModal(item.contractNumber)}
+        onClick={() => props.showDepositeDetailsModal(item)}
       >
         <div className="col-sm-9 col-lg-10 mb-2">
           <h3 className="text-capitalize color-gold text-16">

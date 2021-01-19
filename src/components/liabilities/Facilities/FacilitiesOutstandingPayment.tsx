@@ -3,13 +3,13 @@ import { Modal } from "react-bootstrap";
 import excelIcon from "../../../images/excel.svg";
 import FilterCommonControl2 from "../../../shared/FilterCommonControl2";
 import TransactionListing from "../../../shared/TransactionListing";
-import moment from "moment";
 import { localStrings as local_Strings } from "../../../translations/localStrings";
 import { AuthContext } from "../../../providers/AuthProvider";
 import {
   emptyTransaction,
   ICommonFilter,
   ITransaction,
+  ILoanItem
 } from "../../../Helpers/publicInterfaces";
 import * as helper from "../../../Helpers/helper";
 import { GetViewOutstandingPayments } from "../../../services/cmsService";
@@ -24,7 +24,7 @@ interface iFacilitiesOutstandingPayment {
   showFacilitiesOutstandingPaymentModal: boolean;
   hideFacilitiesOutstandingPaymentModal: () => void;
   backFacilitiesOutstandingPaymentModal: () => void;
-  facilityNumber: string;
+  facilityItem: ILoanItem;
 }
 
 function FacilitiesOutstandingPayment(props: iFacilitiesOutstandingPayment) {
@@ -47,7 +47,7 @@ function FacilitiesOutstandingPayment(props: iFacilitiesOutstandingPayment) {
       setLoading(true);
       GetViewOutstandingPayments(
         currentContext.selectedCIF,
-        props.facilityNumber
+        props.facilityItem.ldReference
       )
         .then((responseData: ITransaction[]) => {
           if (isMounted && responseData && responseData.length > 0) {
@@ -71,7 +71,7 @@ function FacilitiesOutstandingPayment(props: iFacilitiesOutstandingPayment) {
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [props.facilityNumber]);
+  }, [props.facilityItem.ldReference]);
 
   return (
     <Modal
@@ -131,13 +131,15 @@ function FacilitiesOutstandingPayment(props: iFacilitiesOutstandingPayment) {
         )}
         <div className="col-12 col-sm-12">
           <h5>
-            {props.facilityNumber + " " + local_Strings.OutstandingPaymentsText}
+            {props.facilityItem.ldReference + " " + local_Strings.OutstandingPaymentsText}
           </h5>
         </div>
         <TransactionListing
           transactions={filteredData}
           descriptionLabel={local_Strings.DepositeDetailsFilterType}
           showBalanceField={false}
+          currency={props.facilityItem.currency}
+          NoDataMessage={local_Strings.OutstandingPayments_NoData}
         />
 
         <LoadingOverlay
@@ -155,7 +157,7 @@ function FacilitiesOutstandingPayment(props: iFacilitiesOutstandingPayment) {
             <div className="exportExcel">
               <ExcelFile
                 filename={
-                  props.facilityNumber +
+                  props.facilityItem.ldReference +
                   " " +
                   local_Strings.OutstandingPaymentsText
                 }
@@ -168,7 +170,7 @@ function FacilitiesOutstandingPayment(props: iFacilitiesOutstandingPayment) {
               >
                 <ExcelSheet
                   data={filteredData}
-                  name={local_Strings.OutstandingPaymentsText}
+                  name={props.facilityItem.ldReference + " - Outstanding Payment"}
                 >
                   <ExcelColumn
                     label={local_Strings.LoanNo}

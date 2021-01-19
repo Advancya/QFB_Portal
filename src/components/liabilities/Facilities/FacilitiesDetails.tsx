@@ -5,6 +5,7 @@ import { AuthContext } from "../../../providers/AuthProvider";
 import {
   emptyLoanDetail,
   ILoanDetail,
+  ILoanItem
 } from "../../../Helpers/publicInterfaces";
 import Constant from "../../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
@@ -19,7 +20,7 @@ interface iFacilitiesDetails {
   backFacilitiesListingModal: () => void;
   showFacilitiesOutstandingPayment: () => void;
   showFacilitiesHistoricalPayment: () => void;
-  facilityNumber: string;
+  facilityItem: ILoanItem;
 }
 
 function FacilitiesDetails(props: iFacilitiesDetails) {
@@ -31,7 +32,7 @@ function FacilitiesDetails(props: iFacilitiesDetails) {
   useEffect(() => {
     let isMounted = true;
     setLoading(true);
-    GetFacilityDetails(currentContext.selectedCIF, props.facilityNumber)
+    GetFacilityDetails(currentContext.selectedCIF, props.facilityItem.ldReference)
       .then((responseData: any) => {
         if (responseData && responseData.length > 0 && isMounted) {
           const _detail = helper.transformingStringToJSON(
@@ -47,7 +48,7 @@ function FacilitiesDetails(props: iFacilitiesDetails) {
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [props.facilityNumber]);
+  }, [props.facilityItem.ldReference]);
 
   return (
     <Modal
@@ -99,7 +100,7 @@ function FacilitiesDetails(props: iFacilitiesDetails) {
               <div className="row align-items-center">
                 <div className="col-sm-8">
                   <h3 className="text-capitalize color-gold">
-                    {local_Strings.LoanNo + " | " + props.facilityNumber}
+                    {local_Strings.LoanNo + " | " + props.facilityItem.ldReference}
                   </h3>
                   <h3 className="text-sm">
                     {item.OutstandingAmount.value || "0"}
@@ -107,11 +108,11 @@ function FacilitiesDetails(props: iFacilitiesDetails) {
                 </div>
                 <div className="col-sm-4 text-sm-right">
                   <strong className="status-badge status-badge-lg color-gold text-xs">
-                    {item.Currency.value || ""}
+                    {props.facilityItem.currency || ""}
                   </strong>
                   <br />
                   <strong className="status-badge status-badge-lg">
-                    {item.ProfitRate.value || ""}
+                    {props.facilityItem.profitRate || ""}
                   </strong>
                 </div>
               </div>

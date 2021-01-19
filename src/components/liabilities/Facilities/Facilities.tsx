@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import facilitiesIcon from "../../../images/facilities-icon.svg";
-import { Button, Modal } from "react-bootstrap";
 import FacilitiesListing from "./FacilitiesListing";
 import FacilitiesDetails from "./FacilitiesDetails";
 import FacilitiesOutstandingPayment from "./FacilitiesOutstandingPayment";
@@ -8,11 +7,12 @@ import FacilitiesHistoricalPayment from "./FacilitiesHistoricalPayment";
 import { AuthContext } from "../../../providers/AuthProvider";
 import { PortfolioContext } from "../../../pages/Homepage";
 import { localStrings as local_Strings } from "../../../translations/localStrings";
+import { ILoanItem } from "../../../Helpers/publicInterfaces";
 
 function Facilities() {
   const currentContext = useContext(AuthContext);
   const userPortfolio = useContext(PortfolioContext);
-  const [facilityNumber, setReferenceId] = useState<string>("");
+  const [facilityItem, selectItemFromList] = useState<ILoanItem>(null);
   const [showFacilitiesListing, setShowFacilitiesListing] = useState(false);
   const [showFacilitiesDetails, setshowFacilitiesDetails] = useState(false);
   const [
@@ -51,13 +51,13 @@ function Facilities() {
         hideFacilitiesListingModal={() =>
           setShowFacilitiesListing(false)
         }
-        showFacilitiesDetailsModal={(facilityNumber: string) => {
+        showFacilitiesDetailsModal={(selectedFacility: ILoanItem) => {
           setShowFacilitiesListing(false);
           setshowFacilitiesDetails(true);
-          setReferenceId(facilityNumber);
+          selectItemFromList(selectedFacility);
         }}
       />
-      {facilityNumber && !!facilityNumber &&
+      {facilityItem && !!facilityItem.ldReference &&
         <React.Fragment>
           <FacilitiesDetails
             showFacilitiesDetailsModal={showFacilitiesDetails}
@@ -74,7 +74,7 @@ function Facilities() {
               setshowFacilitiesDetails(false);
               setShowFacilitiesHistoricalPayment(true);
             }}
-            facilityNumber={facilityNumber}
+            facilityItem={facilityItem}
           />
           <FacilitiesOutstandingPayment
             showFacilitiesOutstandingPaymentModal={showFacilitiesOutstandingPayment}
@@ -85,7 +85,7 @@ function Facilities() {
               setShowFacilitiesOutstandingPayment(false);
               setshowFacilitiesDetails(true);
             }}
-            facilityNumber={facilityNumber}
+            facilityItem={facilityItem}
           />
           <FacilitiesHistoricalPayment
             showFacilitiesHistoricalPaymentModal={showFacilitiesHistoricalPayment}
@@ -95,7 +95,7 @@ function Facilities() {
               setShowFacilitiesHistoricalPayment(false);
               setshowFacilitiesDetails(true);
             }}
-            facilityNumber={facilityNumber}
+            facilityItem={facilityItem}
           />
         </React.Fragment>}
     </div>

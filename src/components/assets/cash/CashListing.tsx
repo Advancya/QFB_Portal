@@ -20,7 +20,7 @@ import xIcon from "../../../images/x-icon.svg";
 interface iCashListing {
   showCashListingModal: boolean;
   hideCashListingModal: () => void;
-  showCashDetailsModal: (accountNumber: string, balance: number) => void;
+  showCashDetailsModal: (selectedItem: IAccountBalance) => void;
 }
 
 function CashListing(props: iCashListing) {
@@ -65,7 +65,7 @@ function CashListing(props: iCashListing) {
         href="#"
         className="row align-items-center"
         onClick={() =>
-          props.showCashDetailsModal(item.accountNumber, item.balance)
+          props.showCashDetailsModal(item)
         }
       >
         <div className="col-2 col-sm-1">

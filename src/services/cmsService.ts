@@ -377,6 +377,18 @@ const GetOfferAll = async () => {
   }
 };
 
+
+const GetOffersByCIF = async (cif: string) => {
+  try {
+    const result = await apiInstance.get(`/api/Offer/GetByCif?cif=${cif}`);
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
 const GetProductAndOffers = async () => {
   try {
     const result = await apiInstance.get(`/api/ProductsAndOffers/All`);
@@ -1292,6 +1304,7 @@ export {
   GetBankGuaranteeListing,
   GetBankGuaranteeDetails,
   GetOfferAll,
+  GetOffersByCIF,
   GetOfferById,
   GetUserWelcomeData,
   GetLiveHoldings_1stDrill_Deposit,

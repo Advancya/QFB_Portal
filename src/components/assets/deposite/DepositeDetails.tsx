@@ -6,6 +6,7 @@ import { AuthContext } from "../../../providers/AuthProvider";
 import {
   emptyDepositDetail,
   IDepositDetail,
+  IDeposit
 } from "../../../Helpers/publicInterfaces";
 import Constant from "../../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
@@ -19,7 +20,7 @@ interface iDepositeDetails {
   hideDepositeDetailsModal: () => void;
   backDepositeListingModal: () => void;
   showDepositeRecievedProfit: () => void;
-  depositNumber: string;
+  depositItem: IDeposit;
 }
 
 function DepositeDetails(props: iDepositeDetails) {
@@ -31,7 +32,7 @@ function DepositeDetails(props: iDepositeDetails) {
   useEffect(() => {
     let isMounted = true;
     setLoading(true);
-    GetDepositsDetails(currentContext.selectedCIF, props.depositNumber)
+    GetDepositsDetails(currentContext.selectedCIF, props.depositItem.contractNumber)
       .then((responseData: any) => {
         if (responseData && responseData.length > 0 && isMounted) {
           const _detail = helper.transformingStringToJSON(
@@ -47,7 +48,7 @@ function DepositeDetails(props: iDepositeDetails) {
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [props.depositNumber]);
+  }, [props.depositItem]);
 
   return (
     <Modal
@@ -100,17 +101,17 @@ function DepositeDetails(props: iDepositeDetails) {
                 <div className="col-sm-8">
                   <h3 className="text-capitalize color-gold">
                     {local_Strings.DepositeListingAccountNumberLabel +
-                      props.depositNumber}
+                      props.depositItem.contractNumber}
                   </h3>
                   <h3 className="text-sm">{item.DepositAmount.value || ""}</h3>
                 </div>
                 <div className="col-sm-4 text-sm-right">
                   <strong className="status-badge status-badge-lg color-gold text-xs">
-                    {item.Currency.value || ""}
+                    {props.depositItem.currency || ""}
                   </strong>
                   <br />
                   <strong className="status-badge status-badge-lg">
-                    {item.ExpectedProfitRate.value || ""}
+                    {props.depositItem.interestRate || ""}
                   </strong>
                 </div>
               </div>

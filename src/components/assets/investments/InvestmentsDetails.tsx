@@ -6,6 +6,7 @@ import { AuthContext } from "../../../providers/AuthProvider";
 import {
   emptyInvestmentDetail,
   IInvestmentDetail,
+  IInvestment
 } from "../../../Helpers/publicInterfaces";
 import Constant from "../../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
@@ -20,7 +21,7 @@ interface iInvestmentsDetails {
   backInvestmentsListingModal: () => void;
   showInvestmentsRecievedProfit: () => void;
   showInvestmentsBuyAndSell: () => void;
-  investment: { Id: number; name: string };
+  investment: IInvestment;
 }
 
 function InvestmentsDetails(props: iInvestmentsDetails) {
@@ -32,7 +33,7 @@ function InvestmentsDetails(props: iInvestmentsDetails) {
   useEffect(() => {
     let isMounted = true;
     setLoading(true);
-    GetInvestmentsDetails(currentContext.selectedCIF, props.investment.Id)
+    GetInvestmentsDetails(currentContext.selectedCIF, props.investment.subAssetID)
       .then((responseData: any) => {
         if (responseData && responseData.length > 0 && isMounted) {
           const _detail = helper.transformingStringToJSON(
@@ -48,7 +49,7 @@ function InvestmentsDetails(props: iInvestmentsDetails) {
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [props.investment.Id]);
+  }, [props.investment.subAssetID]);
 
   return (
     <Modal
@@ -110,11 +111,11 @@ function InvestmentsDetails(props: iInvestmentsDetails) {
                 </div>
                 <div className="col-sm-4 text-sm-right">
                   <strong className="status-badge status-badge-lg color-gold text-xs">
-                    {item.Currency.value || ""}
+                    {props.investment.securityCCY || ""}
                   </strong>
                   <br />
                   <strong className="status-badge status-badge-lg">
-                    {item.ExpectedProfitRate.value || ""}
+                    {props.investment.profitRate || ""}
                   </strong>
                 </div>
               </div>

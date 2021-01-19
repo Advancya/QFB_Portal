@@ -10,6 +10,7 @@ import {
   emptyTransaction,
   ICommonFilter,
   ITransaction,
+  IAccountBalance
 } from "../../../Helpers/publicInterfaces";
 import * as helper from "../../../Helpers/helper";
 import { GetCashTransactions } from "../../../services/cmsService";
@@ -23,7 +24,7 @@ interface iCashDetails {
   showCashDetailsModal: boolean;
   hideCashDetailsModal: () => void;
   backCashListingModal: () => void;
-  params: { accountNumber: string; balance: number };
+  cashItem: IAccountBalance;
 }
 
 function CashDetails(props: iCashDetails) {
@@ -45,7 +46,7 @@ function CashDetails(props: iCashDetails) {
       setLoading(true);
       GetCashTransactions(
         currentContext.selectedCIF,
-        props.params.accountNumber
+        props.cashItem.accountNumber
       )
         .then((responseData: ITransaction[]) => {
           if (isMounted && responseData && responseData.length > 0) {
@@ -68,7 +69,7 @@ function CashDetails(props: iCashDetails) {
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [props.params.accountNumber]);
+  }, [props.cashItem.accountNumber]);
 
   return (
     <Modal
@@ -94,14 +95,14 @@ function CashDetails(props: iCashDetails) {
             </div>
             <div className="col-4 col-sm-3">
               <h5>{local_Strings.AccountNo}</h5>
-              <h4>{props.params.accountNumber}</h4>
+              <h4>{props.cashItem.accountNumber}</h4>
             </div>
             <div className="col-4 col-sm-3">
               <h5>{local_Strings.CurrentBalanceLabel}</h5>
               <h4>
-                {props.params.balance +
+                {props.cashItem.balance +
                   " " +
-                  currentContext.userSettings.currency}
+                  props.cashItem.currency}
               </h4>
             </div>
           </div>
@@ -140,6 +141,8 @@ function CashDetails(props: iCashDetails) {
         <TransactionListing
           transactions={filteredData}
           showBalanceField={true}
+          currency={props.cashItem.currency}
+          NoDataMessage={local_Strings.CashListing_NoData}
         />
 
         <LoadingOverlay
@@ -166,7 +169,7 @@ function CashDetails(props: iCashDetails) {
               >
                 <ExcelSheet
                   data={filteredData}
-                  name={local_Strings.CashDetailsTitle}
+                  name={props.cashItem.accountNumber + " - Cash Details"}
                 >
                   <ExcelColumn
                     label={local_Strings.AccountNo}

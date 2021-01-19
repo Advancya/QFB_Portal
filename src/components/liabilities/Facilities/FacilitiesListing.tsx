@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import facilitiesIcon from "../../../images/facilities-icon.svg";
 import { emptyLoanItem, ILoanItem } from "../../../Helpers/publicInterfaces";
-import moment from "moment";
 import { localStrings as local_Strings } from "../../../translations/localStrings";
 import { AuthContext } from "../../../providers/AuthProvider";
 import * as helper from "../../../Helpers/helper";
@@ -18,7 +17,7 @@ import xIcon from "../../../images/x-icon.svg";
 interface iFacilitiesListing {
   showFacilitiesListingModal: boolean;
   hideFacilitiesListingModal: () => void;
-  showFacilitiesDetailsModal: (facilityNumber: string) => void;
+  showFacilitiesDetailsModal: (selectedFacility: ILoanItem) => void;
 }
 
 function FacilitiesListing(props: iFacilitiesListing) {
@@ -62,7 +61,7 @@ function FacilitiesListing(props: iFacilitiesListing) {
       <a
         href="#"
         className="row align-items-center"
-        onClick={() => props.showFacilitiesDetailsModal(item.ldReference)}
+        onClick={() => props.showFacilitiesDetailsModal(item)}
       >
         <div className="col-sm-9 col-lg-10 mb-2">
           <h3 className="text-capitalize color-gold text-16">

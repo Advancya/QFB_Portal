@@ -189,7 +189,7 @@ function AuthOfferRequest(props: iAuthOfferRequest) {
                   <div className="col-lg-6 form-group">
                     <label>{local_Strings.OfferSubscriptionAmountLabel}</label>
                     <input
-                      type="text"
+                      type="number"
                       className="form-control"
                       placeholder=""
                       onChange={handleChange("amount")}

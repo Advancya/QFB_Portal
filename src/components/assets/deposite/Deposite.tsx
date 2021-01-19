@@ -8,12 +8,12 @@ import DepositeRecievedProfit from "./DepositeRecievedProfit";
 import { AuthContext } from "../../../providers/AuthProvider";
 import { PortfolioContext } from "../../../pages/Homepage";
 import { localStrings as local_Strings } from "../../../translations/localStrings";
-import { emptyDeposit, IDeposit } from "../../../Helpers/publicInterfaces";
+import { IDeposit } from "../../../Helpers/publicInterfaces";
 
 function Deposite() {
   const currentContext = useContext(AuthContext);
   const userPortfolio = useContext(PortfolioContext);
-  const [depositNumber, setReferenceId] = useState<string>("");
+  const [depositItem, selectItemFromList] = useState<IDeposit>(null);
 
   const [showDepositeListing, setShowDepositeListing] = useState(false);
   const [showDepositeDetails, setshowDepositeDetails] = useState(false);
@@ -53,13 +53,13 @@ function Deposite() {
       <DepositeListing
         showDepositeListingModal={showDepositeListing}
         hideDepositeListingModal={() => setShowDepositeListing(false)}
-        showDepositeDetailsModal={(depositNumber: string) => {
+        showDepositeDetailsModal={(depositItem: IDeposit) => {
           setShowDepositeListing(false);
           setshowDepositeDetails(true);
-          setReferenceId(depositNumber);
+          selectItemFromList(depositItem);
         }}
       />
-      {depositNumber && !!depositNumber && (
+      {depositItem && !!depositItem && (
         <React.Fragment>
           <DepositeDetails
             showDepositeDetailsModal={showDepositeDetails}
@@ -72,7 +72,7 @@ function Deposite() {
               setshowDepositeDetails(false);
               setShowDepositeRecievedProfit(true);
             }}
-            depositNumber={depositNumber}
+            depositItem={depositItem}
           />
           <DepositeRecievedProfit
             showDepositeRecievedProfitModal={showDepositeRecievedProfit}
@@ -83,7 +83,7 @@ function Deposite() {
               setShowDepositeRecievedProfit(false);
               setshowDepositeDetails(true);
             }}
-            depositNumber={depositNumber}
+            depositItem={depositItem}
           />
         </React.Fragment>
       )}

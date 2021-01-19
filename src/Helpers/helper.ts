@@ -433,15 +433,21 @@ export const transformingStringToJSON = (input: string[], language: string) => {
         const keyValuePairStr = languageSpecificStr.split(
           languageSpecificStr.indexOf(":") !== -1 ? ":" : ","
         );
+
         const uniquePropStr = s
           .split(";")[0]
           .split(":")[0]
           .replace(/\s/g, "")
           .replace("/", "")
           .replace(":", "");
-        const labelStr = keyValuePairStr[language === "en" ? 0 : 1]
+
+        let labelStr = keyValuePairStr[language === "en" ? 0 : 1]
           .replace(":", "")
           .trim();
+        if (language === "ar" && uniquePropStr === "InvestmentAmount") {
+          labelStr = languageSpecificStr.substr(languageSpecificStr.lastIndexOf(",") + 1, languageSpecificStr.length).trim();
+        }
+
         const valueStrIndex =
           language === "en"
             ? languageSpecificStr.replace(":", "").trim().indexOf(",")
@@ -704,25 +710,25 @@ export const prepareTotalNetWorth = (
   let sdata = [
     {
       name: local_Strings.TotalCash,
-      y: !!chartData.totalCash ? parseFloat(chartData.totalCash.replaceAll(",","")) : 0,
+      y: !!chartData.totalCash ? parseFloat(chartData.totalCash.replaceAll(",", "")) : 0,
       amount: chartData.totalCash,
       color: "#493026",
     },
     {
       name: local_Strings.TotalInvestments,
-      y: !!chartData.totalInvestment ? parseFloat(chartData.totalInvestment.replaceAll(",","")) : 0,
+      y: !!chartData.totalInvestment ? parseFloat(chartData.totalInvestment.replaceAll(",", "")) : 0,
       amount: chartData.totalInvestment,
       color: "#6C544B",
     },
     {
       name: local_Strings.TotalDeposits,
-      y: !!chartData.totalDeposits ? parseFloat(chartData.totalDeposits.replaceAll(",","")) : 0,
+      y: !!chartData.totalDeposits ? parseFloat(chartData.totalDeposits.replaceAll(",", "")) : 0,
       amount: chartData.totalDeposits,
       color: "#97877F",
     },
     {
       name: local_Strings.TotalLoans,
-      y: !!chartData.totalLoans ? parseFloat(chartData.totalLoans.replaceAll(",","")) : 0,
+      y: !!chartData.totalLoans ? parseFloat(chartData.totalLoans.replaceAll(",", "")) : 0,
       amount: chartData.totalLoans,
       color: "#CBC4C1",
     }
@@ -731,7 +737,7 @@ export const prepareTotalNetWorth = (
   if (!!chartData.totalGuarantees && chartData.totalGuarantees !== "0") {
     sdata.push({
       name: local_Strings.BankGurantees,
-      y: parseFloat(chartData.totalGuarantees.replaceAll(",","")),
+      y: parseFloat(chartData.totalGuarantees.replaceAll(",", "")),
       amount: chartData.totalGuarantees,
       color: "#A79A94",
     });

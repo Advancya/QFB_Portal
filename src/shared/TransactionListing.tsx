@@ -3,7 +3,6 @@ import { Accordion, Collapse } from "react-bootstrap";
 import { localStrings as local_Strings } from "../translations/localStrings";
 import { AuthContext } from "../providers/AuthProvider";
 import {
-  emptyTransaction,
   ITransaction,
   ITransactionAccordianDetail,
 } from "../Helpers/publicInterfaces";
@@ -19,9 +18,11 @@ interface ITransactionListingProps {
   transactions: ITransaction[];
   showBalanceField?: boolean;
   descriptionLabel?: string;
+  currency: string;
+  NoDataMessage: string;
 }
 
-const TransactionListing: React.FC<ITransactionListingProps> = (props) => {
+const TransactionListing = (props: ITransactionListingProps) => {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
   const [isLoading, setLoading] = useState(false);
@@ -66,7 +67,7 @@ const TransactionListing: React.FC<ITransactionListingProps> = (props) => {
           <td colSpan={2} className={(item.amount || item.transaction_Amount) < 0 ? "color-red" : ""}>
             {(item.amount || item.transaction_Amount) +
               " " +
-              currentContext.userSettings.currency}
+              props.currency}
           </td>
           <td colSpan={3}>
             {item.descirption ||
@@ -79,7 +80,7 @@ const TransactionListing: React.FC<ITransactionListingProps> = (props) => {
             <td colSpan={2} className="text-right">
               {(item.balance || "0") +
                 " " +
-                currentContext.userSettings.currency}
+                props.currency}
             </td>
           ) : null}
 
@@ -223,7 +224,7 @@ const TransactionListing: React.FC<ITransactionListingProps> = (props) => {
                 .map((item, index) => renderItem(item, String(index)))
             ) : (
               <tr>
-                <td colSpan={7}>{NoResult(local_Strings.NoDataToShow)}</td>
+                <td colSpan={10}>{NoResult(props.NoDataMessage)}</td>
               </tr>
             )}
           </tbody>
