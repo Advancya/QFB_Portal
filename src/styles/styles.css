@@ -1792,3 +1792,7 @@ ul ul {
     max-width: 100%;
   }
 }
+
+#applyReqBox {
+  padding-top: 1rem;
+}
