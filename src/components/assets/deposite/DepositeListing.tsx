@@ -66,7 +66,7 @@ function DepositeListing(props: iDepositeListing) {
       >
         <div className="col-sm-9 col-lg-10 mb-2">
           <h3 className="text-capitalize color-gold text-16">
-            {local_Strings.DepositNo + item.contractNumber}
+            {local_Strings.DepositNo + " | " + item.contractNumber}
           </h3>
           <h3 className="text-18">
             {helper.ConvertToQfbNumberFormat(item.depositAmount)}

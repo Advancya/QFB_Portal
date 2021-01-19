@@ -84,6 +84,8 @@ const ar = {
   LoginWithCredentialsLoginButton: "تسجيل الدخول",
   GeneralValidation: "يجب عليك تعيين قيمة لهذا الحقل",
   LoginWithCredentialsErrorMessage: "اسم المستخدم او كلمة المرور غير صحيحة",
+  LoginWithCredentialsLockedErrorMessage:
+    "اسم المستخدم معلق, برجاء الاتصال بالبنك",
 
   PasswordResetInvalidData: "المعلومات المدخلة غير صحيحة",
   PasswordResetTitle: "إعادة تعيين كلمة المرور",
@@ -262,6 +264,11 @@ const ar = {
   HistoricalPayments_SettlemenOfPayment: "تسوية المدفوعات",
   OutstandingPayments_PastDueSettlement: "Past Due Payment",
   OutstandingPayments_SettlemenOfPayment: "Payment of Facility",
+  
+  DepositsAndReceivedProfit: "الودائع والأرباح المحصلة",
+  ClickToViewTheAccumulatedProfitReceived:
+    "إضغط لعرض الأرباح المتراكمة المحصلة",
+  CumulativeProfitReceived: "الأرباح المتراكمة المحصلة",
 
   ReceivedProfitText: "حصل على ربح",
   ViewReceivedProfitTransactionsToDate: "الأرباح المستلمة",

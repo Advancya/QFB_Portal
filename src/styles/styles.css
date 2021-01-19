@@ -1381,6 +1381,7 @@ tr.shown {
 .exportExcel a {
   font-size: 0.9rem;
   text-transform: uppercase;
+  font-weight: 600;
 }
 
 .exportExcel a img {

@@ -48,12 +48,12 @@ function DepositeRecievedProfit(props: iDepositeRecievedProfit) {
       GetDepositsReceivedProfit(currentContext.selectedCIF, props.depositNumber)
         .then((responseData: ITransaction[]) => {
           if (isMounted && responseData && responseData.length > 0) {
-            const _data = responseData.filter(
-              (d) =>
-                new Date(d.bookingDate) > moment().add(-3, "months").toDate()
-            );
+            // const _data = responseData.filter(
+            //   (d) =>
+            //     new Date(d.bookingDate) > moment().add(-3, "months").toDate()
+            // );
             setData(responseData);
-            setFilteredData(_data);
+            setFilteredData(responseData);
           }
         })
         .catch((e: any) => console.log(e))
@@ -108,11 +108,11 @@ function DepositeRecievedProfit(props: iDepositeRecievedProfit) {
         {data && data.length > 0 && !!data[0].bookingDate && (
           <FilterCommonControl
             clearFilter={() => {
-              const _data = data.filter(
-                (d) =>
-                  new Date(d.bookingDate) > moment().add(-3, "months").toDate()
-              );
-              setFilteredData(_data);
+              // const _data = data.filter(
+              //   (d) =>
+              //     new Date(d.bookingDate) > moment().add(-3, "months").toDate()
+              // );
+              setFilteredData(data);
             }}
             applyFilter={(filters: ICommonFilter) => {
               console.log(filters);
@@ -163,11 +163,7 @@ function DepositeRecievedProfit(props: iDepositeRecievedProfit) {
                 <ExcelSheet
                   data={filteredData}
                   name={local_Strings.ViewReceivedProfit}
-                >
-                  <ExcelColumn
-                    label={local_Strings.AccountNo}
-                    value="accountNo"
-                  />
+                >                  
                   <ExcelColumn
                     label={local_Strings.RequestListingFilterDate}
                     value="bookingDate"

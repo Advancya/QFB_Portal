@@ -74,7 +74,7 @@ function CashListing(props: iCashListing) {
           </span>
         </div>
         <div className="col-8 col-sm-4">
-          <h5>{local_Strings.AccountNo}</h5>
+          <h5>{local_Strings.AccountNo + " "}</h5>
           <h4>{item.accountNumber || ""}</h4>
         </div>
         <div className="col-8 offset-2 offset-sm-0 col-sm-6">

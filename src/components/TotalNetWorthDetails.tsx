@@ -55,7 +55,8 @@ const TotalNetWorthDetails = () => {
       </div>
       <div className="mx-auto text-center">
         {userPortfolio && !!userPortfolio.customerCode &&
-          <PieChart highcharts={Highcharts} options={chart_data} callback={afterChartCreated} />
+          <PieChart highcharts={Highcharts} options={chart_data}
+            callback={afterChartCreated} />
         }
       </div>
       <LoadingOverlay
