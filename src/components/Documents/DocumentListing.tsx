@@ -54,7 +54,7 @@ function DocumentListing() {
   }, [currentContext.selectedCIF]);
 
   const renderItem = (item: IDocumentDetail, index: number) => (
-    <li className="shown" key={index}>
+    <li className="shown border-0" key={index}>
       <a
         href="#"
         className="row align-items-center"
