@@ -293,7 +293,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
         <div className="box modal-box" id="applyReqBox">
           {props.beneficiary ? (
             <ul className="box-list" id="reqList1">
-              <li className="pb-3">
+              <li className="py-3 mb-3 border-bottom rounded-0">
                 <div className="row align-items-center">
                   <div className="col-sm-8">
                     <h4>
@@ -313,29 +313,29 @@ function NewBeneficiary(props: iNewBeneficiary) {
               </li>
             </ul>
           ) : (
-              <div className="container-fluid">
-                <div className="row  col-xl-12">
-                  <div className="col-lg-12 form-group">
-                    <label>Beneficiary Type</label>
-                    <select
-                      className="form-control"
-                      id="reqTypeSelect"
-                      onChange={(e: any) => setTransactionTypeId(e.target.value)}
-                    >
-                      <option value="">{local_Strings.SelectItem}</option>
-                      {transactionTypes &&
-                        transactionTypes.length > 0 &&
-                        !!transactionTypes[0].label &&
-                        transactionTypes.map((c, i) => (
-                          <option key={i} value={c.value}>
-                            {c.label}
-                          </option>
-                        ))}
-                    </select>
-                  </div>
+            <div className="container-fluid">
+              <div className="row  col-xl-12">
+                <div className="col-lg-12 form-group">
+                  <label>Beneficiary Type</label>
+                  <select
+                    className="form-control"
+                    id="reqTypeSelect"
+                    onChange={(e: any) => setTransactionTypeId(e.target.value)}
+                  >
+                    <option value="">{local_Strings.SelectItem}</option>
+                    {transactionTypes &&
+                      transactionTypes.length > 0 &&
+                      !!transactionTypes[0].label &&
+                      transactionTypes.map((c, i) => (
+                        <option key={i} value={c.value}>
+                          {c.label}
+                        </option>
+                      ))}
+                  </select>
                 </div>
               </div>
-            )}
+            </div>
+          )}
 
           {transactionTypeId.toString() === "1" && (
             <Formik
@@ -553,10 +553,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                 validateForm,
                 isValid,
               }) => (
-                <div
-                  className="newReqFields"
-                  id="newReqFields"
-                >
+                <div className="newReqFields" id="newReqFields">
                   <div className="container-fluid py-2">
                     <div className="row col-xl-12 mb-5">
                       <div className="col-lg-6 form-group">
@@ -579,26 +576,40 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           onChange={handleChange("beneficiaryFullName")}
                           onBlur={handleBlur("beneficiaryFullName")}
                         />
-                        {touched.beneficiaryFullName && errors.beneficiaryFullName && InvalidFieldError(errors.beneficiaryFullName)}
+                        {touched.beneficiaryFullName &&
+                          errors.beneficiaryFullName &&
+                          InvalidFieldError(errors.beneficiaryFullName)}
                       </div>
                       <div className="col-lg-6 form-group">
                         <label>{local_Strings.BeneficiaryBankLabel}</label>
-                        <select className="form-control"
+                        <select
+                          className="form-control"
                           onBlur={handleBlur("beneficiaryBank")}
                           value={values.beneficiaryBankSwiftCode || ""}
                           onChange={(e) => {
                             const index = e.target.selectedIndex;
-                            setFieldValue("beneficiaryBank", e.target[index].innerText);
-                            setFieldValue("beneficiaryBankSwiftCode", e.target.value);
-                          }}>
+                            setFieldValue(
+                              "beneficiaryBank",
+                              e.target[index].innerText
+                            );
+                            setFieldValue(
+                              "beneficiaryBankSwiftCode",
+                              e.target.value
+                            );
+                          }}
+                        >
                           <option value="">{local_Strings.SelectItem}</option>
                           {banks &&
                             banks.length > 0 &&
-                            banks.map((c, i) =>
-                              <option key={i} value={c.value}>{c.label}</option>
-                            )}
+                            banks.map((c, i) => (
+                              <option key={i} value={c.value}>
+                                {c.label}
+                              </option>
+                            ))}
                         </select>
-                        {touched.beneficiaryBank && errors.beneficiaryBank && InvalidFieldError(errors.beneficiaryBank)}
+                        {touched.beneficiaryBank &&
+                          errors.beneficiaryBank &&
+                          InvalidFieldError(errors.beneficiaryBank)}
                       </div>
                       <div className="col-lg-6 form-group">
                         <label>{local_Strings.BeneficiarySwiftCodeLabel}</label>
@@ -882,7 +893,9 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           InvalidFieldError(errors.beneficiarySwiftCode)}
                       </div>
                       <div className="col-lg-6 form-group">
-                        <label>{local_Strings.BeneficiaryForeignCurrencyLabel}</label>
+                        <label>
+                          {local_Strings.BeneficiaryForeignCurrencyLabel}
+                        </label>
                         <select
                           className="form-control"
                           value={values.beneficiaryCurrency || ""}
@@ -981,7 +994,9 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           onChange={handleChange("beneficiaryIban")}
                         />
                         {!isValidIban &&
-                          InvalidFieldError(local_Strings.BeneficiaryInvalidIban)}
+                          InvalidFieldError(
+                            local_Strings.BeneficiaryInvalidIban
+                          )}
                       </div>
 
                       <div className="col-lg-6 form-group">

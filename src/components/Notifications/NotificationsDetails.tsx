@@ -24,7 +24,6 @@ const NotficationDetail = (props: iNotficationDetail) => {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-
     let isMounted = true;
     const initialLoadMethod = async () => {
       const userData = await GetUserLocalData();
@@ -52,7 +51,6 @@ const NotficationDetail = (props: iNotficationDetail) => {
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-
   }, [props.item.id]);
 
   return (
@@ -104,15 +102,15 @@ const NotficationDetail = (props: iNotficationDetail) => {
           />
           <ul className="box-list mb-0">
             {!isLoading && (
-              <li className="shown">
+              <li className="shown border-bottom rounded-0">
                 <div className="row align-items-center py-2">
                   <div className="col-sm-12 ">
                     <div className="mb-1 d-flex align-items-center">
                       <span className="mx-1 text-15 color-grey">
                         {!!props.item.messageSendDate
                           ? moment(props.item.messageSendDate).format(
-                            "DD/MM/YYYY"
-                          )
+                              "DD/MM/YYYY"
+                            )
                           : ""}
                       </span>
                     </div>
@@ -142,6 +140,6 @@ const NotficationDetail = (props: iNotficationDetail) => {
       </Modal.Body>
     </Modal>
   );
-}
+};
 
 export default NotficationDetail;

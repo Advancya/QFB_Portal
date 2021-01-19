@@ -96,7 +96,7 @@ function FacilitiesDetails(props: iFacilitiesDetails) {
             }
           />
           <ul className="box-list" id="investmentModalDetails">
-            <li className="pb-3 px-4">
+            <li className="py-3 px-4 mb-3 border-bottom rounded-0">
               <div className="row align-items-center">
                 <div className="col-sm-8">
                   <h3 className="text-capitalize color-gold">

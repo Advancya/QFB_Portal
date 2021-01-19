@@ -46,11 +46,8 @@ function InboxDetails(props: iInboxDetails) {
     if (!!currentContext.selectedCIF) {
       setThisInboxItemAsRead();
     }
-    
-    GetInboxByCIFAndType(
-      currentContext.selectedCIF,
-      props.item.adviceType
-    )
+
+    GetInboxByCIFAndType(currentContext.selectedCIF, props.item.adviceType)
       .then((responseData: IInboxDetail[]) => {
         if (responseData && responseData.length > 0 && isMounted) {
           const previousItems = responseData.filter(
@@ -82,7 +79,7 @@ function InboxDetails(props: iInboxDetails) {
         InboxMessages.refreshInbox();
       }
     }
-  }
+  };
 
   const renderItem = (item: IInboxDetail, index: number) => (
     <li className="shown" key={index}>
@@ -100,14 +97,22 @@ function InboxDetails(props: iInboxDetails) {
           <div className="text-15">{item.dateRange || ""}</div>
         </div>
         <div className="col-md-4 text-right">
-          <a
-            className="download-link d-inline-block "
-            target="_blank"
-            href={item.pdfUrl || "#"}
-          >
-            {/* <i className="mx-1 fa fa-file color-white"></i> */}
-            <i className="mx-1 fa fa-download color-white"></i>
-          </a>
+          <span className="download-link d-inline-block ">
+            <a
+              className="d-inline-block "
+              target="_blank"
+              href={item.pdfUrl || "#"}
+            >
+              <i className="mx-1 fa fa-file color-white"></i>
+            </a>
+            <a
+              className="d-inline-block "
+              target="_blank"
+              href={item.pdfUrl || "#"}
+            >
+              <i className="mx-1 fa fa-download color-white"></i>
+            </a>
+          </span>
         </div>
       </div>
     </li>
@@ -161,7 +166,7 @@ function InboxDetails(props: iInboxDetails) {
             }
           />
           <ul className="box-list mb-0">
-            <li className="shown">
+            <li className="shown border-bottom rounded-0">
               <div className="row align-items-center py-2">
                 <div className="col-md-8 col-sm-12 ">
                   <div className="mb-1 d-flex align-items-center">
@@ -169,8 +174,8 @@ function InboxDetails(props: iInboxDetails) {
                     <span className="mx-1 text-15 color-light-gold">
                       {props.item.adviceDate
                         ? moment(props.item.adviceDate).format(
-                          "dddd DD MMM YYYY"
-                        )
+                            "dddd DD MMM YYYY"
+                          )
                         : ""}
                     </span>
                   </div>
@@ -180,14 +185,22 @@ function InboxDetails(props: iInboxDetails) {
                   <div className="text-15">{props.item.dateRange || ""}</div>
                 </div>
                 <div className="col-md-4 text-right">
-                  <a
-                    className="download-link d-inline-block "
-                    target="_blank"
-                    href={props.item.pdfUrl || "#"}
-                  >
-                    {/* <i className="mx-1 fa fa-file color-white"></i> */}
-                    <i className="mx-1 fa fa-download color-white"></i>
-                  </a>
+                  <span className="download-link d-inline-block ">
+                    <a
+                      className="d-inline-block "
+                      target="_blank"
+                      href={props.item.pdfUrl || "#"}
+                    >
+                      <i className="mx-1 fa fa-file color-white"></i>
+                    </a>
+                    <a
+                      className="d-inline-block "
+                      target="_blank"
+                      href={props.item.pdfUrl || "#"}
+                    >
+                      <i className="mx-1 fa fa-download color-white"></i>
+                    </a>
+                  </span>
                 </div>
               </div>
             </li>
@@ -200,11 +213,11 @@ function InboxDetails(props: iInboxDetails) {
               </h4>
             </li>
             {filteredData &&
-              filteredData.length > 0 &&
-              !!filteredData[0].adviceDate
+            filteredData.length > 0 &&
+            !!filteredData[0].adviceDate
               ? filteredData
-                .slice(0, offset)
-                .map((item, index) => renderItem(item, index))
+                  .slice(0, offset)
+                  .map((item, index) => renderItem(item, index))
               : NoResult(local_Strings.NoDataToShow)}
           </ul>
         </div>

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
-import requestIcon from "../../images/request-icon-color.svg";
+import requestIcon from "../../images/request-icon.svg";
 import FilterDateControl from "../../shared/FilterDateControl";
 import FilterCustomDateControl from "../../shared/FilterCustomDateControl";
 import FilterDropDownControl from "../../shared/FilterDropDownControl";
@@ -85,7 +85,11 @@ function RequestsListing(props: iRequestsListing) {
 
   useEffect(() => {
     setFilteredData(props.requests);
-    if (props.requests && props.requests.length > 0 && props.requests.length < rowLimit) {
+    if (
+      props.requests &&
+      props.requests.length > 0 &&
+      props.requests.length < rowLimit
+    ) {
       setOffset(props.requests.length);
     } else {
       setOffset(rowLimit);
@@ -255,7 +259,10 @@ function RequestsListing(props: iRequestsListing) {
                   applyFilter={() => {
                     setFilter({ ...filters, filterApplied: true });
                     console.log(filters);
-                    const _filteredData = helper.filterRequests(props.requests, filters);
+                    const _filteredData = helper.filterRequests(
+                      props.requests,
+                      filters
+                    );
                     setFilteredData(_filteredData);
                   }}
                   showClearFilter={filters.filterApplied}
@@ -278,11 +285,11 @@ function RequestsListing(props: iRequestsListing) {
           <div className="box modal-box">
             <ul className="box-list" id="reqList">
               {filteredData &&
-                filteredData.length > 0 &&
-                !!filteredData[0].requestSubject
+              filteredData.length > 0 &&
+              !!filteredData[0].requestSubject
                 ? filteredData
-                  .slice(0, offset)
-                  .map((item, index) => renderItem(item, index))
+                    .slice(0, offset)
+                    .map((item, index) => renderItem(item, index))
                 : NoResult(local_Strings.NoDataToShow)}
             </ul>
           </div>
