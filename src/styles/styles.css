@@ -884,7 +884,8 @@ ul.box-list {
   padding: 0;
   margin: 0;
   list-style: none;
-  margin-bottom: 1rem;
+  /*   margin-bottom: 1rem;
+ */
 }
 
 .box-list-sub-header {
@@ -894,6 +895,12 @@ ul.box-list {
 
 ul.box-list li {
   border-bottom: 1px solid rgba(60, 60, 67, 0.2);
+}
+
+ul.box-list li:last-child {
+  border-bottom: 0;
+  border-bottom-left-radius: 1.5rem;
+  border-bottom-right-radius: 1.5rem;
 }
 
 ul.box-list>li>a, .box-list-details {
@@ -1097,8 +1104,7 @@ ul.box-list a:hover h4 small, ul.box-list a:hover p {
 }
 
 .modal-box {
-  padding-left: 0;
-  padding-right: 0;
+  padding: 0;
 }
 
 .modal-box-scrollable {

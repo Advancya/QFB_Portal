@@ -264,7 +264,7 @@ const ar = {
   HistoricalPayments_SettlemenOfPayment: "تسوية المدفوعات",
   OutstandingPayments_PastDueSettlement: "Past Due Payment",
   OutstandingPayments_SettlemenOfPayment: "Payment of Facility",
-  
+
   DepositsAndReceivedProfit: "الودائع والأرباح المحصلة",
   ClickToViewTheAccumulatedProfitReceived:
     "إضغط لعرض الأرباح المتراكمة المحصلة",
@@ -327,13 +327,13 @@ const ar = {
   OfferSelectCurrencyLabel: "عملة الاشتراك",
   OfferButton: "إرسال",
 
-  RequestListingTitle: "قائمة الطلبات",
+  RequestListingTitle: "الطلبات",
   RequestListingAddButton: "طلب جديد",
   RequestListingFilterButton: "تنقية",
   RequestListingSampleStatus: "مغلق",
   RequestListingRemoveFilterButton: "إزالة التصفية",
   RequestListingFilterDate: "تاريخ",
-  RequestListingFilterStatus: "الحالة",
+  RequestListingFilterStatus: "حالة الطلب",
   RequestListingFilterType: "نوع الطلب",
   RequestListingFilterSubmitButton: "تطبيق",
   RequestListingFilterSelect: "اختر",
@@ -786,31 +786,33 @@ const ar = {
   ContactUsSelectCountry: "Select Country",
   OTPSentMessage: "An OTP has been sent successfully, kindly check.",
   fileDeleteConfirmMessage: "You want to delete this file?",
-  
+
   NewBeneficiaryMsgTitle: "Beneficiary Sent",
-  NewBeneficiaryMsgBody: "Your beneficiary has been sent successfully to your RM",
-  
+  NewBeneficiaryMsgBody:
+    "Your beneficiary has been sent successfully to your RM",
+
   AccessDeniedMsgTitle: "Access Denied",
   AccessDeniedMessage: "Your are not authorize to accesss this section.",
 
   ChartProfitRecieved: "الارباح",
   ChartDepositsAmount: "المبالغ",
-  
+
   NoLiveHoldingsMesageDeposit: "No Live Holdings Yet for Deposit",
   NoLiveHoldingsMesageInvestment: "No Live Holdings Yet for Investment",
-  NoClosedHoldingsMesageInvestment: "No Closed Holdings Yet for Investment",  
+  NoClosedHoldingsMesageInvestment: "No Closed Holdings Yet for Investment",
   NoClosedHoldingsMesageDeposit: "No Closed Holdings Yet for Deposit",
-  
+
   BreadcrumbLandingTitle: "Landing",
   BreadcrumbAdminTitle: "Admin",
-  
+
   RMSampleAccount: "رقم تعريف مدير العلاقة | ",
   CustomerSampleAccount: "رقم تعريف العميل | ",
   ManagementSampleAccount: "الادارة | ",
   ChartDepositProfitRecieved: "Deposit Received Profit",
   ChartDrillDownHint: "Click to view the profit received",
 
-  ContactUs_Mobile_Format_Validation_Message: "Mobile number should contain country code like +974xxxxxxxx",
+  ContactUs_Mobile_Format_Validation_Message:
+    "Mobile number should contain country code like +974xxxxxxxx",
 
   Signup_Autherization_Code: "Autherization code is not valid",
   Signup_CIF_Message: "Identification Number is not valid",
@@ -820,7 +822,7 @@ const ar = {
   Transactions_Amount_Validation: "Only number accepted",
   BeneficiaryInvalidAccountOrIban: "Invalid Account Number or IBAN",
   BeneficiaryInvalidSwiftCode: "Invalid Swift Code",
-  
+
   NoDepositsHoldingsFound: "No Deposits Holdings Found",
   NoInvestmentsHoldingsFound: "No Investments Holdings Found",
   InvalidEmail: "Please enter a valid email address",

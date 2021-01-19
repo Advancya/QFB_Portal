@@ -3,15 +3,13 @@ import RequestsListing from "./RequestsListing";
 import RequestsDetails from "./RequestsDetails";
 import NewRequest from "./NewRequest";
 import OTPValidationForm from "./ValidateOTPForm";
-import requestIcon from "../../images/request-icon.svg";
+import requestIcon from "../../images/request-icon-white.svg";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import {
   emptyRequestDetail,
   IRequestDetail,
 } from "../../Helpers/publicInterfaces";
-import {
-  GetRequestsByCIF,
-} from "../../services/cmsService";
+import { GetRequestsByCIF } from "../../services/cmsService";
 import { AuthContext } from "../../providers/AuthProvider";
 
 function Requests() {
@@ -26,15 +24,12 @@ function Requests() {
   const [requests, setRequestsListData] = useState<IRequestDetail[]>(null);
 
   useEffect(() => {
-
     if (!!currentContext.selectedCIF) {
       refresRequests();
     }
-
   }, [currentContext.selectedCIF]);
 
   const refresRequests = async () => {
-
     if (!!currentContext.selectedCIF) {
       setLoading(true);
 
@@ -43,7 +38,9 @@ function Requests() {
       );
 
       if (responseData && responseData.length > 0) {
-        setRequestsListData(responseData.sort((a, b) => (a.id > b.id ? -1 : 1)));
+        setRequestsListData(
+          responseData.sort((a, b) => (a.id > b.id ? -1 : 1))
+        );
       }
 
       setLoading(false);
@@ -53,12 +50,16 @@ function Requests() {
   return (
     <>
       <li className="nav-item">
-        <a className="nav-link" href="#" onClick={() => setShowRequestsListing(true)}>
+        <a
+          className="nav-link"
+          href="#"
+          onClick={() => setShowRequestsListing(true)}
+        >
           <img src={requestIcon} className="images-fluid" />
           {local_Strings.navigationItem4}
         </a>
       </li>
-      
+
       <RequestsListing
         showRequestsListingModal={showRequestsListing}
         hideRequestsListingModal={() => setShowRequestsListing(false)}

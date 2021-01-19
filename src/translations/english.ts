@@ -327,13 +327,13 @@ const en = {
   OfferSelectCurrencyLabel: "Subscription Currency",
   OfferButton: "Submit",
 
-  RequestListingTitle: "Request Listing Page",
+  RequestListingTitle: "Requests",
   RequestListingAddButton: "New Request",
   RequestListingFilterButton: "Filter",
   RequestListingSampleStatus: "Closed",
   RequestListingRemoveFilterButton: "Remove Filter",
   RequestListingFilterDate: "Date",
-  RequestListingFilterStatus: "Status",
+  RequestListingFilterStatus: "Request Status",
   RequestListingFilterType: "Request Type",
   RequestListingFilterSubmitButton: "Apply",
   RequestListingFilterSelect: "Select",
@@ -490,7 +490,6 @@ const en = {
   PasswordResetSuccessTitle: "Request Sent",
   PasswordResetSuccessMessage:
     "Your Password reset is done, click here to login",
-
 
   GenericErrorMessage: "Something went wrong, please try again later",
   NewRequestSubmitRequiredMessage:
@@ -795,7 +794,8 @@ const en = {
 
   fileDeleteConfirmMessage: "You want to delete this file?",
   NewBeneficiaryMsgTitle: "Beneficiary Sent",
-  NewBeneficiaryMsgBody: "Your beneficiary has been sent successfully to your RM",
+  NewBeneficiaryMsgBody:
+    "Your beneficiary has been sent successfully to your RM",
 
   AccessDeniedMsgTitle: "Access Denied",
   AccessDeniedMessage: "Your are not authorize to accesss this section.",
@@ -817,7 +817,8 @@ const en = {
   ChartDepositProfitRecieved: "Deposit Received Profit",
   ChartDrillDownHint: "Click to view the profit received",
 
-  ContactUs_Mobile_Format_Validation_Message: "Mobile number should contain country code like +974xxxxxxxx",
+  ContactUs_Mobile_Format_Validation_Message:
+    "Mobile number should contain country code like +974xxxxxxxx",
 
   Signup_Autherization_Code: "Autherization code is not valid",
   Signup_CIF_Message: "Identification Number is not valid",
