@@ -568,7 +568,7 @@ const ar = {
   BankPositionsTitle: "صفحة محفظة البنك",
   ViewPositionAnalysisTitle: "عرض تحليل المحفظه",
   ManagementLandingAssetsTitle: "الأصول",
-  ManagementLandingLiabilitiesTitle: "الخصوم",
+  ManagementLandingLiabilitiesTitle: "الإلتزامات",
   NotificationListingTitle: "إشعارات",
   RequestListingFilterStatusOption1: "في انتظار الإقرار",
   RequestListingFilterStatusOption2: "مغلق",

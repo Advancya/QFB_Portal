@@ -129,7 +129,7 @@ function AuthOffersDetails(props: iAuthOffersDetails) {
             }
           />
           <ul className="box-list mb-0">
-            <li className="shown">
+            <li className="shown border-bottom rounded-0">
               <div className="row align-items-center py-2">
                 <div className="col-md-8 col-sm-8 ">
                   <div className="text-xs color-grey">
@@ -146,14 +146,25 @@ function AuthOffersDetails(props: iAuthOffersDetails) {
                   </h6>
                 </div>
                 {item && !!item.fileName && (
-                  <div
-                    className="col-md-4 text-right"
-                    onClick={downloadAttachment}
-                  >
-                    <a className="download-link d-inline-block " href="#">
-                      {/* <i className="mx-1 fa fa-file color-white"></i> */}
-                      <i className="mx-1 fa fa-download color-white"></i>
-                    </a>
+                  <div className="col-md-4 text-right">
+                    <span className="download-link d-inline-block ">
+                      <a
+                        className="d-inline-block "
+                        target="_blank"
+                        href="#"
+                        onClick={downloadAttachment}
+                      >
+                        <i className="mx-1 fa fa-file color-white"></i>
+                      </a>
+                      <a
+                        className="d-inline-block "
+                        target="_blank"
+                        href="#"
+                        onClick={downloadAttachment}
+                      >
+                        <i className="mx-1 fa fa-download color-white"></i>
+                      </a>
+                    </span>
                   </div>
                 )}
               </div>

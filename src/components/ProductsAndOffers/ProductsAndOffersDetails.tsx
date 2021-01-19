@@ -55,7 +55,7 @@ function ProductsAndOffersDetails(props: iProductsAndOffersDetails) {
       <Modal.Body>
         <div className="box modal-box py-0 mb-0 scrollabel-modal-box">
           <ul className="box-list mb-0">
-            <li className="shown">
+            <li className="py-3 px-4 mb-3 border-bottom rounded-0">
               <div className="row align-items-center py-2">
                 <div className="col-md-12 col-sm-12 ">
                   <div className="text-xs color-gray">
@@ -66,7 +66,9 @@ function ProductsAndOffersDetails(props: iProductsAndOffersDetails) {
                   <h6 className="mb-1 text-600 text-18 ">
                     {(currentContext.language === "en"
                       ? props.item.name
-                      : props.item.nameAr) + " | " + props.item.id}
+                      : props.item.nameAr) +
+                      " | " +
+                      props.item.id}
                   </h6>
                 </div>
               </div>

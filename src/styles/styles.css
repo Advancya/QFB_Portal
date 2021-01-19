@@ -427,6 +427,7 @@ textarea.form-control {
   padding: 0.25rem 1rem;
   text-transform: uppercase;
   min-width: 120px;
+  margin-bottom: 1rem;
 }
 
 .btn-primary:hover {
@@ -1273,6 +1274,10 @@ ul.box-list a:hover h4 small, ul.box-list a:hover p {
   margin-bottom: 1.25rem;
 }
 
+#newReqFields {
+  margin-top: 1rem;
+}
+
 .filter-box input.form-control, .filter-box select.form-control, .filter-box select.custom-select, .filter-box textarea.form-control, .filter-box .custom-file-label, .filter-box .custom-file-label {
   color: #000;
   font-size: 0.9rem;
@@ -1280,6 +1285,12 @@ ul.box-list a:hover h4 small, ul.box-list a:hover p {
 
 .input-group-search {
   position: relative;
+}
+
+.form-group {
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
 }
 
 .input-group-search .input-group-prepend-search {
@@ -1496,23 +1507,23 @@ tr.shown {
   border-radius: 10px;
 }
 
-.download-link:hover i {
+.download-link a:hover {
   background-color: #8d2232!important;
 }
 
-.download-link i {
-  padding: 10px 15px;
+.download-link a {
+  padding: 8px 13px;
   background: rgb(94, 66, 54);
   margin: 0!important;
 }
 
-[dir=ltr] .download-link i:first-child {
+[dir=ltr] .download-link a:first-child {
   border-bottom-left-radius: 8px;
   border-top-left-radius: 8px;
   opacity: 0.8;
 }
 
-[dir=ltr] .download-link i:last-child {
+[dir=ltr] .download-link a:last-child {
   border-bottom-right-radius: 8px;
   border-top-right-radius: 8px;
 }

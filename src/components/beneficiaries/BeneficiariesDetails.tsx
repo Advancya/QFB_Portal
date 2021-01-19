@@ -26,7 +26,7 @@ function BeneficiariesDetails(props: iBeneficiariesDetails) {
   local_Strings.setLanguage(currentContext.language);
   const [isLoading, setLoading] = useState(false);
   const [allowEdit, setAllowEdit] = useState<boolean>(false);
-  
+
   useEffect(() => {
     let isMounted = true;
     const initialLoadMethod = async () => {
@@ -84,7 +84,7 @@ function BeneficiariesDetails(props: iBeneficiariesDetails) {
       <Modal.Body>
         <div className="box modal-box">
           <ul className="box-list" id="reqList1">
-            <li className="pb-3">
+            <li className="py-3 mb-3 border-bottom rounded-0">
               <div className="row align-items-center">
                 <div className="col-sm-8">
                   <h4>

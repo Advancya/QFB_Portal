@@ -7,9 +7,12 @@ import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import { RmTranasctionUpdateStatus } from "../../services/transactionService";
-import ViewAttachment from '../../shared/AttachmentViewer';
-import Swal from 'sweetalert2';
-import { emptyTransactionDetail, ITransactionDetail } from "../../Helpers/publicInterfaces";
+import ViewAttachment from "../../shared/AttachmentViewer";
+import Swal from "sweetalert2";
+import {
+  emptyTransactionDetail,
+  ITransactionDetail,
+} from "../../Helpers/publicInterfaces";
 import { GetTransactionById } from "../../services/cmsService";
 import xIcon from "../../images/x-icon.svg";
 
@@ -26,7 +29,9 @@ function RMTranactionDetails(props: iRMDetails) {
   const [isLoading, setLoading] = useState(false);
 
   const [formFields, setFormFields] = useState<any[]>([]);
-  const [item, setDetail] = useState<ITransactionDetail>(emptyTransactionDetail);
+  const [item, setDetail] = useState<ITransactionDetail>(
+    emptyTransactionDetail
+  );
   const [selectedStatus, setSelectedStatus] = useState("");
   const [showNoData, setNoData] = useState(false);
 
@@ -78,16 +83,25 @@ function RMTranactionDetails(props: iRMDetails) {
       <Modal.Body>
         <div className="box modal-box">
           <ul className="box-list" id="reqList1">
-            <li className="pb-3">
+            <li className="py-3 mb-3 border-bottom rounded-0">
               <div className="row align-items-center">
                 <div className="col-sm-8">
                   <h5 className="mb-2">
-                    {item.requestDate ? moment(item.requestDate).format("DD MMMM YYYY") : ""}</h5>
-                  <h4>{currentContext.language === "ar" ? item.requestSubjectAR : item.requestSubject}</h4>
+                    {item.requestDate
+                      ? moment(item.requestDate).format("DD MMMM YYYY")
+                      : ""}
+                  </h5>
+                  <h4>
+                    {currentContext.language === "ar"
+                      ? item.requestSubjectAR
+                      : item.requestSubject}
+                  </h4>
                 </div>
                 <div className="col-sm-4 text-sm-right">
                   <span className="status-badge">
-                    {currentContext.language === "ar" ? item.requestStatusAR : item.requestStatus}
+                    {currentContext.language === "ar"
+                      ? item.requestStatusAR
+                      : item.requestStatus}
                   </span>
                 </div>
               </div>
@@ -95,29 +109,28 @@ function RMTranactionDetails(props: iRMDetails) {
           </ul>
           <LoadingOverlay
             active={isLoading}
-            spinner={<PuffLoader
-              size={Constant.SpnnerSize}
-              color={Constant.SpinnerColor}
-            />}
+            spinner={
+              <PuffLoader
+                size={Constant.SpnnerSize}
+                color={Constant.SpinnerColor}
+              />
+            }
           />
           <div className="py-2">
             <div className="row col-lg-9">
               <div className="col-lg-6 form-group">
                 <label>{local_Strings.TransactionFromAccountLabel}</label>
-                <div className="readonly">
-                  {item.transferFromAccount || ""}</div>
+                <div className="readonly">{item.transferFromAccount || ""}</div>
               </div>
               {item.transactionTypeId === 1 && (
                 <div className="col-lg-6 form-group">
                   <label>{local_Strings.TransactionToAccountLabel}</label>
-                  <div className="readonly">
-                    {item.transferToAccount || ""}
-                  </div>
-                </div>)}
+                  <div className="readonly">{item.transferToAccount || ""}</div>
+                </div>
+              )}
               <div className="col-lg-6 form-group">
                 <label>{local_Strings.TransactionAmountLabel}</label>
-                <div className="readonly">
-                  {item.amount || ""}</div>
+                <div className="readonly">{item.amount || ""}</div>
               </div>
               {item.transactionTypeId !== 1 && (
                 <React.Fragment>
@@ -129,29 +142,32 @@ function RMTranactionDetails(props: iRMDetails) {
                   </div>
                   <div className="col-lg-6 form-group">
                     <label>{local_Strings.TransactionBenficiaryLabel}</label>
-                    <div className="readonly">{item.beneficiaryFullName || ""}</div>
+                    <div className="readonly">
+                      {item.beneficiaryFullName || ""}
+                    </div>
                   </div>
                   <div className="col-lg-6 form-group customDate">
                     <label>{local_Strings.TransactionDateLabel}</label>
                     <div className="readonly date d-flex justify-content-between align-items-center">
-                      {item.transactionDate ? moment(item.transactionDate).format("DD/MM/YYYY") : ""}
+                      {item.transactionDate
+                        ? moment(item.transactionDate).format("DD/MM/YYYY")
+                        : ""}
                       <i className="fa fa-calendar-o" aria-hidden="true"></i>
                     </div>
                   </div>
                   <div className="col-lg-12">
                     <label>{local_Strings.TransactionDescriptionLabel}</label>
-                    <div className="readonly">
-                      {item.description || ""}
-                    </div>
+                    <div className="readonly">{item.description || ""}</div>
                   </div>
-                </React.Fragment>)}
+                </React.Fragment>
+              )}
             </div>
           </div>
           <div className="row py-2 px-3">
-
             <div className="col-lg-4">
               <label>{local_Strings.RMDetailsChangeRequestStatusLabel}</label>
-              <select className="form-control"
+              <select
+                className="form-control"
                 value={selectedStatus || ""}
                 onChange={(e) => {
                   setSelectedStatus(e.target.value);
@@ -170,7 +186,9 @@ function RMTranactionDetails(props: iRMDetails) {
               </select>
             </div>
             <div className="col-lg-4 text-right py-2 px-3">
-              <button id="submitOTPBtn" className="btn btn-primary"
+              <button
+                id="submitOTPBtn"
+                className="btn btn-primary"
                 type="submit"
                 onClick={async (e) => {
                   if (!!selectedStatus) {
@@ -182,41 +200,40 @@ function RMTranactionDetails(props: iRMDetails) {
                     setLoading(false);
                     if (result) {
                       Swal.fire({
-                        position: 'top-end',
-                        icon: 'success',
+                        position: "top-end",
+                        icon: "success",
                         title: local_Strings.ConfirmationTitle,
                         html: local_Strings.ConfirmationDesc,
                         showConfirmButton: false,
-                        timer: Constant.AlertTimeout
+                        timer: Constant.AlertTimeout,
                       });
                       props.backRMDetailsgModal();
                     } else {
                       Swal.fire({
-                        position: 'top-end',
-                        icon: 'error',
+                        position: "top-end",
+                        icon: "error",
                         title: local_Strings.GenericErrorMessage,
                         showConfirmButton: false,
-                        timer: Constant.AlertTimeout
+                        timer: Constant.AlertTimeout,
                       });
                     }
                   } else {
-
                     Swal.fire({
-                      position: 'top-end',
-                      icon: 'error',
+                      position: "top-end",
+                      icon: "error",
                       title: local_Strings.formValidationMessage,
                       showConfirmButton: false,
-                      timer: Constant.AlertTimeout
+                      timer: Constant.AlertTimeout,
                     });
                   }
-                }}>
+                }}
+              >
                 {local_Strings.RMDetailsbutton}
               </button>
             </div>
           </div>
         </div>
       </Modal.Body>
-
     </Modal>
   );
 }

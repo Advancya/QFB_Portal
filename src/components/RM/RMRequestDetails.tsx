@@ -11,8 +11,8 @@ import iRequest, {
   GetRequstByID,
   RmUpdateStatus,
 } from "../../services/requestService";
-import ViewAttachment from '../../shared/AttachmentViewer';
-import Swal from 'sweetalert2';
+import ViewAttachment from "../../shared/AttachmentViewer";
+import Swal from "sweetalert2";
 import xIcon from "../../images/x-icon.svg";
 
 interface iRMDetails {
@@ -187,11 +187,13 @@ function RMRequestDetails(props: iRMDetails) {
       <Modal.Body>
         <div className="box modal-box">
           <ul className="box-list" id="reqList1">
-            <li className="pb-3">
+            <li className="py-3 mb-3 border-bottom rounded-0">
               <div className="row align-items-center">
                 <div className="col-sm-8">
                   <h5 className="mb-2">
-                    {moment(currentRequest.requestCreateDate).format("DD/MM/YYYY")}
+                    {moment(currentRequest.requestCreateDate).format(
+                      "DD/MM/YYYY"
+                    )}
                   </h5>
                   <h4>
                     {currentContext.language !== "ar"
@@ -212,57 +214,56 @@ function RMRequestDetails(props: iRMDetails) {
           </ul>
           <LoadingOverlay
             active={isLoading}
-            spinner={<PuffLoader
-              size={Constant.SpnnerSize}
-              color={Constant.SpinnerColor}
-            />}
+            spinner={
+              <PuffLoader
+                size={Constant.SpnnerSize}
+                color={Constant.SpinnerColor}
+              />
+            }
           />
-          {formFields.map((item, index) =>
-
+          {formFields.map((item, index) => (
             <div key={index} className="px-3 py-3 col-lg-8">
-              <label>{
-                currentContext.language === "ar"
+              <label>
+                {currentContext.language === "ar"
                   ? item["details"].split(";")[1]
-                  : item["details"].split(";")[0]
-              }
+                  : item["details"].split(";")[0]}
               </label>
-              {item["details"].split(";")[2] !== "FILE_UPLOAD" ?
-                (
-                  item["details"].split(";")[2] ===
-                    "MULTILINE_TEXT" || (item["details"].split(";")[2] === "READ_ONLY" &&
-                      item["details"].split(";")[3].toString() !==
-                      "NULL") ?
-                    <Form.Control
-                      as="textarea"
-                      readOnly={true}
-                      defaultValue={getRequestFieldValue(
-                        item["details"].split(";")[0].replace(/ /g, ""))
-                      }
-                      maxLength={400}
-                    /> :
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: getRequestFieldValue(
-                          item["details"].split(";")[0].replace(/ /g, ""))
-                      }}
-                      className="request-detail-control" />
+              {item["details"].split(";")[2] !== "FILE_UPLOAD" ? (
+                item["details"].split(";")[2] === "MULTILINE_TEXT" ||
+                (item["details"].split(";")[2] === "READ_ONLY" &&
+                  item["details"].split(";")[3].toString() !== "NULL") ? (
+                  <Form.Control
+                    as="textarea"
+                    readOnly={true}
+                    defaultValue={getRequestFieldValue(
+                      item["details"].split(";")[0].replace(/ /g, "")
+                    )}
+                    maxLength={400}
+                  />
+                ) : (
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: getRequestFieldValue(
+                        item["details"].split(";")[0].replace(/ /g, "")
+                      ),
+                    }}
+                    className="request-detail-control"
+                  />
                 )
-                :
-                <ViewAttachment showDelete={false}
+              ) : (
+                <ViewAttachment
+                  showDelete={false}
                   fileName={getRequestFieldValue("FileName")}
-                  fileContent={getRequestFieldValue(
-                    "FileContent"
-                  )}
+                  fileContent={getRequestFieldValue("FileContent")}
                 />
-              }
+              )}
             </div>
-
-          )}
-          <div className="py-3 row col-xl-12 mb-5">
-
-            <div className="col-lg-6">
+          ))}
+          <div className="">
+            <div className="px-3 py-3 col-lg-8">
               <label>{local_Strings.RMDetailsChangeRequestStatusLabel}</label>
-              <select className="form-control"
+              <select
+                className="form-control"
                 value={selectedStatus || ""}
                 onChange={(e) => {
                   setSelectedStatus(e.target.value);
@@ -283,8 +284,11 @@ function RMRequestDetails(props: iRMDetails) {
                 </option>
               </select>
             </div>
-            <div className="col-lg-6 text-right py-2 px-3">
-              <button id="submitOTPBtn" className="btn btn-primary"
+
+            <div className="text-right py-2 px-3">
+              <button
+                id="submitOTPBtn"
+                className="btn btn-primary"
                 type="submit"
                 onClick={async (e) => {
                   if (!!selectedStatus) {
@@ -296,41 +300,40 @@ function RMRequestDetails(props: iRMDetails) {
                     setLoading(false);
                     if (result) {
                       Swal.fire({
-                        position: 'top-end',
-                        icon: 'success',
+                        position: "top-end",
+                        icon: "success",
                         title: local_Strings.ConfirmationTitle,
                         html: local_Strings.ConfirmationDesc,
                         showConfirmButton: false,
-                        timer: Constant.AlertTimeout
+                        timer: Constant.AlertTimeout,
                       });
                       props.backRMDetailsgModal();
                     } else {
                       Swal.fire({
-                        position: 'top-end',
-                        icon: 'error',
+                        position: "top-end",
+                        icon: "error",
                         title: local_Strings.GenericErrorMessage,
                         showConfirmButton: false,
-                        timer: Constant.AlertTimeout
+                        timer: Constant.AlertTimeout,
                       });
                     }
                   } else {
-
                     Swal.fire({
-                      position: 'top-end',
-                      icon: 'error',
+                      position: "top-end",
+                      icon: "error",
                       title: local_Strings.formValidationMessage,
                       showConfirmButton: false,
-                      timer: Constant.AlertTimeout
+                      timer: Constant.AlertTimeout,
                     });
                   }
-                }}>
+                }}
+              >
                 {local_Strings.RMDetailsbutton}
               </button>
             </div>
           </div>
         </div>
       </Modal.Body>
-
     </Modal>
   );
 }

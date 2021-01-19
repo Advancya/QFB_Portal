@@ -108,7 +108,7 @@ function AuthOfferRequest(props: iAuthOfferRequest) {
       <Modal.Body>
         <div className="box modal-box py-0 mb-0 scrollabel-modal-box">
           <ul className="box-list mb-0">
-            <li className="shown">
+            <li className="shown border-bottom rounded-0">
               <div className="row align-items-center py-2">
                 <div className="col-md-12 ">
                   <div className="text-xs color-grey">
