@@ -46,7 +46,7 @@ const Navigation = () => {
 
   return (
     <div className="col-md-7">
-      <div className="welcomeText text-right mt-3">
+      <div className="welcomeText text-right mt-3  d-flex justify-content-end">
         <span>
           {local_Strings.navigationUserMessage +
             (userInfo.customerShortName || "") +

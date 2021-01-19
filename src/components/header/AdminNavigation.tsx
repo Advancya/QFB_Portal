@@ -2,8 +2,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { emptyUserInfo, IUserInfo } from "../../Helpers/publicInterfaces";
-import { GetUserWelcomeData, GetRmDisplayName } from "../../services/cmsService";
+import {
+  GetUserWelcomeData,
+  GetRmDisplayName,
+} from "../../services/cmsService";
 import Notfications from "../Notifications/Notifications";
+import usericon from "../../images/user-icon.svg";
 
 function AdminNavigation() {
   const currentContext = useContext(AuthContext);
@@ -37,24 +41,24 @@ function AdminNavigation() {
     }; // use effect cleanup to set flag false, if unmounted
   }, [currentContext.selectedCIF]);
 
-
   return (
     <div className="col-md-7">
-      <div className="welcomeText text-right mt-3">
+      <div className="welcomeText text-right mt-3  d-flex justify-content-end">
         <span>
-          {(rmName || userInfo.name) + " "}
-          <i className="fa fa-user-circle-o"></i>
+          {local_Strings.navigationUserMessage +
+            (rmName || userInfo.name) +
+            " "}
+          <img className="mx-1" width="20" src={usericon} />
         </span>
         &nbsp;
         <a
-          className="cursor-pointer mx-2"
+          className="cursor-pointer  log-out"
           href="#"
           title="Exit"
           onClick={currentContext.logout}
         >
-          <i className="fa fa-sign-out" />
+          <i className="fa fa-sign-out text-sm" />
         </a>
-        <Notfications />
       </div>
     </div>
   );

@@ -1,9 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import FilterCustomDateControl from "../../shared/FilterCustomDateControl";
-import {
-  IRequestFilter,
-  iRmRequests,
-} from "../../Helpers/publicInterfaces";
+import { IRequestFilter, iRmRequests } from "../../Helpers/publicInterfaces";
 import moment from "moment";
 import FilterDateControl from "../../shared/FilterDateControl";
 import FilterDropDownControl from "../../shared/FilterDropDownControl";
@@ -13,9 +10,7 @@ import * as helper from "../../Helpers/helper";
 import FilterButtonControlInline from "../../shared/FilterButtonControlInline";
 import CommonSearchControl from "../../shared/CommonSearchControl";
 import NoResult from "../../shared/NoResult";
-import {
-  GetAllRequestTypes
-} from "../../services/cmsService";
+import { GetAllRequestTypes } from "../../services/cmsService";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
@@ -61,7 +56,7 @@ function RMRequestListing(props: iRMRequestListing) {
     },
     {
       label: local_Strings.RequestListingFilterStatusOption2,
-      value: "Closed"
+      value: "Closed",
     },
     {
       label: local_Strings.RequestListingFilterStatusOption3,
@@ -100,7 +95,11 @@ function RMRequestListing(props: iRMRequestListing) {
 
   useEffect(() => {
     setFilteredData(props.requests);
-    if (props.requests && props.requests.length > 0 && props.requests.length < rowLimit) {
+    if (
+      props.requests &&
+      props.requests.length > 0 &&
+      props.requests.length < rowLimit
+    ) {
       setOffset(props.requests.length);
     }
   }, [props.requests, props.reloading]);
@@ -122,10 +121,16 @@ function RMRequestListing(props: iRMRequestListing) {
       >
         <div className="row align-items-center border-bottom  pb-2 mb-2">
           <div className="col-sm-8">
-            <h5 className={!item.isRead ? "unread" : ""}>{moment(item["requestCreateDate"]).format("DD-MM-YYYY")}</h5>
-            <h4>{currentContext.language === "ar"
-              ? item["requestSubjectAr"] || ""
-              : item["requestSubject"] || ""}</h4>
+            <h5>
+              <span className={!item.isRead ? "unread" : ""}>
+                {moment(item["requestCreateDate"]).format("DD-MM-YYYY")}
+              </span>
+            </h5>
+            <h4>
+              {currentContext.language === "ar"
+                ? item["requestSubjectAr"] || ""
+                : item["requestSubject"] || ""}
+            </h4>
           </div>
           <div className="col-sm-4 text-sm-right">
             <span className="status-badge ">
@@ -137,9 +142,7 @@ function RMRequestListing(props: iRMRequestListing) {
         </div>
         <div className="row align-items-center">
           <div className="col-sm-8">
-            <h6 className="text-15 mb-0">
-              {item["customerName"] || ""}
-            </h6>
+            <h6 className="text-15 mb-0">{item["customerName"] || ""}</h6>
             <span className="color-light-gold">
               {local_Strings.RMSampleAccount + item["cif"] || ""}
             </span>
@@ -149,10 +152,7 @@ function RMRequestListing(props: iRMRequestListing) {
               {local_Strings.WelcomeScreenCall}
             </span>
             <span className="icon-badge">
-              <i
-                className="fa fa-mobile text-sm"
-                aria-hidden="true"
-              ></i>
+              <i className="fa fa-mobile text-sm" aria-hidden="true"></i>
             </span>
           </div>
         </div>
@@ -180,30 +180,30 @@ function RMRequestListing(props: iRMRequestListing) {
             <h3>{local_Strings.RMLandingBankPositionsLabel}</h3>
           </div>
           <div className="col-md-4">
-            <CommonSearchControl applySearch={(_text) => {
-              if (!!_text) {
-                const _filteredData = [...props.requests];
-                setFilteredData(
-                  _filteredData
-                    .filter(
-                      (f) =>
-                        Object.values(f).filter(
-                          (t: any) =>
-                            t &&
-                            t
-                              .toString()
-                              .toLowerCase()
-                              .indexOf(
-                                _text.toLowerCase()
-                              ) !== -1
-                        ).length > 0
-                    )
-                    .slice(0, 10)
-                );
-              } else {
-                setFilteredData(props.requests.slice(0, 10));
-              }
-            }} />
+            <CommonSearchControl
+              applySearch={(_text) => {
+                if (!!_text) {
+                  const _filteredData = [...props.requests];
+                  setFilteredData(
+                    _filteredData
+                      .filter(
+                        (f) =>
+                          Object.values(f).filter(
+                            (t: any) =>
+                              t &&
+                              t
+                                .toString()
+                                .toLowerCase()
+                                .indexOf(_text.toLowerCase()) !== -1
+                          ).length > 0
+                      )
+                      .slice(0, 10)
+                  );
+                } else {
+                  setFilteredData(props.requests.slice(0, 10));
+                }
+              }}
+            />
           </div>
         </div>
       </div>
@@ -267,7 +267,10 @@ function RMRequestListing(props: iRMRequestListing) {
               applyFilter={() => {
                 setFilter({ ...filters, filterApplied: true });
                 console.log(filters);
-                const _filteredData = helper.filterRMRequests(props.requests, filters);
+                const _filteredData = helper.filterRMRequests(
+                  props.requests,
+                  filters
+                );
                 setFilteredData(_filteredData);
               }}
               showClearFilter={filters.filterApplied}
@@ -287,17 +290,18 @@ function RMRequestListing(props: iRMRequestListing) {
             }
           />
           <ul className="box-list" id="reqList">
-            {filteredData &&
-              filteredData.length > 0
+            {filteredData && filteredData.length > 0
               ? filteredData
-                .slice(0, offset)
-                .map((item, index) => renderItem(item, index))
+                  .slice(0, offset)
+                  .map((item, index) => renderItem(item, index))
               : NoResult(local_Strings.NoDataToShow)}
           </ul>
         </div>
         <FilterMoreButtonControl
           showMore={
-            filteredData && filteredData.length > rowLimit && offset < filteredData.length
+            filteredData &&
+            filteredData.length > rowLimit &&
+            offset < filteredData.length
           }
           onClickMore={() => setOffset(offset + 5)}
         />
