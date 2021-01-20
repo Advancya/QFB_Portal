@@ -195,7 +195,7 @@ function NotificationsForm(props: DetailsProps) {
             <div className="box modal-box py-0 mb-0 scrollabel-modal-box">
               <div className="box-body">
                 <div className="form-group">
-                  <label className="mb-1 text-600">
+                  <label>
                     {values.selectedCIFs && values.selectedCIFs.length > 0
                       ? local_Strings.NotificationsCustomerNameLabel
                       : ""}
@@ -232,9 +232,7 @@ function NotificationsForm(props: DetailsProps) {
                   )}
                 </div>
                 <div className="form-group">
-                  <label className="mb-1 text-600">
-                    {local_Strings.NotificationsNameLabel}
-                  </label>
+                  <label>{local_Strings.NotificationsNameLabel}</label>
                   <input
                     type="text"
                     className="form-control"
@@ -248,9 +246,7 @@ function NotificationsForm(props: DetailsProps) {
                     InvalidFieldError(errors.messageTitle)}
                 </div>
                 <div className="form-group">
-                  <label className="mb-1 text-600">
-                    {local_Strings.NotificationsArNameLabel}
-                  </label>
+                  <label>{local_Strings.NotificationsArNameLabel}</label>
                   <input
                     type="text"
                     className="form-control"
@@ -264,9 +260,7 @@ function NotificationsForm(props: DetailsProps) {
                     InvalidFieldError(errors.messageTitleAr)}
                 </div>
                 <div className="form-group customDate">
-                  <label className="mb-1 text-600">
-                    {local_Strings.NotificationsExpireLabel}
-                  </label>
+                  <label>{local_Strings.NotificationsExpireLabel}</label>
 
                   <DatePicker
                     name="expiryDate"
@@ -286,9 +280,7 @@ function NotificationsForm(props: DetailsProps) {
                     InvalidFieldError(errors.expiryDate)}
                 </div>
                 <div className="form-group">
-                  <label className="mb-1 text-600">
-                    {local_Strings.NotificationsDescrLabel}
-                  </label>
+                  <label>{local_Strings.NotificationsDescrLabel}</label>
                   {props.editable ? (
                     <CKEditor
                       editor={ClassicEditor}
@@ -331,9 +323,7 @@ function NotificationsForm(props: DetailsProps) {
                   )}
                 </div>
                 <div className="form-group">
-                  <label className="mb-1 text-600">
-                    {local_Strings.NotificationsArDescrLabel}
-                  </label>
+                  <label>{local_Strings.NotificationsArDescrLabel}</label>
                   {props.editable ? (
                     <CKEditor
                       editor={ClassicEditor}

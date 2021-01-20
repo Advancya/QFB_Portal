@@ -454,7 +454,7 @@ const en = {
   RMDetailsChangeRequestStatusLabel: "Change Request Status",
   RMDetailsbutton: "Save",
 
-  InboxMessageListingTitle: "Inbox Message Listing",
+  InboxMessageListingTitle: "INBOX MESSAGES",
   InboxMessageListingFilterWithLabel: "Filter With",
   InboxMessageListingAsOfLabel: "As Of: ",
   InboxMessageDetailsTitle: "Inbox Message Details",

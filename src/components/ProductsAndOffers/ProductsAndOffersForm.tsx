@@ -159,9 +159,7 @@ function ProductsAndOffersForm(props: DetailsProps) {
             <div className="box modal-box py-0 mb-0 scrollabel-modal-box">
               <div className="box-body">
                 <div className="form-group">
-                  <label className="mb-1 text-600">
-                    {local_Strings.ProductsAndOffersNameLabel}
-                  </label>
+                  <label>{local_Strings.ProductsAndOffersNameLabel}</label>
                   <input
                     type="text"
                     className="form-control"
@@ -175,9 +173,7 @@ function ProductsAndOffersForm(props: DetailsProps) {
                     InvalidFieldError(errors.name)}
                 </div>
                 <div className="form-group">
-                  <label className="mb-1 text-600">
-                    {local_Strings.ProductsAndOffersArNameLabel}
-                  </label>
+                  <label>{local_Strings.ProductsAndOffersArNameLabel}</label>
                   <input
                     type="text"
                     className="form-control"
@@ -191,9 +187,7 @@ function ProductsAndOffersForm(props: DetailsProps) {
                     InvalidFieldError(errors.nameAr)}
                 </div>
                 <div className="form-group customDate">
-                  <label className="mb-1 text-600">
-                    {local_Strings.ProductsAndOffersExpireLabel}
-                  </label>
+                  <label>{local_Strings.ProductsAndOffersExpireLabel}</label>
 
                   <DatePicker
                     name="expiryDate"
@@ -213,9 +207,7 @@ function ProductsAndOffersForm(props: DetailsProps) {
                     InvalidFieldError(errors.expiryDate)}
                 </div>
                 <div className="form-group">
-                  <label className="mb-1 text-600">
-                    {local_Strings.ProductsAndOffersDescrLabel}
-                  </label>
+                  <label>{local_Strings.ProductsAndOffersDescrLabel}</label>
                   {props.editable ? (
                     <CKEditor
                       editor={ClassicEditor}
@@ -258,9 +250,7 @@ function ProductsAndOffersForm(props: DetailsProps) {
                   )}
                 </div>
                 <div className="form-group">
-                  <label className="mb-1 text-600">
-                    {local_Strings.ProductsAndOffersArDescrLabel}
-                  </label>
+                  <label>{local_Strings.ProductsAndOffersArDescrLabel}</label>
                   {props.editable ? (
                     <CKEditor
                       editor={ClassicEditor}
