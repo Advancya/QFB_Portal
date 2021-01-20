@@ -43,7 +43,7 @@ function AdminNavigation() {
 
   return (
     <div className="col-md-7">
-      <div className="welcomeText text-right mt-3  d-flex justify-content-end">
+      <div className="welcomeText text-right mt-3  d-flex justify-content-end align-items-center">
         <span>
           {local_Strings.navigationUserMessage +
             (rmName || userInfo.name) +

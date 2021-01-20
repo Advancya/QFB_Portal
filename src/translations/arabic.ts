@@ -743,7 +743,7 @@ const ar = {
   pagingNext: "التالى",
   pagingPrevious: "السابق",
 
-  navigationUserMessage: "مرحبا ، أحمد محمد أحمد محمد",
+  navigationUserMessage: "مرحبا ،    ",
   navigationItem1: "القابضة",
   navigationItem2: "المعاملات",
   navigationItem3: "العروض",

@@ -1662,7 +1662,7 @@ tr.shown {
   border-top-left-radius: 8px;
 }
 
-[dir="rtl"] .fa-chevron-left, [dir="rtl"] .fa-chevron-right, [dir="rtl"] .fa-arrow-right, [dir="rtl"] .fa-caret-right {
+[dir="rtl"] .fa-chevron-left, [dir="rtl"] .fa-chevron-right, [dir="rtl"] .fa-arrow-right, [dir="rtl"] .fa-caret-right, [dir="rtl"] .fa-sign-out {
   -webkit-transform: rotate(180deg);
   -moz-transform: rotate(180deg);
   -ms-transform: rotate(180deg);
