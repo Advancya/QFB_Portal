@@ -1,9 +1,4 @@
-import React, {
-  createRef,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import React, { createRef, useContext, useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
@@ -205,9 +200,7 @@ function DocumentForm(props: DetailsProps) {
             <div className="box modal-box py-0 mb-0 scrollabel-modal-box">
               <div className="box-body">
                 <div className="form-group">
-                  <label className="mb-1 text-600">
-                    {local_Strings.documentName}
-                  </label>
+                  <label>{local_Strings.documentName}</label>
                   <input
                     type="text"
                     className="form-control"
@@ -221,9 +214,7 @@ function DocumentForm(props: DetailsProps) {
                     InvalidFieldError(errors.documentName)}
                 </div>
                 <div className="form-group">
-                  <label className="mb-1 text-600">
-                    {local_Strings.documentNameAr}
-                  </label>
+                  <label>{local_Strings.documentNameAr}</label>
                   <input
                     type="text"
                     className="form-control"
@@ -237,9 +228,7 @@ function DocumentForm(props: DetailsProps) {
                     InvalidFieldError(errors.documentNameAr)}
                 </div>
                 <div className="form-group customDate">
-                  <label className="mb-1 text-600">
-                    {local_Strings.documentDate}
-                  </label>
+                  <label>{local_Strings.documentDate}</label>
 
                   <DatePicker
                     name="documentDate"
@@ -263,9 +252,7 @@ function DocumentForm(props: DetailsProps) {
                     InvalidFieldError(errors.documentDate)}
                 </div>
                 <div className="form-group">
-                  <label className="mb-1 text-600">
-                    {local_Strings.documentPriority}
-                  </label>
+                  <label>{local_Strings.documentPriority}</label>
                   <input
                     type="text"
                     className="form-control"
@@ -294,9 +281,7 @@ function DocumentForm(props: DetailsProps) {
                     InvalidFieldError(errors.orderId)}
                 </div>
                 <div className="form-group">
-                  <label className="mb-1 text-600">
-                    {local_Strings.documentShortDescription}
-                  </label>
+                  <label>{local_Strings.documentShortDescription}</label>
                   {props.editable ? (
                     <React.Fragment>
                       <CKEditor
@@ -343,9 +328,7 @@ function DocumentForm(props: DetailsProps) {
                   )}
                 </div>
                 <div className="form-group">
-                  <label className="mb-1 text-600">
-                    {local_Strings.documentShortDescriptionAr}
-                  </label>
+                  <label>{local_Strings.documentShortDescriptionAr}</label>
                   {props.editable ? (
                     <React.Fragment>
                       <CKEditor
@@ -392,9 +375,7 @@ function DocumentForm(props: DetailsProps) {
                   )}
                 </div>
                 <div className="form-group">
-                  <label className="mb-1 text-600">
-                    {local_Strings.OfferAttachment}
-                  </label>
+                  <label>{local_Strings.OfferAttachment}</label>
                   {props.editable ? (
                     <React.Fragment>
                       <label className="file">
@@ -511,7 +492,7 @@ function DocumentForm(props: DetailsProps) {
                         saveAs(blob, values.fileName);
                       }}
                     >
-                      <h5>
+                      <h5 className="text-break">
                         {values.fileName}
                         <br />
                         <small>

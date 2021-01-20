@@ -41,7 +41,6 @@ function InboxLanding(props: iInboxLanding) {
     setShowInboxListing(true);
   };
 
-
   return (
     <div className="box pb-0 min-h-16">
       <div className="box-header">
@@ -62,7 +61,7 @@ function InboxLanding(props: iInboxLanding) {
       <ul className="box-list">
         {InboxMessages.messages &&
           InboxMessages.messages.length > 0 &&
-          InboxMessages.messages.slice(0, 3).map((item, index) =>
+          InboxMessages.messages.slice(0, 3).map((item, index) => (
             <li key={index}>
               <a
                 href="#"
@@ -70,34 +69,37 @@ function InboxLanding(props: iInboxLanding) {
                 onClick={() => props.showInboxDetailsModal(item)}
               >
                 <h4>
-                  <span className={!item.isRead
-                    ? "unread" : ""}>{item.adviceType || ""}</span>
-                  <small>{item.adviceDate
-                    ? moment(item.adviceDate).format(
-                      "DD/MM/YYYY h:mm a"
-                    )
-                    : ""}</small>
+                  <span className={!item.isRead ? "unread" : ""}>
+                    {item.adviceType || ""}
+                  </span>
+                  <small>
+                    {item.adviceDate
+                      ? moment(item.adviceDate).format("DD/MM/YYYY h:mm a")
+                      : ""}
+                  </small>
                 </h4>
                 <p>{item.description || ""}</p>
               </a>
-            </li>)
-        }
+            </li>
+          ))}
       </ul>
-      {InboxMessages.messages && InboxMessages.messages.length > 0
-        && !!InboxMessages.messages[0].adviceDate &&
-        <InboxListing
-          showInboxListingModal={showInboxListing}
-          hideInboxListingModal={handleCloseInboxListing}
-          showInboxDetailsModal={handleShowInboxDetails}
-        />
-      }
-      {message && !!message.adviceDate &&
+      {InboxMessages.messages &&
+        InboxMessages.messages.length > 0 &&
+        !!InboxMessages.messages[0].adviceDate && (
+          <InboxListing
+            showInboxListingModal={showInboxListing}
+            hideInboxListingModal={handleCloseInboxListing}
+            showInboxDetailsModal={handleShowInboxDetails}
+          />
+        )}
+      {message && !!message.adviceDate && (
         <InboxDetails
           item={message}
           showInboxDetailsModal={showInboxDetails}
           hideInboxDetailsModal={handleCloseInboxDetails}
           backInboxListingModal={handleBackInboxDetails}
-        />}
+        />
+      )}
     </div>
   );
 }

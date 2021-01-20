@@ -359,10 +359,10 @@ const en = {
   RequestOTPResendOTP: "Resend OTP ?",
   RequestOTPButton: "Confirm",
 
-  TransactionsListingTitle: "Transactions Listing",
+  TransactionsListingTitle: "Transactions",
   TransactionsListingFilterButton: "Filter",
   TransactionsListingBeneficiariesButton: "Beneficiaries",
-  TransactionsListingNewButton: "New",
+  TransactionsListingNewButton: "New Transaction",
   TransactionsListingTitleSample: "Transfer to Ahmed Mohamed",
   TransactionsListingStatus: "Cancelled",
   TransactionsDetailsTitle: "Transactions Details",
@@ -454,7 +454,7 @@ const en = {
   RMDetailsChangeRequestStatusLabel: "Change Request Status",
   RMDetailsbutton: "Save",
 
-  InboxMessageListingTitle: "Inbox Message Listing",
+  InboxMessageListingTitle: "INBOX MESSAGES",
   InboxMessageListingFilterWithLabel: "Filter With",
   InboxMessageListingAsOfLabel: "As Of: ",
   InboxMessageDetailsTitle: "Inbox Message Details",

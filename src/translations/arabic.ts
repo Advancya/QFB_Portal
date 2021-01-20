@@ -359,10 +359,10 @@ const ar = {
   RequestOTPResendOTP: "إعادة إرسال رمز المرور؟",
   RequestOTPButton: "تأكيد",
 
-  TransactionsListingTitle: "قائمة المعاملات",
+  TransactionsListingTitle: "المعاملات",
   TransactionsListingFilterButton: "تنقية",
   TransactionsListingBeneficiariesButton: "المستفيدون",
-  TransactionsListingNewButton: "طلب  جديد",
+  TransactionsListingNewButton: "معاملة جديدة",
   TransactionsListingTitleSample: "التحويل لأحمد محمد",
   TransactionsListingStatus: "ألغيت",
   TransactionsDetailsTitle: "تفاصيل المعاملات",
@@ -450,7 +450,7 @@ const ar = {
   RMDetailsChangeRequestStatusLabel: "تغيير حالة الطلب",
   RMDetailsbutton: "حفظ",
 
-  InboxMessageListingTitle: "قائمة رسائل البريد الوارد",
+  InboxMessageListingTitle: "رسائل البريد الوارد",
   InboxMessageListingFilterWithLabel: "تصفية ب",
   InboxMessageListingAsOfLabel: "اعتبارا من:",
 
@@ -816,16 +816,16 @@ const ar = {
 
   Signup_Autherization_Code: "Autherization code is not valid",
   Signup_CIF_Message: "Identification Number is not valid",
-  Signup_Email_Message: "Email is not valid",
-  Signup_Mobile_Number_Message: "Mobile Number is not Valid",
+  Signup_Email_Message: "من فضلك أدخل بريد أليكترونى صحيح",
+  Signup_Mobile_Number_Message: "من فضلك أدخل رقم جوال صحيح",
 
   Transactions_Amount_Validation: "Only number accepted",
   BeneficiaryInvalidAccountOrIban: "Invalid Account Number or IBAN",
   BeneficiaryInvalidSwiftCode: "Invalid Swift Code",
 
-  NoDepositsHoldingsFound: "No Deposits Holdings Found",
-  NoInvestmentsHoldingsFound: "No Investments Holdings Found",
-  InvalidEmail: "Please enter a valid email address",
+  NoDepositsHoldingsFound: "لم يتم العثور على ودائع القابضة",
+  NoInvestmentsHoldingsFound: "لم يتم العثور على استثمارات القابضة",
+  InvalidEmail: "من فضلك أدخل بريد أليكترونى صحيح",
 };
 
 export default ar;

@@ -7,9 +7,7 @@ import InvestmentsBuyAndSell from "./InvestmentsBuyAndSell";
 import { AuthContext } from "../../../providers/AuthProvider";
 import { PortfolioContext } from "../../../pages/Homepage";
 import { localStrings as local_Strings } from "../../../translations/localStrings";
-import {
-  IInvestment,
-} from "../../../Helpers/publicInterfaces";
+import { IInvestment } from "../../../Helpers/publicInterfaces";
 
 function Investments() {
   const currentContext = useContext(AuthContext);
@@ -18,7 +16,9 @@ function Investments() {
 
   const [showInvestmentsListing, setShowInvestmentsListing] = useState(false);
   const [showInvestmentsDetails, setshowInvestmentsDetails] = useState(false);
-  const [showInvestmentsRecievedProfit, setShowInvestmentsRecievedProfit,
+  const [
+    showInvestmentsRecievedProfit,
+    setShowInvestmentsRecievedProfit,
   ] = useState(false);
   const [showInvestmentsBuyAndSell, setShowInvestmentsBuyAndSell] = useState(
     false
@@ -35,7 +35,10 @@ function Investments() {
             href="#"
             className="ib-text"
             onClick={() => {
-              if (!!userPortfolio.totalInvestment && userPortfolio.totalInvestment !== "0") {
+              if (
+                !!userPortfolio.totalInvestment &&
+                userPortfolio.totalInvestment !== "0"
+              ) {
                 setShowInvestmentsListing(true);
               }
             }}
@@ -58,13 +61,13 @@ function Investments() {
           setInvestmentDetail(item);
         }}
       />
-      {selectedInvestment && !!selectedInvestment.subAssetID &&
+      {selectedInvestment && !!selectedInvestment.subAssetID && (
         <React.Fragment>
           <InvestmentsDetails
             showInvestmentsDetailsModal={showInvestmentsDetails}
             hideInvestmentsDetailsModal={() => {
               setshowInvestmentsDetails(false);
-              setShowInvestmentsBuyAndSell(true);
+              // setShowInvestmentsBuyAndSell(true);
             }}
             backInvestmentsListingModal={() => {
               setshowInvestmentsDetails(false);
@@ -82,7 +85,9 @@ function Investments() {
           />
           <InvestmentsRecievedProfit
             showInvestmentsRecievedProfitModal={showInvestmentsRecievedProfit}
-            hideInvestmentsRecievedProfitModal={() => setShowInvestmentsRecievedProfit(false)}
+            hideInvestmentsRecievedProfitModal={() =>
+              setShowInvestmentsRecievedProfit(false)
+            }
             backInvestmentsRecievedProfitModal={() => {
               setShowInvestmentsRecievedProfit(false);
               setshowInvestmentsDetails(true);
@@ -91,14 +96,17 @@ function Investments() {
           />
           <InvestmentsBuyAndSell
             showInvestmentsBuyAndSellModal={showInvestmentsBuyAndSell}
-            hideInvestmentsBuyAndSellModal={() => setShowInvestmentsBuyAndSell(false)}
+            hideInvestmentsBuyAndSellModal={() =>
+              setShowInvestmentsBuyAndSell(false)
+            }
             backInvestmentsBuyAndSellModal={() => {
               setShowInvestmentsBuyAndSell(false);
               setshowInvestmentsDetails(true);
             }}
             investment={selectedInvestment}
           />
-        </React.Fragment>}
+        </React.Fragment>
+      )}
     </div>
   );
 }

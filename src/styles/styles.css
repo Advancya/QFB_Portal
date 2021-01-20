@@ -450,8 +450,12 @@ input.form-control, select.form-control, select.custom-select, textarea.form-con
   display: block;
 }
 
-.react-datepicker-wrapper input {
+[dir="ltr"] .react-datepicker-wrapper input {
   background: url("../images/calendar-inactive.png") no-repeat 96% 41%;
+}
+
+[dir="rtl"] .react-datepicker-wrapper input {
+  background: url("../images/calendar-inactive.png") no-repeat 3% 44%;
 }
 
 .form-control:disabled[type="date"] {
@@ -1555,6 +1559,14 @@ tr.shown {
   margin: 0 0.25rem;
 }
 
+[dir="ltr"] .btnOutlineWhite i.fa {
+  margin: 0 0.25rem 0 0;
+}
+
+[dir="rtl"] .btnOutlineWhite i.fa {
+  margin: 0 0 0 0.25rem;
+}
+
 .btnOutlineWhite:hover {
   background: #FFF;
   color: #8d2232;
@@ -1650,7 +1662,7 @@ tr.shown {
   border-top-left-radius: 8px;
 }
 
-[dir="rtl"].fa-chevron-left, [dir="rtl"] .fa-chevron-right, [dir="rtl"] .fa-arrow-right, [dir="rtl"] .fa-caret-right {
+[dir="rtl"] .fa-chevron-left, [dir="rtl"] .fa-chevron-right, [dir="rtl"] .fa-arrow-right, [dir="rtl"] .fa-caret-right {
   -webkit-transform: rotate(180deg);
   -moz-transform: rotate(180deg);
   -ms-transform: rotate(180deg);
@@ -1866,4 +1878,8 @@ ul ul {
 
 #applyReqBox {
   padding-top: 1rem;
+}
+
+.filter-box .btn-primary {
+  margin-bottom: 0;
 }

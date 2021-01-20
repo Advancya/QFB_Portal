@@ -264,9 +264,7 @@ function OffersForm(props: DetailsProps) {
             <div className="box modal-box py-0 mb-0 scrollabel-modal-box">
               <div className="box-body">
                 <div className="form-group">
-                  <label className="mb-1 text-600">
-                    {local_Strings.NotificationsCustomerNameLabel}
-                  </label>
+                  <label>{local_Strings.NotificationsCustomerNameLabel}</label>
                   {props.editable && values.id === 0 ? (
                     <React.Fragment>
                       <MultiSelect
@@ -302,9 +300,7 @@ function OffersForm(props: DetailsProps) {
                   )}
                 </div>
                 <div className="form-group">
-                  <label className="mb-1 text-600">
-                    {local_Strings.OfferNameLabel}
-                  </label>
+                  <label>{local_Strings.OfferNameLabel}</label>
                   <input
                     type="text"
                     className="form-control"
@@ -318,9 +314,7 @@ function OffersForm(props: DetailsProps) {
                     InvalidFieldError(errors.title)}
                 </div>
                 <div className="form-group">
-                  <label className="mb-1 text-600">
-                    {local_Strings.OfferArNameLabel}
-                  </label>
+                  <label>{local_Strings.OfferArNameLabel}</label>
                   <input
                     type="text"
                     className="form-control"
@@ -334,9 +328,7 @@ function OffersForm(props: DetailsProps) {
                     InvalidFieldError(errors.titleAr)}
                 </div>
                 <div className="form-group customDate">
-                  <label className="mb-1 text-600">
-                    {local_Strings.OfferExpireLabel}
-                  </label>
+                  <label>{local_Strings.OfferExpireLabel}</label>
 
                   <DatePicker
                     name="expireDate"
@@ -356,9 +348,7 @@ function OffersForm(props: DetailsProps) {
                     InvalidFieldError(errors.expireDate)}
                 </div>
                 <div className="form-group">
-                  <label className="mb-1 text-600">
-                    {local_Strings.selectedOfferDetailsLabel}
-                  </label>
+                  <label>{local_Strings.selectedOfferDetailsLabel}</label>
                   {props.editable ? (
                     <CKEditor
                       editor={ClassicEditor}
@@ -400,9 +390,7 @@ function OffersForm(props: DetailsProps) {
                   )}
                 </div>
                 <div className="form-group">
-                  <label className="mb-1 text-600">
-                    {local_Strings.selectedOfferDetailsArLabel}
-                  </label>
+                  <label>{local_Strings.selectedOfferDetailsArLabel}</label>
                   {props.editable ? (
                     <CKEditor
                       editor={ClassicEditor}
@@ -444,9 +432,7 @@ function OffersForm(props: DetailsProps) {
                   )}
                 </div>
                 <div className="form-group">
-                  <label className="mb-1 text-600">
-                    {local_Strings.OfferAttachment}
-                  </label>
+                  <label>{local_Strings.OfferAttachment}</label>
                   {props.editable ? (
                     <React.Fragment>
                       <label className="file">
@@ -561,7 +547,7 @@ function OffersForm(props: DetailsProps) {
                         saveAs(blob, values.fileName);
                       }}
                     >
-                      <h5>
+                      <h5 className="text-break">
                         {values.fileName}
                         <br />
                         <small>

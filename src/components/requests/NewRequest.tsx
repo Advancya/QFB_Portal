@@ -123,10 +123,10 @@ function NewRequest(props: iNewRequest) {
 
     return data && data.length > 0
       ? data.map((c, i) => (
-        <option key={i} value={c.value}>
-          {c.label}
-        </option>
-      ))
+          <option key={i} value={c.value}>
+            {c.label}
+          </option>
+        ))
       : null;
   };
 
@@ -161,7 +161,7 @@ function NewRequest(props: iNewRequest) {
       } else {
         setExtraDetailsValue("");
       }
-    } catch (error) { }
+    } catch (error) {}
   };
 
   let validationSchema = yup.object().shape({});
@@ -226,17 +226,18 @@ function NewRequest(props: iNewRequest) {
     }; // use effect cleanup to set flag false, if unmounted
   }, [currentContext.selectedCIF]);
 
-
   const setBasicValidationSchema = (fieldName: string, type: string) => {
-
     if (fieldName === "FaxNumber") {
       const fieldSchema = yup.object().shape({
         FaxNumber:
           type !== "NUMBER"
             ? yup.string()
-            : yup.string()
-              .matches(/^[0-9]+$/,
-                local_Strings.ContactUs_Mobile_Format_Validation_Message),
+            : yup
+                .string()
+                .matches(
+                  /^[0-9]+$/,
+                  local_Strings.ContactUs_Mobile_Format_Validation_Message
+                ),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -245,9 +246,12 @@ function NewRequest(props: iNewRequest) {
         LandlineNumber:
           type !== "NUMBER"
             ? yup.string()
-            : yup.string()
-              .matches(/^[0-9]+$/,
-                local_Strings.ContactUs_Mobile_Format_Validation_Message),
+            : yup
+                .string()
+                .matches(
+                  /^[0-9]+$/,
+                  local_Strings.ContactUs_Mobile_Format_Validation_Message
+                ),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -257,15 +261,17 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string()
             : yup
-              .string()
-              .matches(/^[0-9]+$/,
-                local_Strings.ContactUs_Mobile_Format_Validation_Message),
+                .string()
+                .matches(
+                  /^[0-9]+$/,
+                  local_Strings.ContactUs_Mobile_Format_Validation_Message
+                ),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
     if (fieldName === "Email") {
       const fieldSchema = yup.object().shape({
-        Email: yup.string().email(local_Strings.InvalidEmail)
+        Email: yup.string().email(local_Strings.InvalidEmail),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -278,9 +284,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-              .string()
-              .required(local_Strings.GeneralValidation)
-              .matches(/^[0-9]+$/),
+                .string()
+                .required(local_Strings.GeneralValidation)
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -290,9 +296,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-              .string()
-              .required(local_Strings.GeneralValidation)
-              .matches(/^[0-9]+$/),
+                .string()
+                .required(local_Strings.GeneralValidation)
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -302,9 +308,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-              .string()
-              .required(local_Strings.GeneralValidation)
-              .matches(/^[0-9]+$/),
+                .string()
+                .required(local_Strings.GeneralValidation)
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -314,9 +320,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-              .string()
-              .required(local_Strings.GeneralValidation)
-              .matches(/^[0-9]+$/),
+                .string()
+                .required(local_Strings.GeneralValidation)
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -326,10 +332,12 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-              .string()
-              .required(local_Strings.GeneralValidation)
-              .matches(/^[0-9]+$/,
-                local_Strings.ContactUs_Mobile_Format_Validation_Message),
+                .string()
+                .required(local_Strings.GeneralValidation)
+                .matches(
+                  /^[0-9]+$/,
+                  local_Strings.ContactUs_Mobile_Format_Validation_Message
+                ),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -339,10 +347,12 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-              .string()
-              .required(local_Strings.GeneralValidation)
-              .matches(/^[0-9]+$/,
-                local_Strings.ContactUs_Mobile_Format_Validation_Message),
+                .string()
+                .required(local_Strings.GeneralValidation)
+                .matches(
+                  /^[0-9]+$/,
+                  local_Strings.ContactUs_Mobile_Format_Validation_Message
+                ),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -352,10 +362,12 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-              .string()
-              .required(local_Strings.GeneralValidation)
-              .matches(/^[0-9]+$/,
-                local_Strings.ContactUs_Mobile_Format_Validation_Message),
+                .string()
+                .required(local_Strings.GeneralValidation)
+                .matches(
+                  /^[0-9]+$/,
+                  local_Strings.ContactUs_Mobile_Format_Validation_Message
+                ),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -365,9 +377,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-              .string()
-              .required(local_Strings.GeneralValidation)
-              .matches(/^[0-9]+$/),
+                .string()
+                .required(local_Strings.GeneralValidation)
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -377,9 +389,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-              .string()
-              .required(local_Strings.GeneralValidation)
-              .matches(/^[0-9]+$/),
+                .string()
+                .required(local_Strings.GeneralValidation)
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -389,9 +401,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-              .string()
-              .required(local_Strings.GeneralValidation)
-              .matches(/^[0-9]+$/),
+                .string()
+                .required(local_Strings.GeneralValidation)
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -401,9 +413,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-              .string()
-              .required(local_Strings.GeneralValidation)
-              .matches(/^[0-9]+$/),
+                .string()
+                .required(local_Strings.GeneralValidation)
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -413,9 +425,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-              .string()
-              .required(local_Strings.GeneralValidation)
-              .matches(/^[0-9]+$/),
+                .string()
+                .required(local_Strings.GeneralValidation)
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -425,9 +437,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-              .string()
-              .required(local_Strings.GeneralValidation)
-              .matches(/^[0-9]+$/),
+                .string()
+                .required(local_Strings.GeneralValidation)
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -437,9 +449,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-              .string()
-              .required(local_Strings.GeneralValidation)
-              .matches(/^[0-9]+$/),
+                .string()
+                .required(local_Strings.GeneralValidation)
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -449,9 +461,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-              .string()
-              .required(local_Strings.GeneralValidation)
-              .matches(/^[0-9]+$/),
+                .string()
+                .required(local_Strings.GeneralValidation)
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -461,9 +473,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-              .string()
-              .required(local_Strings.GeneralValidation)
-              .matches(/^[0-9]+$/),
+                .string()
+                .required(local_Strings.GeneralValidation)
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -473,9 +485,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-              .string()
-              .required(local_Strings.GeneralValidation)
-              .matches(/^[0-9]+$/),
+                .string()
+                .required(local_Strings.GeneralValidation)
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -486,9 +498,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-              .string()
-              .required(local_Strings.GeneralValidation)
-              .matches(/^[0-9]+$/),
+                .string()
+                .required(local_Strings.GeneralValidation)
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -498,9 +510,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-              .string()
-              .required(local_Strings.GeneralValidation)
-              .matches(/^[0-9]+$/),
+                .string()
+                .required(local_Strings.GeneralValidation)
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -508,11 +520,14 @@ function NewRequest(props: iNewRequest) {
       const fieldSchema = yup.object().shape({
         Email:
           type !== "EMAIL"
-            ? yup.string().email(local_Strings.InvalidEmail).required(local_Strings.GeneralValidation)
+            ? yup
+                .string()
+                .email(local_Strings.InvalidEmail)
+                .required(local_Strings.GeneralValidation)
             : yup
-              .string()
-              .required(local_Strings.GeneralValidation)
-              .matches(/^[0-9]+$/),
+                .string()
+                .required(local_Strings.GeneralValidation)
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -523,9 +538,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-              .string()
-              .required(local_Strings.GeneralValidation)
-              .matches(/^[0-9]+$/),
+                .string()
+                .required(local_Strings.GeneralValidation)
+                .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -752,7 +767,9 @@ function NewRequest(props: iNewRequest) {
                               var fType = d["details"].split(";")[2];
                               setValidationSchema(fName, fType);
                             } else {
-                              var fName = d["details"].split(";")[0].replace(/ /g, "");
+                              var fName = d["details"]
+                                .split(";")[0]
+                                .replace(/ /g, "");
                               var fType = d["details"].split(";")[2];
                               setBasicValidationSchema(fName, fType);
                             }
@@ -851,9 +868,9 @@ function NewRequest(props: iNewRequest) {
                                   as="textarea"
                                   value={
                                     values[
-                                    item["details"]
-                                      .split(";")[0]
-                                      .replace(/ /g, "")
+                                      item["details"]
+                                        .split(";")[0]
+                                        .replace(/ /g, "")
                                     ] || ""
                                   }
                                   onChange={(e) => {
@@ -875,7 +892,7 @@ function NewRequest(props: iNewRequest) {
                         )}
                         {item["details"].split(";")[2] === "READ_ONLY" &&
                           item["details"].split(";")[3].toString() !==
-                          "NULL" && (
+                            "NULL" && (
                             <Form.Row>
                               <Col md={8}>
                                 <Form.Group>
@@ -907,9 +924,9 @@ function NewRequest(props: iNewRequest) {
                                 <Form.Control
                                   value={
                                     values[
-                                    item["details"]
-                                      .split(";")[0]
-                                      .replace(/ /g, "")
+                                      item["details"]
+                                        .split(";")[0]
+                                        .replace(/ /g, "")
                                     ] || ""
                                   }
                                   onChange={(e) => {
@@ -940,9 +957,9 @@ function NewRequest(props: iNewRequest) {
                                 <Form.Control
                                   value={
                                     values[
-                                    item["details"]
-                                      .split(";")[0]
-                                      .replace(/ /g, "")
+                                      item["details"]
+                                        .split(";")[0]
+                                        .replace(/ /g, "")
                                     ] || ""
                                   }
                                   onChange={(e) => {
@@ -973,9 +990,9 @@ function NewRequest(props: iNewRequest) {
                                 <Form.Control
                                   value={
                                     values[
-                                    item["details"]
-                                      .split(";")[0]
-                                      .replace(/ /g, "")
+                                      item["details"]
+                                        .split(";")[0]
+                                        .replace(/ /g, "")
                                     ] || ""
                                   }
                                   onChange={(e) => {
@@ -998,7 +1015,7 @@ function NewRequest(props: iNewRequest) {
                           <Form.Row>
                             <Col md={8}>
                               <Form.Group className="customDate">
-                                <Form.Label className="mb-1 text-600">
+                                <Form.Label className="">
                                   {currentContext.language === "ar"
                                     ? item["details"].split(";")[1]
                                     : item["details"].split(";")[0]}
@@ -1013,12 +1030,12 @@ function NewRequest(props: iNewRequest) {
                                         .replace(/ /g, "")
                                     ]
                                       ? new Date(
-                                        values[
-                                        item["details"]
-                                          .split(";")[0]
-                                          .replace(/ /g, "")
-                                        ]
-                                      )
+                                          values[
+                                            item["details"]
+                                              .split(";")[0]
+                                              .replace(/ /g, "")
+                                          ]
+                                        )
                                       : null
                                   }
                                   onChange={(date: Date) => {
@@ -1111,11 +1128,13 @@ function NewRequest(props: iNewRequest) {
                           item["details"].split(";")[0].replace(/ /g, "")
                         ] &&
                           errors[
-                          item["details"].split(";")[0].replace(/ /g, "")
-                          ] &&
-                          InvalidFieldError(errors[
                             item["details"].split(";")[0].replace(/ /g, "")
-                          ])}
+                          ] &&
+                          InvalidFieldError(
+                            errors[
+                              item["details"].split(";")[0].replace(/ /g, "")
+                            ]
+                          )}
                       </div>
                     </Form>
                   ))}

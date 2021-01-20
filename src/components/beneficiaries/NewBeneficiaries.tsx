@@ -468,7 +468,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                   <div className="text-right p-3">
                     <button
                       id="applyReqBtn"
-                      className="btn btn-primary"
+                      className="btn btn-primary mx-2"
                       type="submit"
                       onClick={(e) => {
                         validateForm(values);
@@ -744,7 +744,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                   <div className="text-right p-3">
                     <button
                       id="applyReqBtn"
-                      className="btn btn-primary"
+                      className="btn btn-primary mx-2"
                       type="submit"
                       onClick={(e) => {
                         validateForm(values);
