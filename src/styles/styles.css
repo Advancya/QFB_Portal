@@ -335,6 +335,80 @@ a:active, a:focus, a:hover {
 }
 
 .file {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  height: 2.5rem;
+}
+
+.file input {
+  min-width: 20rem;
+  margin: 0;
+  filter: alpha(opacity=0);
+  opacity: 0;
+}
+
+.file-custom {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 5;
+  height: 2.5rem;
+  padding: .5rem 1rem;
+  line-height: 1.5;
+  color: #555;
+  background-color: #fff;
+  border: .075rem solid #ddd;
+  border-radius: .25rem;
+  box-shadow: inset 0 .2rem .4rem rgba(0, 0, 0, .05);
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  text-transform: none;
+  font-size: 0;
+}
+
+.file-custom:before {
+  position: absolute;
+  top: -.075rem;
+  bottom: -.075rem;
+  z-index: 6;
+  display: block;
+  height: 2.5rem;
+  padding: .5rem 1rem;
+  line-height: 1.5;
+  color: #555;
+  background-color: #eee;
+  border: .075rem solid #ddd;
+}
+
+[dir="ltr"] .file-custom:before {
+  right: -.075rem;
+  border-radius: 0 1.5rem 1.5rem 0;
+  content: "Browse";
+  font-size: 0.875rem;
+}
+
+[dir="rtl"] .file-custom:before {
+  left: -.075rem;
+  border-radius: 1.5rem 0 0 1.5rem;
+  content: "تصفح";
+  font-size: 0.875rem;
+}
+
+[dir="ltr"] .file .file-custom::after {
+  content: "Browse to upload a file";
+  font-size: 0.875rem;
+}
+
+[dir="rtl"] .file .file-custom::after {
+  content: "تصفح لتحميل ملف";
+  font-size: 0.875rem;
+}
+
+.file {
   border: 0;
 }
 
@@ -343,10 +417,6 @@ a:active, a:focus, a:hover {
   box-shadow: none;
   border: 1px solid #d8d8d8;
   color: #000;
-}
-
-.file-custom:before {
-  border-radius: 0 1.5rem 1.5rem 0;
 }
 
 input.form-control, select.form-control, select.custom-select, textarea.form-control, .custom-file-label, .custom-file-label {
@@ -556,6 +626,7 @@ textarea.form-control {
   text-align: center;
   padding-bottom: 0.25rem;
   transition: all 0.25s;
+  height: 4rem;
 }
 
 .header .navbar-nav .nav-item {
@@ -1481,7 +1552,7 @@ tr.shown {
 
 .btnOutlineWhite i.fa {
   font-size: 1rem;
-  margin-right: 0.25rem;
+  margin: 0 0.25rem;
 }
 
 .btnOutlineWhite:hover {
@@ -1568,18 +1639,18 @@ tr.shown {
   text-align: right!important;
 }
 
-[dir=rtl] .download-link i:first-child {
+[dir="rtl"] .download-link i:first-child {
   border-bottom-right-radius: 8px;
   border-top-right-radius: 8px;
   opacity: 0.8;
 }
 
-[dir=rtl] .download-link i:last-child {
+[dir="rtl"] .download-link i:last-child {
   border-bottom-left-radius: 8px;
   border-top-left-radius: 8px;
 }
 
-[dir=rtl] .fa-chevron-left, [dir=rtl] .fa-chevron-right, [dir=rtl] .fa-arrow-right, [dir=rtl] .fa-caret-right {
+[dir="rtl"].fa-chevron-left, [dir="rtl"] .fa-chevron-right, [dir="rtl"] .fa-arrow-right, [dir="rtl"] .fa-caret-right {
   -webkit-transform: rotate(180deg);
   -moz-transform: rotate(180deg);
   -ms-transform: rotate(180deg);
