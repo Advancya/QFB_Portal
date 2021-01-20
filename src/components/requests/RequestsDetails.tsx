@@ -28,7 +28,7 @@ function RequestsDetails(props: iRequestsDetails) {
   const [isLoading, setLoading] = useState(false);
 
   const [formFields, setFormFields] = useState<any[]>([]);
-  const [currentRequest, setCurrentRequest] = useState<iRequest>({});
+  const [currentRequest, setCurrentRequest] = useState<iRequest>(null);
 
   const fetchFormData = async () => {
     setLoading(true);
@@ -147,8 +147,15 @@ function RequestsDetails(props: iRequestsDetails) {
   };
 
   useEffect(() => {
-    fetchFormData();
-  }, [props.item.id]);
+
+    if (props.showRequestsDetailsModal) {
+      fetchFormData();
+    } else {
+      setFormFields([]);
+      setCurrentRequest(null);
+    }
+    
+  }, [props.item.id, props.showRequestsDetailsModal]);
 
   return (
     <Modal
@@ -220,7 +227,7 @@ function RequestsDetails(props: iRequestsDetails) {
               />
             }
           />
-          {formFields.map((item, index) => (
+          {!isLoading && currentRequest && formFields.map((item, index) => (
             <div key={index} className="py-2 px-3">
               <div className="row">
                 <div className="col-lg-8">

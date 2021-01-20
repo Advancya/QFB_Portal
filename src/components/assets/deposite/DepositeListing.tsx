@@ -55,7 +55,7 @@ function DepositeListing(props: iDepositeListing) {
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [currentContext.selectedCIF]);
+  }, [currentContext.selectedCIF, currentContext.language]);
 
   const renderItem = (item: IDeposit, index: number) => (
     <li className="shown" key={index}>

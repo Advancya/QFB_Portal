@@ -27,7 +27,7 @@ function Requests() {
     if (!!currentContext.selectedCIF) {
       refresRequests();
     }
-  }, [currentContext.selectedCIF]);
+  }, [currentContext.selectedCIF, currentContext.language]);
 
   const refresRequests = async () => {
     if (!!currentContext.selectedCIF) {

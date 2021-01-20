@@ -30,7 +30,7 @@ function Notfications() {
       refreshNotifications();
     }
 
-  }, [currentContext.selectedCIF]);
+  }, [currentContext.selectedCIF, currentContext.language]);
 
   const refreshNotifications = async () => {
 

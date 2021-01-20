@@ -55,7 +55,7 @@ function Transactions() {
       refreshBeneficiaries();
     }
 
-  }, [currentContext.selectedCIF]);
+  }, [currentContext.selectedCIF, currentContext.language]);
 
   const refreshTransactions = async () => {
 

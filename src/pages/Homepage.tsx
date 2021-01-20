@@ -125,6 +125,8 @@ const HomePage = () => {
             history.push(`/${currentContext.language}/RMLanding`);
           } else if (role.name === Constant.Management) {
             history.push(`/${currentContext.language}/Managment`);
+          } else if (role.name === Constant.CMSADMIN) {
+            history.push(`/${currentContext.language}/Admin`);
           } else {
             Swal.fire({
               title: local_Strings.SessionTimeOutMessage,
@@ -238,7 +240,7 @@ const HomePage = () => {
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [currentContext.selectedCIF]);
+  }, [currentContext.selectedCIF, currentContext.language]);
 
   const refreshInbox = () => {
     setLoading(true);

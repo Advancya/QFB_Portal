@@ -54,7 +54,7 @@ function AuthOffersListing(props: iAuthOffersListing) {
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [currentContext.selectedCIF]);
+  }, [currentContext.selectedCIF, currentContext.language]);
 
   const renderItem = (item: IOfferDetail, index: number) => (
     <li className="shown" key={index}>

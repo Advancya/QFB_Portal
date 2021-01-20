@@ -17,7 +17,6 @@ import FilterButtonControl from "../../shared/FilterButtonControl";
 import * as helper from "../../Helpers/helper";
 import NoResult from "../../shared/NoResult";
 import xIcon from "../../images/x-icon.svg";
-import { GetNotificationsByCIF } from "../../services/cmsService";
 
 interface iNotficationsListing {
   showNotficationsListingModal: boolean;
@@ -33,7 +32,7 @@ function NotficationsListing(props: iNotficationsListing) {
   const [filteredData, setFilteredData] = useState<INotificationDetail[]>([]);
   const [filters, setFilter] = useState<IInboxFilter>({
     filterApplied: false,
-    Status: "0",
+    Status: "All Messages",
   });
   const rowLimit: number = Constant.RecordPerPage;
   const [offset, setOffset] = useState<number>(
@@ -49,6 +48,15 @@ function NotficationsListing(props: iNotficationsListing) {
     } else {
       setOffset(rowLimit);
     }
+
+    if (filters.filterApplied) {
+      const _filteredData = helper.filterReadableList(
+        props.notfications,
+        filters
+      );
+      setFilteredData(_filteredData);
+    }
+
   }, [props.notfications, props.reloading]);
 
   const renderItem = (item: INotificationDetail, index: number) => (
@@ -127,10 +135,11 @@ function NotficationsListing(props: iNotficationsListing) {
                     <FilterDropDownControl
                       label={local_Strings.NotificationsListingFilter}
                       options={statusFilterOptions}
-                      value={filters.Status || "0"}
+                      value={filters.Status || "All Messages"}
                       onChange={(_value: string) =>
                         setFilter({ ...filters, Status: _value })
                       }
+                      initialSelectRequired={false}
                     />
                   </div>
 
@@ -139,7 +148,7 @@ function NotficationsListing(props: iNotficationsListing) {
                       clearFilter={() => {
                         setFilter({
                           filterApplied: false,
-                          Status: "0",
+                          Status: "All Messages",
                         });
                         setFilteredData(props.notfications);
                         setOffset(rowLimit);

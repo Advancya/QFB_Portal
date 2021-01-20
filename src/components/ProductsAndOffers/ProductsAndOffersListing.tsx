@@ -52,7 +52,7 @@ function ProductsAndOffersListing(props: iProductsAndOffersListing) {
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [currentContext.selectedCIF]);
+  }, [currentContext.selectedCIF, currentContext.language]);
 
   const renderItem = (item: IProductAndOffersDetail, index: number) => (
     <div className="col-md-6 col-lg-4 col-container" key={index}>

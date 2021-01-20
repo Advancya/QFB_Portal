@@ -24,7 +24,7 @@ import "@ckeditor/ckeditor5-build-classic/build/translations/ar.js";
 //import Base64UploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/base64uploadadapter';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { emptyOfferData, IOfferDetail } from "../../Helpers/publicInterfaces";
+import { emptyOfferData, IOfferDetail, IKeyValuePair } from "../../Helpers/publicInterfaces";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
@@ -74,7 +74,7 @@ function OffersForm(props: DetailsProps) {
     setLoading(true);
 
     const requests = [];
-    values.selectedCIFs.forEach((element) => {
+    values.selectedCIFs.forEach(async (element: IKeyValuePair) => {
       const item = {
         cif: element.value,
         title: values.title,
@@ -90,33 +90,21 @@ function OffersForm(props: DetailsProps) {
         offersSubscriptions: [],
       };
 
-      requests.push(AddNewOffer(item));
+      await AddNewOffer(item).catch((e: any) => console.log(e));
     });
-    axios
-      .all(requests)
-      .then(() => {
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: local_Strings.OfferSavedMessage,
-          showConfirmButton: false,
-          timer: Constant.AlertTimeout,
-        });
-        props.refreshList();
-        props.OnHide();
-      })
-      .catch((e: any) =>
-        Swal.fire({
-          position: "top-end",
-          icon: "error",
-          title: local_Strings.GenericErrorMessage,
-          showConfirmButton: false,
-          timer: Constant.AlertTimeout,
-        })
-      )
-      .finally(() => {
-        setLoading(false);
-      });
+
+    setLoading(false);
+
+    Swal.fire({
+      position: "top-end",
+      icon: "success",
+      title: local_Strings.OfferSavedMessage,
+      showConfirmButton: false,
+      timer: Constant.AlertTimeout,
+    });
+    props.refreshList();
+    props.OnHide();
+
   };
 
   const updateRecord = async (values: any) => {

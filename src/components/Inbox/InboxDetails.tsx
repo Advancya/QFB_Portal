@@ -59,8 +59,11 @@ function InboxDetails(props: iInboxDetails) {
 
           setData(previousItems);
           setFilteredData(previousItems);
-          if (previousItems.length < rowLimit) {
+          
+          if (previousItems && previousItems.length > 0 && previousItems.length < rowLimit) {
             setOffset(previousItems.length);
+          } else {
+            setOffset(rowLimit);
           }
         }
       })
@@ -70,7 +73,7 @@ function InboxDetails(props: iInboxDetails) {
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [props.item.description]);
+  }, [props.item]);
 
   const setThisInboxItemAsRead = async () => {
     const userData = await GetUserLocalData();

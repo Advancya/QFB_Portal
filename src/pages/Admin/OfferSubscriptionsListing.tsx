@@ -28,7 +28,7 @@ function OfferSubscriptionsListing() {
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [currentContext.selectedCIF]);
+  }, [currentContext.selectedCIF, currentContext.language]);
 
   const refreshList = () => {
     GetAllOfferSubscriptions()

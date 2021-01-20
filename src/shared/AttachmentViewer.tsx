@@ -19,7 +19,7 @@ const ViewAttachment = (props: any) => {
   }
 
   return !!props.fileName ? (
-    <div className="row no-gutters align-items-center view-attachment">
+    <div className="row no-gutters align-items-center">
 
       <div className="col-2 col-lg-2 text-center">
         <img alt="" src={pdfIcon}

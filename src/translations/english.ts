@@ -187,7 +187,7 @@ const en = {
   CashDetailsBalanceLabel: "Balance",
   CashDetailsDescriptionLabel: "Description",
   CashDetailsAmountLabel: "Amount",
-  CurrentBalanceLabel: "Current Balance: ",
+  CurrentBalanceLabel: "Current Balance ",
   CashDetailsTransactionRefrence: "Transaction Reference",
   CashDetailsBeneficiaryName: "Beneficiary Name",
   CashDetailsBeneficiaryAccount: "Beneficiary Account",
@@ -343,7 +343,7 @@ const en = {
   RequestFromLabel: "From",
   RequestToLabel: "To",
   RequestAuditorNameLabel: "Auditor Name",
-  RequestTypeLabel: "Select Request Type",
+  RequestTypeLabel: "Request Type",
   RequestButton: "Submit Request to RM",
   RequestSelectLabel: "Select",
   RequestAttachmentsLabel: "Attachments",
@@ -359,10 +359,10 @@ const en = {
   RequestOTPResendOTP: "Resend OTP ?",
   RequestOTPButton: "Confirm",
 
-  TransactionsListingTitle: "Transactions Listing",
+  TransactionsListingTitle: "Transactions",
   TransactionsListingFilterButton: "Filter",
   TransactionsListingBeneficiariesButton: "Beneficiaries",
-  TransactionsListingNewButton: "New",
+  TransactionsListingNewButton: "New Transaction",
   TransactionsListingTitleSample: "Transfer to Ahmed Mohamed",
   TransactionsListingStatus: "Cancelled",
   TransactionsDetailsTitle: "Transactions Details",
@@ -371,7 +371,7 @@ const en = {
   TransactionFromAccountLabel: "Transfer From Account",
   TransactionToAccountLabel: "Transfer To Account",
   TransactionCurrencyLabel: "Select Currency",
-  TransactionAmountLabel: "Amount",
+  TransactionAmountLabel: "Transaction Amount",
   TransactionBenficiaryLabel: "Beneficiary",
   TransactionDateLabel: "Request Date",
   TransactionDescriptionLabel: "Description / Purpose of Payment",
@@ -832,6 +832,9 @@ const en = {
   NoDepositsHoldingsFound: "No Deposits Holdings Found",
   NoInvestmentsHoldingsFound: "No Investments Holdings Found",
   InvalidEmail: "Please enter a valid email address",
+
+  TransactionWithinSameAccount: "Transaction within same account is not allowed",
+  TransactionAmountLabel2: "Amount",
 };
 
 export default en;

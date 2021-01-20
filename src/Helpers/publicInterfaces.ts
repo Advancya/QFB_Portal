@@ -213,7 +213,7 @@ export interface ICommonFilter {
 export const emptyCommonFilter = {
   filterApplied: false,
   DateOption: "0",
-  StartDate: moment().add(-7, "days").toDate(),
+  StartDate: moment().toDate(),   //moment().add(-7, "days").toDate(),
   EndDate: moment().toDate(),
   AmountOperator: "",
   Amount: "",

@@ -103,13 +103,13 @@ const ManagmentLanding = () => {
         if (!currentContext.selectedCIF) {
           history.push(`/${currentContext.language}`);
         }
-      }, 3000);
+      }, 5000);
     }
 
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [currentContext.selectedCIF]);
+  }, [currentContext.selectedCIF, currentContext.language]);
 
   return (
     <div>

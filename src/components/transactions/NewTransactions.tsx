@@ -18,6 +18,7 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import InvalidFieldError from "../../shared/invalid-field-error";
 import DatePicker from "react-datepicker";
+import moment from "moment";
 
 interface iNewTransaction {
   showNewTransactionModal: boolean;
@@ -45,7 +46,7 @@ function NewTransaction(props: iNewTransaction) {
   const [showFormWithin, setShowFormWithin] = useState(false);
   const [showFormLocal, setShowFormLocal] = useState(false);
   const [showFormInternational, setShowInternational] = useState(false);
-  
+
   let controller;
   const initialValuesWithin: ITransactionDetail = {
     amount: undefined,
@@ -82,7 +83,9 @@ function NewTransaction(props: iNewTransaction) {
 
   const validationSchemaWithin = yup.object({
     transferFromAccount: yup.string().required(local_Strings.GeneralValidation),
-    transferToAccount: yup.string().required(local_Strings.GeneralValidation),
+    transferToAccount: yup.string().required(local_Strings.GeneralValidation)
+      .notOneOf([yup.ref("transferFromAccount"), ""],
+        local_Strings.TransactionWithinSameAccount),
     amount: yup
       .string()
       .required(local_Strings.GeneralValidation)
@@ -197,7 +200,7 @@ function NewTransaction(props: iNewTransaction) {
     if (!!currentContext.selectedCIF) {
       initialLoadMethod();
     }
-  }, [currentContext.selectedCIF]);
+  }, [currentContext.selectedCIF, currentContext.language]);
 
   return (
     <Modal
@@ -329,8 +332,10 @@ function NewTransaction(props: iNewTransaction) {
                           onBlur={handleBlur("transferFromAccount")}
                           onChange={(e) => {
                             setFieldValue(
-                              "transferFromAccount",
-                              e.target.value
+                              "transferFromAccount", e.target.value
+                            );
+                            setFieldValue(
+                              "transferToAccount", ""
                             );
                           }}
                         >
@@ -353,9 +358,7 @@ function NewTransaction(props: iNewTransaction) {
                           className="form-control"
                           value={values.transferToAccount || ""}
                           onBlur={handleBlur("transferToAccount")}
-                          onChange={(e) => {
-                            setFieldValue("transferToAccount", e.target.value);
-                          }}
+                          onChange={handleChange("transferToAccount")}
                         >
                           <option value="">{local_Strings.SelectItem}</option>
                           {accounts &&
@@ -363,7 +366,7 @@ function NewTransaction(props: iNewTransaction) {
                             accounts
                               .filter(
                                 (obj) =>
-                                  obj.label !== values.transferFromAccount
+                                  obj.value !== values.transferFromAccount
                               )
                               .map((c, i) => (
                                 <option key={i} value={c.value}>
@@ -516,7 +519,7 @@ function NewTransaction(props: iNewTransaction) {
                               setFieldValue(
                                 "currency",
                                 ben[0]["beneficiaryCurrency"]
-                              );                              
+                              );
                               controller.selectItem(
                                 ben[0]["beneficiaryCurrency"]
                               );
@@ -602,7 +605,7 @@ function NewTransaction(props: iNewTransaction) {
                           onChange={(date: Date) => {
                             setFieldValue(
                               "transactionDate",
-                              date.toISOString(),
+                              moment(date).utc(true),
                               false
                             );
                           }}

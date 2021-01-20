@@ -81,7 +81,7 @@ function NewRequest(props: iNewRequest) {
     let data: iDDL[] = [];
 
     if (type === "DDL") {
-      var items = value.split(",");
+      var items = value.indexOf("#@") != -1 ? value.split("#@")[0].split(",") : value.split(",");
       for (let index = 0; index < items.length; index++) {
         data.push({
           label: items[index].replace(/"/g, ""),
@@ -89,7 +89,7 @@ function NewRequest(props: iNewRequest) {
         });
       }
     } else {
-      if (value === "SP_MOB_CUST_CASH_LIST") {
+      if (value === "SP_MOB_CUST_CASH_LIST" || value === "SP_MOB_CUST_CASH_LIST_REQ") {
         if (cashBalance && cashBalance.length > 0) {
           cashBalance.map((element) =>
             data.push({
@@ -99,7 +99,7 @@ function NewRequest(props: iNewRequest) {
           );
         }
       }
-      if (value === "SP_MOB_CUST_INV_LIST") {
+      if (value === "SP_MOB_CUST_INV_LIST" || value === "SP_MOB_CUST_INV_LIST_REQ") {
         if (investments && investments.length > 0) {
           investments.map((element) =>
             data.push({
@@ -109,7 +109,7 @@ function NewRequest(props: iNewRequest) {
           );
         }
       }
-      if (value === "SP_MOB_CUST_DEP_LIST") {
+      if (value === "SP_MOB_CUST_DEP_LIST" || value === "SP_MOB_CUST_DEP_LIST_REQ") {
         if (deposits && deposits.length > 0) {
           deposits.map((element) =>
             data.push({
@@ -224,7 +224,7 @@ function NewRequest(props: iNewRequest) {
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [currentContext.selectedCIF]);
+  }, [currentContext.selectedCIF, currentContext.language]);
 
 
   const setBasicValidationSchema = (fieldName: string, type: string) => {
@@ -531,7 +531,7 @@ function NewRequest(props: iNewRequest) {
     }
   };
 
-  const submitRequest = async (values) => {
+  const submitRequest = async (values, formikObj) => {
     let validateRequired: boolean[] = [];
     let entertedValues: string[] = [];
     let isValidDate: boolean = true;
@@ -632,6 +632,7 @@ function NewRequest(props: iNewRequest) {
           showConfirmButton: false,
           timer: Constant.AlertTimeout,
         });
+        formikObj.resetForm();
         props.refreshRequestsListing();
       } else {
         setErrorMessage(local_Strings.GenericErrorMessage);
@@ -694,10 +695,10 @@ function NewRequest(props: iNewRequest) {
           <Formik
             initialValues={initialNewRequest}
             validationSchema={formValidationSchema}
-            onSubmit={async (values) => {
+            onSubmit={async (values, formikObj) => {
               setLoading(true);
-              await submitRequest(values);
-              setLoading(false);
+              await submitRequest(values, formikObj);
+              setLoading(false);              
             }}
             enableReinitialize={true}
           >
@@ -717,7 +718,7 @@ function NewRequest(props: iNewRequest) {
                 <div className="py-2 px-3">
                   <div className="row">
                     <div className="col-lg-8">
-                      <label className="">Request Type</label>
+                      <label className="">{local_Strings.RequestTypeLabel}</label>
                       <select
                         className="form-control"
                         id="reqTypeSelect"
@@ -1036,8 +1037,7 @@ function NewRequest(props: iNewRequest) {
                                     }
                                     setFieldValue(
                                       fName,
-                                      date.toISOString(),
-                                      false
+                                      moment(date).utc(true)
                                     );
                                   }}
                                 />
@@ -1089,12 +1089,12 @@ function NewRequest(props: iNewRequest) {
                                 </Form.Label>
                                 <Form.Control
                                   as="select"
-                                  onChange={async (i) => {
+                                  onChange={async (e) => {
                                     setFieldValue(
                                       item["details"]
                                         .split(";")[0]
                                         .replace(/ /g, ""),
-                                      i["value"]
+                                        e.target.value
                                     );
                                   }}
                                 >
@@ -1141,7 +1141,7 @@ function NewRequest(props: iNewRequest) {
                         }
                       }}
                     >
-                      Apply
+                      {local_Strings.RequestListingFilterSubmitButton}
                     </button>
                   </div>
                 </div>

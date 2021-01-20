@@ -39,6 +39,7 @@ const FilterCommonControl: React.FC<IFilterCommonControlProps> = (props) => {
             onChangeAmount={(_value: string) =>
               setFilter({ ...filters, Amount: _value })
             }
+            label={local_Strings.TransactionAmountLabel}
           />
         </div>
 
