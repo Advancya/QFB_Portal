@@ -73,7 +73,7 @@ const Navigation = () => {
             <Transactions></Transactions>
             <AuthOffersLanding></AuthOffersLanding>
             <Requests></Requests>
-            <li className="nav-item mt-3">
+            <li className="nav-item">
               <Inbox />
               <Notfications />
             </li>

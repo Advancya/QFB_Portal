@@ -581,6 +581,7 @@ textarea.form-control {
   padding: 0.25rem 0.5rem;
   color: #000;
   font-size: 0.8rem;
+  font-weight: 600;
 }
 
 .header {
