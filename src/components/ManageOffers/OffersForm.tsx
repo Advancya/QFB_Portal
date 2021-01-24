@@ -36,6 +36,7 @@ import axios from "axios";
 import { CustomerListContext } from "../../pages/Admin/Admin";
 import xIcon from "../../images/x-icon.svg";
 
+import RichTextEditor from "../../shared/RichTextEditor";
 import Swal from "sweetalert2";
 const mime = require("mime");
 
@@ -376,6 +377,7 @@ function OffersForm(props: DetailsProps) {
                       />
                     </span>
                   )}
+                  {/* <RichTextEditor/> */}
                 </div>
                 <div className="form-group">
                   <label>{local_Strings.selectedOfferDetailsArLabel}</label>

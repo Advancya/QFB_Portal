@@ -70,7 +70,9 @@ const Navigation = () => {
         <Navbar.Collapse id="basic-navbar-nav">
           <ul className="navbar-nav">
             <HoldingsLanding />
-            <Transactions></Transactions>
+            {currentContext.userSettings.isTransferAllowed &&
+              <Transactions></Transactions>
+            }
             <AuthOffersLanding></AuthOffersLanding>
             <Requests></Requests>
             <li className="nav-item mt-3">

@@ -12,7 +12,6 @@ import { localStrings as local_Strings } from "../translations/localStrings";
 import Constant from "../constants/defaultData";
 import { useHistory } from "react-router-dom";
 import { GetUserLocalData } from "../Helpers/authHelper";
-import AnnonymousTerms from "../components/Terms/AnnonymousTerms";
 
 const initialUserData = { username: "", password: "", otp: "" };
 const Landing = () => {
@@ -28,7 +27,6 @@ const Landing = () => {
   currentContext.language === "en"
     ? document.getElementsByTagName("html")[0].setAttribute("lang", "en")
     : document.getElementsByTagName("html")[0].setAttribute("lang", "ar");
-  const [showAnnonymousTerms, setShowAnnonymousTerms] = useState(false);
 
   useEffect(() => {
 
@@ -46,8 +44,6 @@ const Landing = () => {
             history.push(`/${currentContext.language}/Managment`);
           }
         }
-      } else {
-        setShowAnnonymousTerms(true);
       }
     }
 
@@ -83,10 +79,6 @@ const Landing = () => {
         </div>
       </div>
       <Footer />
-      <AnnonymousTerms
-        showAnnonymousTermsModal={showAnnonymousTerms}
-        hideAnnonymousTermsModal={() => setShowAnnonymousTerms(false)}
-      />
     </div>
   );
 }

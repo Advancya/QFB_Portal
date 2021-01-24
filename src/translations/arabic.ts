@@ -808,8 +808,8 @@ const ar = {
   RMSampleAccount: "رقم تعريف مدير العلاقة | ",
   CustomerSampleAccount: "رقم تعريف العميل | ",
   ManagementSampleAccount: "الادارة | ",
-  ChartDepositProfitRecieved: "Deposit Received Profit",
-  ChartDrillDownHint: "Click to view the profit received",
+  ChartDepositProfitRecieved: "الودائع والأرباح المحصلة",
+  ChartDrillDownHint: "إضغط لعرض الأرباح المتراكمة المحصلة",
 
   ContactUs_Mobile_Format_Validation_Message:
     "Mobile number should contain country code like +974xxxxxxxx",

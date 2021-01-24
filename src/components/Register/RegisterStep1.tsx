@@ -113,7 +113,6 @@ function RegisterStep1(props: iRegisterStep1) {
                 handleSubmit,
                 errors,
                 touched,
-                setFieldValue,
                 isValid,
                 validateForm,
               }) => (
@@ -139,18 +138,23 @@ function RegisterStep1(props: iRegisterStep1) {
                         value={values.oneTimePassword || ""}
                         onChange={handleChange("oneTimePassword")}
                         onBlur={async () => {
-                          setLoading(true);
-                          const data = await ValidateOneTimeRegisterCode(
-                            values.oneTimePassword
-                          );
-                          if (data) {
-                            setField2Editable(true);
-                            setField1ShowError(false);
-                          } else {
-                            setField2Editable(false);
-                            setField1ShowError(true);
+
+                          if (!!values.oneTimePassword) {
+                            setLoading(true);
+                            const data = await ValidateOneTimeRegisterCode(
+                              values.oneTimePassword
+                            );
+                            if (data) {
+                              setField2Editable(true);
+                              setField1ShowError(false);
+                            } else {
+                              setField2Editable(false);
+                              setField1ShowError(true);
+                            }
+                            setLoading(false);
                           }
-                          setLoading(false);
+
+                          touched.oneTimePassword = true;
                           handleBlur("oneTimePassword");
                         }}
                       />
@@ -167,33 +171,36 @@ function RegisterStep1(props: iRegisterStep1) {
                         placeholder=""
                         value={values.cif || ""}
                         onChange={handleChange("cif")}
-                        onBlur={async () => {
-                          setLoading(true);
-                          const data = await ValidateOneTimeRegisterCodeWithCif(
-                            values.oneTimePassword,
-                            values.cif
-                          );
-                          if (data) {
-                            const isRegisterBeforeResponse = await isRegisterBefore(
+                        onBlur={async () => {                          
+
+                          if (field2Editable) {
+                            setLoading(true);
+                            const data = await ValidateOneTimeRegisterCodeWithCif(
+                              values.oneTimePassword,
                               values.cif
                             );
-                            if (isRegisterBeforeResponse === false) {
-                              setField3Editable(true);
-                              setField2ShowError(false);
-                              setField22ShowError(false);
+                            if (data) {
+                              const isRegisterBeforeResponse = await isRegisterBefore(
+                                values.cif
+                              );
+                              if (isRegisterBeforeResponse === false) {
+                                setField3Editable(true);
+                                setField2ShowError(false);
+                                setField22ShowError(false);
+                              } else {
+                                setField3Editable(false);
+                                setShowSubmitButton(false);
+                                setField2ShowError(false);
+                                setField22ShowError(true);
+                              }
                             } else {
                               setField3Editable(false);
+                              setField2ShowError(true);
                               setShowSubmitButton(false);
-                              setField2ShowError(false);
-                              setField22ShowError(true);
                             }
-                          } else {
-                            setField3Editable(false);
-                            setField2ShowError(true);
-                            setShowSubmitButton(false);
+                            setLoading(false);
+                            handleBlur("cif");
                           }
-                          setLoading(false);
-                          handleBlur("cif");
                         }}
                         readOnly={!field2Editable}
                       />
@@ -215,26 +222,29 @@ function RegisterStep1(props: iRegisterStep1) {
                         value={values.email || ""}
                         onChange={handleChange("email")}
                         onBlur={async () => {
-                          setLoading(true);
-                          const data = await getRegisterData(values.cif);
-                          if (data.toString() !== "") {
-                            if (
-                              values.email.toLowerCase() ===
-                              data[0]["Email"].toLowerCase()
-                            ) {
-                              setField4Editable(true);
-                              setField3ShowError(false);
+
+                          if (field3Editable) {
+                            setLoading(true);
+                            const data = await getRegisterData(values.cif);
+                            if (data.toString() !== "") {
+                              if (
+                                values.email.toLowerCase() ===
+                                data[0]["Email"].toLowerCase()
+                              ) {
+                                setField4Editable(true);
+                                setField3ShowError(false);
+                              } else {
+                                setField4Editable(false);
+                                setField3ShowError(true);
+                              }
                             } else {
                               setField4Editable(false);
-                              setField3ShowError(true);
+                              setField3ShowError(false);
+                              setShowSubmitButton(false);
                             }
-                          } else {
-                            setField4Editable(false);
-                            setField3ShowError(false);
-                            setShowSubmitButton(false);
+                            setLoading(false);
+                            handleBlur("email");
                           }
-                          setLoading(false);
-                          handleBlur("email");
                         }}
                         readOnly={!field3Editable}
                       />
@@ -253,27 +263,30 @@ function RegisterStep1(props: iRegisterStep1) {
                         value={values.mobile || ""}
                         onChange={handleChange("mobile")}
                         onBlur={async () => {
-                          setLoading(true);
-                          const data = await getRegisterData(values.cif);
-                          if (data.toString() !== "") {
-                            if (
-                              values.mobile.toLowerCase() ===
-                              data[0]["SMS"].toLowerCase()
-                            ) {
-                              setField4ShowError(false);
-                              setShowSubmitButton(true);
+                          
+                          if (field4Editable) {
+                            setLoading(true);
+                            const data = await getRegisterData(values.cif);
+                            if (data.toString() !== "") {
+                              if (
+                                values.mobile.toLowerCase() ===
+                                data[0]["SMS"].toLowerCase()
+                              ) {
+                                setField4ShowError(false);
+                                setShowSubmitButton(true);
+                              } else {
+                                setField4ShowError(true);
+                                setShowSubmitButton(false);
+                                setShowSubmitButton(false);
+                              }
                             } else {
-                              setField4ShowError(true);
+                              setField4ShowError(false);
                               setShowSubmitButton(false);
                               setShowSubmitButton(false);
                             }
-                          } else {
-                            setField4ShowError(false);
-                            setShowSubmitButton(false);
-                            setShowSubmitButton(false);
+                            setLoading(false);
+                            handleBlur("mobile");
                           }
-                          setLoading(false);
-                          handleBlur("mobile");
                         }}
                         readOnly={!field4Editable}
                       />

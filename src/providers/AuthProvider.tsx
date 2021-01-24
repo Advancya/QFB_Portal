@@ -123,7 +123,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           setUserRole("");
           setUserSettings(null);
           await SaveUserDataLocally(null);
-          localStorage.removeItem(Constant.CustomerTermsAcceptanceStorageKey);
+          //localStorage.removeItem(Constant.CustomerTermsAcceptanceStorageKey);
           window.location.href = `/${language}`;
         },
         changeLanguage: setLanguage,

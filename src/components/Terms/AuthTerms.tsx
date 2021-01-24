@@ -10,6 +10,7 @@ import xIcon from "../../images/x-icon.svg";
 interface iAuthTerms {
   showAuthTermsModal: boolean;
   hideAuthTermsModal: () => void;
+  showWelcomePage?: () => void;
 }
 
 function AuthTerms(authTermsProps: iAuthTerms) {
@@ -49,12 +50,24 @@ function AuthTerms(authTermsProps: iAuthTerms) {
         {currentContext.language === "en" ? (
           <ResponsiveEmbed aspectRatio="16by9">
             <embed type="text/html" src="https://portalcms.azurewebsites.net/TermsAuthen.html" />
+
           </ResponsiveEmbed>
         ) : (
             <ResponsiveEmbed aspectRatio="16by9">
               <embed type="text/html" src="https://portalcms.azurewebsites.net/TermsAuthAr.html" />
             </ResponsiveEmbed>
           )}
+        <div className="text-right">
+          <button className="btn btn-sm btn-primary mt-1 mr-2"
+            type="submit"
+            onClick={(e) => authTermsProps.showWelcomePage()}>
+            {local_Strings.AnonymousTermsAccept}
+          </button>
+          <button className="btn btn-sm btn-primary mt-1 mr-2"
+            type="submit"
+            onClick={(e) => currentContext.logout()}>
+            {local_Strings.AnonymousTermsCancel}</button>
+        </div>
       </Modal.Body>
     </Modal>
   );

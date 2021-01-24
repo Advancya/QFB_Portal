@@ -1,13 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
-import moment from "moment";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
-import { GetBeneficiaryByCIF } from "../../services/cmsService";
-import {
-  emptyBeneficiaryDetail,
-  IBeneficiaryDetail,
-} from "../../Helpers/publicInterfaces";
 import { iBeneficiary } from "../../services/transactionService";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";

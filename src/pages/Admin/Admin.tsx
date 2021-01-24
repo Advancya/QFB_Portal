@@ -114,14 +114,8 @@ const Landing = () => {
 
     if (!!currentContext.selectedCIF) {
       initialLoadMethod();
-    } else {
-      setTimeout(() => {
-        if (!currentContext.selectedCIF) {
-          history.push(`/${currentContext.language}`);
-        }
-      }, 5000);
     }
-
+    
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted

@@ -29,7 +29,7 @@ function ForgotPasswordStep2(props: iForgotPasswordStep2) {
   };
 
   const registerFormStep3ValidationSchema = yup.object({
-    otp: yup.string().required(),
+    otp: yup.number().required(local_Strings.GeneralValidation),
   });
 
   return (
@@ -121,7 +121,7 @@ function ForgotPasswordStep2(props: iForgotPasswordStep2) {
                   <div className="col-lg-12 form-group">
                     <label>{local_Strings.PasswordResetOTPEnterOTP}</label>
                     <input
-                      type="text"
+                      type="number"
                       className="form-control"
                       value={values.otp || ""}
                       onChange={handleChange("otp")}

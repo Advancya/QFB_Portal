@@ -8,6 +8,7 @@ import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
 import {
   emptyTransactionDetail,
+  emptyCommonFilter,
   ICommonFilter,
   ITransactionDetail,
 } from "../../Helpers/publicInterfaces";
@@ -36,6 +37,7 @@ function TransactionsListing(props: iTransactionsListing) {
   const [offset, setOffset] = useState<number>(rowLimit);
   const [filteredData, setFilteredData] = useState<ITransactionDetail[]>([emptyTransactionDetail]);
   const [allowEdit, setAllowEdit] = useState<boolean>(false);
+  const [filters, setFilter] = useState<ICommonFilter>(emptyCommonFilter);
 
   useEffect(() => {
     let isMounted = true;
@@ -58,12 +60,22 @@ function TransactionsListing(props: iTransactionsListing) {
   }, [currentContext.selectedCIF, currentContext.language]);
 
   useEffect(() => {
+    
     setFilteredData(props.transactions);
     if (props.transactions && props.transactions.length > 0 && props.transactions.length < rowLimit) {
       setOffset(props.transactions.length);
     } else {
       setOffset(rowLimit);
     }
+    
+    if (filters.filterApplied) {
+      const _filteredData = helper.filterTransactionList(
+        props.transactions,
+        filters
+      );
+      setFilteredData(_filteredData);
+    }
+
   }, [props.transactions, props.reloading]);
 
   const renderItem = (item: ITransactionDetail, index: number) => (
@@ -156,19 +168,20 @@ function TransactionsListing(props: iTransactionsListing) {
             <FilterCommonControl
               clearFilter={() => {
                 setFilteredData(props.transactions);
+                setFilter(emptyCommonFilter);
                 if (props.transactions.length < rowLimit) {
                   setOffset(props.transactions.length);
                 } else {
                   setOffset(rowLimit);
                 }
               }}
-              applyFilter={(filters: ICommonFilter) => {
-                console.log(filters);
+              applyFilter={(filters: ICommonFilter) => {                
                 const _filteredData = helper.filterTransactionList(
                   props.transactions,
                   filters
                 );
                 setFilteredData(_filteredData);
+                setFilter(filters);
               }}
             />
           }

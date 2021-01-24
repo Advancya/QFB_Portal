@@ -79,8 +79,7 @@ function InboxDetails(props: iInboxDetails) {
     const userData = await GetUserLocalData();
     if (userData) {
       if (userData.customerId === currentContext.selectedCIF) {
-        await SetInboxItemAsRead({ ...props.item, isRead: true });
-        InboxMessages.refreshInbox();
+        await SetInboxItemAsRead({ ...props.item, isRead: true });        
       }
     }
   };

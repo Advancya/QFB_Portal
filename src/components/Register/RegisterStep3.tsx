@@ -29,7 +29,7 @@ function RegisterStep3(props: iRegisterStep3) {
   const [isLoading, setLoading] = useState(false);
 
   const registerFormStep3ValidationSchema = yup.object({
-    otp: yup.string().required(),
+    otp: yup.number().required(local_Strings.GeneralValidation),
   });
 
   return (
@@ -156,7 +156,7 @@ function RegisterStep3(props: iRegisterStep3) {
                   <div className="col-lg-6 form-group">
                     <label> {local_Strings.registerStep3Label1}</label>
                     <input
-                      type="password"
+                      type="number"
                       className="form-control"
                       placeholder=""
                       value={values.otp || ""}

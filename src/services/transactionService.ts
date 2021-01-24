@@ -106,10 +106,14 @@ async function GetBeneficiariesByCif(cif: string) {
 
 async function ValidateBankIBAN(iban: string) {
   try {
-    const result = await axios.get(
-      `https://api.iban.com/clients/api/v4/iban/?format=json&api_key=4c80e9b4389abe84b453d0c133f62ff9&iban=${iban}`
-    );
-    return result.data["bank_data"];
+
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    const result: any = await fetch(proxyUrl + `https://api.iban.com/clients/api/v4/iban/?format=json&api_key=4c80e9b4389abe84b453d0c133f62ff9&iban=${iban}`)
+      .then(res => res.json())
+      .catch((e: any) => console.log(e));
+      
+    return result["bank_data"];
+
   } catch (err) {
     console.log(err);
     return undefined;
@@ -118,10 +122,28 @@ async function ValidateBankIBAN(iban: string) {
 
 async function ValidateBankSwift(swift: string) {
   try {
-    const result = await axios.get(
-      `https://api.iban.com/clients/api/swiftv1/simple.php?format=json&api_key=4c80e9b4389abe84b453d0c133f62ff9&bic=${swift}`
-    );
-    return result.data;
+
+    // const myInit: RequestInit = {
+    //   method: 'HEAD',
+    //   mode: 'no-cors',
+    //   redirect: 'follow'
+    // };
+
+    // fetch(`https://api.iban.com/clients/api/swiftv1/simple.php?format=json&api_key=4c80e9b4389abe84b453d0c133f62ff9&bic=${swift}`, myInit)
+    //   //.then(response => response.json())
+    //   .then((result: any) => {
+    //     console.log(result.data);
+    //     return result.data;
+    //   })
+    //   .catch(error => console.log('error', error));
+
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    const result: any = await fetch(proxyUrl + `https://api.iban.com/clients/api/swiftv1/simple.php?format=json&api_key=4c80e9b4389abe84b453d0c133f62ff9&bic=${swift}`)
+      .then(res => res.json())
+      .catch((e: any) => console.log(e));
+
+    return result;
+
   } catch (err) {
     console.log(err);
     return undefined;

@@ -9,14 +9,11 @@ import { AuthContext } from "../../providers/AuthProvider";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { useHistory } from "react-router-dom";
 import Swal from "sweetalert2";
-import axios from "axios";
 import ManagmentRequestsLanding from "../../components/Managment/ManagmentRequestsLanding";
 import Breadcrumb from "../../components/Breadcrumb";
 import ClientPortfolioListing from "../../shared/ClientPortfolioListing";
 import AdminCustomHeader from "../../components/header/AdminCustomHeader";
 import { GetUserLocalData } from "../../Helpers/authHelper";
-import { AddAcceptTermsStatusForCustomer } from "../../services/cmsService";
-import AuthTerms from "../../components/Terms/AuthTerms";
 
 export const CustomerListContext = createContext<ICustomer[]>([emptyCustomer]);
 
@@ -24,7 +21,6 @@ const ManagmentLanding = () => {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
 
-  const [showAuthTerms, setShowAuthTerms] = useState(false);
   currentContext.language === "en"
     ? document.getElementsByTagName("html")[0].setAttribute("dir", "ltr")
     : document.getElementsByTagName("html")[0].setAttribute("dir", "rtl");
@@ -33,24 +29,12 @@ const ManagmentLanding = () => {
     : document.getElementsByTagName("html")[0].setAttribute("lang", "ar");
 
   const [isLoading, setLoading] = useState<boolean>(false);
-  const [customerList, setCustomerList] = useState<ICustomer[]>([
-    emptyCustomer,
-  ]);
-  const [showLeftSection, setLeftSection] = useState({
-    ProductsAndOffers: true,
-    Notifications: false,
-    Offers: false,
-    Documents: false,
-  });
   const history = useHistory();
 
   useEffect(() => {
 
     const initialLoadMethod = async () => {
-      const termsAccepted = localStorage.getItem(Constant.CustomerTermsAcceptanceStorageKey);
-      if (termsAccepted === null || !termsAccepted) {
-        setShowAuthTerms(true);
-      }
+
     }
 
     initialLoadMethod();
@@ -98,12 +82,6 @@ const ManagmentLanding = () => {
 
     if (!!currentContext.selectedCIF) {
       initialLoadMethod();
-    } else {
-      setTimeout(() => {
-        if (!currentContext.selectedCIF) {
-          history.push(`/${currentContext.language}`);
-        }
-      }, 5000);
     }
 
     return () => {
@@ -152,13 +130,6 @@ const ManagmentLanding = () => {
         </div>
       </div>
       <Footer />
-      <AuthTerms
-        showAuthTermsModal={showAuthTerms}
-        hideAuthTermsModal={async () => {
-          await AddAcceptTermsStatusForCustomer(currentContext.selectedCIF);
-          setShowAuthTerms(false);
-        }}
-      />
     </div>
   );
 }

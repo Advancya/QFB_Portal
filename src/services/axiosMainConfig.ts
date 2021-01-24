@@ -23,8 +23,8 @@ apiInstance.interceptors.request.use(async (config: any) => {
 
     if (moment(jwtDecode<JwtPayload>(token).exp * 1000).add(-45, 'minutes')
       .isBefore(moment().toDate())) {
-
-      ////session expired and required login
+      
+      //session expired and required login
       localStorage.removeItem(defaultData.AccessTokenStorageKey);
       localStorage.removeItem(defaultData.LoginDetailsStorageKey);
       window.location.reload();

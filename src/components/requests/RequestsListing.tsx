@@ -95,6 +95,15 @@ function RequestsListing(props: iRequestsListing) {
       setOffset(rowLimit);
     }
     
+    if (filters.filterApplied) {
+      const _filteredData = helper.filterRequests(
+        props.requests,
+        filters
+      );
+      
+      setFilteredData(_filteredData);
+    }
+
   }, [props.requests, props.reloading]);
 
   useEffect(() => {

@@ -521,7 +521,8 @@ export const prepareDepositHoldings1stDrill = (chartData: any, language: string)
       amount: ConvertToQfbNumberFormat(
         chartData[0].totalDepositsAmount || chartData[0].totalClosedDeposits
       ),
-      color: "#724B44",
+      color: "#493026",
+      drilldown: false
     },
     {
       name: local_Strings.ChartProfitRecieved,
@@ -529,7 +530,8 @@ export const prepareDepositHoldings1stDrill = (chartData: any, language: string)
       amount: ConvertToQfbNumberFormat(
         chartData[0].totalProfitRecieved || chartData[0].totalClosedProfit
       ),
-      color: "#B39758",
+      color: "#A79A94",
+      drilldown: false
     },
   ];
 
@@ -563,15 +565,15 @@ export const prepareDepositHoldings1stDrill = (chartData: any, language: string)
         enableMouseTracking: false,
         dataLabels: {
           enabled: true,
-          format: `{point.amount:.f}`,
+          format: `<span style="color:{point.color}">\u25CF </span><span style="font-weight: normal;">{point.amount:.f}</span>`,
           useHTML: true,
         },
-        events: {
-          click: function (event) {
-            window.ReactNativeWebView.postMessage(event.point.amount);
-          },
-        },
         showInLegend: true,
+        point: {
+          events: {
+            legendItemClick: () => false
+          }
+        }
       },
     },
     series: series,
@@ -582,37 +584,88 @@ export const prepareDepositHoldings1stDrill = (chartData: any, language: string)
 
 export const prepareInvestmentHoldings1stDrill = (
   chartData: any,
+  language: string
+) => {
+  local_Strings.setLanguage(language);
+
+  let sdata: any = [];
+  let colors = ["#493026", "#6C544B", "#97877F", "#CBC4C1", "#A79A94"];
+
+  let index = 0;
+  chartData.map((item) => {
+    sdata.push({
+      y: Number(
+        Number.parseInt(item.nominalAmount || item.investmentAmount).toFixed(1)
+      ),
+      amount: ConvertToQfbNumberFormat(
+        item.nominalAmount || item.investmentAmount
+      ),
+      key: item.subAssetId,
+      name: item.secDescirption,
+      color: colors[index]
+    });
+    index++;
+    if (index > 4) index = 0;
+  });
+
+  return [
+    {
+      name: local_Strings.Investment,
+      colorByPoint: true,
+      data: sdata,
+    },
+  ];
+
+};
+
+export const prepareInvestmentHoldings2ndDrill = (
+  chartData: any,
   title: string,
   language: string
 ) => {
   local_Strings.setLanguage(language);
+
+  var seen = {};
+  chartData = chartData.filter(function (entry) {
+    var previous;
+    entry.bookingDate = entry.bookingDate.slice(0, 10);
+
+    // Have we seen this label before?
+    if (seen.hasOwnProperty(entry.bookingDate)) {
+      // Yes, grab it and add this data to it
+      previous = seen[entry.bookingDate];
+      previous.amount = Number(previous.amount) + Number(entry.amount);
+
+      // Don't keep this entry, we've merged it into the previous one
+      return false;
+    }
+    // entry.data probably isn't an array; make it one for consistency
+    if (!Array.isArray(entry.amount)) {
+      entry.amount = entry.amount;
+    }
+    // Remember that we've seen it
+    seen[entry.bookingDate] = entry;
+
+    // Keep this one, we'll merge any others that match into it
+    return true;
+  });
+
   let series: any = [];
+  let values: any = [];
 
-  for (var i = 0; i < 2; i++) {
-    let data: any = [];
-    chartData.map((item: any) => {
-      i === 0
-        ? data.push({
-          y: item.nominalAmount || item.investmentAmount,
-          key: item.subAssetId,
-          name: item.secDescirption,
-          color: "#724B44",
-        })
-        : data.push({
-          y: item.invRecievedProfit,
-          key: item.subAssetId,
-          name: item.secDescirption,
-          color: "#B39758",
-          drilldown: item.subAssetId
-        });
+  chartData.map((item) => {
+    values.push({
+      y: Math.round((item.amount + Number.EPSILON) * 100) / 100,
+      amount: ConvertToQfbNumberFormat(item.amount),
+      color: "#724B44",
+      name: moment(item.bookingDate).format("DD-MM-YYYY"),
     });
+  });
 
-    series.push({
-      name: !!title ? title : '',
-      colorByPoint: true,
-      data: data,
-    });
-  }
+  series.push({
+    colorByPoint: true,
+    data: values,
+  });
 
   let data = {
     chart: {
@@ -622,14 +675,13 @@ export const prepareInvestmentHoldings1stDrill = (
       text: title,
     },
     subtitle: {
-      text: local_Strings.ChartDrillDownHint,
+      text: local_Strings.CumulativeProfitReceived
     },
     tooltip: {
       enabled: false,
     },
     xAxis: {
-      type: 'category',
-      //categories: chartData.map((c: any) => c.secDescirption),
+      type: "category",
     },
     yAxis: {
       title: {
@@ -646,61 +698,22 @@ export const prepareInvestmentHoldings1stDrill = (
       column: {
         dataLabels: {
           enabled: true,
-          format: "<b>{point.y}</b>",
-          useHTML: true,
+          format: "<b>{point.amount}</b>",
         },
         showInLegend: false,
+        point: {
+          events: {
+            legendItemClick: function() {
+              return false
+            }
+          }
+        }
       },
     },
     series: series,
-    drilldown: {
-      series: []
-    }
   };
 
   return data;
-};
-
-export const prepareInvestmentHoldings2ndDrill = (
-  chartData: any,
-  title: string,
-  rtl = false
-) => {
-  var seen: any = {};
-  chartData = chartData.filter(function (entry: any) {
-    var previous;
-    entry.bookingDate = entry.bookingDate.slice(0, 10);
-
-    // Have we seen this label before?
-    if (seen.hasOwnProperty(entry.bookingDate)) {
-      // Yes, grab it and add this data to it
-      previous = seen[entry.bookingDate];
-      previous.amount = Number(previous.amount) + Number(entry.amount);
-
-      // Don't keep this entry, we've merged it into the previous one
-      return false;
-    }
-    // entry.data probably isn't an array; make it one for consistency
-    // if (!Array.isArray(entry.amount)) {
-    //   entry.amount = entry.amount;
-    // }
-    // Remember that we've seen it
-    seen[entry.bookingDate] = entry;
-
-    // Keep this one, we'll merge any others that match into it
-    return true;
-  });
-
-  let series: any = [];
-  let values: any = [];
-
-  chartData.map((item: any) =>
-    values.push(
-      [moment(item.bookingDate).format("DD/MM/YYYY"),
-      Math.round((item.amount + Number.EPSILON) * 100) / 100]
-    ));
-
-  return values;
 };
 
 export const prepareTotalNetWorth = (

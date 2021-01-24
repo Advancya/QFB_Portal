@@ -229,12 +229,6 @@ const HomePage = () => {
 
     if (!!currentContext.selectedCIF) {
       initialLoadMethod();
-    } else {
-      setTimeout(() => {
-        if (!currentContext.selectedCIF) {
-          history.push(`/${currentContext.language}`);
-        }
-      }, 5000);
     }
 
     return () => {
@@ -312,7 +306,8 @@ const HomePage = () => {
 
       <AuthTerms
         showAuthTermsModal={showAuthTerms}
-        hideAuthTermsModal={async () => {
+        hideAuthTermsModal={async () => setShowAuthTerms(false)}
+        showWelcomePage={async () => {
           await AddAcceptTermsStatusForCustomer(currentContext.selectedCIF);
           setShowAuthTerms(false);
         }}

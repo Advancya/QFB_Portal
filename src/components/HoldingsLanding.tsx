@@ -19,14 +19,8 @@ import PuffLoader from "react-spinners/PuffLoader";
 import holdingsIcon from "../images/holdings-icon.svg";
 import axios from "axios";
 import HighchartsReact from "highcharts-react-official";
-import Highcharts from "highcharts/highstock";
-import drilldown from "highcharts/modules/drilldown.js";
-import {
-  ILiveHoldings_1stDrill_Investment,
-  IClosedHoldings_1stDrill_Investment,
-} from "../Helpers/publicInterfaces";
-
-drilldown(Highcharts);
+import PieChart from "highcharts-react-official";
+import Highcharts from 'highcharts';
 
 type RefObjectForHighchartsReact = {
   /**
@@ -42,23 +36,174 @@ type RefObjectForHighchartsReact = {
 const HoldingsLanding = () => {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
-  const liveInvestmentChart = useRef<RefObjectForHighchartsReact>();
+
+  let liveInvestmentChart = useRef<RefObjectForHighchartsReact>();
+  let closedInvestmentChart = useRef<RefObjectForHighchartsReact>();
+
+
+  const loadLiveHoldings2ndDrill = (e: any) => {
+
+    const name = e.point.name;
+    const saId = e.point.key;
+
+    setLoading(true);
+
+    GetLiveHoldings_2ndDrill_Investment(
+      currentContext.selectedCIF,
+      saId,
+      currentContext.userSettings.currency
+    )
+      .then((responseData: any) => {
+        if (responseData.length > 0) {
+          const chart_Live_2ndDrill_Investment = helper.prepareInvestmentHoldings2ndDrill(
+            responseData,
+            name,
+            currentContext.language
+          );
+          setInvestment_Live_2ndDrill(chart_Live_2ndDrill_Investment as any);
+          setLive2ndDrillShow(true);
+        }
+      })
+      .catch((e: any) => console.log(e))
+      .finally(() => setLoading(false));
+  };
+
+  const loadClosedHoldings2ndDrill = (e: any) => {
+
+    const name = e.point.name;
+    const saId = e.point.key;
+
+    setLoading(true);
+    GetClosedHoldings_2ndDrill_Investment(
+      currentContext.selectedCIF,
+      saId,
+      currentContext.userSettings.currency
+    )
+      .then((responseData: any) => {
+        if (responseData.length > 0) {
+          const chart_Closed_2ndDrill_Investment = helper.prepareInvestmentHoldings2ndDrill(
+            responseData,
+            name,
+            currentContext.language
+          );
+          setInvestment_Closed_2ndDrill(
+            chart_Closed_2ndDrill_Investment as any
+          );
+          setClosed2ndDrillShow(true);
+        }
+      })
+      .catch((e: any) => console.log(e))
+      .finally(() => setLoading(false));
+  };
 
   const [isLoading, setLoading] = useState(false);
   const [showHoldingsLandingModal, showHoldings] = useState(false);
   const [deposit_live_1stDrill, setDeposit_live_1stDrill] = useState(null);
   const [deposit_Closed_1stDrill, setDeposit_Closed_1stDrill] = useState(null);
   const [investment_live_1stDrill, setInvestment_live_1stDrill] = useState(
-    null
+    {
+      chart: {
+        type: "pie",
+        height: 420,
+      },
+      title: {
+        text: local_Strings.Investment,
+      },
+      subtitle: {
+        text: local_Strings.ClickToViewTheAccumulatedProfitReceived,
+      },
+      tooltip: {
+        enabled: false,
+      },
+      credits: {
+        enabled: false,
+      },
+      legend: {
+        rtl: currentContext.language === "ar",
+      },
+      plotOptions: {
+        pie: {
+          allowPointSelect: true,
+          cursor: "pointer",
+          enableMouseTracking: true,
+          dataLabels: {
+            enabled: true,
+            format: `<span style="color:{point.color}">\u25CF </span><span style="font-weight: normal;">{point.amount:.f}</span>`,
+            useHTML: true,
+          },
+          showInLegend: true,
+          point: {
+            events: {
+              legendItemClick: () => false
+            }
+          },
+          events: {
+            click: loadLiveHoldings2ndDrill
+          }
+        },
+      },
+      series: [],
+    }
   );
   const [investment_Closed_1stDrill, setInvestment_Closed_1stDrill] = useState(
-    null
+    {
+      chart: {
+        type: "pie",
+        height: 420,
+      },
+      title: {
+        text: local_Strings.Investment,
+      },
+      subtitle: {
+        text: local_Strings.ClickToViewTheAccumulatedProfitReceived,
+      },
+      tooltip: {
+        enabled: false,
+      },
+      credits: {
+        enabled: false,
+      },
+      legend: {
+        rtl: currentContext.language === "ar",
+      },
+      plotOptions: {
+        pie: {
+          allowPointSelect: true,
+          cursor: "pointer",
+          enableMouseTracking: true,
+          dataLabels: {
+            enabled: true,
+            format: `<span style="color:{point.color}">\u25CF </span><span style="font-weight: normal;">{point.amount:.f}</span>`,
+            useHTML: true,
+          },
+          showInLegend: true,
+          point: {
+            events: {
+              legendItemClick: () => false
+            }
+          },
+          events: {
+            click: loadClosedHoldings2ndDrill
+          }
+        },
+      },
+      series: [],
+    }
   );
   const [showNoDataDepositLive, setNoDataDepositLive] = useState(false);
   const [showNoDataDepositClosed, setNoDataDepositClosed] = useState(false);
   const [showNoDataInvestmentLive, setNoDataInvestmentLive] = useState(false);
   const [showNoDataInvestmentClosed, setNoDataInvestmentClosed] = useState(
     false
+  );
+
+  const [isLive2ndDrillShow, setLive2ndDrillShow] = useState(false);
+  const [isClosed2ndDrillShow, setClosed2ndDrillShow] = useState(false);
+  const [investment_Live_2ndDrill, setInvestment_Live_2ndDrill] = useState(
+    null
+  );
+  const [investment_Closed_2ndDrill, setInvestment_Closed_2ndDrill] = useState(
+    null
   );
 
   useEffect(() => {
@@ -72,180 +217,97 @@ const HoldingsLanding = () => {
   }, [currentContext.selectedCIF, currentContext.language]);
 
   const showLiveHoldings = () => {
-    if (!investment_live_1stDrill || !deposit_live_1stDrill) {
-      setLoading(true);
+    setLoading(true);
 
-      const requestOne = GetLiveHoldings_1stDrill_Deposit(
-        currentContext.selectedCIF,
-        currentContext.userSettings.currency
-      );
-      const requestTwo = GetLiveHoldings_1stDrill_Investment(
-        currentContext.selectedCIF,
-        currentContext.userSettings.currency
-      );
-      axios
-        .all([requestOne, requestTwo])
-        .then((responseData: any) => {
-          if (responseData && responseData.length > 0) {
+    const requestOne = GetLiveHoldings_1stDrill_Deposit(
+      currentContext.selectedCIF,
+      currentContext.userSettings.currency
+    );
+    const requestTwo = GetLiveHoldings_1stDrill_Investment(
+      currentContext.selectedCIF,
+      currentContext.userSettings.currency
+    );
+    axios
+      .all([requestOne, requestTwo])
+      .then((responseData: any) => {
+        if (responseData && responseData.length > 0) {
 
-            if (responseData[0] && responseData[0].length > 0) {
-              const chart_Live_1stDrill_Deposit = helper.prepareDepositHoldings1stDrill(
-                responseData[0],
-                currentContext.language
-              );
-              setDeposit_live_1stDrill(chart_Live_1stDrill_Deposit as any);
-            } else {
-              setNoDataDepositLive(true);
-            }
-
-            const _investment_live_1stDrill = responseData[1] as ILiveHoldings_1stDrill_Investment[];
-
-            if (_investment_live_1stDrill && _investment_live_1stDrill.length > 0) {
-              const drillDownRequests = [];
-              _investment_live_1stDrill.forEach(
-                (item: ILiveHoldings_1stDrill_Investment) => {
-                  drillDownRequests.push(
-                    GetLiveHoldings_2ndDrill_Investment(
-                      currentContext.selectedCIF,
-                      item.subAssetId,
-                      currentContext.userSettings.currency
-                    )
-                  );
-                }
-              );
-
-              const chart_Live_1stDrill_Investment = helper.prepareInvestmentHoldings1stDrill(
-                _investment_live_1stDrill,
-                local_Strings.Investment,
-                currentContext.language
-              );
-
-              axios.all(drillDownRequests).then((drillDownResponseData: any) => {
-                if (drillDownResponseData && drillDownResponseData.length > 0) {
-                  _investment_live_1stDrill.forEach(
-                    (item: ILiveHoldings_1stDrill_Investment, index: number) => {
-                      if (drillDownResponseData[index].length > 0) {
-                        const chart_Closed_2ndDrill_Investment = helper.prepareInvestmentHoldings2ndDrill(
-                          drillDownResponseData[index],
-                          item.secDescirption,
-                          false
-                        );
-                        chart_Live_1stDrill_Investment.drilldown.series.push({
-                          id: item.subAssetId,
-                          name: item.secDescirption,
-                          data: chart_Closed_2ndDrill_Investment,
-                        });
-                      }
-                    }
-                  );
-
-                  setInvestment_live_1stDrill(
-                    chart_Live_1stDrill_Investment as any
-                  );
-                }
-              });
-
-            } else {
-              setNoDataInvestmentLive(true);
-            }
+          if (responseData[0] && responseData[0].length > 0) {
+            const chart_Live_1stDrill_Deposit = helper.prepareDepositHoldings1stDrill(
+              responseData[0],
+              currentContext.language
+            );
+            setDeposit_live_1stDrill(chart_Live_1stDrill_Deposit as any);
+          } else {
+            setNoDataDepositLive(true);
           }
-        })
-        .catch((e: any) => console.log(e))
-        .finally(() => setTimeout(() => setLoading(false), 4000));
-    }
+
+          if (responseData[1] && responseData[1].length > 0) {
+
+            const _investment_live_1stDrill = { ...investment_live_1stDrill };
+            _investment_live_1stDrill.title.text = local_Strings.Investment;
+            _investment_live_1stDrill.subtitle.text = local_Strings.ClickToViewTheAccumulatedProfitReceived;
+            _investment_live_1stDrill.series = helper.prepareInvestmentHoldings1stDrill(
+              responseData[1],
+              currentContext.language
+            );
+
+            setInvestment_live_1stDrill(_investment_live_1stDrill);
+
+          } else {
+            setNoDataInvestmentLive(true);
+          }
+        }
+      })
+      .catch((e: any) => console.log(e))
+      .finally(() => setTimeout(() => setLoading(false), 4000));
   };
 
   const showClosedHoldings = () => {
-    if (!investment_Closed_1stDrill || !deposit_Closed_1stDrill) {
-      setLoading(true);
-      const requestOne = GetClosedHoldings_1stDrill_Deposit(
-        currentContext.selectedCIF,
-        currentContext.userSettings.currency
-      );
-      const requestTwo = GetClosedHoldings_1stDrill_Investment(
-        currentContext.selectedCIF,
-        currentContext.userSettings.currency
-      );
-      axios
-        .all([requestOne, requestTwo])
-        .then((responseData: any) => {
-          if (responseData && responseData.length > 0) {
+    setLoading(true);
+    const requestOne = GetClosedHoldings_1stDrill_Deposit(
+      currentContext.selectedCIF,
+      currentContext.userSettings.currency
+    );
+    const requestTwo = GetClosedHoldings_1stDrill_Investment(
+      currentContext.selectedCIF,
+      currentContext.userSettings.currency
+    );
+    axios
+      .all([requestOne, requestTwo])
+      .then((responseData: any) => {
+        if (responseData && responseData.length > 0) {
 
-            if (responseData[0] && responseData[0].length > 0) {
-              const chart_Closed_1stDrill_Deposit = helper.prepareDepositHoldings1stDrill(
-                responseData[0],
-                currentContext.language
-              );
-              setDeposit_Closed_1stDrill(chart_Closed_1stDrill_Deposit as any);
-            } else {
-              setNoDataDepositClosed(true);
-            }
-
-            const _investment_closed_1stDrill = responseData[1] as IClosedHoldings_1stDrill_Investment[];
-            if (_investment_closed_1stDrill && _investment_closed_1stDrill.length > 0) {
-
-              const drillDownRequests = [];
-              _investment_closed_1stDrill.forEach(
-                (item: IClosedHoldings_1stDrill_Investment) => {
-                  drillDownRequests.push(
-                    GetClosedHoldings_2ndDrill_Investment(
-                      currentContext.selectedCIF,
-                      item.subAssetId,
-                      currentContext.userSettings.currency
-                    )
-                  );
-                }
-              );
-
-              const chart_Closed_1stDrill_Investment = helper.prepareInvestmentHoldings1stDrill(
-                responseData[1],
-                local_Strings.Investment,
-                currentContext.language
-              );
-
-              axios.all(drillDownRequests).then((drillDownResponseData: any) => {
-                if (drillDownResponseData && drillDownResponseData.length > 0) {
-                  _investment_closed_1stDrill.forEach(
-                    (
-                      item: IClosedHoldings_1stDrill_Investment,
-                      index: number
-                    ) => {
-                      if (drillDownResponseData[index].length > 0) {
-                        const chart_Live_2ndDrill_Investment = helper.prepareInvestmentHoldings2ndDrill(
-                          drillDownResponseData[index],
-                          item.secDescirption,
-                          false
-                        );
-                        chart_Closed_1stDrill_Investment.drilldown.series.push({
-                          id: item.subAssetId,
-                          name: item.secDescirption,
-                          data: chart_Live_2ndDrill_Investment,
-                        });
-                      }
-                    }
-                  );
-
-                  setInvestment_Closed_1stDrill(
-                    chart_Closed_1stDrill_Investment as any
-                  );
-                }
-              });
-
-            } else {
-              setNoDataInvestmentClosed(true);
-            }
+          if (responseData[0] && responseData[0].length > 0) {
+            const chart_Closed_1stDrill_Deposit = helper.prepareDepositHoldings1stDrill(
+              responseData[0],
+              currentContext.language
+            );
+            setDeposit_Closed_1stDrill(chart_Closed_1stDrill_Deposit as any);
+          } else {
+            setNoDataDepositClosed(true);
           }
-        })
-        .catch((e: any) => console.log(e))
-        .finally(() => setTimeout(() => setLoading(false), 4000));
-    }
-  };
 
-  Highcharts.setOptions({
-    lang: {
-      drillUpText: local_Strings.DrillBackButtonText,
-    },
-  });
+          if (responseData[1] && responseData[1].length > 0) {
+
+            const _investment_Closed_1stDrill = { ...investment_Closed_1stDrill };
+            _investment_Closed_1stDrill.title.text = local_Strings.Investment;
+            _investment_Closed_1stDrill.subtitle.text = local_Strings.ClickToViewTheAccumulatedProfitReceived;
+            _investment_Closed_1stDrill.series = helper.prepareInvestmentHoldings1stDrill(
+              responseData[1],
+              currentContext.language
+            );
+
+            setInvestment_Closed_1stDrill(_investment_Closed_1stDrill);
+
+          } else {
+            setNoDataInvestmentClosed(true);
+          }
+        }
+      })
+      .catch((e: any) => console.log(e))
+      .finally(() => setTimeout(() => setLoading(false), 4000));
+  };
 
   return (
     <React.Fragment>
@@ -307,39 +369,40 @@ const HoldingsLanding = () => {
                 title={local_Strings.LiveHoldingTab}
                 onEntered={() => showLiveHoldings()}
               >
-                {deposit_live_1stDrill ? (
-                  <HighchartsReact
-                    highcharts={Highcharts}
-                    options={deposit_live_1stDrill}
-                  />
-                ) : !showNoDataDepositLive ? null :
-                    NoResult(local_Strings.NoLiveHoldingsMesageDeposit)}
-                {investment_live_1stDrill ? (
-                  <HighchartsReact
+                <div className="border-bottom mb-5">
+                  {deposit_live_1stDrill && !isLoading ? (
+                    <PieChart
+                      highcharts={Highcharts}
+                      options={deposit_live_1stDrill}
+                    />
+                  ) : !showNoDataDepositLive ? null :
+                      NoResult(local_Strings.NoLiveHoldingsMesageDeposit)}
+                </div>
+
+                {!isLive2ndDrillShow && !isLoading ? (
+
+                  <PieChart
                     highcharts={Highcharts}
                     options={investment_live_1stDrill}
-                    ref={liveInvestmentChart}
-                    immutable={true}
-                    callback={(chart) => {
-                      // chart.options.plotOptions.column.events.click
-                      //   = (e) => {
-                      //     //liveInvestmentChart.current.chart.addSeriesAsDrilldown(e.point, []);
-                      //     chart.title.attr({ text: e.point.name });
-                      //   }
-                      chart.options.plotOptions.column.events.afterAnimate = (
-                        e
-                      ) => {
-                        chart.title.attr({ text: e.target.name });
-                        if (e.target.name !== local_Strings.Investment) {
-                          chart.subtitle.attr({ text: "" });
-                        } else {
-                          chart.subtitle.attr({ text: local_Strings.ChartDrillDownHint });
-                        }
-                      };
-                    }}
                   />
+
                 ) : !showNoDataInvestmentLive ? null :
                     NoResult(local_Strings.NoLiveHoldingsMesageInvestment)}
+                {isLive2ndDrillShow && !isLoading && (
+                  <React.Fragment>
+                    <a
+                      href="#"
+                      onClick={() => setLive2ndDrillShow(false)}
+                    >
+                      <i
+                        className="fa fa-undo text-xs" />
+                    </a>
+                    <HighchartsReact
+                      highcharts={Highcharts}
+                      options={investment_Live_2ndDrill}
+                    />
+                  </React.Fragment>
+                )}
               </Tab>
               <Tab
                 eventKey="profile"
@@ -347,33 +410,37 @@ const HoldingsLanding = () => {
                 title={local_Strings.ExitediveHoldingTab}
                 onEntered={() => showClosedHoldings()}
               >
-                {deposit_Closed_1stDrill ? (
-                  <HighchartsReact
-                    highcharts={Highcharts}
-                    options={deposit_Closed_1stDrill}
-                  />
-                ) : !showNoDataDepositClosed ? null :
-                    NoResult(local_Strings.NoClosedHoldingsMesageInvestment)}
-
-                {investment_Closed_1stDrill ? (
-                  <HighchartsReact
+                <div className="border-bottom mb-5">
+                  {deposit_Closed_1stDrill && !isLoading ? (
+                    <PieChart
+                      highcharts={Highcharts}
+                      options={deposit_Closed_1stDrill}
+                    />
+                  ) : !showNoDataDepositClosed ? null :
+                      NoResult(local_Strings.NoClosedHoldingsMesageDeposit)}
+                </div>                
+                {!isClosed2ndDrillShow && !isLoading ? (
+                  <PieChart
                     highcharts={Highcharts}
                     options={investment_Closed_1stDrill}
-                    callback={(chart) => {
-                      chart.options.plotOptions.column.events.afterAnimate = (
-                        e
-                      ) => {
-                        chart.title.attr({ text: e.target.name });
-                        if (e.target.name !== local_Strings.Investment) {
-                          chart.subtitle.attr({ text: "" });
-                        } else {
-                          chart.subtitle.attr({ text: local_Strings.ChartDrillDownHint });
-                        }
-                      };
-                    }}
                   />
                 ) : !showNoDataInvestmentClosed ? null :
-                    NoResult(local_Strings.NoClosedHoldingsMesageDeposit)}
+                    NoResult(local_Strings.NoClosedHoldingsMesageInvestment)}
+                {isClosed2ndDrillShow && !isLoading && (
+                  <React.Fragment>
+                    <a
+                      href="#"
+                      onClick={() => setClosed2ndDrillShow(false)}
+                    >
+                      <i
+                        className="fa fa-undo text-xs" />
+                    </a>
+                    <HighchartsReact
+                      highcharts={Highcharts}
+                      options={investment_Closed_2ndDrill}
+                    />
+                  </React.Fragment>
+                )}
               </Tab>
             </Tabs>
           </div>

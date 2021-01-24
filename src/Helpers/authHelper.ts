@@ -1,8 +1,8 @@
 
 import defaultData from "../constants/defaultData";
 
-export interface IUserSettings { customerId: string; language: string; currency: string; otp: string };
-export const initialSettingsData = { customerId: "", language: "en", currency: "QAR", otp: "SMS" };
+export interface IUserSettings { customerId: string; language: string; currency: string; otp: string, isTransferAllowed: boolean };
+export const initialSettingsData = { customerId: "", language: "en", currency: "QAR", otp: "SMS", isTransferAllowed: false };
 
 async function SaveUserDataLocally(values: IUserSettings) {
 

@@ -3629,6 +3629,11 @@ coa@^2.0.2:
     chalk "^2.4.1"
     q "^1.1.2"
 
+codemirror@^5.26.0:
+  version "5.59.2"
+  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.59.2.tgz#ee674d3a4a8d241af38d52afc482625ba7393922"
+  integrity sha512-/D5PcsKyzthtSy2NNKCyJi3b+htRkoKv3idswR/tR6UAvMNKA7SrmyZy6fOONJxSRs1JlUWEDAbxqfdArbK8iA==
+
 codepage@~1.3.6:
   version "1.3.8"
   resolved "https://registry.yarnpkg.com/codepage/-/codepage-1.3.8.tgz#4f2e5d7c0975de28f88498058dcb5afcab6a5f71"
@@ -9516,7 +9521,7 @@ prop-types-extra@^1.1.0:
     react-is "^16.3.2"
     warning "^4.0.0"
 
-prop-types@^15.5.6, prop-types@^15.5.7, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@^15.5.10, prop-types@^15.5.6, prop-types@^15.5.7, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -10021,6 +10026,15 @@ react-spinners@^0.9.0:
   integrity sha512-+x6eD8tn/aYLdxZjNW7fSR1uoAXLb9qq6TFYZR1dFweJvckcf/HfP8Pa/cy5HOvB/cvI4JgrYXTjh2Me3S6Now==
   dependencies:
     "@emotion/core" "^10.0.15"
+
+react-summernote@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/react-summernote/-/react-summernote-2.0.2.tgz#7be8ff8f38c286ffb0d6d99a1ef5360b027d30a8"
+  integrity sha512-wVceqtDtz7PaPN7Agh2I22TZY+H0FZpjZuNDQB+Rpx0zSZeeYIBcltI6//XY6vDmOy4AOHpltEBFbYHMyo+Ibw==
+  dependencies:
+    codemirror "^5.26.0"
+    prop-types "^15.5.10"
+    summernote "^0.8.15"
 
 react-text-truncate@^0.16.0:
   version "0.16.0"
@@ -11273,6 +11287,11 @@ stylehacks@^4.0.0:
     browserslist "^4.0.0"
     postcss "^7.0.0"
     postcss-selector-parser "^3.0.0"
+
+summernote@^0.8.15:
+  version "0.8.18"
+  resolved "https://registry.yarnpkg.com/summernote/-/summernote-0.8.18.tgz#be5c368b1c92de8a05039a9976157bdea7aae386"
+  integrity sha512-VlwBaNm9vSYMYXvO2f3UCUmY0Gm8jxLcBn+D08aX3pKs4x2vAoyQ4DcDQ6D+PchQiLrf86AGQVfVu56F4aP3ug==
 
 supports-color@^5.3.0:
   version "5.5.0"

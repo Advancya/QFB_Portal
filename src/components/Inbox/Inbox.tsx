@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import InboxDetails from "./InboxDetails";
 import InboxListing from "./InboxListing";
 import { emptyInboxDetail, IInboxDetail } from "../../Helpers/publicInterfaces";
@@ -7,7 +7,7 @@ import { InboxContext } from "../../pages/Homepage";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 
 function Inbox() {
-  const [showInboxListing, setShowInboxListing] = useState(false);
+
   const [message, setMessageDetail] = useState<IInboxDetail>(emptyInboxDetail);
   const currentContext = useContext(AuthContext);
   const InboxMessages = useContext(InboxContext);
@@ -17,31 +17,15 @@ function Inbox() {
       ? InboxMessages.messages.filter((i: any) => !i.isRead).length
       : 0;
 
-  const handleCloseInboxListing = () => {
-    setShowInboxListing(false);
-  };
-  const handleShowInboxListing = () => {
-    setShowInboxListing(true);
-  };
-
+  const [showInboxListing, setShowInboxListing] = useState(false);
   const [showInboxDetails, setshowInboxDetails] = useState(false);
-  const handleCloseInboxDetails = () => setshowInboxDetails(false);
-  const handleShowInboxDetails = (detail: IInboxDetail) => {
-    handleCloseInboxListing();
-    setshowInboxDetails(true);
-    setMessageDetail(detail);
-  };
-  const handleBackInboxDetails = () => {
-    setshowInboxDetails(false);
-    setShowInboxListing(true);
-  };
 
   return (
     <>
       <a
         className="border border-white rounded-circle p-0 mx-1 "
         href="#"
-        onClick={handleShowInboxListing}
+        onClick={() => setShowInboxListing(true)}
       >
         <i
           className={
@@ -56,16 +40,27 @@ function Inbox() {
         !!InboxMessages.messages[0].adviceDate && (
           <InboxListing
             showInboxListingModal={showInboxListing}
-            hideInboxListingModal={handleCloseInboxListing}
-            showInboxDetailsModal={handleShowInboxDetails}
+            hideInboxListingModal={() => setShowInboxListing(false)}
+            showInboxDetailsModal={(detail: IInboxDetail) => {
+              setShowInboxListing(false);
+              setshowInboxDetails(true);
+              setMessageDetail(detail);
+            }}
           />
         )}
       {message && !!message.adviceDate && (
         <InboxDetails
           item={message}
           showInboxDetailsModal={showInboxDetails}
-          hideInboxDetailsModal={handleCloseInboxDetails}
-          backInboxListingModal={handleBackInboxDetails}
+          hideInboxDetailsModal={() => {
+            InboxMessages.refreshInbox();
+            setshowInboxDetails(false);
+          }}
+          backInboxListingModal={() => {
+            InboxMessages.refreshInbox();
+            setshowInboxDetails(false);
+            setShowInboxListing(true);
+          }}
         />
       )}
     </>
