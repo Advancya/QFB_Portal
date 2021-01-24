@@ -101,7 +101,18 @@ function RMRequestListing(props: iRMRequestListing) {
       props.requests.length < rowLimit
     ) {
       setOffset(props.requests.length);
+    } else {
+      setOffset(rowLimit);
     }
+    
+    if (filters.filterApplied) {
+      const _filteredData = helper.filterRMRequests(
+        props.requests,
+        filters
+      );
+      setFilteredData(_filteredData);
+    }
+
   }, [props.requests, props.reloading]);
 
   const renderItem = (item: iRmRequests, index: number) => (
@@ -225,6 +236,7 @@ function RMRequestListing(props: iRMRequestListing) {
               onChange={(_value: string) =>
                 setFilter({ ...filters, Status: _value })
               }
+              initialSelectRequired={true}
             />
           </div>
           <div className="col-sm-4">
@@ -235,6 +247,7 @@ function RMRequestListing(props: iRMRequestListing) {
               onChange={(_value: string) =>
                 setFilter({ ...filters, Type: _value })
               }
+              initialSelectRequired={true}
             />
           </div>
           <FilterCustomDateControl
@@ -266,7 +279,6 @@ function RMRequestListing(props: iRMRequestListing) {
               }}
               applyFilter={() => {
                 setFilter({ ...filters, filterApplied: true });
-                console.log(filters);
                 const _filteredData = helper.filterRMRequests(
                   props.requests,
                   filters

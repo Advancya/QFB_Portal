@@ -33,7 +33,7 @@ const RM = () => {
       initialLoadMethod();
     }
 
-  }, [currentContext.selectedCIF]);
+  }, [currentContext.selectedCIF, currentContext.language]);
 
   const fetchRequestsForRM = async () => {
     setLoading(true);

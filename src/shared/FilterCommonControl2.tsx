@@ -1,11 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { localStrings as local_Strings } from '../translations/localStrings';
 import { AuthContext } from "../providers/AuthProvider";
 import FilterDateControl from './FilterDateControl';
 import FilterCustomDateControl from './FilterCustomDateControl';
 import FilterAmountControl from './FilterAmountControl';
 import FilterButtonControl from './FilterButtonControl';
-import FilterDropDownControl from './FilterDropDownControl';
 import { emptyCommonFilter, ICommonFilter } from "../Helpers/publicInterfaces";
 import moment from "moment";
 
@@ -30,9 +29,13 @@ const FilterCommonControl2 = (props: IFilterCommonControl2Props) => {
                         onChange={(_value: string) => setFilter({ ...filters, DateOption: _value })} />
                 </div>
                 <div className="col-sm-4">
-                    <FilterAmountControl AmountOperator={filters.AmountOperator} Amount={filters.Amount}
+                    <FilterAmountControl
+                        AmountOperator={filters.AmountOperator}
+                        Amount={filters.Amount}
+                        label={local_Strings.TransactionAmountLabel2}
                         onChangeOperator={(_value: string) => setFilter({ ...filters, AmountOperator: _value })}
-                        onChangeAmount={(_value: string) => setFilter({ ...filters, Amount: _value })} />
+                        onChangeAmount={(_value: string) => setFilter({ ...filters, Amount: _value })}
+                    />
                 </div>
                 <div className="col-sm-3">
                     <label>{props.CheckBoxTitle}</label>
@@ -54,7 +57,7 @@ const FilterCommonControl2 = (props: IFilterCommonControl2Props) => {
                                     });
                                 }}
                             />
-                            <label className="custom-control-label" htmlFor="customCheck1" style={{textTransform: "none"}}>{props.CheckBoxLabels[0]}</label>
+                            <label className="custom-control-label" htmlFor="customCheck1" style={{ textTransform: "none" }}>{props.CheckBoxLabels[0]}</label>
                         </div>
                         <div className="custom-control custom-checkbox custom-control-inline">
                             <input
@@ -73,7 +76,7 @@ const FilterCommonControl2 = (props: IFilterCommonControl2Props) => {
                                     });
                                 }}
                             />
-                            <label className="custom-control-label" htmlFor="customCheck2" style={{textTransform: "none"}}>{props.CheckBoxLabels[1]}</label>
+                            <label className="custom-control-label" htmlFor="customCheck2" style={{ textTransform: "none" }}>{props.CheckBoxLabels[1]}</label>
                         </div>
                     </div>
                 </div>

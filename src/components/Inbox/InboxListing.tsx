@@ -31,12 +31,10 @@ function InboxListing(props: iInboxListing) {
   const InboxMessages = useContext(InboxContext);
   local_Strings.setLanguage(currentContext.language);
   const [isLoading, setLoading] = useState(false);
-  const [filteredData, setFilteredData] = useState<IInboxDetail[]>(
-    InboxMessages.messages
-  );
+  const [filteredData, setFilteredData] = useState<IInboxDetail[]>([]);
   const [filters, setFilter] = useState<IInboxFilter>({
     filterApplied: false,
-    Status: "0",
+    Status: "All Messages",
   });
   const rowLimit: number = Constant.RecordPerPage;
   const [offset, setOffset] = useState<number>(
@@ -44,6 +42,26 @@ function InboxListing(props: iInboxListing) {
       ? InboxMessages.messages.length
       : rowLimit
   );
+  
+  useEffect(() => {
+    setFilteredData(InboxMessages.messages);
+    if (InboxMessages.messages && InboxMessages.messages.length > 0
+       && InboxMessages.messages.length < rowLimit) {
+      setOffset(InboxMessages.messages.length);
+    } else {
+      setOffset(rowLimit);
+    }
+    
+    if (filters.filterApplied) {
+      const _filteredData = helper.filterReadableList(
+        InboxMessages.messages,
+        filters
+      );
+      setFilteredData(_filteredData);
+    }
+
+  }, [InboxMessages.messages]);
+
 
   const renderItem = (item: IInboxDetail, index: number) => (
     <li className="shown" key={index}>
@@ -119,10 +137,11 @@ function InboxListing(props: iInboxListing) {
                 <FilterDropDownControl
                   label={local_Strings.InboxMessageListingFilterWithLabel}
                   options={statusFilterOptions}
-                  value={filters.Status || "0"}
+                  value={filters.Status || "All Messages"}
                   onChange={(_value: string) =>
                     setFilter({ ...filters, Status: _value })
                   }
+                  initialSelectRequired={false}
                 />
               </div>
 
@@ -131,7 +150,7 @@ function InboxListing(props: iInboxListing) {
                   clearFilter={() => {
                     setFilter({
                       filterApplied: false,
-                      Status: "0",
+                      Status: "All Messages",
                     });
                     setFilteredData(InboxMessages.messages);
                     setOffset(rowLimit);

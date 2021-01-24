@@ -81,7 +81,7 @@ function RequestsListing(props: iRequestsListing) {
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [currentContext.selectedCIF]);
+  }, [currentContext.selectedCIF, currentContext.language]);
 
   useEffect(() => {
     setFilteredData(props.requests);
@@ -94,6 +94,7 @@ function RequestsListing(props: iRequestsListing) {
     } else {
       setOffset(rowLimit);
     }
+    
   }, [props.requests, props.reloading]);
 
   useEffect(() => {
@@ -230,6 +231,7 @@ function RequestsListing(props: iRequestsListing) {
                   onChange={(_value: string) =>
                     setFilter({ ...filters, Status: _value })
                   }
+                  initialSelectRequired={true}
                 />
               </div>
               <div className="col-sm-3">
@@ -240,6 +242,7 @@ function RequestsListing(props: iRequestsListing) {
                   onChange={(_value: string) =>
                     setFilter({ ...filters, Type: _value })
                   }
+                  initialSelectRequired={true}
                 />
               </div>
               <div className="col-sm-3">
@@ -258,7 +261,6 @@ function RequestsListing(props: iRequestsListing) {
                   }}
                   applyFilter={() => {
                     setFilter({ ...filters, filterApplied: true });
-                    console.log(filters);
                     const _filteredData = helper.filterRequests(
                       props.requests,
                       filters

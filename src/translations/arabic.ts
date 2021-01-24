@@ -362,7 +362,7 @@ const ar = {
   TransactionsListingTitle: "المعاملات",
   TransactionsListingFilterButton: "تنقية",
   TransactionsListingBeneficiariesButton: "المستفيدون",
-  TransactionsListingNewButton: "معاملة جديدة",
+  TransactionsListingNewButton: "طلب معاملة جديدة",
   TransactionsListingTitleSample: "التحويل لأحمد محمد",
   TransactionsListingStatus: "ألغيت",
   TransactionsDetailsTitle: "تفاصيل المعاملات",
@@ -826,6 +826,10 @@ const ar = {
   NoDepositsHoldingsFound: "لم يتم العثور على ودائع القابضة",
   NoInvestmentsHoldingsFound: "لم يتم العثور على استثمارات القابضة",
   InvalidEmail: "من فضلك أدخل بريد أليكترونى صحيح",
+
+  
+  TransactionWithinSameAccount: "Transaction within same account is not allowed",
+  TransactionAmountLabel2: "المبلغ",
 };
 
 export default ar;

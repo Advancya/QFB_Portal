@@ -51,7 +51,7 @@ function DocumentListing() {
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [currentContext.selectedCIF]);
+  }, [currentContext.selectedCIF, currentContext.language]);
 
   const renderItem = (item: IDocumentDetail, index: number) => (
     <li className="shown border-0" key={index}>

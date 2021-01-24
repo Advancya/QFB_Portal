@@ -112,7 +112,7 @@ function FacilitiesOutstandingPayment(props: iFacilitiesOutstandingPayment) {
       <Modal.Body>
         {data && data.length > 0 && !!data[0].installmentDate && (
           <FilterCommonControl2
-            CheckBoxTitle={local_Strings.RequestTypeLabel}
+            CheckBoxTitle={local_Strings.CashDetailsFilterType}
             CheckBoxLabels={[
               local_Strings.OutstandingPayments_PastDueSettlement,
               local_Strings.OutstandingPayments_SettlemenOfPayment,
@@ -136,7 +136,7 @@ function FacilitiesOutstandingPayment(props: iFacilitiesOutstandingPayment) {
         </div>
         <TransactionListing
           transactions={filteredData}
-          descriptionLabel={local_Strings.DepositeDetailsFilterType}
+          descriptionLabel={local_Strings.CashDetailsFilterType}
           showBalanceField={false}
           currency={props.facilityItem.currency}
           NoDataMessage={local_Strings.OutstandingPayments_NoData}
@@ -182,7 +182,7 @@ function FacilitiesOutstandingPayment(props: iFacilitiesOutstandingPayment) {
                   />
                   <ExcelColumn label={local_Strings.Amount} value="amount" />
                   <ExcelColumn
-                    label={local_Strings.RequestTypeLabel}
+                    label={local_Strings.CashDetailsFilterType}
                     value={"transacitonType"}
                   />
                 </ExcelSheet>

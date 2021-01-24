@@ -50,7 +50,7 @@ const ClientPortfolioListing = () => {
     if (!!currentContext.selectedCIF) {
       fetchClinets();
     }
-  }, [currentContext.selectedCIF]);
+  }, [currentContext.selectedCIF, currentContext.language]);
 
   const renderItem = (item: any, index: number) => (
     <li className="shown border-0 py-2" key={index}>

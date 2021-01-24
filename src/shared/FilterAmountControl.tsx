@@ -3,6 +3,7 @@ import { localStrings as local_Strings } from '../translations/localStrings';
 import { AuthContext } from "../providers/AuthProvider";
 
 interface IFilterAmountControlProps {
+    label: string;
     onChangeOperator: any;
     onChangeAmount: any;
     AmountOperator: string;
@@ -16,7 +17,7 @@ const FilterAmountControl: React.FC<IFilterAmountControlProps> = (props) => {
 
     return (
         <React.Fragment>
-            <label>{local_Strings.TransactionAmountLabel}</label>
+            <label>{props.label || local_Strings.TransactionAmountLabel2}</label>
             <select
                 className="form-control w-50"
                 value={props.AmountOperator || "0"}

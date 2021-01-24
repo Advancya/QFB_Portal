@@ -108,7 +108,7 @@ function InvestmentsBuyAndSell(props: iInvestmentsBuyAndSell) {
       <Modal.Body>
         {data && data.length > 0 && !!data[0].bookingDate && (
           <FilterCommonControl2
-            CheckBoxTitle={local_Strings.RequestListingFilterStatus}
+            CheckBoxTitle={local_Strings.CashDetailsFilterType}
             CheckBoxLabels={[
               local_Strings.BuyAndSellTransactions_Status_Buy,
               local_Strings.BuyAndSellTransactions_Status_Sell,
@@ -142,7 +142,7 @@ function InvestmentsBuyAndSell(props: iInvestmentsBuyAndSell) {
         <TransactionListing
           transactions={filteredData}
           showBalanceField={false}
-          descriptionLabel={local_Strings.RequestTypeLabel}
+          descriptionLabel={local_Strings.CashDetailsFilterType}
           currency={props.investment.securityCCY}
           NoDataMessage={local_Strings.BuyAndSellTransactionsListing_NoData}
         />
@@ -183,7 +183,7 @@ function InvestmentsBuyAndSell(props: iInvestmentsBuyAndSell) {
                   />
                   <ExcelColumn label={local_Strings.Amount} value="amount" />
                   <ExcelColumn
-                    label={local_Strings.RequestListingFilterStatus}
+                    label={local_Strings.CashDetailsFilterType}
                     value="transactionType"
                   />
                 </ExcelSheet>

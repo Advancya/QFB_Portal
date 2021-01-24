@@ -108,7 +108,7 @@ function FacilitiesHistoricalPayment(props: iFacilitiesHistoricalPayment) {
       <Modal.Body>
         {data && data.length > 0 && !!data[0].bookingDate && (
           <FilterCommonControl2
-            CheckBoxTitle={local_Strings.RequestTypeLabel}
+            CheckBoxTitle={local_Strings.CashDetailsFilterType}
             CheckBoxLabels={[
               local_Strings.HistoricalPayments_PastDueSettlement,
               local_Strings.HistoricalPayments_SettlemenOfPayment,
@@ -178,7 +178,7 @@ function FacilitiesHistoricalPayment(props: iFacilitiesHistoricalPayment) {
                   />
                   <ExcelColumn label={local_Strings.Amount} value="amount" />
                   <ExcelColumn
-                    label={local_Strings.RequestTypeLabel}
+                    label={local_Strings.CashDetailsFilterType}
                     value={"trxDescirption"}
                   />
                 </ExcelSheet>

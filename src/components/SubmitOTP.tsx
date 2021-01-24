@@ -24,7 +24,7 @@ const SubmitOTP: React.FC<IProps> = ({ userDetail }) => {
   const history = useHistory();
   const currentContext = useContext(AuthContext);
   const [isLoading, setLoading] = useState(false);
-  
+
   local_Strings.setLanguage(currentContext.language);
   const initialValues: iPasswordResetOTP = {
     otp: "",
@@ -43,7 +43,7 @@ const SubmitOTP: React.FC<IProps> = ({ userDetail }) => {
 
       const loginResponse = await currentContext.login({ ...userDetail, otp: values.otp });
       if (loginResponse) {
-        redirectUser();        
+        redirectUser();
       } else {
         setLoading(false);
 
@@ -82,6 +82,8 @@ const SubmitOTP: React.FC<IProps> = ({ userDetail }) => {
         history.push(`/${currentContext.language}/RMLanding`);
       } else if (role.name === Constant.Management) {
         history.push(`/${currentContext.language}/Managment`);
+      } else if (role.name === Constant.CMSADMIN) {
+        history.push(`/${currentContext.language}/Admin`);
       } else {
         Swal.fire({
           position: 'top-end',
@@ -142,7 +144,29 @@ const SubmitOTP: React.FC<IProps> = ({ userDetail }) => {
               </div>
               <div className="form-group text-right">
                 <a href="#" className="forgotLink"
-                  onClick={async () => await SendOTP(userDetail.username)}>
+                  onClick={async () => {
+                    
+                    const optResult = await SendOTP(
+                      userDetail.username
+                    );
+                    if (optResult) {
+                      Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: local_Strings.OTPSentMessage,
+                        showConfirmButton: false,
+                        timer: Constant.AlertTimeout,
+                      });                            
+                    } else {
+                      Swal.fire({
+                        position: "top-end",
+                        icon: "error",
+                        title: local_Strings.GenericErrorMessage,
+                        showConfirmButton: false,
+                        timer: Constant.AlertTimeout,
+                      });
+                    }
+                  }}>
                   {local_Strings.PasswordResetOTPResendOTP}
                 </a>
               </div>
@@ -156,7 +180,7 @@ const SubmitOTP: React.FC<IProps> = ({ userDetail }) => {
           )}
         </Formik>
       </div>
-      
+
     </div>
   );
 }

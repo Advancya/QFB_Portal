@@ -47,8 +47,6 @@ async function authenticate(username: string, password: string) {
       localStorage.setItem(defaultData.AccessTokenStorageKey, access_token);
       localStorage.setItem(defaultData.RefreshTokenStorageKey, response.data["refresh_token"]);      
       
-      console.log("token is saved on local storage");
-
       return true;
     } else {
       return false;

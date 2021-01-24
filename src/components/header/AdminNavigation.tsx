@@ -39,7 +39,7 @@ function AdminNavigation() {
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [currentContext.selectedCIF]);
+  }, [currentContext.selectedCIF, currentContext.language]);
 
   return (
     <div className="col-md-7">

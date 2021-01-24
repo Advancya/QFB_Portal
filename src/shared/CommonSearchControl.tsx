@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { localStrings as local_Strings } from "../translations/localStrings";
 import { AuthContext } from "../providers/AuthProvider";
 interface ICommonSearchControlProps {

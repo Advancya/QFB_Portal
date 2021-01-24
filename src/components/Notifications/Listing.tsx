@@ -33,7 +33,7 @@ function NotificationsListing() {
 
     refreshList();
     
-  }, [currentContext.selectedCIF]);
+  }, [currentContext.selectedCIF, currentContext.language]);
 
   const refreshList = () => {
     setLoading(true);

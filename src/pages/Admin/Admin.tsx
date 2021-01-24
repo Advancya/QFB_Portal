@@ -1,5 +1,5 @@
 import React, { useContext, createContext, useEffect, useState } from "react";
-import AuthCustomHeader from "../../components/header/AuthCustomHeader";
+import AdminCustomHeader from "../../components/header/AdminCustomHeader";
 import Footer from "../../components/Footer";
 import ProductsAndOffersListing from "../../components/ProductsAndOffers/Listing";
 import NotificationsListing from "../../components/Notifications/Listing";
@@ -54,7 +54,7 @@ const Landing = () => {
               if (responseData && responseData.length > 0 && isMounted) {
 
                 const role = responseData[0];
-                if (!(role && role.name === Constant.Management)) {
+                if (!(role && role.name === Constant.CMSADMIN)) {
                   Swal.fire({
                     title: local_Strings.AccessDeniedMsgTitle,
                     icon: 'warning',
@@ -119,18 +119,18 @@ const Landing = () => {
         if (!currentContext.selectedCIF) {
           history.push(`/${currentContext.language}`);
         }
-      }, 3000);
+      }, 5000);
     }
 
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
 
-  }, [currentContext.selectedCIF]);
+  }, [currentContext.selectedCIF, currentContext.language]);
 
   return (
     <div>
-      <AuthCustomHeader />
+      <AdminCustomHeader />
       <Breadcrumb pageName={local_Strings.BreadcrumbAdminTitle} />
       <div>
         <div id="main-section" className="main-section pt-4">

@@ -240,7 +240,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
     if (!!currentContext.selectedCIF) {
       initialLoadMethod();
     }
-  }, [currentContext.selectedCIF]);
+  }, [currentContext.selectedCIF, currentContext.language]);
 
   useEffect(
     () =>
@@ -621,63 +621,13 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           readOnly
                         />
                       </div>
-                      <div className="col-lg-6 form-group">
-                        <label>{local_Strings.BeneficiaryFullNameLabel}</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder=""
-                          value={values.beneficiaryFullName || ""}
-                          onChange={handleChange("beneficiaryFullName")}
-                          onBlur={handleBlur("beneficiaryFullName")}
-                        />
-                        {touched.beneficiaryFullName &&
-                          errors.beneficiaryFullName &&
-                          InvalidFieldError(errors.beneficiaryFullName)}
-                      </div>
-                      <div className="col-lg-6 form-group">
-                        <label>{local_Strings.BeneficiaryBankLabel}</label>
-                        <select
-                          className="form-control"
-                          onBlur={handleBlur("beneficiaryBank")}
-                          value={values.beneficiaryBank || ""}
-                          onChange={(e) => {
-                            setFieldValue("beneficiaryBank", e.target.value);
-                            setBankSwift(e.target.value);
-                            setFieldValue(
-                              "beneficiaryBankSwiftCode",
-                              e.target.value
-                            );
-                          }}
-                        >
-                          <option value="">{local_Strings.SelectItem}</option>
-                          {banks &&
-                            banks.length > 0 &&
-                            banks.map((c, i) => (
-                              <option key={i} value={c.value}>
-                                {c.label}
-                              </option>
-                            ))}
-                        </select>
-                        {touched.beneficiaryBank &&
-                          errors.beneficiaryBank &&
-                          InvalidFieldError(errors.beneficiaryBank)}
-                      </div>
-                      <div className="col-lg-6 form-group">
-                        <label>{local_Strings.BeneficiarySwiftCodeLabel}</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder=""
-                          defaultValue={bankSwift}
-                          readOnly
-                        />
-                      </div>
+                      
+                      
                     </div>
                     <div className="row  col-xl-12 mb-5">
                       <div className="col-lg-6 form-group">
                         <label>
-                          {local_Strings.BeneficiaryQFBAccountOrIBAN}
+                          {local_Strings.BeneficiaryIBANLabel}
                         </label>
                         <input
                           type="text"
@@ -708,7 +658,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           )}
                       </div>
                       <div className="col-lg-6 form-group">
-                        <label>{local_Strings.TransactionCurrencyLabel}</label>
+                        <label>{local_Strings.BeneficiaryForeignCurrencyLabel}</label>
                         <select
                           className="form-control"
                           value={values.beneficiaryCurrency || ""}
@@ -734,7 +684,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           className="form-control"
                           value={values.beneficiaryAddress || ""}
                           rows={4}
-                          maxLength={500}
+                          maxLength={400}
                           onBlur={handleBlur("beneficiaryAddress")}
                           onChange={handleChange("beneficiaryAddress")}
                         />
@@ -893,6 +843,34 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           InvalidFieldError(errors.beneficiarySwiftCode)}
                       </div>
                       <div className="col-lg-6 form-group">
+                        <label>{local_Strings.BeneficiaryBankLabel}</label>
+                        <select
+                          className="form-control"
+                          onBlur={handleBlur("beneficiaryBank")}
+                          value={values.beneficiaryBank || ""}
+                          onChange={(e) => {
+                            setFieldValue("beneficiaryBank", e.target.value);
+                            setBankSwift(e.target.value);
+                            setFieldValue(
+                              "beneficiaryBankSwiftCode",
+                              e.target.value
+                            );
+                          }}
+                        >
+                          <option value="">{local_Strings.SelectItem}</option>
+                          {banks &&
+                            banks.length > 0 &&
+                            banks.map((c, i) => (
+                              <option key={i} value={c.value}>
+                                {c.label}
+                              </option>
+                            ))}
+                        </select>
+                        {touched.beneficiaryBank &&
+                          errors.beneficiaryBank &&
+                          InvalidFieldError(errors.beneficiaryBank)}
+                      </div>
+                      <div className="col-lg-6 form-group">
                         <label>
                           {local_Strings.BeneficiaryForeignCurrencyLabel}
                         </label>
@@ -1028,14 +1006,16 @@ function NewBeneficiary(props: iNewBeneficiary) {
                             if (!!values.beneficiaryIban) {
                               setLoading(true);
 
-                              const result = await ValidateBankIBAN(
-                                values.beneficiaryIban!
+                              const result = await ValidateBankSwift(
+                                values.intermediaryBankSwiftCode!
                               );
-                              if (result && !!result.bic) {
-                                setIsValidIban(true);
-                              } else {
-                                setIsValidIban(false);
+                              if (result && !!result.bicdata) {
+                                setFieldValue(
+                                  "intermediaryBankName",
+                                  result["bicdata"][0]["institution_name"]
+                                );
                               }
+                              
                               setLoading(false);
                             }
                             handleBlur("intermediaryBankSwiftCode");

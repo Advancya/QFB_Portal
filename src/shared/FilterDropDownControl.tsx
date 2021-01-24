@@ -12,10 +12,11 @@ interface IFilterDropDownControlProps {
   onChange: any;
   options: IKeyValuePair[];
   value: string;
+  initialSelectRequired: boolean;
 }
 
-const FilterDropDownControl: React.FC<IFilterDropDownControlProps> = (
-  props
+const FilterDropDownControl = (
+  props: IFilterDropDownControlProps
 ) => {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
@@ -25,10 +26,10 @@ const FilterDropDownControl: React.FC<IFilterDropDownControlProps> = (
       <label>{props.label}</label>
       <select
         className="form-control"
-        value={props.value || "0"}
+        value={props.value}
         onChange={(e) => props.onChange(e.target.value)}
       >
-        <option value="0">{local_Strings.SelectItem}</option>
+        {props.initialSelectRequired && <option value="0">{local_Strings.SelectItem}</option>}
         {props.options &&
           props.options.length > 0 &&
           props.options.map((o, i) => (

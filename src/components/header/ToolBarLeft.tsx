@@ -42,30 +42,14 @@ function ToolBarLeft() {
           history.push(`/${currentContext.language}/RMLanding`);
         } else if (role && role.name === Constant.Management) {
           history.push(`/${currentContext.language}/Managment`);
+        } else if (role.name === Constant.CMSADMIN) {
+          history.push(`/${currentContext.language}/Admin`);
         } else {
           history.push(`/${currentContext.language}`);
         }
       }, 500);
     }
   }
-
-  useEffect(() => {
-    const initialLoadMethod = async () => {
-      const userData = await GetUserLocalData();
-      if (userData) {
-        const role = await getUserRole(userData.customerId);
-        if (role && role.name === Constant.Management) {
-          setAdminLink(true);
-        } else {
-          setAdminLink(false);
-        }
-      }
-    }
-
-    if (!!currentContext.selectedCIF) {
-      initialLoadMethod();
-    }
-  }, [currentContext.selectedCIF]);
 
   return (
     <div className="col-md-3">
@@ -84,11 +68,6 @@ function ToolBarLeft() {
             ? local_Strings.arabic
             : local_Strings.english}
         </a>
-        {adminLink &&
-          <Link to={`/${currentContext.language}/Admin`} className="admin-top-link">
-            {local_Strings.BreadcrumbAdminTitle}
-          </Link>
-        }
       </div>
     </div>
   );

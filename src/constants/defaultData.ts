@@ -13,6 +13,7 @@ export default {
   Customer: "CUSTOMER",
   Management: "MANAGEMENT",
   RM: "RM",
+  CMSADMIN: "CMSADMIN",
   AlertTimeout: 3000,
   MapApiKey: "AIzaSyChFfCU3MWxnnsh79D5Lf6_YYiEahZMvcQ",
 };

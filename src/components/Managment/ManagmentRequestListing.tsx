@@ -58,7 +58,7 @@ function ManagmentRequestListing(
     if (!!currentContext.selectedCIF) {
       fetchData();
     }
-  }, [currentContext.selectedCIF]);
+  }, [currentContext.selectedCIF, currentContext.language]);
 
   return (
     <div className="box p-0">

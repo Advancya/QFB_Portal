@@ -52,7 +52,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [userRole, setUserRole] = useState<string>("");
   const [selectedCIF, setCIF] = useState<string>(initialSettingsData.customerId);
   moment.locale(language);
-  
+  let intervalID = 0;
+
   useEffect(() => {
     const getUserData = async () => {
       const userData = await GetUserLocalData();
@@ -107,6 +108,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                 if (role && !!role) {
                   setUserRole(role.name);
                 }
+
+                clearInterval(intervalID); // Will check session at every 15 mins.
+                intervalID = window.setInterval(async () => await GetSettingsByCIF(selectedCIF), 900000);
               }
             );
             return resutl;

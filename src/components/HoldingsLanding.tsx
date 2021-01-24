@@ -69,7 +69,7 @@ const HoldingsLanding = () => {
     if (!!currentContext.selectedCIF) {
       initialLoadMethod();
     }
-  }, [currentContext.selectedCIF]);
+  }, [currentContext.selectedCIF, currentContext.language]);
 
   const showLiveHoldings = () => {
     if (!investment_live_1stDrill || !deposit_live_1stDrill) {

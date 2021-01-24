@@ -1,4 +1,4 @@
-import React, { createRef, useContext, useEffect, useState } from "react";
+import React, { createRef, useContext, useState } from "react";
 import { localStrings as local_Strings } from "../translations/localStrings";
 import { AuthContext } from "../providers/AuthProvider";
 import Swal from "sweetalert2";
@@ -81,8 +81,8 @@ const FileUploader = (props: IFileUploaderProps) => {
           type="file"
           multiple={false}
           id="file"
-          aria-label="File browser example"
-          lang={currentContext.language}
+          aria-label={local_Strings.OfferFileBrowseLabel}
+          lang={currentContext.language === "en" ? "en-US" : "ar-QA"}
           className=""
           accept="application/pdf,.pdf"
           ref={fileInputRef}

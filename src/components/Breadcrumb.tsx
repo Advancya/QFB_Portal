@@ -25,6 +25,8 @@ const Breadcrumb = ({ pageName }) => {
           history.push(`/${currentContext.language}/RMLanding`);
         } else if (role && role.name === Constant.Management) {
           history.push(`/${currentContext.language}/Managment`);
+        } else if (role.name === Constant.CMSADMIN) {
+          history.push(`/${currentContext.language}/Admin`);
         } else {
           history.push(`/${currentContext.language}`);
         }
