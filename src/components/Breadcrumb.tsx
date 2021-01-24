@@ -32,7 +32,7 @@ const Breadcrumb = ({ pageName }) => {
         }
       }, 500);
     }
-  }
+  };
 
   return (
     <div id="breadcrumb-section" className="breadcrumb-section">
@@ -40,10 +40,7 @@ const Breadcrumb = ({ pageName }) => {
         <nav aria-label="breadcrumb">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <a
-                onClick={redirectToHome}
-                style={{ cursor: "pointer" }}
-              >
+              <a href="#" onClick={redirectToHome}>
                 {local_Strings.FooterItem1}
               </a>
             </li>
@@ -60,6 +57,6 @@ const Breadcrumb = ({ pageName }) => {
       </div>
     </div>
   );
-}
+};
 
 export default Breadcrumb;

@@ -49,21 +49,15 @@ function ToolBarLeft() {
         }
       }, 500);
     }
-  }
+  };
 
   return (
     <div className="col-md-3">
       <div className="topLeftIcons">
-        <a
-          onClick={redirectToHome}
-          style={{ cursor: "pointer" }}
-        >
+        <a href="#" onClick={redirectToHome}>
           <FontAwesomeIcon icon={faHome} />
         </a>
-        <a
-          onClick={() => switchLanguage(currentContext.language)}
-          style={{ cursor: "pointer" }}
-        >
+        <a href="#" onClick={() => switchLanguage(currentContext.language)}>
           {currentContext.language === "en"
             ? local_Strings.arabic
             : local_Strings.english}

@@ -89,13 +89,14 @@ function StandardSettlement(standardSettlementProps: iStandardSettlement) {
                     <td>3001858290</td>
                   </tr>
                   <tr>
-                    <td colSpan={1}>QAR </td>
-                    <td>Qatar Islamic Bank</td>
-                    <td>Doha</td>
-                    <td>QISBQAQA</td>
-                    <td>QA94QISB000000000112072510049</td>
-                    <td>112072510049</td>
+                    <td colSpan={1}>AED</td>
+                    <td>Standard Chartered</td>
+                    <td>Dubai</td>
+                    <td>SCBLAEAD</td>
+                    <td>AE630440000002209905301</td>
+                    <td>AE630440000002209905301</td>
                   </tr>
+
                   <tr>
                     <td colSpan={1}>USD</td>
                     <td>JP Morgan Chase Bank</td>
@@ -103,14 +104,6 @@ function StandardSettlement(standardSettlementProps: iStandardSettlement) {
                     <td>CHASUS33</td>
                     <td>NA</td>
                     <td>799763420</td>
-                  </tr>
-                  <tr>
-                    <td colSpan={1}>GBP</td>
-                    <td>JP Morgan Chase Bank</td>
-                    <td>London</td>
-                    <td>CHASGB2L</td>
-                    <td>GB82CHAS60924240256002</td>
-                    <td>40256002</td>
                   </tr>
                   <tr>
                     <td colSpan={1}>EUR</td>
@@ -121,12 +114,21 @@ function StandardSettlement(standardSettlementProps: iStandardSettlement) {
                     <td>40256001</td>
                   </tr>
                   <tr>
-                    <td colSpan={1}>AED</td>
-                    <td>Standard Chartered</td>
-                    <td>Dubai</td>
-                    <td>SCBLAEAD</td>
-                    <td>AE630440000002209905301</td>
-                    <td>AE630440000002209905301</td>
+                    <td colSpan={1}>GBP</td>
+                    <td>JP Morgan Chase Bank</td>
+                    <td>London</td>
+                    <td>CHASGB2L</td>
+                    <td>GB82CHAS60924240256002</td>
+                    <td>40256002</td>
+                  </tr>
+
+                  <tr>
+                    <td colSpan={1}>QAR </td>
+                    <td>Qatar Islamic Bank</td>
+                    <td>Doha</td>
+                    <td>QISBQAQA</td>
+                    <td>QA94QISB000000000112072510049</td>
+                    <td>112072510049</td>
                   </tr>
                 </tbody>
               </table>
