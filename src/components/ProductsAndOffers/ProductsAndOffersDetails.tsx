@@ -68,7 +68,7 @@ function ProductsAndOffersDetails(props: iProductsAndOffersDetails) {
                       ? props.item.name
                       : props.item.nameAr) +
                       " | " +
-                      props.item.id}
+                      props.item.productId}
                   </h6>
                 </div>
               </div>

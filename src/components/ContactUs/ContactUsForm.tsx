@@ -89,7 +89,8 @@ function ContactUsForm(props: iContactUsForm) {
     mobile: yup
       .string()
       .required(local_Strings.GeneralValidation)
-      .matches(/^[+]*[/0-9]{0,16}$/, local_Strings.ContactUs_Mobile_Format_Validation_Message),
+      .min(10)
+      .matches(/^\+(?:[0-9]?){6,14}[0-​9]$/, local_Strings.ContactUs_Mobile_Format_Validation_Message),
     name: yup.string().required(local_Strings.GeneralValidation).min(1),
     query: yup.string().required(local_Strings.GeneralValidation),
   });
@@ -278,9 +279,9 @@ function ContactUsForm(props: iContactUsForm) {
                                 {local_Strings.ContactUsMobileLabel}
                               </Form.Label>
                               <Form.Control
-                                type="number"
+                                type="text"
                                 placeholder=""
-                                onChange={handleChange("mobile")}
+                                onChange={(e) => setFieldValue("mobile", e.target.value)}
                                 onBlur={handleBlur("mobile")}
                                 value={values.mobile || ""}
                                 maxLength={16}

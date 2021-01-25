@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Modal } from "react-bootstrap";
 import dateIcon from "../../images/calendar-inactive.png";
 import Breadcrumb from "../Breadcrumb";
 import {
@@ -15,8 +14,6 @@ import {
   IProductAndOffersDetail,
 } from "../../Helpers/publicInterfaces";
 import Constant from "../../constants/defaultData";
-import LoadingOverlay from "react-loading-overlay";
-import PuffLoader from "react-spinners/PuffLoader";
 import Pagination from "../../shared/pagination";
 import NoResult from "../../shared/NoResult";
 import Swal from "sweetalert2";

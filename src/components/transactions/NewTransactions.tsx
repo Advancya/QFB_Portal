@@ -1,6 +1,6 @@
 import { Modal } from "react-bootstrap";
 import xIcon from "../../images/x-icon.svg";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { GetBeneficiariesByCif } from "../../services/transactionService";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
@@ -36,6 +36,9 @@ function NewTransaction(props: iNewTransaction) {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
   const [isLoading, setLoading] = useState(false);
+
+  const formikRef_WitihinQFB = useRef<any>();
+  const formikRef_LocalOrInternational = useRef<any>();
 
   const [transactionTypes, setTransactionTypes] = useState<iDDL[]>([]);
   const [currencies, setCurrencies] = useState<iDDL[]>([]);
@@ -202,6 +205,12 @@ function NewTransaction(props: iNewTransaction) {
     }
   }, [currentContext.selectedCIF, currentContext.language]);
 
+  useEffect(() => {    
+    if (props.showNewTransactionModal) {
+      setTransactionTypeId("");
+    }
+  }, [props.showNewTransactionModal]);
+
   return (
     <Modal
       show={props.showNewTransactionModal}
@@ -262,6 +271,12 @@ function NewTransaction(props: iNewTransaction) {
                     if (e.target.value === "3") {
                       setShowInternational(true);
                     }
+                    if (formikRef_WitihinQFB && formikRef_WitihinQFB.current) {
+                      formikRef_WitihinQFB.current.handleReset();
+                    }
+                    if (formikRef_LocalOrInternational && formikRef_LocalOrInternational.current) {
+                      formikRef_LocalOrInternational.current.handleReset();
+                    }
                   }}
                 >
                   <option value="">{local_Strings.SelectItem}</option>
@@ -286,7 +301,7 @@ function NewTransaction(props: iNewTransaction) {
               />
             }
           />
-          {showFormWithin && (
+          {!!transactionTypeId && showFormWithin && (
             <Formik
               initialValues={initialValuesWithin}
               validationSchema={validationSchemaWithin}
@@ -307,6 +322,7 @@ function NewTransaction(props: iNewTransaction) {
                 }
                 setLoading(false);
               }}
+              innerRef={formikRef_WitihinQFB}
             >
               {({
                 values,
@@ -437,7 +453,7 @@ function NewTransaction(props: iNewTransaction) {
               )}
             </Formik>
           )}
-          {(showFormLocal || showFormInternational) && (
+          {!!transactionTypeId && (showFormLocal || showFormInternational) && (
             <Formik
               initialValues={initialValuesLocalOrInternational}
               validationSchema={validationSchemaLocalOrInternational}
@@ -458,6 +474,7 @@ function NewTransaction(props: iNewTransaction) {
                 }
                 setLoading(false);
               }}
+              innerRef={formikRef_LocalOrInternational}
             >
               {({
                 values,
@@ -596,9 +613,10 @@ function NewTransaction(props: iNewTransaction) {
                         <DatePicker
                           className="form-control"
                           dateFormat="MMMM dd, yyyy"
+                          locale={currentContext.language}
                           selected={
                             values.transactionDate
-                              ? new Date(values.transactionDate)
+                              ? moment(values.transactionDate).toDate()
                               : null
                           }
                           onBlur={handleBlur("transactionDate")}

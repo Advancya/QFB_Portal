@@ -346,7 +346,7 @@ const en = {
   RequestTypeLabel: "Request Type",
   RequestButton: "Submit Request to RM",
   RequestSelectLabel: "Select",
-  RequestAttachmentsLabel: "Attachments",
+  RequestAttachmentsLabel: "Attachment (PDF only)",
   RequestStatusLabel: "Status",
 
   AddAttachments: "Add Your Attachment",

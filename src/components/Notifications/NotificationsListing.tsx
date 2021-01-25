@@ -164,33 +164,17 @@ function NotficationsListing(props: iNotficationsListing) {
                       showClearFilter={filters.filterApplied}
                     />
                   </div>
-                  <div className="col-sm-9 py-3 customDate d-none" id="">
-                    <div className="row">
-                      <div className="col-lg-4">
-                        <label>
-                          {local_Strings.InboxMessageListingFilterWithLabel}
-                        </label>
-                        <input type="date" className="form-control" />
-                      </div>
-                      <div className="col-lg-4">
-                        <label>
-                          {local_Strings.InboxMessageListingFilterWithLabel}
-                        </label>
-                        <input type="date" className="form-control" />
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </form>
 
               <div className="box modal-box py-0 mb-0 scrollabel-modal-box">
                 <ul className="box-list" id="dataList">
                   {filteredData &&
-                  filteredData.length > 0 &&
-                  filteredData[0].id > 0
+                    filteredData.length > 0 &&
+                    filteredData[0].id > 0
                     ? filteredData
-                        .slice(0, offset)
-                        .map((item, index) => renderItem(item, index))
+                      .slice(0, offset)
+                      .map((item, index) => renderItem(item, index))
                     : NoResult(local_Strings.NoDataToShow)}
                 </ul>
               </div>

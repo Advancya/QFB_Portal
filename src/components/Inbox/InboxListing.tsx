@@ -42,16 +42,16 @@ function InboxListing(props: iInboxListing) {
       ? InboxMessages.messages.length
       : rowLimit
   );
-  
+
   useEffect(() => {
     setFilteredData(InboxMessages.messages);
     if (InboxMessages.messages && InboxMessages.messages.length > 0
-       && InboxMessages.messages.length < rowLimit) {
+      && InboxMessages.messages.length < rowLimit) {
       setOffset(InboxMessages.messages.length);
     } else {
       setOffset(rowLimit);
     }
-    
+
     if (filters.filterApplied) {
       const _filteredData = helper.filterReadableList(
         InboxMessages.messages,
@@ -165,22 +165,6 @@ function InboxListing(props: iInboxListing) {
                   }}
                   showClearFilter={filters.filterApplied}
                 />
-              </div>
-              <div className="col-sm-9 py-3 customDate d-none" id="">
-                <div className="row">
-                  <div className="col-lg-4">
-                    <label>
-                      {local_Strings.InboxMessageListingFilterWithLabel}
-                    </label>
-                    <input type="date" className="form-control" />
-                  </div>
-                  <div className="col-lg-4">
-                    <label>
-                      {local_Strings.InboxMessageListingFilterWithLabel}
-                    </label>
-                    <input type="date" className="form-control" />
-                  </div>
-                </div>
               </div>
             </div>
           </form>

@@ -7,12 +7,12 @@ import RoutingMap from "./router/routingMap";
 function App() {
 
   return (
-    <AuthProvider>
-      <Router>
+    <Router>
+      <AuthProvider>
         <ScrollToTop />
         <RoutingMap />
-      </Router>
-    </AuthProvider>
+      </AuthProvider>
+    </Router>
   );
 }
 

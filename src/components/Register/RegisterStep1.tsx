@@ -59,8 +59,8 @@ function RegisterStep1(props: iRegisterStep1) {
       .required(local_Strings.GeneralValidation)
       .email(local_Strings.InvalidEmail),
     mobile: yup.string().required(local_Strings.GeneralValidation)
-      .matches(/^[+]*[/0-9]{0,16}$/,
-        local_Strings.ContactUs_Mobile_Format_Validation_Message),
+      .min(10)
+      .matches(/^\+(?:[0-9]?){6,14}[0-​9]$/, local_Strings.ContactUs_Mobile_Format_Validation_Message),
   });
 
   return (
@@ -171,7 +171,7 @@ function RegisterStep1(props: iRegisterStep1) {
                         placeholder=""
                         value={values.cif || ""}
                         onChange={handleChange("cif")}
-                        onBlur={async () => {                          
+                        onBlur={async () => {
 
                           if (field2Editable) {
                             setLoading(true);
@@ -263,7 +263,7 @@ function RegisterStep1(props: iRegisterStep1) {
                         value={values.mobile || ""}
                         onChange={handleChange("mobile")}
                         onBlur={async () => {
-                          
+
                           if (field4Editable) {
                             setLoading(true);
                             const data = await getRegisterData(values.cif);
@@ -288,6 +288,7 @@ function RegisterStep1(props: iRegisterStep1) {
                             handleBlur("mobile");
                           }
                         }}
+                        maxLength={16}
                         readOnly={!field4Editable}
                       />
                       {touched.mobile &&

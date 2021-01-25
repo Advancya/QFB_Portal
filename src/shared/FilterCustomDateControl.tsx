@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { localStrings as local_Strings } from "../translations/localStrings";
 import { AuthContext } from "../providers/AuthProvider";
 import moment from "moment";
+import DatePicker from "react-datepicker";
 
 interface IFilterCustomDateControlProps {
   onStartDateChange: any;
@@ -30,30 +31,36 @@ const FilterCustomDateControl: React.FC<IFilterCustomDateControlProps> = (
       <div className="row">
         <div className="col-md-6 col-lg-4">
           <label>{local_Strings.RequestFromLabel}</label>
-          <input
-            type="date"
+          <DatePicker
             className="form-control"
-            value={
+            dateFormat="yyyy-MM-dd"
+            minDate={moment().add(-6, "months").toDate()}
+            maxDate={moment().toDate()}
+            locale={currentContext.language}
+            selected={
               props.StartDate
-                ? moment(props.StartDate).format("yyyy-MM-DD")
-                : ""
+                ? moment(props.StartDate).toDate()
+                : null
             }
-            min={moment().add(-6, "months").format("yyyy-MM-DD")}
-            max={moment().format("yyyy-MM-DD")}
-            onChange={(e) => props.onStartDateChange(e.target.value)}
+            onChange={(date: Date) =>
+              props.onStartDateChange(moment(date).utc(true))}
           />
         </div>
         <div className="col-md-6 col-lg-4">
-          <label>{local_Strings.RequestToLabel}</label>
-          <input
-            type="date"
+          <label>{local_Strings.RequestToLabel}</label>          
+          <DatePicker
             className="form-control"
-            value={
-              props.EndDate ? moment(props.EndDate).format("yyyy-MM-DD") : ""
+            dateFormat="yyyy-MM-dd"
+            minDate={moment().add(-6, "months").toDate()}
+            maxDate={moment().toDate()}
+            locale={currentContext.language}
+            selected={
+              props.EndDate
+                ? moment(props.EndDate).toDate()
+                : null
             }
-            min={moment().add(-6, "months").format("yyyy-MM-DD")}
-            max={moment().format("yyyy-MM-DD")}
-            onChange={(e) => props.onEndDateChange(e.target.value)}
+            onChange={(date: Date) =>
+              props.onEndDateChange(moment(date).utc(true))}
           />
         </div>
       </div>

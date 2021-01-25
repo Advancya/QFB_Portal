@@ -73,6 +73,7 @@ export interface IProductAndOffersDetail {
   expiryDate: string;
   details: string;
   detailsAr: string;
+  productId: string;
 }
 
 export const emptyProductAndOffersData = {
@@ -83,6 +84,7 @@ export const emptyProductAndOffersData = {
   expiryDate: "",
   details: "",
   detailsAr: "",
+  productId: ""
 };
 
 

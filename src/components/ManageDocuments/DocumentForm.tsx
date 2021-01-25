@@ -233,6 +233,7 @@ function DocumentForm(props: DetailsProps) {
                   <DatePicker
                     name="documentDate"
                     className="form-control"
+                    locale={currentContext.language}
                     selected={
                       !!values.documentDate
                         ? new Date(values.documentDate)

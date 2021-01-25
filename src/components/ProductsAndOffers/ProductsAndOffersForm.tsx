@@ -46,8 +46,9 @@ function ProductsAndOffersForm(props: DetailsProps) {
   );
   const [isLoading, setLoading] = useState(false);
   const formValidationSchema = yup.object({
-    name: yup.string().nullable().required("Name is required"),
-    nameAr: yup.string().nullable().required("Arabic Name is required"),
+    productId: yup.string().nullable().max(30).required("Product Number is required"),
+    name: yup.string().nullable().max(150).required("Name is required"),
+    nameAr: yup.string().nullable().max(150).required("Arabic Name is required"),
     expiryDate: yup.string().nullable().required("Expire date is required"),
   });
 
@@ -57,13 +58,14 @@ function ProductsAndOffersForm(props: DetailsProps) {
       data.id > 0
         ? values
         : {
-            name: values.name,
-            nameAr: values.nameAr,
-            createdDate: moment().utc(true),
-            expiryDate: moment(values.expiryDate).utc(true),
-            details: values.details,
-            detailsAr: values.detailsAr,
-          };
+          productId: values.productId,
+          name: values.name,
+          nameAr: values.nameAr,
+          createdDate: moment().utc(true),
+          expiryDate: moment(values.expiryDate).utc(true),
+          details: values.details,
+          detailsAr: values.detailsAr,
+        };
 
     const x =
       data.id > 0
@@ -159,6 +161,20 @@ function ProductsAndOffersForm(props: DetailsProps) {
             <div className="box modal-box py-0 mb-0 scrollabel-modal-box">
               <div className="box-body">
                 <div className="form-group">
+                  <label>{local_Strings.productAndOffersListingLabel}</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    readOnly={!props.editable}
+                    value={values.productId || ""}
+                    onChange={handleChange("productId")}
+                    onBlur={handleBlur("productId")}
+                  />
+                  {touched.productId &&
+                    errors.productId &&
+                    InvalidFieldError(errors.productId)}
+                </div>
+                <div className="form-group">
                   <label>{local_Strings.ProductsAndOffersNameLabel}</label>
                   <input
                     type="text"
@@ -191,6 +207,7 @@ function ProductsAndOffersForm(props: DetailsProps) {
 
                   <DatePicker
                     name="expiryDate"
+                    locale={currentContext.language}
                     selected={
                       !!values.expiryDate ? new Date(values.expiryDate) : null
                     }
@@ -240,14 +257,14 @@ function ProductsAndOffersForm(props: DetailsProps) {
                       }}
                     />
                   ) : (
-                    <span className="box-brief mb-3">
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: values.details,
-                        }}
-                      />
-                    </span>
-                  )}
+                      <span className="box-brief mb-3">
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: values.details,
+                          }}
+                        />
+                      </span>
+                    )}
                 </div>
                 <div className="form-group">
                   <label>{local_Strings.ProductsAndOffersArDescrLabel}</label>
@@ -283,14 +300,14 @@ function ProductsAndOffersForm(props: DetailsProps) {
                       }}
                     />
                   ) : (
-                    <span className="box-brief mb-3">
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: values.detailsAr,
-                        }}
-                      />
-                    </span>
-                  )}
+                      <span className="box-brief mb-3">
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: values.detailsAr,
+                          }}
+                        />
+                      </span>
+                    )}
                 </div>
                 {props.editable && (
                   <div className="form-group">

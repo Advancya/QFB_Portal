@@ -9,9 +9,11 @@ import React, { useEffect, useState } from "react";
 import { authenticate } from "../services/authenticationService";
 import * as helper from "../Helpers/helper";
 import { getUserRole } from "../services/apiServices";
-import Constant from "../constants/defaultData";
 import moment from "moment";
 import "moment/min/locales";
+import { registerLocale, setDefaultLocale } from "react-datepicker";
+import arSA from 'date-fns/locale/ar-SA';
+registerLocale('ar', arSA);
 
 export type User = { username: string; password: string; otp: string };
 interface IAppContext {
@@ -52,6 +54,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [userRole, setUserRole] = useState<string>("");
   const [selectedCIF, setCIF] = useState<string>(initialSettingsData.customerId);
   moment.locale(language);
+  setDefaultLocale(language);
+
   let intervalID = 0;
 
   useEffect(() => {
@@ -70,9 +74,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setCIF(initialSettingsData.customerId);
         setUserRole("");
         setUserSettings(initialSettingsData);
+        //clearInterval(intervalID);
+        //window.location.href = `/${language}`;
       }
     };
     getUserData();
+
   }, []);
 
   return (
@@ -108,9 +115,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                 if (role && !!role) {
                   setUserRole(role.name);
                 }
-
-                clearInterval(intervalID); // Will check session at every 15 mins.
-                intervalID = window.setInterval(async () => await GetSettingsByCIF(selectedCIF), 900000);
+                clearInterval(intervalID);
+                intervalID = window.setInterval( async () => await GetSettingsByCIF(userData.username), 30000);
               }
             );
             return resutl;

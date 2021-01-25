@@ -321,6 +321,7 @@ function OffersForm(props: DetailsProps) {
 
                   <DatePicker
                     name="expireDate"
+                    locale={currentContext.language}
                     selected={
                       !!values.expireDate ? new Date(values.expireDate) : null
                     }

@@ -1,6 +1,6 @@
 import { Modal } from "react-bootstrap";
 import xIcon from "../../images/x-icon.svg";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
 import { GetBeneficiariesTypes } from "../../services/cmsService";
@@ -42,6 +42,11 @@ interface iNewBeneficiary {
 function NewBeneficiary(props: iNewBeneficiary) {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
+
+  const formikRef_WitihinQFB = useRef<any>();
+  const formikRef_Local = useRef<any>();
+  const formikRef_International = useRef<any>();
+
   const [isLoading, setLoading] = useState(false);
 
   const [transactionTypes, setTransactionTypes] = useState<iDDL[]>([]);
@@ -250,6 +255,14 @@ function NewBeneficiary(props: iNewBeneficiary) {
     [props.beneficiary]
   );
 
+  
+  useEffect(() => {    
+    if (!props.beneficiary && props.showNewBeneficiaryModal) {
+      setTransactionTypeId("");
+    }
+  }, [props.showNewBeneficiaryModal]);
+
+
   return (
     <Modal
       show={props.showNewBeneficiaryModal}
@@ -313,31 +326,42 @@ function NewBeneficiary(props: iNewBeneficiary) {
               </li>
             </ul>
           ) : (
-            <div className="container-fluid">
-              <div className="row  col-xl-12">
-                <div className="col-lg-12 form-group">
-                  <label>Beneficiary Type</label>
-                  <select
-                    className="form-control"
-                    id="reqTypeSelect"
-                    onChange={(e: any) => setTransactionTypeId(e.target.value)}
-                  >
-                    <option value="">{local_Strings.SelectItem}</option>
-                    {transactionTypes &&
-                      transactionTypes.length > 0 &&
-                      !!transactionTypes[0].label &&
-                      transactionTypes.map((c, i) => (
-                        <option key={i} value={c.value}>
-                          {c.label}
-                        </option>
-                      ))}
-                  </select>
+              <div className="container-fluid">
+                <div className="row  col-xl-12">
+                  <div className="col-lg-12 form-group">
+                    <label>Beneficiary Type</label>
+                    <select
+                      className="form-control"
+                      id="reqTypeSelect"
+                      onChange={(e: any) => {
+                        setTransactionTypeId(e.target.value);
+                        if (formikRef_WitihinQFB && formikRef_WitihinQFB.current) {
+                          formikRef_WitihinQFB.current.handleReset();
+                        }
+                        if (formikRef_Local && formikRef_Local.current) {
+                          formikRef_Local.current.handleReset();
+                        }
+                        if (formikRef_International && formikRef_International.current) {
+                          formikRef_International.current.handleReset();
+                        }
+                      }}
+                    >
+                      <option value="">{local_Strings.SelectItem}</option>
+                      {transactionTypes &&
+                        transactionTypes.length > 0 &&
+                        !!transactionTypes[0].label &&
+                        transactionTypes.map((c, i) => (
+                          <option key={i} value={c.value}>
+                            {c.label}
+                          </option>
+                        ))}
+                    </select>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {transactionTypeId.toString() === "1" && (
+          {!!transactionTypeId && transactionTypeId.toString() === "1" && (
             <Formik
               initialValues={
                 props.beneficiary ? props.beneficiary : initialValuesWithin
@@ -369,6 +393,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                 }
                 setLoading(false);
               }}
+              innerRef={formikRef_WitihinQFB}
             >
               {({
                 values,
@@ -404,8 +429,10 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           className="form-control"
                           placeholder=""
                           value={values.beneficiaryFullName || ""}
-                          onChange={handleChange("beneficiaryFullName")}
+                          onChange={(e) => setFieldValue("beneficiaryFullName",
+                            e.target.value.replace(/[^a-zA-Z_\sء-ي]+/g, ''))}
                           onBlur={handleBlur("beneficiaryFullName")}
+                          maxLength={30}
                         />
                         {touched.beneficiaryFullName &&
                           errors.beneficiaryFullName &&
@@ -506,7 +533,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
               )}
             </Formik>
           )}
-          {transactionTypeId.toString() === "2" && (
+          {!!transactionTypeId && transactionTypeId.toString() === "2" && (
             <Formik
               initialValues={
                 props.beneficiary ? props.beneficiary : initialValuesLocal
@@ -538,6 +565,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                 }
                 setLoading(false);
               }}
+              innerRef={formikRef_Local}
             >
               {({
                 values,
@@ -573,8 +601,10 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           className="form-control"
                           placeholder=""
                           value={values.beneficiaryFullName || ""}
-                          onChange={handleChange("beneficiaryFullName")}
+                          onChange={(e) => setFieldValue("beneficiaryFullName",
+                            e.target.value.replace(/[^a-zA-Z_\sء-ي]+/g, ''))}
                           onBlur={handleBlur("beneficiaryFullName")}
+                          maxLength={30}
                         />
                         {touched.beneficiaryFullName &&
                           errors.beneficiaryFullName &&
@@ -621,8 +651,8 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           readOnly
                         />
                       </div>
-                      
-                      
+
+
                     </div>
                     <div className="row  col-xl-12 mb-5">
                       <div className="col-lg-6 form-group">
@@ -684,7 +714,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           className="form-control"
                           value={values.beneficiaryAddress || ""}
                           rows={4}
-                          maxLength={400}
+                          maxLength={300}
                           onBlur={handleBlur("beneficiaryAddress")}
                           onChange={handleChange("beneficiaryAddress")}
                         />
@@ -734,7 +764,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
               )}
             </Formik>
           )}
-          {transactionTypeId.toString() === "3" && (
+          {!!transactionTypeId && transactionTypeId.toString() === "3" && (
             <Formik
               initialValues={
                 props.beneficiary
@@ -768,6 +798,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                 }
                 setLoading(false);
               }}
+              innerRef={formikRef_International}
             >
               {({
                 values,
@@ -805,8 +836,10 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           className="form-control"
                           placeholder=""
                           value={values.beneficiaryFullName || ""}
-                          onChange={handleChange("beneficiaryFullName")}
+                          onChange={(e) => setFieldValue("beneficiaryFullName",
+                            e.target.value.replace(/[^a-zA-Z_\sء-ي]+/g, ''))}
                           onBlur={handleBlur("beneficiaryFullName")}
+                          maxLength={30}
                         />
                         {touched.beneficiaryFullName &&
                           errors.beneficiaryFullName &&
@@ -903,6 +936,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           className="form-control"
                           value={values.beneficiaryAddress || ""}
                           rows={4}
+                          maxLength={300}
                           onBlur={handleBlur("beneficiaryAddress")}
                           onChange={handleChange("beneficiaryAddress")}
                         />
@@ -1015,7 +1049,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                                   result["bicdata"][0]["institution_name"]
                                 );
                               }
-                              
+
                               setLoading(false);
                             }
                             handleBlur("intermediaryBankSwiftCode");

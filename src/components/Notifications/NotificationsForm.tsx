@@ -264,6 +264,7 @@ function NotificationsForm(props: DetailsProps) {
 
                   <DatePicker
                     name="expiryDate"
+                    locale={currentContext.language}
                     selected={
                       !!values.expiryDate ? new Date(values.expiryDate) : null
                     }

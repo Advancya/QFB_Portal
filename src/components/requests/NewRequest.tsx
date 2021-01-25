@@ -37,6 +37,7 @@ import {
 import axios from "axios";
 import FileUploader from "../../shared/FileUploader";
 import ViewAttachment from "../../shared/AttachmentViewer";
+import { AnySrvRecord } from "dns";
 
 interface iNewRequest {
   showNewRequestModal: boolean;
@@ -91,7 +92,7 @@ function NewRequest(props: iNewRequest) {
     } else {
       if (value === "SP_MOB_CUST_CASH_LIST" || value === "SP_MOB_CUST_CASH_LIST_REQ") {
         if (cashBalance && cashBalance.length > 0) {
-          cashBalance.map((element) =>
+          cashBalance.forEach((element) =>
             data.push({
               label: element.accountNumber,
               value: element.accountNumber,
@@ -101,7 +102,7 @@ function NewRequest(props: iNewRequest) {
       }
       if (value === "SP_MOB_CUST_INV_LIST" || value === "SP_MOB_CUST_INV_LIST_REQ") {
         if (investments && investments.length > 0) {
-          investments.map((element) =>
+          investments.forEach((element) =>
             data.push({
               label: element.secDesciption,
               value: element.secDesciption,
@@ -111,7 +112,7 @@ function NewRequest(props: iNewRequest) {
       }
       if (value === "SP_MOB_CUST_DEP_LIST" || value === "SP_MOB_CUST_DEP_LIST_REQ") {
         if (deposits && deposits.length > 0) {
-          deposits.map((element) =>
+          deposits.forEach((element) =>
             data.push({
               label: element.contractNumber,
               value: element.contractNumber,
@@ -121,13 +122,20 @@ function NewRequest(props: iNewRequest) {
       }
     }
 
-    return data && data.length > 0
-      ? data.map((c, i) => (
-          <option key={i} value={c.value}>
-            {c.label}
-          </option>
-        ))
-      : null;
+    if (data && data.length > 0) {
+
+      return (
+        <>
+          <option value="0">{local_Strings.SelectItem}</option>
+          {data.map((c, i) =>
+            <option key={i} value={c.value}>
+              {c.label}
+            </option>)}
+        </>);
+    } else {
+      return (<option value="0">{local_Strings.SelectItem}</option>);
+    }
+
   };
 
   const getExtraDetailsValue = (value: string, param: string) => {
@@ -136,7 +144,7 @@ function NewRequest(props: iNewRequest) {
         GetExtraDetailCurrentDetail(currentContext.selectedCIF).then((c) => {
           let data = "";
 
-          c.map((element: any, index: any) => {
+          c.forEach((element: any) => {
             if (currentContext.language === "ar") {
               data = data + element.nameAr + ":" + element.valueAr + "\n\n ";
             } else {
@@ -148,7 +156,7 @@ function NewRequest(props: iNewRequest) {
       } else if (value.split(",")[0] === "MOB_REQ_EX_DET_FLD_DEP_BRK") {
         GetExtraDetailsDepositDetails(param).then((c) => {
           let data = "";
-          c.map((element: any, index: any) => {
+          c.forEach((element: any) => {
             if (currentContext.language === "ar") {
               data =
                 data + element.nameAr + ":" + element.valueAr || "" + "\n\n ";
@@ -161,7 +169,7 @@ function NewRequest(props: iNewRequest) {
       } else {
         setExtraDetailsValue("");
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   let validationSchema = yup.object().shape({});
@@ -233,11 +241,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string()
             : yup
-                .string()
-                .matches(
-                  /^[0-9]+$/,
-                  local_Strings.ContactUs_Mobile_Format_Validation_Message
-                ),
+              .string()
+              .min(10)
+              .matches(/^\+(?:[0-9]?){6,14}[0-​9]$/, local_Strings.ContactUs_Mobile_Format_Validation_Message),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -247,11 +253,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string()
             : yup
-                .string()
-                .matches(
-                  /^[0-9]+$/,
-                  local_Strings.ContactUs_Mobile_Format_Validation_Message
-                ),
+              .string()
+              .min(10)
+              .matches(/^\+(?:[0-9]?){6,14}[0-​9]$/, local_Strings.ContactUs_Mobile_Format_Validation_Message),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -261,11 +265,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string()
             : yup
-                .string()
-                .matches(
-                  /^[0-9]+$/,
-                  local_Strings.ContactUs_Mobile_Format_Validation_Message
-                ),
+              .string()
+              .min(10)
+              .matches(/^\+(?:[0-9]?){6,14}[0-​9]$/, local_Strings.ContactUs_Mobile_Format_Validation_Message),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -284,9 +286,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-                .string()
-                .required(local_Strings.GeneralValidation)
-                .matches(/^[0-9]+$/),
+              .string()
+              .required(local_Strings.GeneralValidation)
+              .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -296,9 +298,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-                .string()
-                .required(local_Strings.GeneralValidation)
-                .matches(/^[0-9]+$/),
+              .string()
+              .required(local_Strings.GeneralValidation)
+              .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -308,9 +310,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-                .string()
-                .required(local_Strings.GeneralValidation)
-                .matches(/^[0-9]+$/),
+              .string()
+              .required(local_Strings.GeneralValidation)
+              .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -320,9 +322,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-                .string()
-                .required(local_Strings.GeneralValidation)
-                .matches(/^[0-9]+$/),
+              .string()
+              .required(local_Strings.GeneralValidation)
+              .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -332,12 +334,10 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-                .string()
-                .required(local_Strings.GeneralValidation)
-                .matches(
-                  /^[0-9]+$/,
-                  local_Strings.ContactUs_Mobile_Format_Validation_Message
-                ),
+              .string()
+              .required(local_Strings.GeneralValidation)
+              .min(10)
+              .matches(/^\+(?:[0-9]?){6,14}[0-​9]$/, local_Strings.ContactUs_Mobile_Format_Validation_Message),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -347,12 +347,10 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-                .string()
-                .required(local_Strings.GeneralValidation)
-                .matches(
-                  /^[0-9]+$/,
-                  local_Strings.ContactUs_Mobile_Format_Validation_Message
-                ),
+              .string()
+              .required(local_Strings.GeneralValidation)
+              .min(10)
+              .matches(/^\+(?:[0-9]?){6,14}[0-​9]$/, local_Strings.ContactUs_Mobile_Format_Validation_Message),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -362,12 +360,10 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-                .string()
-                .required(local_Strings.GeneralValidation)
-                .matches(
-                  /^[0-9]+$/,
-                  local_Strings.ContactUs_Mobile_Format_Validation_Message
-                ),
+              .string()
+              .required(local_Strings.GeneralValidation)
+              .min(10)
+              .matches(/^\+(?:[0-9]?){6,14}[0-​9]$/, local_Strings.ContactUs_Mobile_Format_Validation_Message),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -377,9 +373,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-                .string()
-                .required(local_Strings.GeneralValidation)
-                .matches(/^[0-9]+$/),
+              .string()
+              .required(local_Strings.GeneralValidation)
+              .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -389,9 +385,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-                .string()
-                .required(local_Strings.GeneralValidation)
-                .matches(/^[0-9]+$/),
+              .string()
+              .required(local_Strings.GeneralValidation)
+              .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -401,9 +397,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-                .string()
-                .required(local_Strings.GeneralValidation)
-                .matches(/^[0-9]+$/),
+              .string()
+              .required(local_Strings.GeneralValidation)
+              .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -413,9 +409,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-                .string()
-                .required(local_Strings.GeneralValidation)
-                .matches(/^[0-9]+$/),
+              .string()
+              .required(local_Strings.GeneralValidation)
+              .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -425,9 +421,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-                .string()
-                .required(local_Strings.GeneralValidation)
-                .matches(/^[0-9]+$/),
+              .string()
+              .required(local_Strings.GeneralValidation)
+              .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -437,9 +433,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-                .string()
-                .required(local_Strings.GeneralValidation)
-                .matches(/^[0-9]+$/),
+              .string()
+              .required(local_Strings.GeneralValidation)
+              .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -449,9 +445,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-                .string()
-                .required(local_Strings.GeneralValidation)
-                .matches(/^[0-9]+$/),
+              .string()
+              .required(local_Strings.GeneralValidation)
+              .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -461,9 +457,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-                .string()
-                .required(local_Strings.GeneralValidation)
-                .matches(/^[0-9]+$/),
+              .string()
+              .required(local_Strings.GeneralValidation)
+              .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -473,9 +469,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-                .string()
-                .required(local_Strings.GeneralValidation)
-                .matches(/^[0-9]+$/),
+              .string()
+              .required(local_Strings.GeneralValidation)
+              .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -485,9 +481,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-                .string()
-                .required(local_Strings.GeneralValidation)
-                .matches(/^[0-9]+$/),
+              .string()
+              .required(local_Strings.GeneralValidation)
+              .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -498,9 +494,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-                .string()
-                .required(local_Strings.GeneralValidation)
-                .matches(/^[0-9]+$/),
+              .string()
+              .required(local_Strings.GeneralValidation)
+              .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -510,9 +506,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-                .string()
-                .required(local_Strings.GeneralValidation)
-                .matches(/^[0-9]+$/),
+              .string()
+              .required(local_Strings.GeneralValidation)
+              .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -521,13 +517,13 @@ function NewRequest(props: iNewRequest) {
         Email:
           type !== "EMAIL"
             ? yup
-                .string()
-                .email(local_Strings.InvalidEmail)
-                .required(local_Strings.GeneralValidation)
+              .string()
+              .email(local_Strings.InvalidEmail)
+              .required(local_Strings.GeneralValidation)
             : yup
-                .string()
-                .required(local_Strings.GeneralValidation)
-                .matches(/^[0-9]+$/),
+              .string()
+              .required(local_Strings.GeneralValidation)
+              .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -538,9 +534,9 @@ function NewRequest(props: iNewRequest) {
           type !== "NUMBER"
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
-                .string()
-                .required(local_Strings.GeneralValidation)
-                .matches(/^[0-9]+$/),
+              .string()
+              .required(local_Strings.GeneralValidation)
+              .matches(/^[0-9]+$/),
       });
       validationSchema = validationSchema.concat(fieldSchema);
     }
@@ -551,7 +547,7 @@ function NewRequest(props: iNewRequest) {
     let entertedValues: string[] = [];
     let isValidDate: boolean = true;
 
-    formFields.map((item, index) => {
+    formFields.forEach((item) => {
       let elements = item["details"].split(";");
       if (elements[4] === "YES") {
         if (
@@ -713,7 +709,7 @@ function NewRequest(props: iNewRequest) {
             onSubmit={async (values, formikObj) => {
               setLoading(true);
               await submitRequest(values, formikObj);
-              setLoading(false);              
+              setLoading(false);
             }}
             enableReinitialize={true}
           >
@@ -753,7 +749,7 @@ function NewRequest(props: iNewRequest) {
                           validationSchema = yup.object().shape({});
                           const data = await GetRequestFields(typeId);
 
-                          data.map((d: any, index: number) => {
+                          data.forEach((d: any) => {
                             if (d["details"].split(";")[2] === "READ_ONLY") {
                               getExtraDetailsValue(
                                 d["details"].split(";")[3],
@@ -806,16 +802,14 @@ function NewRequest(props: iNewRequest) {
                   id="newReqFields"
                 >
                   {formFields.map((item, index) => (
-                    <Form>
+                    <Form key={index}>
                       <div className="py-2 px-3">
                         {item["details"].split(";")[2] === "FILE_UPLOAD" && (
                           <Form.Row>
                             <Col md={8}>
                               <Form.Group>
                                 <Form.Label className="">
-                                  {currentContext.language === "ar"
-                                    ? item["details"].split(";")[1]
-                                    : item["details"].split(";")[0]}
+                                  {local_Strings.RequestAttachmentsLabel}
                                 </Form.Label>
                                 <FileUploader
                                   onUploaded={(
@@ -869,9 +863,9 @@ function NewRequest(props: iNewRequest) {
                                   as="textarea"
                                   value={
                                     values[
-                                      item["details"]
-                                        .split(";")[0]
-                                        .replace(/ /g, "")
+                                    item["details"]
+                                      .split(";")[0]
+                                      .replace(/ /g, "")
                                     ] || ""
                                   }
                                   onChange={(e) => {
@@ -893,7 +887,7 @@ function NewRequest(props: iNewRequest) {
                         )}
                         {item["details"].split(";")[2] === "READ_ONLY" &&
                           item["details"].split(";")[3].toString() !==
-                            "NULL" && (
+                          "NULL" && (
                             <Form.Row>
                               <Col md={8}>
                                 <Form.Group>
@@ -925,21 +919,26 @@ function NewRequest(props: iNewRequest) {
                                 <Form.Control
                                   value={
                                     values[
-                                      item["details"]
-                                        .split(";")[0]
-                                        .replace(/ /g, "")
+                                    item["details"]
+                                      .split(";")[0]
+                                      .replace(/ /g, "")
                                     ] || ""
                                   }
                                   onChange={(e) => {
                                     const fName = item["details"]
                                       .split(";")[0]
                                       .replace(/ /g, "");
-                                    setFieldValue(fName, e.target.value, false);
+                                    if (fName === "ContactPersonName(underPOA)") {
+                                      setFieldValue(fName, e.target.value.replace(/[^A-Za-z\sء-ي]/ig, ''), false);
+                                    } else {
+                                      setFieldValue(fName, e.target.value, false);
+                                    }
+
                                   }}
-                                  max={
+                                  maxLength={
                                     item["details"].split(";")[5] !== "NULL"
                                       ? Number(item["details"].split(";")[5])
-                                      : undefined
+                                      : 200
                                   }
                                 />
                               </Form.Group>
@@ -958,21 +957,23 @@ function NewRequest(props: iNewRequest) {
                                 <Form.Control
                                   value={
                                     values[
-                                      item["details"]
-                                        .split(";")[0]
-                                        .replace(/ /g, "")
+                                    item["details"]
+                                      .split(";")[0]
+                                      .replace(/ /g, "")
                                     ] || ""
                                   }
                                   onChange={(e) => {
-                                    const fName = item["details"]
-                                      .split(";")[0]
-                                      .replace(/ /g, "");
-                                    setFieldValue(fName, e.target.value, false);
+                                    if (e.currentTarget.validity.valid) {
+                                      const fName = item["details"]
+                                        .split(";")[0]
+                                        .replace(/ /g, "");
+                                      setFieldValue(fName, e.target.value, false);
+                                    }
                                   }}
-                                  max={
+                                  maxLength={
                                     item["details"].split(";")[5] !== "NULL"
                                       ? Number(item["details"].split(";")[5])
-                                      : undefined
+                                      : 50
                                   }
                                 />
                               </Form.Group>
@@ -988,25 +989,24 @@ function NewRequest(props: iNewRequest) {
                                     ? item["details"].split(";")[1]
                                     : item["details"].split(";")[0]}
                                 </Form.Label>
-                                <Form.Control
+                                <input
+                                  type="text"
+                                  className="form-control"
                                   value={
                                     values[
-                                      item["details"]
-                                        .split(";")[0]
-                                        .replace(/ /g, "")
+                                    item["details"]
+                                      .split(";")[0]
+                                      .replace(/ /g, "")
                                     ] || ""
                                   }
-                                  onChange={(e) => {
-                                    const fName = item["details"]
-                                      .split(";")[0]
-                                      .replace(/ /g, "");
-                                    setFieldValue(fName, e.target.value, false);
-                                  }}
-                                  max={
+                                  maxLength={
                                     item["details"].split(";")[5] !== "NULL"
                                       ? Number(item["details"].split(";")[5])
-                                      : undefined
+                                      : 50
                                   }
+                                  onChange={(e) => setFieldValue(item["details"]
+                                    .split(";")[0]
+                                    .replace(/ /g, ""), e.target.value.replace(/[^0-9]*/, ''))}
                                 />
                               </Form.Group>
                             </Col>
@@ -1024,6 +1024,7 @@ function NewRequest(props: iNewRequest) {
                                 <DatePicker
                                   dateFormat="MMMM dd, yyyy"
                                   className="form-control"
+                                  locale={currentContext.language}
                                   selected={
                                     values[
                                       item["details"]
@@ -1031,12 +1032,12 @@ function NewRequest(props: iNewRequest) {
                                         .replace(/ /g, "")
                                     ]
                                       ? new Date(
-                                          values[
-                                            item["details"]
-                                              .split(";")[0]
-                                              .replace(/ /g, "")
-                                          ]
-                                        )
+                                        values[
+                                        item["details"]
+                                          .split(";")[0]
+                                          .replace(/ /g, "")
+                                        ]
+                                      )
                                       : null
                                   }
                                   onChange={(date: Date) => {
@@ -1085,6 +1086,13 @@ function NewRequest(props: iNewRequest) {
                                       e.currentTarget.value
                                     );
                                   }}
+                                  value={
+                                    values[
+                                    item["details"]
+                                      .split(";")[0]
+                                      .replace(/ /g, "")
+                                    ] || ""
+                                  }
                                 >
                                   {getDropDownListValue(
                                     item["details"].split(";")[2],
@@ -1111,9 +1119,16 @@ function NewRequest(props: iNewRequest) {
                                       item["details"]
                                         .split(";")[0]
                                         .replace(/ /g, ""),
-                                        e.target.value
+                                      e.target.value
                                     );
                                   }}
+                                  value={
+                                    values[
+                                    item["details"]
+                                      .split(";")[0]
+                                      .replace(/ /g, "")
+                                    ] || ""
+                                  }
                                 >
                                   {getDropDownListValue(
                                     item["details"].split(";")[2],
@@ -1128,11 +1143,11 @@ function NewRequest(props: iNewRequest) {
                           item["details"].split(";")[0].replace(/ /g, "")
                         ] &&
                           errors[
-                            item["details"].split(";")[0].replace(/ /g, "")
+                          item["details"].split(";")[0].replace(/ /g, "")
                           ] &&
                           InvalidFieldError(
                             errors[
-                              item["details"].split(";")[0].replace(/ /g, "")
+                            item["details"].split(";")[0].replace(/ /g, "")
                             ]
                           )}
                       </div>

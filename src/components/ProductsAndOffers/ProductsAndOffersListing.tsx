@@ -63,7 +63,7 @@ function ProductsAndOffersListing(props: iProductsAndOffersListing) {
       >
         <div className="box-header bg-beige">
           <h3>
-            {local_Strings.productAndOffersListingLabel} | {item.id}
+            {local_Strings.productAndOffersListingLabel} | {item.productId}
           </h3>
         </div>
         <div className="box-body p-3">
