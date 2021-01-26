@@ -24,6 +24,9 @@ interface IUserInfo {
 function RelationManger() {
   const [index, setIndex] = useState(0);
   const currentContext = useContext(AuthContext);
+  local_Strings.setLanguage(currentContext.language);
+
+  const [customerName, setCustomerName] = useState("");
   const [carouselItems, setCarouselItems] = useState<IUserInfo[]>([]);
   const handleSelect = (selectedIndex: any, e: any) => {
     setIndex(selectedIndex);
@@ -34,7 +37,8 @@ function RelationManger() {
     const initialLoadMethod = async () => {
       GetUserWelcomeData(currentContext.selectedCIF).then((s) => {
         if (isMounted) {
-          setCarouselItems(s);
+          setCarouselItems(currentContext.language === "ar" ? s.reverse() : s);
+          setCustomerName(s[0]["customerShortName"]);
         }
       });
     }
@@ -68,7 +72,10 @@ function RelationManger() {
                 <li>
                   <div className="box-list-details">
                     <h5> {local_Strings.WelcomeScreenRMNameLabel}</h5>
-                    <h6 className="">{item.name || ""}</h6>
+                    <h6 className="">
+                      {currentContext.language === "en"
+                        ? item.name.split(";")[0]
+                        : item.name.split(";")[1] || item.name.split(";")[0]}</h6>
                   </div>
                 </li>
                 <li>
@@ -79,7 +86,7 @@ function RelationManger() {
                         <h6 className="">{item.telephone || ""}</h6>
                       </div>
                       <div className="col-4 text-right">
-                        <a href="#" className="actionIcon">
+                        <a href={`tel:${item.telephone}`} className="actionIcon">
                           <img src={phoneIcon} className="img-fluid" />
                         </a>
                       </div>
@@ -94,11 +101,11 @@ function RelationManger() {
                         <h6 className="">{item.rmMobile || ""}</h6>
                       </div>
                       <div className="col-6 text-right">
-                        <a href="#" className="actionIcon mx-1">
+                        <a href={`sms:${item.rmMobile}`} className="actionIcon mx-1">
                           {local_Strings.WelcomeScreenSMS}
                           <img src={messageIcon} className="img-fluid" />
                         </a>
-                        <a href="#" className="actionIcon mx-1">
+                        <a href={`tel:${item.rmMobile}`} className="actionIcon mx-1">
                           {local_Strings.WelcomeScreenCall}
                           <img src={cellPhoneIcon} className="img-fluid" />
                         </a>
@@ -116,7 +123,7 @@ function RelationManger() {
                         </h6>
                       </div>
                       <div className="col-2 text-right">
-                        <a href="#" className="actionIcon">
+                        <a href={`mailto:${item.rmEmail}`} className="actionIcon">
                           <img src={emailIcon} className="img-fluid" />
                         </a>
                       </div>
@@ -129,15 +136,17 @@ function RelationManger() {
                   onClick={() => {
                     if (currentContext.userRole === "CUSTOMER") {
                       RequestCallback(
-                        item.name || "",
+                        currentContext.language === "en"
+                        ? item.name.split(";")[0]
+                        : item.name.split(";")[1] || item.name.split(";")[0],
                         currentContext.selectedCIF || "",
-                        item.customerShortName || "",
+                        customerName,
                         item.rmEmail || "",
                         item.rmMobile || ""
                       );
                       Swal.fire({
                         position: "center",
-                        icon: "success",                        
+                        icon: "success",
                         title: local_Strings.WelcomeScreenPopUpTitle,
                         text: local_Strings.WelcomeScreenPopUpMessage,
                         showConfirmButton: true,

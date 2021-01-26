@@ -42,13 +42,13 @@ const TransactionListing = (props: ITransactionListingProps) => {
   const renderItem = (item: ITransaction, index: string) => {
     const transactionsDetails =
       (item.transactionsDetails && !!item.transactionsDetails) ||
-      (item.paymentDetails && !!item.paymentDetails)
+        (item.paymentDetails && !!item.paymentDetails)
         ? (helper.transformingTransactionDetail(
-            item.paymentDetails
-              ? item.paymentDetails
-              : item.transactionsDetails,
-            currentContext.language
-          ) as ITransactionAccordianDetail)
+          item.paymentDetails
+            ? item.paymentDetails
+            : item.transactionsDetails,
+          currentContext.language
+        ) as ITransactionAccordianDetail)
         : null;
 
     return (
@@ -57,7 +57,7 @@ const TransactionListing = (props: ITransactionListingProps) => {
           as="tr"
           eventKey={index}
           className="clickRow"
-          onClick={() => setCollapsibleId(collapsibleId === index ? "-1": index)}
+          onClick={() => setCollapsibleId(collapsibleId === index ? "-1" : index)}
         >
           <td colSpan={1}>
             {moment(
@@ -65,8 +65,14 @@ const TransactionListing = (props: ITransactionListingProps) => {
             ).format("DD/MM/YYYY")}{" "}
           </td>
           <td colSpan={2} className={(item.amount || item.transaction_Amount) < 0 ? "color-red" : ""}>
-            {(item.amount || item.transaction_Amount) +
-              " " +
+            {Number(item.amount || item.transaction_Amount) < 0
+              ? `(${helper.ConvertToQfbNumberFormatWithFraction(
+                item.amount || item.transaction_Amount
+              ).substring(1)})`
+              : helper.ConvertToQfbNumberFormatWithFraction(
+                item.amount || item.transaction_Amount
+              )}
+            {" " +
               props.currency}
           </td>
           <td colSpan={3}>
@@ -78,14 +84,14 @@ const TransactionListing = (props: ITransactionListingProps) => {
           </td>
           {props.showBalanceField ? (
             <td colSpan={2} className="text-right">
-              {(item.balance || "0") +
-                " " +
+              {helper.ConvertToQfbNumberFormatWithFraction(item.balance) || ""}
+              {" " +
                 props.currency}
             </td>
           ) : null}
 
           <td className="caretArrow">
-            {transactionsDetails && (
+            {transactionsDetails && !!transactionsDetails && (
               <i
                 className={
                   (collapsibleId === index ? "fa fa-caret-down" : "fa fa-caret-right") +
@@ -95,7 +101,7 @@ const TransactionListing = (props: ITransactionListingProps) => {
             )}
           </td>
         </Accordion.Toggle>
-        {transactionsDetails && (
+        {transactionsDetails && !!transactionsDetails && (
           <tr>
             <td colSpan={9} className="p-0">
               <Accordion.Collapse eventKey={index} className="collapseRow">
@@ -216,17 +222,17 @@ const TransactionListing = (props: ITransactionListingProps) => {
           </thead>
           <tbody>
             {filteredData &&
-            filteredData.length > 0 &&
-            (!!filteredData[0].bookingDate ||
-              !!filteredData[0].installmentDate) ? (
-              filteredData
-                .slice(0, offset)
-                .map((item, index) => renderItem(item, String(index)))
-            ) : (
-              <tr>
-                <td colSpan={10}>{NoResult(props.NoDataMessage)}</td>
-              </tr>
-            )}
+              filteredData.length > 0 &&
+              (!!filteredData[0].bookingDate ||
+                !!filteredData[0].installmentDate) ? (
+                filteredData
+                  .slice(0, offset)
+                  .map((item, index) => renderItem(item, String(index)))
+              ) : (
+                <tr>
+                  <td colSpan={10}>{NoResult(props.NoDataMessage)}</td>
+                </tr>
+              )}
           </tbody>
         </Accordion>
       </div>

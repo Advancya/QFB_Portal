@@ -1,44 +1,70 @@
-import {
-    useContext,
-    useEffect,
-    useState
-} from "react";
+import React, { useContext } from "react";
 import { localStrings as local_Strings } from "../translations/localStrings";
 import { AuthContext } from "../providers/AuthProvider";
-import ReactSummernote from 'react-summernote';
-import 'react-summernote/dist/react-summernote.css'; // import styles
-//import 'react-summernote/lang/summernote-ar-AR'; // you can import any other locale
-import "bootstrap";
-import "popper.js";
-import * as jquery from 'jquery';
-declare var  jQuery;
+import CKEditor from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import "@ckeditor/ckeditor5-build-classic/build/translations/ar.js";
+import RichTextUploadAdapter from "./RichTextUploadAdapter";
 
-const RichTextEditor = (props: any) => {
-    const currentContext = useContext(AuthContext);
-    local_Strings.setLanguage(currentContext.language);
+interface IRichTextEditor {
+    value: string;
+    onChange: (text: string) => void;
+    language: string;
+}
 
-    const onChange = (content: string) => {
-        console.log('onChange', content);
+const RichTextEditor: React.FC<IRichTextEditor>
+    = ({ value, onChange, language }) => {
+        const currentContext = useContext(AuthContext);
+        local_Strings.setLanguage(currentContext.language);
+
+        return (
+            <React.Fragment>
+                <label className="imageAttachmentHint text-left">
+                    {local_Strings.RichTextImageUploadHint}
+                </label>
+                <CKEditor
+                    editor={ClassicEditor}
+                    data={value || ""}
+                    onChange={(event: any, editor: any) => {
+                        const richText = editor.getData();                        
+                        onChange(richText);
+                    }}
+                    config={{
+                        extraPlugins: [CustomUploadAdapterPlugin],
+                        toolbar: [
+                            "heading",
+                            "|",
+                            "bold",
+                            "italic",
+                            "|",
+                            "link",
+                            "bulletedList",
+                            "numberedList",
+                            "|",
+                            "blockQuote",
+                            'insertTable',
+                            'imageUpload',
+                            '|',
+                            "undo",
+                            "redo",
+                        ],
+                        table: {
+                            contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells']
+                        },
+                        allowedContent: true,
+                        extraAllowedContent: "div(*)",
+                        language: language,
+                        content: language,
+                    }}
+                />
+            </React.Fragment>
+        );
     }
 
-    return (
-        <ReactSummernote
-            value=""
-            options={{
-                lang: 'ar-AR',
-                height: 300,
-                dialogsInBody: true,
-                toolbar: [
-                    ['style', ['style']],
-                    ['font', ['bold', 'underline', 'clear']],
-                    ['para', ['ul', 'ol', 'paragraph']],
-                    ['table', ['table']],
-                    ['insert', ['link', 'picture']]
-                ]
-            }}
-            onChange={onChange}
-        />
-    );
+function CustomUploadAdapterPlugin(editor) {
+    editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+        return new RichTextUploadAdapter(loader)
+    }
 }
 
 export default RichTextEditor;

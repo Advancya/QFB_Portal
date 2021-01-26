@@ -829,7 +829,10 @@ const ar = {
 
   
   TransactionWithinSameAccount: "Transaction within same account is not allowed",
-  TransactionAmountLabel2: "المبلغ",
+  TransactionAmountLabel2: "المبلغ",  
+  RichTextImageUploadHint: "Image attachment should be less than 5MB",
+
+  MobileNumberLengthError: "يجب ألا يقل رقم الهاتف المحمول عن 10 أحرف",
 };
 
 export default ar;

@@ -835,6 +835,10 @@ const en = {
 
   TransactionWithinSameAccount: "Transaction within same account is not allowed",
   TransactionAmountLabel2: "Amount",
+  RichTextImageUploadHint: "Image attachment should be less than 5MB",
+  
+  MobileNumberLengthError: "Mobile number must be at least 10 characters",
+
 };
 
 export default en;

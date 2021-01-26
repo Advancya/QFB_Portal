@@ -10,10 +10,6 @@ import moment from "moment";
 import { Formik } from "formik";
 import * as yup from "yup";
 import InvalidFieldError from "../../shared/invalid-field-error";
-import CKEditor from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import "@ckeditor/ckeditor5-build-classic/build/translations/ar.js";
-//import Base64UploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/base64uploadadapter';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {
@@ -25,6 +21,9 @@ import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import Swal from "sweetalert2";
 import xIcon from "../../images/x-icon.svg";
+import RichTextEditor from "../../shared/RichTextEditor";
+import RichTextUploadAdapter from "../../shared/RichTextUploadAdapter";
+import * as helper from "../../Helpers/helper";
 
 interface DetailsProps {
   item?: IProductAndOffersDetail;
@@ -53,6 +52,10 @@ function ProductsAndOffersForm(props: DetailsProps) {
   });
 
   const submitTheRecord = async (values: IProductAndOffersDetail) => {
+
+    values.details = helper.appendAnchorToImageTag(values.details);
+    values.detailsAr = helper.appendAnchorToImageTag(values.detailsAr);
+
     setLoading(true);
     const item =
       data.id > 0
@@ -226,36 +229,8 @@ function ProductsAndOffersForm(props: DetailsProps) {
                 <div className="form-group">
                   <label>{local_Strings.ProductsAndOffersDescrLabel}</label>
                   {props.editable ? (
-                    <CKEditor
-                      editor={ClassicEditor}
-                      readOnly={!props.editable}
-                      data={values.details || ""}
-                      onChange={(event: any, editor: any) => {
-                        const _text = editor.getData();
-                        setFieldValue("details", _text);
-                      }}
-                      config={{
-                        //plugins: [Base64UploadAdapter],
-                        toolbar: [
-                          "heading",
-                          "|",
-                          "bold",
-                          "italic",
-                          "|",
-                          "link",
-                          "bulletedList",
-                          "numberedList",
-                          "blockQuote",
-                          "|",
-                          "undo",
-                          "redo",
-                        ],
-                        allowedContent: true,
-                        extraAllowedContent: "div(*)",
-                        language: "en",
-                        content: "en",
-                      }}
-                    />
+                    <RichTextEditor language="en" value={values.details}
+                      onChange={handleChange("details")} />
                   ) : (
                       <span className="box-brief mb-3">
                         <div
@@ -269,36 +244,8 @@ function ProductsAndOffersForm(props: DetailsProps) {
                 <div className="form-group">
                   <label>{local_Strings.ProductsAndOffersArDescrLabel}</label>
                   {props.editable ? (
-                    <CKEditor
-                      editor={ClassicEditor}
-                      readOnly={!props.editable}
-                      data={values.detailsAr || ""}
-                      onChange={(event: any, editor: any) => {
-                        const _text = editor.getData();
-                        setFieldValue("detailsAr", _text);
-                      }}
-                      config={{
-                        //plugins: [Base64UploadAdapter],
-                        toolbar: [
-                          "heading",
-                          "|",
-                          "bold",
-                          "italic",
-                          "|",
-                          "link",
-                          "bulletedList",
-                          "numberedList",
-                          "blockQuote",
-                          "|",
-                          "undo",
-                          "redo",
-                        ],
-                        allowedContent: true,
-                        extraAllowedContent: "div(*)",
-                        language: "ar",
-                        content: "ar",
-                      }}
-                    />
+                    <RichTextEditor language="ar" value={values.detailsAr}
+                      onChange={handleChange("detailsAr")} />
                   ) : (
                       <span className="box-brief mb-3">
                         <div
@@ -344,6 +291,12 @@ function ProductsAndOffersForm(props: DetailsProps) {
       </Modal.Body>
     </Modal>
   );
+}
+
+function CustomUploadAdapterPlugin(editor) {
+  editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+      return new RichTextUploadAdapter(loader)
+  }
 }
 
 export default ProductsAndOffersForm;

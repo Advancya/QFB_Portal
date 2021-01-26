@@ -103,10 +103,10 @@ function InvestmentsDetails(props: iInvestmentsDetails) {
                   <h3 className="text-capitalize color-gold">
                     {local_Strings.Investment +
                       " | " +
-                      item.InvestmentName.value}
+                      item.InvestmentName ? item.InvestmentName.value : ""}
                   </h3>
                   <h3 className="text-sm">
-                    {item.InvestmentAmount.value || ""}
+                    {item.InvestmentAmount ? item.InvestmentAmount.value : ""}
                   </h3>
                 </div>
                 <div className="col-sm-4 text-sm-right">
@@ -122,34 +122,48 @@ function InvestmentsDetails(props: iInvestmentsDetails) {
             </li>
           </ul>
           <div className="px-4">
-            <div className="formGrp">
-              <label>{item.InvestmentName.label}</label>
-              <p>{item.InvestmentName.value || ""}</p>
-            </div>
-            <div className="formGrp">
-              <label>{item.Currency.label}</label>
-              <p>{item.Currency.value || ""}</p>
-            </div>
-            <div className="formGrp">
-              <label>{item.InvestmentAmount.label}</label>
-              <p>{item.InvestmentAmount.value || ""}</p>
-            </div>
-            <div className="formGrp">
-              <label>{item.Location.label}</label>
-              <p>{item.Location.value || ""}</p>
-            </div>
-            <div className="formGrp">
-              <label>{item.StartDate.label}</label>
-              <p>{item.StartDate.value || ""}</p>
-            </div>
-            <div className="formGrp">
-              <label>{item.ExpectedProfitRate.label}</label>
-              <p>{item.ExpectedProfitRate.value || ""}</p>
-            </div>
-            <div className="formGrp">
-              <label>{item.ProfitDistributionFrequency.label}</label>
-              <p>{item.ProfitDistributionFrequency.value || ""}</p>
-            </div>
+            {item.InvestmentName &&
+              <div className="formGrp">
+                <label>{item.InvestmentName.label}</label>
+                <p>{item.InvestmentName.value || ""}</p>
+              </div>
+            }
+            {item.Currency &&
+              <div className="formGrp">
+                <label>{item.Currency.label}</label>
+                <p>{item.Currency.value || ""}</p>
+              </div>
+            }
+            {item.InvestmentAmount &&
+              <div className="formGrp">
+                <label>{item.InvestmentAmount.label}</label>
+                <p>{item.InvestmentAmount.value || ""}</p>
+              </div>
+            }
+            {item.Location &&
+              <div className="formGrp">
+                <label>{item.Location.label}</label>
+                <p>{item.Location.value || ""}</p>
+              </div>
+            }
+            {item.StartDate &&
+              <div className="formGrp">
+                <label>{item.StartDate.label}</label>
+                <p>{item.StartDate.value || ""}</p>
+              </div>
+            }
+            {item.ExpectedProfitRate &&
+              <div className="formGrp">
+                <label>{item.ExpectedProfitRate.label}</label>
+                <p>{item.ExpectedProfitRate.value || ""}</p>
+              </div>
+            }
+            {item.ProfitDistributionFrequency &&
+              <div className="formGrp">
+                <label>{item.ProfitDistributionFrequency.label}</label>
+                <p>{item.ProfitDistributionFrequency.value || ""}</p>
+              </div>
+            }
           </div>
           <div className="text-right px-4">
             <button

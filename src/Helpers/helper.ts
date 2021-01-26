@@ -1,6 +1,7 @@
 import moment from "moment";
 import { ICommonFilter, IRequestFilter, ITransactionDetail, IRequestDetail, iRmRequests } from "./publicInterfaces";
 import { localStrings as local_Strings } from '../translations/localStrings';
+import jQuery from "jquery";
 
 export interface ITransactionFilter {
   exposeFilter: boolean,
@@ -703,7 +704,7 @@ export const prepareInvestmentHoldings2ndDrill = (
         showInLegend: false,
         point: {
           events: {
-            legendItemClick: function() {
+            legendItemClick: function () {
               return false
             }
           }
@@ -821,31 +822,41 @@ export const b64toBlob = (b64Data: any, contentType = '', sliceSize = 512) => {
   return new Blob(byteArrays, { type: contentType });
 }
 
-export const ConvertToQfbNumberFormat = (amount: any) => {
-
-  //moment.locale() === "en" ? "en-US" : "ar-QA"
-
+export function ConvertToQfbNumberFormat(amount: any) {
   try {
     let number = Number(parseInt(amount ? amount.toString() : "0").toFixed(2));
-    let finalNumber = number.toLocaleString("en-US", {
-      minimumFractionDigits: 0,
-    });
+    let finalNumber = "";
+
+    if (isNaN(number)) {
+      finalNumber = amount;
+    } else {
+      finalNumber = number.toLocaleString("en", {
+        minimumFractionDigits: 0,
+      });
+    }
 
     return finalNumber.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
 
   } catch (err) {
+    console.log("error", err);
     return amount;
   }
 }
 
-export const ConvertToQfbNumberFormatWithFraction = (amount: any) => {
+export function ConvertToQfbNumberFormatWithFraction(amount: any) {
   try {
+    let number = Number(
+      parseFloat(!!amount ? amount.toString() : "0").toFixed(2)
+    );
+    let finalNumber = "";
 
-    let number = Number(parseFloat(!!amount ? amount.toString() : "0").toFixed(2));
-    let finalNumber = number.toLocaleString("en-US", {
-      minimumFractionDigits: 0,
-    });
-
+    if (isNaN(number)) {
+      finalNumber = amount;
+    } else {
+      finalNumber = number.toLocaleString("en", {
+        minimumFractionDigits: 0,
+      });
+    }
     return finalNumber.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
 
   } catch (err) {
@@ -991,3 +1002,16 @@ export const prepareManagementData = (
 
   return data;
 };
+
+export const appendAnchorToImageTag = (richText: string) => {
+  jQuery("#hiddenTempDiv").html(richText);
+  jQuery("#hiddenTempDiv").find("img").each((i, ele) => {
+    if (!jQuery(ele).parent().is("a")) {
+      jQuery(ele).wrap(jQuery("<a/>").attr("href", jQuery(ele).attr("src")));
+    }
+  });
+
+  const _richText = jQuery("#hiddenTempDiv").html();
+  jQuery("#hiddenTempDiv").html("");
+  return _richText;
+}

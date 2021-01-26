@@ -34,7 +34,6 @@ import "core-js/es/string/pad-start";
 import "core-js/es/string/pad-end";
 import "core-js/es/string/starts-with";
 import "whatwg-fetch";
-import * as jQuery from "jquery";
 
 ReactDOM.render(<App/>,
   document.getElementById("root")

@@ -5,22 +5,18 @@ import Inbox from "../Inbox/Inbox";
 import AuthOffersLanding from "../AuthOffers/AuthOffersLanding";
 import { AuthContext } from "../../providers/AuthProvider";
 import { localStrings as local_Strings } from "../../translations/localStrings";
-import { emptyUserInfo, IUserInfo } from "../../Helpers/publicInterfaces";
 import {
   GetUserWelcomeData,
-  GetRmDisplayName,
 } from "../../services/cmsService";
 import HoldingsLanding from "../HoldingsLanding";
 import usericon from "../../images/user-icon.svg";
 import Notfications from "../Notifications/Notifications";
 import { Navbar } from "react-bootstrap";
-import Constant from "../../constants/defaultData";
-import { GetUserLocalData } from "../../Helpers/authHelper";
 
 const Navigation = () => {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
-  const [userInfo, setUserInfo] = useState<IUserInfo>(emptyUserInfo);
+  const [customerName, setCustomerName] = useState("");
 
   useEffect(() => {
     let isMounted = true;
@@ -29,7 +25,7 @@ const Navigation = () => {
         GetUserWelcomeData(currentContext.selectedCIF)
           .then((responseData: any) => {
             if (responseData && responseData.length > 0) {
-              setUserInfo(responseData[0] as IUserInfo);
+              setCustomerName(responseData[0]["customerShortName"]);
             }
           })
           .catch((e: any) => console.log(e));
@@ -49,7 +45,7 @@ const Navigation = () => {
       <div className="welcomeText text-right mt-3  d-flex justify-content-end align-items-center">
         <span>
           {local_Strings.navigationUserMessage +
-            (userInfo.customerShortName || "") +
+            (customerName || "") +
             " "}
           <img className="mx-1" width="20" src={usericon} />
         </span>

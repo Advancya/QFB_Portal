@@ -357,7 +357,20 @@ const GetBankGuaranteeDetails = async (cif: string, gurRef: string) => {
 
 const GetUserWelcomeData = async (cif: string) => {
   try {
-    const result = await apiInstance.get(`/api/WelcomeMessage?cif=${cif}`);
+    const result = await apiInstance.get(`/api/WelcomeMessage/Get?cif=${cif}`);
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+const GetUserWelcomeDataWithUserData = async (cif: string) => {
+  try {
+    const result = await apiInstance.get(
+      `/api/WelcomeMessage/GetCustomerDetails?cif=${cif}`
+    );
 
     return result.data;
   } catch (err) {
@@ -1307,6 +1320,7 @@ export {
   GetOffersByCIF,
   GetOfferById,
   GetUserWelcomeData,
+  GetUserWelcomeDataWithUserData,
   GetLiveHoldings_1stDrill_Deposit,
   GetLiveHoldings_1stDrill_Investment,
   GetLiveHoldings_2ndDrill_Investment,

@@ -3,12 +3,13 @@ import { Modal } from "react-bootstrap";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { useHistory } from "react-router-dom";
 import { AuthContext } from "../../providers/AuthProvider";
-import { GetRmDisplayName, GetUserWelcomeData } from "../../services/cmsService";
+import { GetRmDisplayName, GetUserWelcomeDataWithUserData } from "../../services/cmsService";
 import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import xIcon from "../../images/x-icon.svg";
 import { GetUserLocalData } from "../../Helpers/authHelper";
+import { getUserRole } from "../../services/apiServices";
 
 interface iSettingsLanding {
   showSettingsLandingModal: boolean;
@@ -39,6 +40,7 @@ function SettingsLanding(props: iSettingsLanding) {
     rmEmail: "",
     customerShortName: "",
   });
+  const [userRole, setRole] = React.useState("");
   const fetchRmName = async () => {
     const res = await GetRmDisplayName(currentContext.selectedCIF);
     setRmName(res);
@@ -52,6 +54,12 @@ function SettingsLanding(props: iSettingsLanding) {
         if (isMounted && userData.customerId === currentContext.selectedCIF) {
           setAllowEdit(true);
         }
+      }
+
+      const role = await getUserRole(currentContext.selectedCIF);
+
+      if (role && !!role) {
+        setRole(role.name);
       }
     };
 
@@ -70,7 +78,7 @@ function SettingsLanding(props: iSettingsLanding) {
     const initialLoadMethod = async () => {
       setLoading(true);
       fetchRmName();
-      GetUserWelcomeData(currentContext.selectedCIF)
+      GetUserWelcomeDataWithUserData(currentContext.selectedCIF)
         .then((responseData: any) => {
           if (responseData && responseData.length > 0 && isMounted) {
             setUserInfo(responseData[0] as IUserInfo);
@@ -133,22 +141,22 @@ function SettingsLanding(props: iSettingsLanding) {
                 <div className="row no-gutters align-items-center">
                   <div className="col-md-6">
                     <h6 className="mb-1 text-600 text-18 ">
-                      {currentContext.userRole === Constant.RM
+                      {userRole === Constant.RM
                         ? rmName
                         : userInfo["customerShortName"] ||
                         userInfo["rmEmail"] ||
                         ""}
                     </h6>
                     <div className="color-gray">
-                      {(currentContext.userRole === Constant.RM ?
-                       local_Strings.RMSampleAccount : (currentContext.userRole === Constant.Management ?
-                        local_Strings.ManagementSampleAccount : local_Strings.CustomerSampleAccount)) +
+                      {(userRole === Constant.RM ?
+                        local_Strings.RMSampleAccount : (userRole === Constant.Management ?
+                          local_Strings.ManagementSampleAccount : local_Strings.CustomerSampleAccount)) +
                         currentContext.selectedCIF}
                     </div>
                   </div>
                   <div className="col-md-6 text-right">
                     <a
-                      href="tel:+974 00000000"
+                      href={`tel:${userInfo.telephone}`}
                       className="mx-1 color-gold text-xs d-block"
                     >
                       {userInfo.telephone || ""}
@@ -158,7 +166,7 @@ function SettingsLanding(props: iSettingsLanding) {
                       ></i>
                     </a>
                     <a
-                      href="mailto:ahmedmohamed@gmail.com"
+                      href={`mailto:${userInfo.rmEmail}`}
                       className=" color-gold text-xs d-block"
                     >
                       {userInfo.rmEmail || ""}

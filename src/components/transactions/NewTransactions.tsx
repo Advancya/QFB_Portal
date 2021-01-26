@@ -90,20 +90,18 @@ function NewTransaction(props: iNewTransaction) {
       .notOneOf([yup.ref("transferFromAccount"), ""],
         local_Strings.TransactionWithinSameAccount),
     amount: yup
-      .string()
+      .number()
       .required(local_Strings.GeneralValidation)
-      .matches(/^[0-9]*$/,
-        local_Strings.Transactions_Amount_Validation),
+      .min(0.1, local_Strings.Transactions_Amount_Validation),
   });
 
   const validationSchemaLocalOrInternational = yup.object({
     transferFromAccount: yup.string().required(local_Strings.GeneralValidation),
     currency: yup.string().required(local_Strings.GeneralValidation),
     amount: yup
-      .string()
+      .number()
       .required(local_Strings.GeneralValidation)
-      .matches(/^[0-9]*$/,
-        local_Strings.Transactions_Amount_Validation),
+      .min(0.1, local_Strings.Transactions_Amount_Validation),
     requestDate: yup.string().required(local_Strings.GeneralValidation),
     beneficiaryId: yup.string().required(local_Strings.GeneralValidation),
     description: yup.string().required(local_Strings.GeneralValidation),
@@ -205,7 +203,7 @@ function NewTransaction(props: iNewTransaction) {
     }
   }, [currentContext.selectedCIF, currentContext.language]);
 
-  useEffect(() => {    
+  useEffect(() => {
     if (props.showNewTransactionModal) {
       setTransactionTypeId("");
     }
@@ -397,24 +395,12 @@ function NewTransaction(props: iNewTransaction) {
                       <div className="col-lg-6 form-group">
                         <label>{local_Strings.TransactionAmountLabel}</label>
                         <input
-                          type="text"
+                          type="number"
                           className="form-control"
                           placeholder=""
-                          pattern="[0-9]*"
-                          maxLength={99}
                           value={values.amount?.toString() || ""}
                           onBlur={handleBlur("amount")}
-                          onChange={(e) => {
-                            if (
-                              e.currentTarget.validity.valid &&
-                              e.currentTarget.value.length <= 99
-                            ) {
-                              setFieldValue(
-                                "amount",
-                                e.target.value.replace(/[^0-9]*/, "")
-                              );
-                            }
-                          }}
+                          onChange={handleChange("amount")}
                         />
                         {touched.amount &&
                           errors.amount &&
@@ -584,24 +570,12 @@ function NewTransaction(props: iNewTransaction) {
                       <div className="col-lg-6 form-group">
                         <label>{local_Strings.TransactionAmountLabel}</label>
                         <input
-                          type="text"
+                          type="number"
                           className="form-control"
                           placeholder=""
-                          pattern="[0-9]*"
-                          maxLength={99}
                           value={values.amount?.toString() || ""}
                           onBlur={handleBlur("amount")}
-                          onChange={(e) => {
-                            if (
-                              e.currentTarget.validity.valid &&
-                              e.currentTarget.value.length <= 99
-                            ) {
-                              setFieldValue(
-                                "amount",
-                                e.target.value.replace(/[^0-9]*/, "")
-                              );
-                            }
-                          }}
+                          onChange={handleChange("amount")}
                         />
                         {touched.amount &&
                           errors.amount &&
@@ -627,6 +601,7 @@ function NewTransaction(props: iNewTransaction) {
                               false
                             );
                           }}
+                          minDate={new Date()}
                         />
                         {touched.transactionDate &&
                           errors.transactionDate &&

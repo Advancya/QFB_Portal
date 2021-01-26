@@ -138,3 +138,11 @@
   text-align: end!important;
   direction: ltr;
 }
+
+figure.image img {
+  width: 99%;
+}
+
+label.imageAttachmentHint.text-left {
+    text-transform: none;
+}

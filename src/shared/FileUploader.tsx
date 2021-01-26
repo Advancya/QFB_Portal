@@ -40,7 +40,7 @@ const FileUploader = (props: IFileUploaderProps) => {
           timer: Constant.AlertTimeout,
         });
         fileInputRef.current.value = "";
-      } else if (file.size / 1024 / 1024 > 10 || file.size / 1024 / 1024 > 10) {
+      } else if (file.size / 1024 / 1024 > 10) {
         Swal.fire({
           position: "top-end",
           icon: "error",

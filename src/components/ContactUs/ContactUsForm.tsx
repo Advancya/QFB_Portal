@@ -89,7 +89,7 @@ function ContactUsForm(props: iContactUsForm) {
     mobile: yup
       .string()
       .required(local_Strings.GeneralValidation)
-      .min(10)
+      .min(10, local_Strings.MobileNumberLengthError)
       .matches(
         /^\+(?:[0-9]?){6,14}[0-​9]$/,
         local_Strings.ContactUs_Mobile_Format_Validation_Message
