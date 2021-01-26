@@ -90,7 +90,10 @@ function ContactUsForm(props: iContactUsForm) {
       .string()
       .required(local_Strings.GeneralValidation)
       .min(10)
-      .matches(/^\+(?:[0-9]?){6,14}[0-​9]$/, local_Strings.ContactUs_Mobile_Format_Validation_Message),
+      .matches(
+        /^\+(?:[0-9]?){6,14}[0-​9]$/,
+        local_Strings.ContactUs_Mobile_Format_Validation_Message
+      ),
     name: yup.string().required(local_Strings.GeneralValidation).min(1),
     query: yup.string().required(local_Strings.GeneralValidation),
   });
@@ -151,7 +154,7 @@ function ContactUsForm(props: iContactUsForm) {
                     position={item.location}
                   >
                     <InfoBox
-                      onLoad={(_v) => { }}
+                      onLoad={(_v) => {}}
                       options={{
                         closeBoxURL: "",
                         enableEventPropagation: true,
@@ -221,94 +224,104 @@ function ContactUsForm(props: iContactUsForm) {
                     <div className="col-lg-9">
                       <Form>
                         <div className="row">
-                          <Col md={6}>
-                            <Form.Group controlId="formName">
-                              <Form.Label>
-                                {local_Strings.ContactUsNameLabel}
-                              </Form.Label>
-                              <Form.Control
-                                type="text"
-                                placeholder=""
-                                onChange={(e) => setFieldValue("name",
-                                  e.target.value.replace(/[^a-zA-Z_\sء-ي]+/g, ''))}
-                                onBlur={handleBlur("name")}
-                                value={values.name || ""}
-                                maxLength={100}
-                              />
-                              {touched.name &&
-                                errors.name &&
-                                InvalidFieldError(errors.name)}
-                            </Form.Group>
-                          </Col>
-                          <Col md={6}>
-                            <Form.Group controlId="formCountry">
-                              <Form.Label>
-                                {local_Strings.ContactUsCountryLabel}
-                              </Form.Label>
-                              <Form.Control
-                                as="select"
-                                placeholder=""
-                                value={values.country || ""}
-                                onChange={handleChange("country")}
-                                onBlur={handleBlur("country")}
-                              >
-                                <option value="">
-                                  {local_Strings.SelectItem}
-                                </option>
-                                {countries &&
-                                  countries.length > 0 &&
-                                  !!countries[0].nameEn &&
-                                  countries.map((c, i) => (
-                                    <option key={i} value={c.nameEn}>
-                                      {currentContext.language === "en"
-                                        ? c.nameEn
-                                        : c.nameAr}
-                                    </option>
-                                  ))}
-                              </Form.Control>
-                              {touched.country &&
-                                errors.country &&
-                                InvalidFieldError(errors.country)}
-                            </Form.Group>
-                          </Col>
+                          <Form.Group className="col-md-6" controlId="formName">
+                            <Form.Label>
+                              {local_Strings.ContactUsNameLabel}
+                            </Form.Label>
+                            <Form.Control
+                              type="text"
+                              placeholder=""
+                              onChange={(e) =>
+                                setFieldValue(
+                                  "name",
+                                  e.target.value.replace(
+                                    /[^a-zA-Z_\sء-ي]+/g,
+                                    ""
+                                  )
+                                )
+                              }
+                              onBlur={handleBlur("name")}
+                              value={values.name || ""}
+                              maxLength={100}
+                            />
+                            {touched.name &&
+                              errors.name &&
+                              InvalidFieldError(errors.name)}
+                          </Form.Group>
+                          <Form.Group
+                            className="col-md-6"
+                            controlId="formCountry"
+                          >
+                            <Form.Label>
+                              {local_Strings.ContactUsCountryLabel}
+                            </Form.Label>
+                            <Form.Control
+                              as="select"
+                              placeholder=""
+                              value={values.country || ""}
+                              onChange={handleChange("country")}
+                              onBlur={handleBlur("country")}
+                            >
+                              <option value="">
+                                {local_Strings.SelectItem}
+                              </option>
+                              {countries &&
+                                countries.length > 0 &&
+                                !!countries[0].nameEn &&
+                                countries.map((c, i) => (
+                                  <option key={i} value={c.nameEn}>
+                                    {currentContext.language === "en"
+                                      ? c.nameEn
+                                      : c.nameAr}
+                                  </option>
+                                ))}
+                            </Form.Control>
+                            {touched.country &&
+                              errors.country &&
+                              InvalidFieldError(errors.country)}
+                          </Form.Group>
                         </div>
                         <div className="row">
-                          <Col md={6}>
-                            <Form.Group controlId="formMobile">
-                              <Form.Label>
-                                {local_Strings.ContactUsMobileLabel}
-                              </Form.Label>
-                              <Form.Control
-                                type="text"
-                                placeholder=""
-                                onChange={(e) => setFieldValue("mobile", e.target.value)}
-                                onBlur={handleBlur("mobile")}
-                                value={values.mobile || ""}
-                                maxLength={16}
-                              />
-                              {touched.mobile &&
-                                errors.mobile &&
-                                InvalidFieldError(errors.mobile)}
-                            </Form.Group>
-                          </Col>
-                          <Col md={6}>
-                            <Form.Group controlId="formEmail">
-                              <Form.Label>
-                                {local_Strings.ContactUsEmailAddressLabel}
-                              </Form.Label>
-                              <Form.Control
-                                type="email"
-                                placeholder=""
-                                onChange={handleChange("email")}
-                                onBlur={handleBlur("email")}
-                                value={values.email || ""}
-                                maxLength={50}
-                              />
-                              {touched.email &&
-                                errors.email &&
-                                InvalidFieldError(errors.email)}
-                            </Form.Group>
-                          </Col>
+                          <Form.Group
+                            className="col-md-6"
+                            controlId="formMobile"
+                          >
+                            <Form.Label>
+                              {local_Strings.ContactUsMobileLabel}
+                            </Form.Label>
+                            <Form.Control
+                              type="text"
+                              placeholder=""
+                              onChange={(e) =>
+                                setFieldValue("mobile", e.target.value)
+                              }
+                              onBlur={handleBlur("mobile")}
+                              value={values.mobile || ""}
+                              maxLength={16}
+                            />
+                            {touched.mobile &&
+                              errors.mobile &&
+                              InvalidFieldError(errors.mobile)}
+                          </Form.Group>
+                          <Form.Group
+                            className="col-md-6"
+                            controlId="formEmail"
+                          >
+                            <Form.Label>
+                              {local_Strings.ContactUsEmailAddressLabel}
+                            </Form.Label>
+                            <Form.Control
+                              type="email"
+                              placeholder=""
+                              onChange={handleChange("email")}
+                              onBlur={handleBlur("email")}
+                              value={values.email || ""}
+                              maxLength={50}
+                            />
+                            {touched.email &&
+                              errors.email &&
+                              InvalidFieldError(errors.email)}
+                          </Form.Group>
                         </div>
                         <div className="row">
                           <Col md={12}>
