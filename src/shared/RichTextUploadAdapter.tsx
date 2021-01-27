@@ -2,6 +2,7 @@ import Constant from "../constants/defaultData";
 import jwtDecode, { JwtPayload } from "jwt-decode";
 import moment from "moment";
 import { authenticate } from "../services/authenticationService";
+import oidc from "../services/oidc-config.json";
 
 class RichTextUploadAdapter {
     private loader: any;
@@ -31,32 +32,33 @@ class RichTextUploadAdapter {
         }
     }
 
-    // Example implementation using XMLHttpRequest.
     _initRequest() {
         const xhr = this.xhr = new XMLHttpRequest();
 
         xhr.open('POST', this.url, true);
         xhr.setRequestHeader('Content-Type', "application/json;charset=UTF-8");
 
-        const token = localStorage.getItem(Constant.AccessTokenStorageKey);
-        if (token) {
-            if (moment(jwtDecode<JwtPayload>(token).exp * 1000)
-                .isBefore(moment().toDate())) {
+        const token = JSON.parse(localStorage.getItem(oidc.storage_key)) || "";
+        xhr.setRequestHeader('Authorization', `Bearer ${token["access_token"]}`);
+        
+        // if (token) {
+        //     if (moment(jwtDecode<JwtPayload>(token).exp * 1000)
+        //         .isBefore(moment().toDate())) {
 
-                // authenticate("101102", "Mm@123123").then(
-                //     () =>
-                //         window.location.reload()
-                // );
+        //         // authenticate("101102", "Mm@123123").then(
+        //         //     () =>
+        //         //         window.location.reload()
+        //         // );
 
-                ////session expired and required login
-                localStorage.removeItem(Constant.AccessTokenStorageKey);
-                localStorage.removeItem(Constant.LoginDetailsStorageKey);
-                window.location.href = `/${window.location.pathname.split("/")[1]}`;
+        //         ////session expired and required login
+        //         localStorage.removeItem(Constant.AccessTokenStorageKey);
+        //         localStorage.removeItem(Constant.LoginDetailsStorageKey);
+        //         window.location.href = `/${window.location.pathname.split("/")[1]}`;
 
-            } else {
-                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-            }
-        }
+        //     } else {
+        //         xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+        //     }
+        // }
     }
 
     // Initializes XMLHttpRequest listeners.
@@ -116,7 +118,6 @@ class RichTextUploadAdapter {
             }
         });
     }
-
 }
 
 export default RichTextUploadAdapter;

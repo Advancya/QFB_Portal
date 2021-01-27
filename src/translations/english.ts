@@ -70,9 +70,9 @@ const en = {
   AnonymousLandingInquiryText: "For any inquiries, ",
   AnonymousLandingInquiryLink: "Contact us",
   AnonymousLandingStockSectionTitle: " Qatar First Bank Stock Price",
-  AnonymousLandingStockSectionStockPriceLabel: "Stock Price",
+  AnonymousLandingStockSectionStockPriceLabel: "Current Price",
   AnonymousLandingStockSectionChangeLabel: "Change",
-  AnonymousLandingStockSectionLastPriceLabel: "Last Price",
+  AnonymousLandingStockSectionLastPriceLabel: "Prevuios Close",
   AnonymousLandingProductsAndOffers: "Products and Offers ",
   AnonymousLandingPublicNews: "Latest News",
 
@@ -550,7 +550,7 @@ const en = {
   ChangePassword_InvalidationMsg:
     "Password must be minimum 7 characters & include at least 1 number and capital letter",
   ChangePassword_ConfirmRequiredMsg: "Confirm password is required",
-  ChangePassword_MustMatchMsg: "Passwords must match",
+  ChangePassword_MustMatchMsg: "Password doesn't match",
 
   DrawerAnonymoudSignIn: "Login",
   DrawerAnonymoudRegister: "Register",

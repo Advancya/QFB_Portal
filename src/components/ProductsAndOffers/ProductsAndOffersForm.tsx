@@ -22,7 +22,6 @@ import PuffLoader from "react-spinners/PuffLoader";
 import Swal from "sweetalert2";
 import xIcon from "../../images/x-icon.svg";
 import RichTextEditor from "../../shared/RichTextEditor";
-import RichTextUploadAdapter from "../../shared/RichTextUploadAdapter";
 import * as helper from "../../Helpers/helper";
 
 interface DetailsProps {
@@ -291,12 +290,6 @@ function ProductsAndOffersForm(props: DetailsProps) {
       </Modal.Body>
     </Modal>
   );
-}
-
-function CustomUploadAdapterPlugin(editor) {
-  editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
-      return new RichTextUploadAdapter(loader)
-  }
 }
 
 export default ProductsAndOffersForm;

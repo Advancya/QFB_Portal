@@ -100,7 +100,7 @@ function CashDetails(props: iCashDetails) {
             <div className="col-4 col-sm-3">
               <h5>{local_Strings.CurrentBalanceLabel}</h5>
               <h4>
-                {props.cashItem.balance +
+                {helper.ConvertToQfbNumberFormatWithFraction(props.cashItem.balance) +
                   " " +
                   props.cashItem.currency}
               </h4>

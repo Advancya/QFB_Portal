@@ -36,4 +36,10 @@ async function GetBanks() {
   }
 }
 
-export { GetTransactionTypes, GetCurrencies, GetCountries, GetBanks };
+
+async function ConvertUTCDateToLocalDate(date: Date) {
+  var newDate = new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000);
+  return newDate;
+}
+
+export { ConvertUTCDateToLocalDate, GetTransactionTypes, GetCurrencies, GetCountries, GetBanks };

@@ -45,55 +45,57 @@ const HoldingsLanding = () => {
 
     const name = e.point.name;
     const saId = e.point.key;
+    if (e.point.drilldown) {
+      setLoading(true);
 
-    setLoading(true);
-
-    GetLiveHoldings_2ndDrill_Investment(
-      currentContext.selectedCIF,
-      saId,
-      currentContext.userSettings.currency
-    )
-      .then((responseData: any) => {
-        if (responseData.length > 0) {
-          const chart_Live_2ndDrill_Investment = helper.prepareInvestmentHoldings2ndDrill(
-            responseData,
-            name,
-            currentContext.language
-          );
-          setInvestment_Live_2ndDrill(chart_Live_2ndDrill_Investment as any);
-          setLive2ndDrillShow(true);
-        }
-      })
-      .catch((e: any) => console.log(e))
-      .finally(() => setLoading(false));
+      GetLiveHoldings_2ndDrill_Investment(
+        currentContext.selectedCIF,
+        saId,
+        currentContext.userSettings.currency
+      )
+        .then((responseData: any) => {
+          if (responseData.length > 0) {
+            const chart_Live_2ndDrill_Investment = helper.prepareInvestmentHoldings2ndDrill(
+              responseData,
+              name,
+              currentContext.language
+            );
+            setInvestment_Live_2ndDrill(chart_Live_2ndDrill_Investment as any);
+            setLive2ndDrillShow(true);
+          }
+        })
+        .catch((e: any) => console.log(e))
+        .finally(() => setLoading(false));
+    }
   };
 
   const loadClosedHoldings2ndDrill = (e: any) => {
 
     const name = e.point.name;
     const saId = e.point.key;
-
-    setLoading(true);
-    GetClosedHoldings_2ndDrill_Investment(
-      currentContext.selectedCIF,
-      saId,
-      currentContext.userSettings.currency
-    )
-      .then((responseData: any) => {
-        if (responseData.length > 0) {
-          const chart_Closed_2ndDrill_Investment = helper.prepareInvestmentHoldings2ndDrill(
-            responseData,
-            name,
-            currentContext.language
-          );
-          setInvestment_Closed_2ndDrill(
-            chart_Closed_2ndDrill_Investment as any
-          );
-          setClosed2ndDrillShow(true);
-        }
-      })
-      .catch((e: any) => console.log(e))
-      .finally(() => setLoading(false));
+    if (e.point.drilldown) {
+      setLoading(true);
+      GetClosedHoldings_2ndDrill_Investment(
+        currentContext.selectedCIF,
+        saId,
+        currentContext.userSettings.currency
+      )
+        .then((responseData: any) => {
+          if (responseData.length > 0) {
+            const chart_Closed_2ndDrill_Investment = helper.prepareInvestmentHoldings2ndDrill(
+              responseData,
+              name,
+              currentContext.language
+            );
+            setInvestment_Closed_2ndDrill(
+              chart_Closed_2ndDrill_Investment as any
+            );
+            setClosed2ndDrillShow(true);
+          }
+        })
+        .catch((e: any) => console.log(e))
+        .finally(() => setLoading(false));
+    }
   };
 
   const [isLoading, setLoading] = useState(false);
@@ -215,6 +217,13 @@ const HoldingsLanding = () => {
       initialLoadMethod();
     }
   }, [currentContext.selectedCIF, currentContext.language]);
+
+  useEffect(() => {
+    if (!showHoldingsLandingModal) {
+      setLive2ndDrillShow(false);
+      setClosed2ndDrillShow(false);
+    }
+  }, [showHoldingsLandingModal]);
 
   const showLiveHoldings = () => {
     setLoading(true);
@@ -418,7 +427,7 @@ const HoldingsLanding = () => {
                     />
                   ) : !showNoDataDepositClosed ? null :
                       NoResult(local_Strings.NoClosedHoldingsMesageDeposit)}
-                </div>                
+                </div>
                 {!isClosed2ndDrillShow && !isLoading ? (
                   <PieChart
                     highcharts={Highcharts}

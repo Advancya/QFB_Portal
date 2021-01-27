@@ -35,7 +35,6 @@ import MultiSelect from "react-multi-select-component";
 import axios from "axios";
 import { CustomerListContext } from "../../pages/Admin/Admin";
 import xIcon from "../../images/x-icon.svg";
-
 import RichTextEditor from "../../shared/RichTextEditor";
 import Swal from "sweetalert2";
 const mime = require("mime");
@@ -74,7 +73,9 @@ function OffersForm(props: DetailsProps) {
   const submitTheRecord = async (values: any) => {
     setLoading(true);
 
-    const requests = [];
+    values.selectedOfferDetails = helper.appendAnchorToImageTag(values.selectedOfferDetails);
+    values.selectedOfferDetailsAr = helper.appendAnchorToImageTag(values.selectedOfferDetailsAr);
+
     values.selectedCIFs.forEach(async (element: IKeyValuePair) => {
       const item = {
         cif: element.value,
@@ -110,6 +111,10 @@ function OffersForm(props: DetailsProps) {
 
   const updateRecord = async (values: any) => {
     setLoading(true);
+
+    values.selectedOfferDetails = helper.appendAnchorToImageTag(values.selectedOfferDetails);
+    values.selectedOfferDetailsAr = helper.appendAnchorToImageTag(values.selectedOfferDetailsAr);
+
     const x = await UpdateOfferDetail(values);
     if (x) {
       Swal.fire({
@@ -186,9 +191,9 @@ function OffersForm(props: DetailsProps) {
   const options =
     customerList && customerList.length > 0
       ? customerList.map((c) => ({
-          value: c.id ? c.id : "",
-          label: c.shortName ? c.shortName : "",
-        }))
+        value: c.id ? c.id : "",
+        label: c.shortName ? c.shortName : "",
+      }))
       : [];
 
   return (
@@ -261,8 +266,8 @@ function OffersForm(props: DetailsProps) {
                         options={options}
                         value={
                           values.selectedCIFs &&
-                          values.selectedCIFs.length > 0 &&
-                          values.selectedCIFs[0].value !== "0"
+                            values.selectedCIFs.length > 0 &&
+                            values.selectedCIFs[0].value !== "0"
                             ? values.selectedCIFs
                             : null
                         }
@@ -281,12 +286,12 @@ function OffersForm(props: DetailsProps) {
                         InvalidFieldError("Select at least one customer")}
                     </React.Fragment>
                   ) : (
-                    <span className="box-brief mb-3">
-                      {values.selectedCIFs && values.selectedCIFs.length > 0
-                        ? values.selectedCIFs[0].label
-                        : ""}
-                    </span>
-                  )}
+                      <span className="box-brief mb-3">
+                        {values.selectedCIFs && values.selectedCIFs.length > 0
+                          ? values.selectedCIFs[0].label
+                          : ""}
+                      </span>
+                    )}
                 </div>
                 <div className="form-group">
                   <label>{local_Strings.OfferNameLabel}</label>
@@ -340,87 +345,33 @@ function OffersForm(props: DetailsProps) {
                 <div className="form-group">
                   <label>{local_Strings.selectedOfferDetailsLabel}</label>
                   {props.editable ? (
-                    <CKEditor
-                      editor={ClassicEditor}
-                      data={values.selectedOfferDetails || ""}
-                      onChange={(event: any, editor: any) => {
-                        const _text = editor.getData();
-                        setFieldValue("selectedOfferDetails", _text);
-                      }}
-                      config={{
-                        //plugins: [Base64UploadAdapter],
-                        toolbar: [
-                          "heading",
-                          "|",
-                          "bold",
-                          "italic",
-                          "|",
-                          "link",
-                          "bulletedList",
-                          "numberedList",
-                          "blockQuote",
-                          "|",
-                          "undo",
-                          "redo",
-                        ],
-                        allowedContent: true,
-                        extraAllowedContent: "div(*)",
-                        language: "en",
-                        content: "en",
-                      }}
-                    />
+                    <RichTextEditor language="en" value={values.selectedOfferDetails}
+                      onChange={handleChange("selectedOfferDetails")} />
                   ) : (
-                    <span className="box-brief mb-3">
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: values.selectedOfferDetails,
-                        }}
-                      />
-                    </span>
-                  )}
+                      <span className="box-brief mb-3">
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: values.selectedOfferDetails,
+                          }}
+                        />
+                      </span>
+                    )}
                   {/* <RichTextEditor/> */}
                 </div>
                 <div className="form-group">
                   <label>{local_Strings.selectedOfferDetailsArLabel}</label>
                   {props.editable ? (
-                    <CKEditor
-                      editor={ClassicEditor}
-                      data={values.selectedOfferDetailsAr || ""}
-                      onChange={(event: any, editor: any) => {
-                        const _text = editor.getData();
-                        setFieldValue("selectedOfferDetailsAr", _text);
-                      }}
-                      config={{
-                        //plugins: [Base64UploadAdapter],
-                        toolbar: [
-                          "heading",
-                          "|",
-                          "bold",
-                          "italic",
-                          "|",
-                          "link",
-                          "bulletedList",
-                          "numberedList",
-                          "blockQuote",
-                          "|",
-                          "undo",
-                          "redo",
-                        ],
-                        allowedContent: true,
-                        extraAllowedContent: "div(*)",
-                        language: "ar",
-                        content: "ar",
-                      }}
-                    />
+                    <RichTextEditor language="ar" value={values.selectedOfferDetailsAr}
+                      onChange={handleChange("selectedOfferDetailsAr")} />
                   ) : (
-                    <span className="box-brief mb-3">
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: values.selectedOfferDetailsAr,
-                        }}
-                      />
-                    </span>
-                  )}
+                      <span className="box-brief mb-3">
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: values.selectedOfferDetailsAr,
+                          }}
+                        />
+                      </span>
+                    )}
                 </div>
                 <div className="form-group">
                   <label>{local_Strings.OfferAttachment}</label>

@@ -7,8 +7,8 @@ import { AuthContext, User } from "../providers/AuthProvider";
 import InvalidFieldError from "../shared/invalid-field-error";
 import { localStrings as local_Strings } from "../translations/localStrings";
 import * as helper from "../Helpers/helper";
-import { SendOTP } from "../services/cmsService";
-import { authenticate } from "../services/authenticationService";
+import { AddToLogs, SendOTP } from "../services/cmsService";
+import { IsAccountLocked, checkUsernameAndPassword } from "../services/authenticationService";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import Constant from "../constants/defaultData";
@@ -32,7 +32,7 @@ const Login: React.FC<IProps> = (props) => {
 
   const submitLogin = async (values: User) => {
     setLoading(true);
-    const isValidCredentials = await authenticate(
+    const isValidCredentials = await checkUsernameAndPassword(
       values.username,
       values.password
     );
@@ -51,15 +51,28 @@ const Login: React.FC<IProps> = (props) => {
           setLoading(false);
         });
     } else {
-      setLoading(false);
-
-      Swal.fire({
-        position: "top-end",
-        icon: "error",
-        title: local_Strings.landingPageInvaildLoginMessage,
-        showConfirmButton: false,
-        timer: Constant.AlertTimeout,
+      
+      AddToLogs("Login Failure", "Login Failure", values.username);
+      IsAccountLocked(values.username).then((res) => {
+        if (res === true) {
+          Swal.fire({
+            position: "top-end",
+            icon: "error",
+            title: local_Strings.LoginWithCredentialsLockedErrorMessage,
+            showConfirmButton: false,
+            timer: Constant.AlertTimeout,
+          });
+        } else {
+          Swal.fire({
+            position: "top-end",
+            icon: "error",
+            title: local_Strings.LoginWithCredentialsErrorMessage,
+            showConfirmButton: false,
+            timer: Constant.AlertTimeout,
+          });
+        }
       });
+      setLoading(false);      
     }
   };
 

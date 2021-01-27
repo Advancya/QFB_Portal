@@ -11,10 +11,6 @@ import moment from "moment";
 import { Formik } from "formik";
 import * as yup from "yup";
 import InvalidFieldError from "../../shared/invalid-field-error";
-import CKEditor from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import "@ckeditor/ckeditor5-build-classic/build/translations/ar.js";
-//import Base64UploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/base64uploadadapter';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {
@@ -25,10 +21,11 @@ import Constant from "../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import fileIcon from "../../images/pdf.png";
-import * as helper from "../../Helpers/helper";
 import { saveAs } from "file-saver";
 import Swal from "sweetalert2";
 import xIcon from "../../images/x-icon.svg";
+import RichTextEditor from "../../shared/RichTextEditor";
+import * as helper from "../../Helpers/helper";
 
 const mime = require("mime");
 
@@ -77,19 +74,23 @@ function DocumentForm(props: DetailsProps) {
 
   const submitTheRecord = async (values: IDocumentDetail) => {
     setLoading(true);
+
+    values.documentDescription = helper.appendAnchorToImageTag(values.documentDescription);
+    values.documentDescriptionAr = helper.appendAnchorToImageTag(values.documentDescriptionAr);
+
     const item =
       values.id > 0
         ? values
         : {
-            documentName: values.documentName,
-            documentNameAr: values.documentNameAr,
-            documentDate: moment(values.documentDate).utc(true),
-            documentDescription: values.documentDescription,
-            documentDescriptionAr: values.documentDescriptionAr,
-            fileName: values.fileName,
-            fileContent: values.fileContent,
-            orderId: values.orderId,
-          };
+          documentName: values.documentName,
+          documentNameAr: values.documentNameAr,
+          documentDate: moment(values.documentDate).utc(true),
+          documentDescription: values.documentDescription,
+          documentDescriptionAr: values.documentDescriptionAr,
+          fileName: values.fileName,
+          fileContent: values.fileContent,
+          orderId: values.orderId,
+        };
 
     const x =
       values.id > 0
@@ -285,95 +286,41 @@ function DocumentForm(props: DetailsProps) {
                   <label>{local_Strings.documentShortDescription}</label>
                   {props.editable ? (
                     <React.Fragment>
-                      <CKEditor
-                        editor={ClassicEditor}
-                        data={values.documentDescription || ""}
-                        onChange={(event: any, editor: any) => {
-                          const _text = editor.getData();
-                          setFieldValue("documentDescription", _text);
-                        }}
-                        config={{
-                          //plugins: [Base64UploadAdapter],
-                          toolbar: [
-                            "heading",
-                            "|",
-                            "bold",
-                            "italic",
-                            "|",
-                            "link",
-                            "bulletedList",
-                            "numberedList",
-                            "blockQuote",
-                            "|",
-                            "undo",
-                            "redo",
-                          ],
-                          allowedContent: true,
-                          extraAllowedContent: "div(*)",
-                          language: "en",
-                          content: "en",
-                        }}
-                      />
+                      <RichTextEditor language="en" value={values.documentDescription}
+                        onChange={handleChange("documentDescription")} />
                       {touched.documentDescription &&
                         errors.documentDescription &&
                         InvalidFieldError(errors.documentDescription)}
                     </React.Fragment>
                   ) : (
-                    <span className="box-brief mb-3">
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: values.documentDescription,
-                        }}
-                      />
-                    </span>
-                  )}
+                      <span className="box-brief mb-3">
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: values.documentDescription,
+                          }}
+                        />
+                      </span>
+                    )}
                 </div>
                 <div className="form-group">
                   <label>{local_Strings.documentShortDescriptionAr}</label>
                   {props.editable ? (
                     <React.Fragment>
-                      <CKEditor
-                        editor={ClassicEditor}
-                        data={values.documentDescriptionAr || ""}
-                        onChange={(event: any, editor: any) => {
-                          const _text = editor.getData();
-                          setFieldValue("documentDescriptionAr", _text);
-                        }}
-                        config={{
-                          //plugins: [Base64UploadAdapter],
-                          toolbar: [
-                            "heading",
-                            "|",
-                            "bold",
-                            "italic",
-                            "|",
-                            "link",
-                            "bulletedList",
-                            "numberedList",
-                            "blockQuote",
-                            "|",
-                            "undo",
-                            "redo",
-                          ],
-                          allowedContent: true,
-                          extraAllowedContent: "div(*)",
-                          language: "ar",
-                          content: "ar",
-                        }}
-                      />
+                      <RichTextEditor language="ar" value={values.documentDescriptionAr}
+                        onChange={handleChange("documentDescriptionAr")} />
                       {touched.documentDescriptionAr &&
                         errors.documentDescriptionAr &&
                         InvalidFieldError(errors.documentDescriptionAr)}
                     </React.Fragment>
                   ) : (
-                    <span className="box-brief mb-3">
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: values.documentDescriptionAr,
-                        }}
-                      />
-                    </span>
-                  )}
+                      <span className="box-brief mb-3">
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: values.documentDescriptionAr,
+                          }}
+                        />
+                      </span>
+                    )}
                 </div>
                 <div className="form-group">
                   <label>{local_Strings.OfferAttachment}</label>

@@ -5,14 +5,14 @@ const ar = {
   FooterItem2: "أخبار",
   FooterItem3: "المنتجات",
   FooterItem4: "اتصل بنا",
-  FooterItem5: "القابضة",
+  FooterItem5: "الأصول",
   FooterItem6: "المعاملات",
   FooterItem7: "الطلبات",
   FooterItem8: "عروض",
   FooterItem9: "محفظة العملاء",
   FooterItem10: "طلبات العميل",
   FooterItem11: "مناصب البنك",
-  AnonymousTermsTitle: "الشروط و الاحكام",
+  AnonymousTermsTitle: "الشروط و الأحكام",
   AnonymousTermsDesc:
     "تطبيق خدمات بنك قطر الأول الإلكترونية هو تطبيق موجه فقط لاستخدام 'المستثمر المؤهل'. من خلال استعمال هذا التطبيق يقر العميل على مسؤوليته الخاصة بأنه يستوفي جميع معايير التأهل 'للمستثمر المؤهل' كما ورد تعريفه في هذه الأحكام والشروط، وفي قوانين مركز قطر للمال بصيغتها المعدلة من وقت لآخر.",
 
@@ -69,7 +69,7 @@ const ar = {
   AnonymousLandingInquiryText: "لأية استفسارات ، ",
   AnonymousLandingInquiryLink: "اتصل بنا",
   AnonymousLandingStockSectionTitle: " سعر سهم بنك قطر الأول",
-  AnonymousLandingStockSectionStockPriceLabel: " السعر الحالي",
+  AnonymousLandingStockSectionStockPriceLabel: "السعر الحالي",
   AnonymousLandingStockSectionChangeLabel: "التغيير",
   AnonymousLandingStockSectionLastPriceLabel: "آخر سعر ",
   AnonymousLandingProductsAndOffers: "المنتجات والعروض",
@@ -92,7 +92,7 @@ const ar = {
   PasswordResetHint: "يرجى ملء الحقول أدناه لإعادة تعيين كلمة المرور الخاصة بك",
   PasswordResetUserNameLabel: "ادخل اسم المستخدم",
   PasswordResetMobileLabel:
-    "أدخل رقم الهاتف المحمول (يحتوي علي كود الدولة, مثال 97412345678+)",
+    "رقم الهاتف المحمول (يحتوي علي كود الدولة, مثال 97412345678+)",
   PasswordResetEmailLabel: "أدخل البريد الإلكتروني",
   PasswordResetButton: "إرسال",
 
@@ -116,7 +116,7 @@ const ar = {
   SignUpStep1EmailLabel: "البريد الإلكتروني المسجل لدى البنك",
   SignUpStep1Mobile:
     "الهاتف المحمول المسجل لدى البنك (يحتوي علي كود الدولة , مثال:97412345678+)",
-  SignUpStep1Button: "التالى",
+  SignUpStep1Button: "التالي",
   SignUpStep1Pager: "الخطوة 1 من 3",
 
   SignUpStep1CIFRegisterBefore: "رقم تعريف العميل مسجل من قبل",
@@ -125,7 +125,7 @@ const ar = {
   SignUpStep2Hint: "يرجى متابعة عملية التسجيل الخاصة بك",
   SignUpStep2EnterPassword: "أدخل كلمة المرور",
   SignUpStep2ConfirmPassword: "تأكيد كلمة المرور",
-  SignUpStep2Button: "التالى",
+  SignUpStep2Button: "التالي",
   SignUpStep2Pager: "الخطوة 2 من 3",
 
   SignUpStep3Title: "تسجيل",
@@ -136,15 +136,15 @@ const ar = {
   SignUpStep3Pager: "الخطوة 3 من 3",
 
   WelcomeScreenMsg:
-    "أهلا بك {0} في بنك QFB ، نحن سعداء بخدمتك وكونك عميل ، ونأمل أن نلبي جميع احتياجاتك ..",
+    "أهلا بك {0} في بنك قطر الأول  ، نحن سعداء بخدمتك وكونك عميل ، ونأمل أن نلبي جميع احتياجاتك ..",
   WelcomeScreenTitle: "أهلا بك",
   WelcomeScreenPopUpTitle: "اطلب معاودة الاتصال بي",
-  WelcomeScreenPopUpMessage: "تم إرسال طلبك إلى ",
+  WelcomeScreenPopUpMessage: "تم إرسال طلبك",
   WelcomeScreenClose: "أغلق",
   WelcomeScreenCall: "اتصل",
   WelcomeScreenSMS: "رسالة",
   WelcomeScreenEmail: "البريد",
-  WelcomeScreenCallMeBackLabel: "يرجى من مدير العلاقه االتواصل معنا",
+  WelcomeScreenCallMeBackLabel: "يرجى من مدير العلاقة التواصل معنا",
   WelcomeScreenRMNameLabel: "اسم مدير العلاقة",
   WelcomeScreenRMPhoneLabel: "رقم المكتب",
   WelcomeScreenRMMobileLabel: "رقم الهاتف المحمول",
@@ -154,10 +154,10 @@ const ar = {
   PortfolioTitle: "محفظة",
   PortfolioAssetsTitle: "الأصول",
   PortfolioAssetsOption1: "النقد",
-  PortfolioAssetsOption2: "الاستثمارات",
+  PortfolioAssetsOption2: "الإستثمارات",
   PortfolioAssetsOption3: "الوديعة لأجل",
   PortfolioLiabilitiesTitle: "الإلتزامات",
-  PortfolioLiabilitiesOption1: "القروض",
+  PortfolioLiabilitiesOption1: "التسهيلات",
   PortfolioLiabilitiesOption2: "الضمانات البنكيه",
   // PortfolioBG: require("../../assets/images/Intersection2Ar.png"),
   PortfolioCurrencyType: "ريال",
@@ -167,8 +167,8 @@ const ar = {
 
   landingPageInvaildLoginMessage: "اسم المستخدم او كلمه المرور غير صحيحة",
 
-  CashListingTitle: "قائمة الحساب النقدي",
-  CashListingCash: "السيولة النقدية",
+  CashListingTitle: "قائمة الحسابات النقدية",
+  CashListingCash: "النقد",
   CashListingCurrency: "ريال قطري",
   CashListingAccountNumberLabel: "رقم الحساب | ",
 
@@ -195,7 +195,7 @@ const ar = {
   CaretIconRight: "caretleft",
 
   DepositeListingTitle: "قائمة حساب الإيداع",
-  DepositeListingCash: "الإيداع",
+  DepositeListingCash: "الودائع لأجل",
   DepositeListingCurrency: "ريال قطري",
   DepositeListingAccountNumberLabel: "رقم الإيداع | ",
 
@@ -224,16 +224,16 @@ const ar = {
   DepositeDetailsBeneficiaryAccount: "حساب المستفيد",
   DepositeDetailsPaymentDetails: "بيانات الدفع",
 
-  InvestmentsListingTitle: "قائمة حساب الاستثمار",
-  InvestmentsListingCash: "الاستثمارات",
+  InvestmentsListingTitle: "قائمة الإستثمارات",
+  InvestmentsListingCash: "الإستثمارات",
   InvestmentsListingCurrency: "ريال قطري",
   InvestmentsListingAccountNumberLabel: "رقم الاستثمار | ",
 
-  LoanListing: "قائمة القروض",
+  LoanListing: "قائمة التسهيلات",
 
   DepositDetail: "تفاصيل الإيداع",
-  InvestmentDetail: "تفاصيل الاستثمار",
-  LoanDetail: "تفاصيل القروض",
+  InvestmentDetail: "تفاصيل الإستثمار",
+  LoanDetail: "تفاصيل التسهيلات",
 
   BuyAndSellTransactionsListing_NoData: "لم يتم العثور على معاملات",
   ReceivedProfitTransactionsListing_NoData: "لم يتم العثور على معاملات الربح",
@@ -249,9 +249,9 @@ const ar = {
   DepositNo: "رقم الإيداع | ",
   AccountNo: "رقم الحساب | ",
   InvestmentNo: "رقم الاستثمار | ",
-  LoanNo: "رقم المرفق | ",
-  Amount: "مُبَلِّغ",
-  Description: "أَوْصاف",
+  LoanNo: "رقم التسهيل | ",
+  Amount: "المبلغ",
+  Description: "الوصف",
   Cash: "السيولة النقدية",
   Deposit: "الوديعة",
   Investment: "الاستثمار",
@@ -259,11 +259,11 @@ const ar = {
   BuyAndSellTransactions_Status_Buy: "شراء",
   BuyAndSellTransactions_Status_Sell: "بيع",
   CashDetails_Filter_Debit: "مدين",
-  CashDetails_Filter_Credit: "ائتمان",
+  CashDetails_Filter_Credit: "دائن",
   HistoricalPayments_PastDueSettlement: "تسوية المتاخرات",
   HistoricalPayments_SettlemenOfPayment: "تسوية المدفوعات",
-  OutstandingPayments_PastDueSettlement: "Past Due Payment",
-  OutstandingPayments_SettlemenOfPayment: "Payment of Facility",
+  OutstandingPayments_PastDueSettlement: "تسوية المتاخرات",
+  OutstandingPayments_SettlemenOfPayment: "تسوية المدفوعات",
 
   DepositsAndReceivedProfit: "الودائع والأرباح المحصلة",
   ClickToViewTheAccumulatedProfitReceived:
@@ -297,7 +297,7 @@ const ar = {
 
   BankGuarantee: "ضمان بنكي",
   GuaranteeNo: "رقم الضمان | ",
-  BankGuaranteeListing: "قائمة الضمان البنكي",
+  BankGuaranteeListing: "قائمة الضمانات البنكية",
   BankGuaranteeDetails: "تفاصيل الضمان البنكي",
 
   ViewReceivedProfit: "الأرباح المستلمة",
@@ -313,11 +313,11 @@ const ar = {
   InvestmentsDetailsBuyAndSell: "معاملات البيع والشراء",
   InvestmentsDetailsLocationSample: "الدوحة قطر",
 
-  NewsListingTitle: "قائمة الأخبار العامة في QFP",
+  NewsListingTitle: "قائمة الأخبار العامة في بنك قطر الأول",
   NewsListingDateSample: "08-08-2020",
   NewsListingTitleSample:
     "بنك قطر الأول يستحوذ على مقر شركة بي إس إن سبورتس فارسيتي براندز في تكساس بنك قطر رسيتي براندز في تكساس",
-  NewsDetailsTitle: "تفاصيل أخبار QFP العامة",
+  NewsDetailsTitle: "تفاصيل الخبر",
 
   OffersListingTitle: "قائمة العروض",
   OffersDetailsTitle: "تفاصيل العروض",
@@ -327,7 +327,7 @@ const ar = {
   OfferSelectCurrencyLabel: "عملة الاشتراك",
   OfferButton: "إرسال",
 
-  RequestListingTitle: "الطلبات",
+  RequestListingTitle: "قائمة الطلبات",
   RequestListingAddButton: "طلب جديد",
   RequestListingFilterButton: "تنقية",
   RequestListingSampleStatus: "مغلق",
@@ -359,10 +359,10 @@ const ar = {
   RequestOTPResendOTP: "إعادة إرسال رمز المرور؟",
   RequestOTPButton: "تأكيد",
 
-  TransactionsListingTitle: "المعاملات",
+  TransactionsListingTitle: "قائمة المعاملات",
   TransactionsListingFilterButton: "تنقية",
   TransactionsListingBeneficiariesButton: "المستفيدون",
-  TransactionsListingNewButton: "طلب معاملة جديدة",
+  TransactionsListingNewButton: "جديد",
   TransactionsListingTitleSample: "التحويل لأحمد محمد",
   TransactionsListingStatus: "ألغيت",
   TransactionsDetailsTitle: "تفاصيل المعاملات",
@@ -380,15 +380,15 @@ const ar = {
 
   BeneficiariesListingTitle: "قائمة المستفيدون",
   BeneficiariesListingIDLabel: "هوية المستفيدين | ",
-  BeneficiariesListingCountrySample: "دولة قطر",
+  BeneficiariesListingCountrySample: "قطر",
 
   NewBeneficiaryTitle: "إضافة مستفيد جديد",
   EditBeneficiaryTitle: "تعديل مستفيد",
   BeneficiaryTransferTypeLabel: "نوع المستفيد",
   BeneficiaryIDLabel: "هوية المستفيد",
   BeneficiaryNickNameLabel: "القب",
-  BeneficiaryQFBAccountOrIBAN: "رقم حساب QFB المستفيد أو IBAN",
-  BeneficiaryBankLabel: "البنك المستفيد",
+  BeneficiaryQFBAccountOrIBAN: "رقم حساب المستفيد في بنك قطر الأول أو الأيبان",
+  BeneficiaryBankLabel: "بنك المستفيد",
   BeneficiarySwiftCodeLabel: "رمز الSWIFT للبنك المستفيد",
   BeneficiaryFullNameLabel: "الاسم الكامل للمستفيد",
   BeneficiaryAccountNumberLabel: "رقم حساب المستفيد",
@@ -401,9 +401,9 @@ const ar = {
   BeneficiaryIntermediaryBankLabel: " اسم البنك الوسيط ",
   BeneficiaryForeignCurrencyLabel: "عملة المستفيد ",
   BeneficiaryRoutingNumberLabel: "رقم التوجيه / رمز التصنيف ، إن وجد",
-  BeneficiaryIBANLabel: "IBAN المستفيد",
-  BeneficiaryIBANInternationalLabel: "IBAN المستفيد (إن وجد)",
-  BeneficiaryIntermediaryBankSwiftCodeLabel: "رمز الSWIFT للبنك الوسيط",
+  BeneficiaryIBANLabel: "أيبان المستفيد",
+  BeneficiaryIBANInternationalLabel: "أيبان المستفيد (إن وجد)",
+  BeneficiaryIntermediaryBankSwiftCodeLabel: "رمز السويفت للبنك الوسيط",
 
   BeneficiaryAddressLabel: "عنوان المستفيد ",
   BeneficiarySaveButton: "حفظ",
@@ -443,14 +443,14 @@ const ar = {
   RMClienPortfolioListingTitle: "قائمة محافظ العملاء",
   ClienPortfolioListingTitle: " محافظ العملاء",
 
-  RMDetailsCIFLabel: "CIF",
+  RMDetailsCIFLabel: "رقم تعريف العميل",
   RMDetailsNameLabel: "الاسم",
   RMDetailsMobileLabel: "رقم الهاتف المحمول",
   RMDetailsRequestDetailsLabel: "تفاصيل الطلب",
   RMDetailsChangeRequestStatusLabel: "تغيير حالة الطلب",
   RMDetailsbutton: "حفظ",
 
-  InboxMessageListingTitle: "رسائل البريد الوارد",
+  InboxMessageListingTitle: "قائمة رسائل البريد الوارد",
   InboxMessageListingFilterWithLabel: "تصفية ب",
   InboxMessageListingAsOfLabel: "اعتبارا من:",
 
@@ -472,14 +472,15 @@ const ar = {
 
   ContactUsNameLabel: "الاسم",
   ContactUsCountryLabel: "البلد",
-  ContactUsMobileLabel: "أدخل رقم الهاتف المحمول (مثال 97412345678+)",
-  ContactUsEmailAddressLabel: "عنوان بريد الكتروني",
+  ContactUsMobileLabel:
+    "رقم الهاتف المحمول(يحتوي علي كود الدولة, مثال 97412345678+)",
+  ContactUsEmailAddressLabel: "عنوان البريد الإلكتروني",
   ContactUsQueryLabel: "الموضوع",
   SignupSuccessTitle: "تم الإرسال",
-  SignupSuccessMessage: "تهانينا ، أنت الآن مسجل في تطبيق QFB للجوال.",
+  SignupSuccessMessage: "تهانيا. أنت الان مسجل في تطبيق بنك قطر الأول للجوال",
 
   RequestSuccessTitle: "تم الإرسال",
-  RequestSuccessMessage: "تم تقديم طلبك ، وسنتواصل معك قريبًا",
+  RequestSuccessMessage: "تم استلام الطلب ؛ سيتم الاتصال بك في اقرب وقت",
 
   PasswordResetSuccessTitle: "تم الإرسال",
   PasswordResetSuccessMessage:
@@ -489,9 +490,9 @@ const ar = {
   NewRequestSubmitRequiredMessage:
     "الرجاء إدخال جميع الحقول المطلوبة والتأكد من ملء حقل واحد على الأقل",
   NewRequestSubmitInvalidDate: "إلي تاريخ يجب أن يكون أكبر من من تاريخ",
-  ManagementLandingTitle: "الإدارة",
-  ManagementLandingItem1Title: "مناصب البنك",
-  ManagementLandingItem2Title: "محافظ العملاء",
+  ManagementLandingTitle: "مرحبا الإدارة",
+  ManagementLandingItem1Title: "محفظة البنك",
+  ManagementLandingItem2Title: "محفظة العملاء ",
   ManagementLandingItem1Desc: "انقر هنا لمشاهدة جميع مقاييس مركز البنك",
   ManagementLandingItem2Desc: "عرض جميع محافظ عملاء البنك هنا",
 
@@ -547,9 +548,9 @@ const ar = {
   ChangePassword_ConfirmRequiredMsg: "تأكيد كلمة المرور مطلوب",
   ChangePassword_MustMatchMsg: "الكلمة السريه يجب ان تتطابق",
 
-  DrawerAnonymoudSignIn: "الدخول",
-  DrawerAnonymoudRegister: "تسجيل الدخول",
-  DrawerAnonymoudNews: "الأخبار",
+  DrawerAnonymoudSignIn: "تسجيل الدخول",
+  DrawerAnonymoudRegister: "التسجيل",
+  DrawerAnonymoudNews: "آخر الأخبار",
   DrawerAnonymoudHome: "الرئيسية",
   DrawerAnonymoudeProductsAndOffers: "المنتجات والعروض",
   DrawerAnonymoudeContactUs: "اتصل بنا",
@@ -570,10 +571,10 @@ const ar = {
   ManagementLandingAssetsTitle: "الأصول",
   ManagementLandingLiabilitiesTitle: "الإلتزامات",
   NotificationListingTitle: "إشعارات",
-  RequestListingFilterStatusOption1: "في انتظار الإقرار",
-  RequestListingFilterStatusOption2: "مغلق",
-  RequestListingFilterStatusOption3: "قيد الانجاز",
-  RequestListingFilterStatusOption4: "ملغى",
+  RequestListingFilterStatusOption1: "بانتظار المراجعة",
+  RequestListingFilterStatusOption2: "الطلبات المنفذة",
+  RequestListingFilterStatusOption3: "قيد التنفيذ",
+  RequestListingFilterStatusOption4: "مغلق",
 
   MessageFilter_Read: "مقروءة",
   MessageFilter_UnRead: "غير مقروءة",
@@ -595,7 +596,7 @@ const ar = {
   SUKUKBalances: "أرصدة الصكوك",
   TreasuryPlacementsBalances: "أرصدة إيداعات الخزينة",
   TotalCash: "مجموع المبالغ النقدية",
-  TotalInvestments: "إجمالي الاستثمارات",
+  TotalInvestments: "إجمالي الإستثمارات",
   TotalDeposits: "إجمالي الودائع",
   TotalLoans: "إجمالي القروض",
   BankGurantees: "الضمانات البنكية",
@@ -606,10 +607,10 @@ const ar = {
   NetAverageRate: "معدل صافي المتوسط",
 
   BankPositionsTotalAssetSub1: "صكوك",
-  BankPositionsTotalAssetSub2: "صندوق MM",
+  BankPositionsTotalAssetSub2: "صندوق سوق المال",
   BankPositionsTotalAssetSub3: "صندوق سوق المال",
   BankPositionsTotalAssetSub4: "متأخرات العملاء",
-  BankPositionsTotalAssetSub5: "الاستثمارات المتاحه",
+  BankPositionsTotalAssetSub5: "الإستثمارات المتاحه",
   BankPositionsTotalAssetSub6: "ودائع في بنوك اخرى",
   BankPositionsTotalAssetSub7: "قروض العملاء",
 
@@ -812,7 +813,7 @@ const ar = {
   ChartDrillDownHint: "إضغط لعرض الأرباح المتراكمة المحصلة",
 
   ContactUs_Mobile_Format_Validation_Message:
-    "Mobile number should contain country code like +974xxxxxxxx",
+    " رقم الهاتف المحمول (يحتوي على كود الدولة, مثال +9741234567)",
 
   Signup_Autherization_Code: "Autherization code is not valid",
   Signup_CIF_Message: "Identification Number is not valid",
@@ -827,9 +828,9 @@ const ar = {
   NoInvestmentsHoldingsFound: "لم يتم العثور على استثمارات القابضة",
   InvalidEmail: "من فضلك أدخل بريد أليكترونى صحيح",
 
-  
+
   TransactionWithinSameAccount: "Transaction within same account is not allowed",
-  TransactionAmountLabel2: "المبلغ",  
+  TransactionAmountLabel2: "المبلغ",
   RichTextImageUploadHint: "Image attachment should be less than 5MB",
 
   MobileNumberLengthError: "يجب ألا يقل رقم الهاتف المحمول عن 10 أحرف",

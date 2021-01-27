@@ -5,7 +5,7 @@ import * as yup from "yup";
 import { AuthContext, User } from "../providers/AuthProvider";
 import InvalidFieldError from '../shared/invalid-field-error';
 import { localStrings as local_Strings } from '../translations/localStrings';
-import { SendOTP, ValidateOTP } from "../services/cmsService";
+import { AddToLogs, SendOTP, ValidateOTP } from "../services/cmsService";
 import { getUserRole } from "../services/apiServices";
 import Constant from "../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
@@ -43,6 +43,12 @@ const SubmitOTP: React.FC<IProps> = ({ userDetail }) => {
 
       const loginResponse = await currentContext.login({ ...userDetail, otp: values.otp });
       if (loginResponse) {
+        await AddToLogs(
+          "Login Success",
+          "Login Success",
+          userDetail.username
+        );
+
         redirectUser();
       } else {
         setLoading(false);

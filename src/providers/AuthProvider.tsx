@@ -1,4 +1,4 @@
-import { GetSettingsByCIF } from "../services/cmsService";
+import { AddToLogs, GetSettingsByCIF } from "../services/cmsService";
 import {
   initialSettingsData,
   IUserSettings,
@@ -13,6 +13,12 @@ import moment from "moment";
 import "moment/min/locales";
 import { registerLocale, setDefaultLocale } from "react-datepicker";
 import arSA from 'date-fns/locale/ar-SA';
+import { useIdleTimer } from 'react-idle-timer'
+import oidc from "../services/oidc-config.json";
+import Swal from 'sweetalert2';
+import Constant from "../constants/defaultData";
+import { localStrings as local_Strings } from '../translations/localStrings';
+
 registerLocale('ar', arSA);
 
 export type User = { username: string; password: string; otp: string };
@@ -53,10 +59,30 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [language, setLanguage] = useState(helper.getLanguage() || "en");
   const [userRole, setUserRole] = useState<string>("");
   const [selectedCIF, setCIF] = useState<string>(initialSettingsData.customerId);
+  local_Strings.setLanguage(language);
   moment.locale(language);
   setDefaultLocale(language);
 
-  let intervalID = 0;
+  const { getLastActiveTime } = useIdleTimer({
+    timeout: 1000 * 60 * 5,
+    onIdle: async event => {
+      console.log('user is idle', event);
+      await AddToLogs(
+        'user is idle',
+        'last active - ' + getLastActiveTime(),
+        selectedCIF
+      );
+      Swal.fire({
+        position: 'center',
+        icon: 'warning',
+        title: local_Strings.SessionTimeOutMessage,
+        confirmButtonColor: '#6b4f44',
+        showConfirmButton: true,
+        showCloseButton: false,
+      }).then(() => signout());
+    },
+    debounce: 500
+  });
 
   useEffect(() => {
     const getUserData = async () => {
@@ -74,13 +100,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setCIF(initialSettingsData.customerId);
         setUserRole("");
         setUserSettings(initialSettingsData);
-        //clearInterval(intervalID);
         //window.location.href = `/${language}`;
       }
     };
     getUserData();
 
   }, []);
+
+  const signout = async () => {
+    setCIF(null);
+    setUserRole("");
+    setUserSettings(null);
+    await SaveUserDataLocally(null);
+    localStorage.removeItem(oidc.storage_key);
+    window.location.href = `/${language}`;
+  }
 
   return (
     <AuthContext.Provider
@@ -115,8 +149,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                 if (role && !!role) {
                   setUserRole(role.name);
                 }
-                clearInterval(intervalID);
-                intervalID = window.setInterval( async () => await GetSettingsByCIF(userData.username), 30000);
               }
             );
             return resutl;
@@ -124,14 +156,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             return false;
           }
         },
-        logout: async () => {
-          setCIF(null);
-          setUserRole("");
-          setUserSettings(null);
-          await SaveUserDataLocally(null);
-          //localStorage.removeItem(Constant.CustomerTermsAcceptanceStorageKey);
-          window.location.href = `/${language}`;
-        },
+        logout: signout,
         changeLanguage: setLanguage,
         changeUserSettings: setUserSettings,
         selectCIF: (selectedCustomer) => {

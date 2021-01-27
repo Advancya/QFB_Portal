@@ -5,6 +5,7 @@ import oidc from "./oidc-config.json";
 import randomatic from "randomatic";
 import Parser from 'rss-parser';
 import queryString from "query-string";
+import { ConvertUTCDateToLocalDate } from "./commonDataServices";
 
 async function generateRegistrationToken() {
   try {
@@ -19,7 +20,7 @@ async function generateRegistrationToken() {
         grant_type: "client_credentials",
         client_id: oidc.config.m_client_id,
         client_secret: oidc.config.client_secret,
-        scope: oidc.config.scope,
+        scope: oidc.config.m_scope,
       }),
       requestOptions
     );
@@ -1293,6 +1294,32 @@ async function AddAcceptTermsStatusForAnonymous() {
   }
 }
 
+async function AddToLogs(title: string, message: string, cif: string) {
+  try {
+    const token = await generateRegistrationToken();
+
+    let config: typeof AxiosRequestConfig = {
+      method: "post",
+      url: `${defaultData.ApiBaseUrl}/api/Logs/Add`,
+      headers: { Authorization: `Bearer ${token["access_token"]}` },
+      data: {
+        id: 0,
+        title: title,
+        message: message,
+        createdDate: await ConvertUTCDateToLocalDate(new Date()),
+        cif: cif,
+        deviceId: "QFB Portal",
+      },
+    };
+
+    const result = await axios(config);
+
+    return result.data;
+  } catch (err) {
+    return false;
+  }
+}
+
 export {
   GetStockData,
   ValidateRegisterData,
@@ -1388,5 +1415,6 @@ export {
   GetManagementBankPoistion,
   GetRmTransactionList,
   AddAcceptTermsStatusForCustomer,
-  AddAcceptTermsStatusForAnonymous
+  AddAcceptTermsStatusForAnonymous,
+  AddToLogs
 };

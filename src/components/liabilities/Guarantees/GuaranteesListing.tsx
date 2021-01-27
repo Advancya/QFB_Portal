@@ -126,7 +126,7 @@ function GuaranteesListing(props: iGuaranteesListing) {
                 <div className="ib-text">
                   <h4>{local_Strings.PortfolioLiabilitiesOption2}</h4>
                   <h5>
-                    {(userPortfolio.totalGuarantees || "0") +
+                    {helper.ConvertToQfbNumberFormat(userPortfolio.totalGuarantees || 0) +
                       " " +
                       currentContext.userSettings.currency}
                   </h5>

@@ -127,7 +127,7 @@ function FacilitiesListing(props: iFacilitiesListing) {
                 <div className="ib-text">
                   <h4>{local_Strings.PortfolioLiabilitiesOption1}</h4>
                   <h5>
-                    {(userPortfolio.totalLoans || "0") +
+                    {helper.ConvertToQfbNumberFormat(userPortfolio.totalLoans || 0) +
                       " " +
                       currentContext.userSettings.currency}
                   </h5>

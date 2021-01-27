@@ -44,11 +44,14 @@ async function authenticate(username: string, password: string) {
     );
 
     if (response.status === 200) {
-      const access_token = response.data["access_token"];
+      response.data["expires_in"] = setTimer(response.data["expires_in"]);
+      const responseData = JSON.stringify(response.data);
 
-      localStorage.setItem(defaultData.AccessTokenStorageKey, access_token);
-      localStorage.setItem(defaultData.RefreshTokenStorageKey, response.data["refresh_token"]);      
+      localStorage.removeItem(oidc.storage_key);
+      localStorage.setItem(oidc.storage_key, responseData);
       
+
+      const access_token = response.data["access_token"];
       console.log("Sesion Token is saved on " + moment().toLocaleString() + ", will expire at ", moment(jwtDecode<JwtPayload>(access_token).exp * 1000).toLocaleString());
       
       return true;
@@ -74,7 +77,7 @@ async function generateRegistrationToken() {
         grant_type: "client_credentials",
         client_id: oidc.config.m_client_id,
         client_secret: oidc.config.client_secret,
-        scope: oidc.config.scope,
+        scope: oidc.config.m_scope,
       }),
       requestOptions
     );
@@ -206,7 +209,7 @@ async function checkUsernameAndPassword(username: string, password: string) {
 
 async function signOut() {
   try {
-    await localStorage.removeItem(oidc.storage_key);
+    localStorage.removeItem(oidc.storage_key);
   } catch (error) {
     console.log(error);
   }
@@ -232,11 +235,9 @@ async function IsAccountLocked(cif: string) {
 
 async function isAuthenticated() {
   try {
-    const token = JSON.parse(
-      (await localStorage.getItem(oidc.storage_key)) || ""
-    );
+    const token = JSON.parse(localStorage.getItem(oidc.storage_key)) || "";
 
-    if (token) {
+    if (!!token) {
       if (!isTokenExpired(token["expires_in"])) {
         return true;
       }
@@ -263,9 +264,7 @@ async function refreshToken() {
       },
     };
 
-    const token = JSON.parse(
-      (await localStorage.getItem(oidc.storage_key)) || ""
-    );
+    const token = JSON.parse(localStorage.getItem(oidc.storage_key)) || "";
 
     const response = await identityInstance.post(
       "connect/token",
@@ -279,8 +278,8 @@ async function refreshToken() {
 
     response.data["expires_in"] = setTimer(response.data["expires_in"]);
 
-    await localStorage.clear();
-    await localStorage.setItem(oidc.storage_key, JSON.stringify(response.data));
+    localStorage.clear();
+    localStorage.setItem(oidc.storage_key, JSON.stringify(response.data));
 
     return true;
   } catch (error) {
@@ -292,9 +291,7 @@ async function refreshToken() {
 
 async function getCurrentUser() {
   if (await isAuthenticated()) {
-    const token = JSON.parse(
-      (await localStorage.getItem(oidc.storage_key)) || ""
-    );
+    const token = JSON.parse(localStorage.getItem(oidc.storage_key)) || "";
     return token;
   }
   return null;

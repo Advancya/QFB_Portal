@@ -77,6 +77,7 @@ export const filterTransactions = (
   transactions: ITransaction[],
   filter: ICommonFilter
 ) => {
+  local_Strings.setLanguage(moment.locale());
   let filteredTransactions = [] as ITransaction[];
   switch (filter.DateOption) {
     case "1":
@@ -174,7 +175,7 @@ export const filterTransactions = (
     filter.OptionalCheck.map((o: IOptionalCheck) => {
       if (applyOptionalFilter && o.value) {
 
-        console.log(o.label.toLowerCase());
+        console.log(local_Strings.CashDetails_Filter_Debit);
 
         filteredTransactions = filteredTransactions.filter((t) =>
           (t.transactionType || t.transacitonType)
@@ -182,7 +183,7 @@ export const filterTransactions = (
               String(t.transacitonType).toLowerCase() === o.label.toLowerCase())
             : !!t.transaction_Amount
               ? o.label.toLowerCase() ===
-                ("debit" || "مدين")
+              local_Strings.CashDetails_Filter_Debit
                 ? t.transaction_Amount < 0
                 : t.transaction_Amount > 0
               : String(t.trxDescirption).toLowerCase() === o.label.toLowerCase()
@@ -513,7 +514,7 @@ export const transformingTransactionDetail = (
 };
 
 export const prepareDepositHoldings1stDrill = (chartData: any, language: string) => {
-  local_Strings.setLanguage(language);
+  local_Strings.setLanguage(moment.locale());
 
   let sdata = [
     {
@@ -587,7 +588,7 @@ export const prepareInvestmentHoldings1stDrill = (
   chartData: any,
   language: string
 ) => {
-  local_Strings.setLanguage(language);
+  local_Strings.setLanguage(moment.locale());
 
   let sdata: any = [];
   let colors = ["#493026", "#6C544B", "#97877F", "#CBC4C1", "#A79A94"];
@@ -603,7 +604,8 @@ export const prepareInvestmentHoldings1stDrill = (
       ),
       key: item.subAssetId,
       name: item.secDescirption,
-      color: colors[index]
+      color: colors[index],
+      drilldown: item.invRecievedProfit && item.invRecievedProfit > 0
     });
     index++;
     if (index > 4) index = 0;
@@ -624,7 +626,7 @@ export const prepareInvestmentHoldings2ndDrill = (
   title: string,
   language: string
 ) => {
-  local_Strings.setLanguage(language);
+  local_Strings.setLanguage(moment.locale());
 
   var seen = {};
   chartData = chartData.filter(function (entry) {
@@ -721,7 +723,7 @@ export const prepareTotalNetWorth = (
   chartData: any,
   rtl = false
 ) => {
-  local_Strings.setLanguage(rtl ? "ar" : "en");
+  local_Strings.setLanguage(moment.locale());
 
   let sdata = [
     {
@@ -871,7 +873,7 @@ export const prepareManagementData = (
   language: string
 ) => {
 
-  local_Strings.setLanguage(language);
+  local_Strings.setLanguage(moment.locale());
   let series: any = [];
   let values: any = [];
   let categories: string = "";

@@ -111,7 +111,7 @@ function CashListing(props: iCashListing) {
             <div className="ib-text">
               <h4>{local_Strings.CashListingCash}</h4>
               <h5>
-                {(userPortfolio.totalCash || "0") +
+                {helper.ConvertToQfbNumberFormat(userPortfolio.totalCash || 0) +
                   " " +
                   (currentContext.userSettings.currency || "")}
               </h5>

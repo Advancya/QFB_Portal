@@ -37,7 +37,7 @@ const FilterAmountControl: React.FC<IFilterAmountControlProps> = (props) => {
                 className="form-control w-50"
                 placeholder={local_Strings.Amount}
                 value={props.Amount || ""}
-                onChange={(e) => props.onChangeAmount(e.target.value.replace(/[^0-9]*/, ''))}
+                onChange={(e) => props.onChangeAmount(e.target.value)}
             />
         </React.Fragment>
     );

@@ -13,10 +13,6 @@ import InvalidFieldError from "../../shared/invalid-field-error";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import MultiSelect from "react-multi-select-component";
-import CKEditor from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import "@ckeditor/ckeditor5-build-classic/build/translations/ar.js";
-//import Base64UploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/base64uploadadapter';
 import {
   emptyNotificationsDetail,
   INotificationsDetail,
@@ -27,6 +23,9 @@ import PuffLoader from "react-spinners/PuffLoader";
 import { CustomerListContext } from "../../pages/Admin/Admin";
 import Swal from "sweetalert2";
 import xIcon from "../../images/x-icon.svg";
+import RichTextEditor from "../../shared/RichTextEditor";
+import * as helper from "../../Helpers/helper";
+
 
 interface DetailsProps {
   item?: INotificationsDetail;
@@ -65,6 +64,10 @@ function NotificationsForm(props: DetailsProps) {
 
   const submitTheRecord = async (values: INotificationsDetail) => {
     setLoading(true);
+
+    values.messageBody = helper.appendAnchorToImageTag(values.messageBody);
+    values.messageBodyAr = helper.appendAnchorToImageTag(values.messageBodyAr);
+
     const item = {
       cif:
         values.selectedCIFs.length === customerList.length
@@ -130,9 +133,9 @@ function NotificationsForm(props: DetailsProps) {
 
   const options = customerList
     ? customerList.map((c) => ({
-        value: c.id ? c.id : "",
-        label: c.shortName ? c.shortName : "",
-      }))
+      value: c.id ? c.id : "",
+      label: c.shortName ? c.shortName : "",
+    }))
     : [];
 
   return (
@@ -206,8 +209,8 @@ function NotificationsForm(props: DetailsProps) {
                         options={options}
                         value={
                           values.selectedCIFs &&
-                          values.selectedCIFs.length > 0 &&
-                          values.selectedCIFs[0].value !== "0"
+                            values.selectedCIFs.length > 0 &&
+                            values.selectedCIFs[0].value !== "0"
                             ? values.selectedCIFs
                             : null
                         }
@@ -224,12 +227,12 @@ function NotificationsForm(props: DetailsProps) {
                         InvalidFieldError("Select at least one customer")}
                     </React.Fragment>
                   ) : (
-                    <span className="box-brief mb-3">
-                      {values.selectedCIFs && values.selectedCIFs.length > 0
-                        ? values.selectedCIFs[0].label
-                        : ""}
-                    </span>
-                  )}
+                      <span className="box-brief mb-3">
+                        {values.selectedCIFs && values.selectedCIFs.length > 0
+                          ? values.selectedCIFs[0].label
+                          : ""}
+                      </span>
+                    )}
                 </div>
                 <div className="form-group">
                   <label>{local_Strings.NotificationsNameLabel}</label>
@@ -283,88 +286,32 @@ function NotificationsForm(props: DetailsProps) {
                 <div className="form-group">
                   <label>{local_Strings.NotificationsDescrLabel}</label>
                   {props.editable ? (
-                    <CKEditor
-                      editor={ClassicEditor}
-                      readOnly={!props.editable}
-                      data={values.messageBody || ""}
-                      onChange={(event: any, editor: any) => {
-                        const _text = editor.getData();
-                        setFieldValue("messageBody", _text);
-                      }}
-                      config={{
-                        //plugins: [Base64UploadAdapter],
-                        toolbar: [
-                          "heading",
-                          "|",
-                          "bold",
-                          "italic",
-                          "|",
-                          "link",
-                          "bulletedList",
-                          "numberedList",
-                          "blockQuote",
-                          "|",
-                          "undo",
-                          "redo",
-                        ],
-                        allowedContent: true,
-                        extraAllowedContent: "div(*)",
-                        language: "en",
-                        content: "en",
-                      }}
-                    />
+                    <RichTextEditor language="en" value={values.messageBody}
+                      onChange={handleChange("messageBody")} readOnly={!props.editable} />
                   ) : (
-                    <span className="box-brief mb-3">
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: values.messageBody,
-                        }}
-                      />
-                    </span>
-                  )}
+                      <span className="box-brief mb-3">
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: values.messageBody,
+                          }}
+                        />
+                      </span>
+                    )}
                 </div>
                 <div className="form-group">
                   <label>{local_Strings.NotificationsArDescrLabel}</label>
                   {props.editable ? (
-                    <CKEditor
-                      editor={ClassicEditor}
-                      readOnly={!props.editable}
-                      data={values.messageBodyAr || ""}
-                      onChange={(event: any, editor: any) => {
-                        const _text = editor.getData();
-                        setFieldValue("messageBodyAr", _text);
-                      }}
-                      config={{
-                        //plugins: [Base64UploadAdapter],
-                        toolbar: [
-                          "heading",
-                          "|",
-                          "bold",
-                          "italic",
-                          "|",
-                          "link",
-                          "bulletedList",
-                          "numberedList",
-                          "blockQuote",
-                          "|",
-                          "undo",
-                          "redo",
-                        ],
-                        allowedContent: true,
-                        extraAllowedContent: "div(*)",
-                        language: "ar",
-                        content: "ar",
-                      }}
-                    />
+                    <RichTextEditor language="ar" value={values.messageBodyAr}
+                      onChange={handleChange("messageBodyAr")} readOnly={!props.editable} />
                   ) : (
-                    <span className="box-brief mb-3">
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: values.messageBodyAr,
-                        }}
-                      />
-                    </span>
-                  )}
+                      <span className="box-brief mb-3">
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: values.messageBodyAr,
+                          }}
+                        />
+                      </span>
+                    )}
                 </div>
                 {props.editable && (
                   <div className="form-group">

@@ -107,7 +107,7 @@ function ChangeOTPMethod(props: iChangeOTPMethod) {
                 id="customRadio1"
                 name="customRadio"
                 className="custom-control-input"
-                checked={userSettings.otp === local_Strings.ChangeOTPSMS}
+                checked={userSettings.otp === "SMS"}
                 onChange={(e) =>
                   e.target.checked
                     ? setUserSettings({
@@ -130,7 +130,7 @@ function ChangeOTPMethod(props: iChangeOTPMethod) {
                 id="customRadio2"
                 name="customRadio"
                 className="custom-control-input"
-                checked={userSettings.otp === local_Strings.ChangeOTPEmail}
+                checked={userSettings.otp === "Email"}
                 onChange={(e) =>
                   e.target.checked
                     ? setUserSettings({
@@ -153,7 +153,7 @@ function ChangeOTPMethod(props: iChangeOTPMethod) {
                 id="customRadio3"
                 name="customRadio"
                 className="custom-control-input"
-                checked={userSettings.otp === local_Strings.ChangeOTPSMSAndEMail}
+                checked={userSettings.otp === "SMS & Email"}
                 onChange={(e) =>
                   e.target.checked
                     ? setUserSettings({

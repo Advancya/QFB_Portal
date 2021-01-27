@@ -10,10 +10,11 @@ interface IRichTextEditor {
     value: string;
     onChange: (text: string) => void;
     language: string;
+    readOnly?: boolean;
 }
 
 const RichTextEditor: React.FC<IRichTextEditor>
-    = ({ value, onChange, language }) => {
+    = (props) => {
         const currentContext = useContext(AuthContext);
         local_Strings.setLanguage(currentContext.language);
 
@@ -24,10 +25,11 @@ const RichTextEditor: React.FC<IRichTextEditor>
                 </label>
                 <CKEditor
                     editor={ClassicEditor}
-                    data={value || ""}
+                    readOnly={props.readOnly}
+                    data={props.value || ""}
                     onChange={(event: any, editor: any) => {
-                        const richText = editor.getData();                        
-                        onChange(richText);
+                        const richText = editor.getData();
+                        props.onChange(richText);
                     }}
                     config={{
                         extraPlugins: [CustomUploadAdapterPlugin],
@@ -42,19 +44,15 @@ const RichTextEditor: React.FC<IRichTextEditor>
                             "numberedList",
                             "|",
                             "blockQuote",
-                            'insertTable',
                             'imageUpload',
                             '|',
                             "undo",
                             "redo",
                         ],
-                        table: {
-                            contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells']
-                        },
                         allowedContent: true,
                         extraAllowedContent: "div(*)",
-                        language: language,
-                        content: language,
+                        language: props.language,
+                        content: props.language,
                     }}
                 />
             </React.Fragment>

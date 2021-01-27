@@ -1,13 +1,13 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { Modal } from "react-bootstrap";
 import {
-  emptyTransactionDetail,
   ITransactionDetail,
 } from "../../Helpers/publicInterfaces";
 import moment from "moment";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
 import xIcon from "../../images/x-icon.svg";
+import * as helper from "../../Helpers/helper";
 
 interface iTransactionsDetails {
   showTransactionsDetailsModal: boolean;
@@ -99,7 +99,8 @@ function TransactionsDetails(props: iTransactionsDetails) {
               )}
               <div className="col-lg-6 form-group">
                 <label>{local_Strings.TransactionAmountLabel}</label>
-                <div className="readonly">{props.item.amount || ""}</div>
+                <div className="readonly">
+                  {helper.ConvertToQfbNumberFormatWithFraction(props.item.amount || "")}</div>
               </div>
               {props.item.transactionTypeId !== 1 && (
                 <React.Fragment>

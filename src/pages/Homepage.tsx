@@ -64,7 +64,7 @@ export interface IInboxProps {
 
 export const InboxContext = createContext<IInboxProps>({
   messages: [emptyInboxDetail],
-  refreshInbox: () => {},
+  refreshInbox: () => { },
 });
 
 const HomePage = () => {
@@ -145,68 +145,10 @@ const HomePage = () => {
               history.push(`/${currentContext.language}`);
             });
           }
-        } else {
-          const requestOne = GetUserPortfolio(
-            currentContext.selectedCIF,
-            currentContext.userSettings.currency
-          );
-          const requestTwo = GetGuarantees(
-            currentContext.selectedCIF,
-            currentContext.userSettings.currency
-          );
-          const requestThree = GetInboxByCIF(currentContext.selectedCIF);
-
-          axios
-            .all([requestOne, requestTwo, requestThree])
-            .then((responseData: any) => {
-              if (isMounted && responseData && responseData.length > 0) {
-                if (responseData[0] && responseData[0][0]) {
-                  let _userPortfolio = responseData[0][0] as IUserPortfolio;
-                  _userPortfolio = {
-                    ..._userPortfolio,
-                    totalAssets: helper.ConvertToQfbNumberFormat(
-                      _userPortfolio.totalAssets
-                    ),
-                    totalCash: helper.ConvertToQfbNumberFormat(
-                      _userPortfolio.totalCash
-                    ),
-                    totalDeposits: helper.ConvertToQfbNumberFormat(
-                      _userPortfolio.totalDeposits
-                    ),
-                    totalInvestment: helper.ConvertToQfbNumberFormat(
-                      _userPortfolio.totalInvestment
-                    ),
-                    totalLoans: helper.ConvertToQfbNumberFormat(
-                      _userPortfolio.totalLoans
-                    ),
-                    networth: helper.ConvertToQfbNumberFormat(
-                      _userPortfolio.networth
-                    ),
-                    totalLiabilities: helper.ConvertToQfbNumberFormat(
-                      _userPortfolio.totalLiabilities
-                    ),
-                    totalGuarantees: "",
-                  };
-
-                  if (responseData[1].length > 0) {
-                    setUserPortfolio({
-                      ..._userPortfolio,
-                      totalGuarantees: helper.ConvertToQfbNumberFormat(
-                        responseData[1][0].totalGurQAR
-                      ),
-                    });
-                  } else {
-                    setUserPortfolio(_userPortfolio);
-                  }
-                }
-
-                setInboxListing(responseData[2]);
-              }
-            })
-            .catch((e: any) => console.log(e))
-            .finally(() => setLoading(false));
         }
       } else {
+
+        /*
         Swal.fire({
           title:
             "Unable to fetch role for the customer - " +
@@ -224,7 +166,69 @@ const HomePage = () => {
         }).then((result) => {
           window.location.reload();
         });
+        */
+
       }
+
+      const requestOne = GetUserPortfolio(
+        currentContext.selectedCIF,
+        currentContext.userSettings.currency
+      );
+      const requestTwo = GetGuarantees(
+        currentContext.selectedCIF,
+        currentContext.userSettings.currency
+      );
+      const requestThree = GetInboxByCIF(currentContext.selectedCIF);
+
+      axios
+        .all([requestOne, requestTwo, requestThree])
+        .then((responseData: any) => {
+          if (isMounted && responseData && responseData.length > 0) {
+            if (responseData[0] && responseData[0][0]) {
+              let _userPortfolio = responseData[0][0] as IUserPortfolio;
+              _userPortfolio = {
+                ..._userPortfolio,
+                totalAssets: helper.ConvertToQfbNumberFormat(
+                  _userPortfolio.totalAssets
+                ),
+                totalCash: helper.ConvertToQfbNumberFormat(
+                  _userPortfolio.totalCash
+                ),
+                totalDeposits: helper.ConvertToQfbNumberFormat(
+                  _userPortfolio.totalDeposits
+                ),
+                totalInvestment: helper.ConvertToQfbNumberFormat(
+                  _userPortfolio.totalInvestment
+                ),
+                totalLoans: helper.ConvertToQfbNumberFormat(
+                  _userPortfolio.totalLoans
+                ),
+                networth: helper.ConvertToQfbNumberFormat(
+                  _userPortfolio.networth
+                ),
+                totalLiabilities: helper.ConvertToQfbNumberFormat(
+                  _userPortfolio.totalLiabilities
+                ),
+                totalGuarantees: "",
+              };
+
+              if (responseData[1].length > 0) {
+                setUserPortfolio({
+                  ..._userPortfolio,
+                  totalGuarantees: helper.ConvertToQfbNumberFormat(
+                    responseData[1][0].totalGurQAR
+                  ),
+                });
+              } else {
+                setUserPortfolio(_userPortfolio);
+              }
+            }
+
+            setInboxListing(responseData[2]);
+          }
+        })
+        .catch((e: any) => console.log(e))
+        .finally(() => setLoading(false));
     };
 
     if (!!currentContext.selectedCIF) {

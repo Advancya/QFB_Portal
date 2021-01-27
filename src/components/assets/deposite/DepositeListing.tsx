@@ -128,7 +128,7 @@ function DepositeListing(props: iDepositeListing) {
                 <div className="ib-text">
                   <h4>{local_Strings.PortfolioAssetsOption3}</h4>
                   <h5>
-                    {(userPortfolio.totalDeposits || "0") +
+                    {helper.ConvertToQfbNumberFormat(userPortfolio.totalDeposits || 0) +
                       " " +
                       currentContext.userSettings.currency}
                   </h5>

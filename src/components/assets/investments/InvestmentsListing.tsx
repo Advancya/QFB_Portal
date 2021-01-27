@@ -131,7 +131,7 @@ function InvestmentsListing(props: iInvestmentsListing) {
                 <div className="ib-text">
                   <h4>{local_Strings.PortfolioAssetsOption2}</h4>
                   <h5>
-                    {(userPortfolio.totalInvestment || "0") +
+                    {helper.ConvertToQfbNumberFormat(userPortfolio.totalInvestment || 0) +
                       " " +
                       currentContext.userSettings.currency}
                   </h5>
