@@ -286,7 +286,7 @@ function ContactUsForm(props: iContactUsForm) {
                             className="col-md-6"
                             controlId="formMobile"
                           >
-                            <Form.Label>
+                            <Form.Label className="longText">
                               {local_Strings.ContactUsMobileLabel}
                             </Form.Label>
                             <Form.Control
@@ -307,7 +307,7 @@ function ContactUsForm(props: iContactUsForm) {
                             className="col-md-6"
                             controlId="formEmail"
                           >
-                            <Form.Label>
+                            <Form.Label className="longText">
                               {local_Strings.ContactUsEmailAddressLabel}
                             </Form.Label>
                             <Form.Control

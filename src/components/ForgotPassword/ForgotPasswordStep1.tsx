@@ -41,9 +41,14 @@ function ForgotPasswordStep1(props: iForgotPasswordStep1) {
       .string()
       .required(local_Strings.GeneralValidation)
       .email(local_Strings.InvalidEmail),
-    mobile: yup.string().required(local_Strings.GeneralValidation)
+    mobile: yup
+      .string()
+      .required(local_Strings.GeneralValidation)
       .min(10, local_Strings.MobileNumberLengthError)
-      .matches(/^\+(?:[0-9]?){6,14}[0-​9]$/, local_Strings.ContactUs_Mobile_Format_Validation_Message),
+      .matches(
+        /^\+(?:[0-9]?){6,14}[0-​9]$/,
+        local_Strings.ContactUs_Mobile_Format_Validation_Message
+      ),
   });
 
   const getRegisterData = async (cif: string) => {
@@ -96,7 +101,7 @@ function ForgotPasswordStep1(props: iForgotPasswordStep1) {
                 if (data.toString() !== "") {
                   if (
                     values.email.toLowerCase() ===
-                    data[0]["Email"].toLowerCase() &&
+                      data[0]["Email"].toLowerCase() &&
                     values.mobile.toLowerCase() === data[0]["SMS"].toLowerCase()
                   ) {
                     //Send OTP here

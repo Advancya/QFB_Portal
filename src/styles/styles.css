@@ -1247,6 +1247,10 @@ ul.box-list a:hover h4 small, ul.box-list a:hover p {
   font-size: 0.9rem;
 }
 
+.modal-box label.longText {
+  min-height: 43px;
+}
+
 .modal-header-text {
   flex: 1;
 }
@@ -1366,7 +1370,7 @@ ul.box-list a:hover h4 small, ul.box-list a:hover p {
 .form-group {
   display: flex;
   flex-flow: column;
-  justify-content: space-between;
+  /* justify-content: space-between; */
 }
 
 .input-group-search .input-group-prepend-search {
