@@ -32,10 +32,8 @@ function FacilitiesOutstandingPayment(props: iFacilitiesOutstandingPayment) {
   const userPortfolio = useContext(PortfolioContext);
   local_Strings.setLanguage(currentContext.language);
   const [isLoading, setLoading] = useState(false);
-  const [data, setData] = useState<ITransaction[]>([emptyTransaction]);
-  const [filteredData, setFilteredData] = useState<ITransaction[]>([
-    emptyTransaction,
-  ]);
+  const [data, setData] = useState<ITransaction[]>(null);
+  const [filteredData, setFilteredData] = useState<ITransaction[]>(null);
   const ExcelFile = ReactExport.ExcelFile;
   const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
   const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
@@ -84,20 +82,18 @@ function FacilitiesOutstandingPayment(props: iFacilitiesOutstandingPayment) {
       dialogClassName="myModal"
     >
       <Modal.Header>
-        <div className="modal-header-text">
-          <div className="row align-items-center">
-            <div className="col-2 col-sm-1 text-center">
-              <a
-                href="#"
-                onClick={props.backFacilitiesOutstandingPaymentModal}
-                className="backToAccountsList"
-              >
-                <i className="fa fa-chevron-left"></i>
-              </a>
-            </div>
-            <div className="ib-text">
-              <h4>{local_Strings.OutstandingPaymentsText}</h4>
-            </div>
+        <div className="d-flex align-items-center">
+          <div className="modal-header-text">
+            <a
+              href="#"
+              onClick={props.backFacilitiesOutstandingPaymentModal}
+              className="backToAccountsList"
+            >
+              <i className="fa fa-chevron-left"></i>
+            </a>
+          </div>
+          <div className="ib-text">
+            <h4>{local_Strings.OutstandingPaymentsText}</h4>
           </div>
         </div>
         <button
@@ -110,7 +106,7 @@ function FacilitiesOutstandingPayment(props: iFacilitiesOutstandingPayment) {
       </Modal.Header>
 
       <Modal.Body>
-        {data && data.length > 0 && !!data[0].installmentDate && (
+        {data && data.length > 0 && (
           <FilterCommonControl2
             CheckBoxTitle={local_Strings.CashDetailsFilterType}
             CheckBoxLabels={[
@@ -152,8 +148,7 @@ function FacilitiesOutstandingPayment(props: iFacilitiesOutstandingPayment) {
           }
         />
         {filteredData &&
-          filteredData.length > 0 &&
-          !!filteredData[0].accountNumber && (
+          filteredData.length > 0 && (
             <div className="exportExcel">
               <ExcelFile
                 filename={

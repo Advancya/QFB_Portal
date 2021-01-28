@@ -8,6 +8,7 @@ import {
 import { AuthContext } from "../../providers/AuthProvider";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { GetNotificationsByCIF } from "../../services/cmsService";
+import { InboxContext } from "../../pages/Homepage";
 
 function Notfications() {
   const [showNotficationsListing, setShowNotficationsListing] = useState(false);
@@ -17,6 +18,9 @@ function Notfications() {
 
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
+
+  const InboxMessages = useContext(InboxContext);
+
   const countUnreadNotfications = notfications && notfications.length > 0
     ? notfications.filter((i: any) => !i.isRead).length
     : 0;
@@ -25,12 +29,15 @@ function Notfications() {
   const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
-    
-    if (!!currentContext.selectedCIF) {
+
+    if (!!currentContext.selectedCIF || InboxMessages.reloadNotifications) {
       refreshNotifications();
+      if (InboxMessages.reloadNotifications) {
+        InboxMessages.refreshNotifications(false);
+      }
     }
 
-  }, [currentContext.selectedCIF, currentContext.language]);
+  }, [currentContext.selectedCIF, currentContext.language, InboxMessages.reloadNotifications]);
 
   const refreshNotifications = async () => {
 

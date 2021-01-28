@@ -237,8 +237,8 @@ export interface IRequestDetail {
   requestStatus: string;
   requestTypeId: string;
   requestSubject: string;
-  requestSubjectAR?: string;
-  requestStatusAR?: string;
+  requestSubjectAr?: string;
+  requestStatusAr?: string;
 }
 
 export const emptyRequestDetail = {
@@ -469,6 +469,8 @@ export interface ITransactionAccordianDetail {
   TransferDetails: IKeyValuePair;
   BeneficiaryCustomer: IKeyValuePair;
   BeneficiaryAccount: IKeyValuePair;
+  FacilityReference: IKeyValuePair;
+  PastDueDays: IKeyValuePair;
 }
 
 
@@ -502,6 +504,14 @@ export const emptyTransactionAccordianDetail = {
     value: "",
   },
   BeneficiaryAccount: {
+    label: "",
+    value: "",
+  },
+  FacilityReference: {
+    label: "",
+    value: "",
+  },
+  PastDueDays: {
     label: "",
     value: "",
   },

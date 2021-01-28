@@ -204,7 +204,7 @@ function RequestsDetails(props: iRequestsDetails) {
                   <h4>
                     {currentContext.language !== "ar"
                       ? props.item.requestSubject
-                      : props.item.requestSubjectAR}
+                      : props.item.requestSubjectAr}
                   </h4>
                 </div>
                 <div className="col-sm-4 text-sm-right">
@@ -212,7 +212,7 @@ function RequestsDetails(props: iRequestsDetails) {
                   <span className="status-badge ">
                     {currentContext.language !== "ar"
                       ? props.item.requestStatus
-                      : props.item.requestStatusAR}
+                      : props.item.requestStatusAr}
                   </span>{" "}
                 </div>
               </div>

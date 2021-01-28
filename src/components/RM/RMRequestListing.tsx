@@ -18,6 +18,7 @@ import FilterMoreButtonControl from "../../shared/FilterMoreButtonControl";
 import {
   RmReadRequest,
   RmReadTransaction,
+  RmReadOffer
 } from "../../services/requestService";
 
 interface IRequestType {
@@ -30,6 +31,7 @@ interface iRMRequestListing {
   hideRMRequestListingModal: () => void;
   showRequestDetailModal: (itemId: number) => void;
   showTransactionDetailModal: (itemId: number) => void;
+  showOfferDetailModal: (itemId: number) => void;
   requests: iRmRequests[];
   backRMRequestListingModal: () => void;
   reloading: boolean;
@@ -104,7 +106,7 @@ function RMRequestListing(props: iRMRequestListing) {
     } else {
       setOffset(rowLimit);
     }
-    
+
     if (filters.filterApplied) {
       const _filteredData = helper.filterRMRequests(
         props.requests,
@@ -124,9 +126,12 @@ function RMRequestListing(props: iRMRequestListing) {
           if (item["type"] === "Request") {
             RmReadRequest(item["id"]);
             props.showRequestDetailModal(item.id);
-          } else {
+          } else if (item["type"] === "Tranasction") {
             RmReadTransaction(item["id"]);
             props.showTransactionDetailModal(item.id);
+          } else {
+            RmReadOffer(String(item.id));
+            props.showOfferDetailModal(item.id);
           }
         }}
       >
@@ -168,7 +173,7 @@ function RMRequestListing(props: iRMRequestListing) {
           </div>
         </div>
       </a>
-    </li>
+    </li >
   );
 
   const typeFilterOptions = [];
@@ -304,8 +309,8 @@ function RMRequestListing(props: iRMRequestListing) {
           <ul className="box-list" id="reqList">
             {filteredData && filteredData.length > 0
               ? filteredData
-                  .slice(0, offset)
-                  .map((item, index) => renderItem(item, index))
+                .slice(0, offset)
+                .map((item, index) => renderItem(item, index))
               : NoResult(local_Strings.NoDataToShow)}
           </ul>
         </div>

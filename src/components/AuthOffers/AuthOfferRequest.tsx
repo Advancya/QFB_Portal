@@ -18,6 +18,7 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import InvalidFieldError from "../../shared/invalid-field-error";
 import xIcon from "../../images/x-icon.svg";
+import { InboxContext } from "../../pages/Homepage";
 
 interface ICurrency {
   id: number;
@@ -39,6 +40,8 @@ function AuthOfferRequest(props: iAuthOfferRequest) {
   const [curruncies, setCurruncies] = React.useState<ICurrency[]>(null);
   const [isLoading, setLoading] = useState(false);
   const [item, setDetail] = useState<IOfferDetail>(null);
+
+  const InboxMessages = useContext(InboxContext);
 
   useEffect(() => {
     let isMounted = true;
@@ -162,6 +165,7 @@ function AuthOfferRequest(props: iAuthOfferRequest) {
                   showConfirmButton: false,
                   timer: Constant.AlertTimeout,
                 });
+                InboxMessages.refreshNotifications(true);
                 props.sendToAuthOffersRequestListing();
               } else {
                 Swal.fire({
@@ -208,7 +212,6 @@ function AuthOfferRequest(props: iAuthOfferRequest) {
                     >
                       {curruncies &&
                         curruncies.length > 0 &&
-                        !!curruncies[0].name &&
                         curruncies.map((c, i) => (
                           <option key={i} value={c.name}>
                             {currentContext.language === "en"

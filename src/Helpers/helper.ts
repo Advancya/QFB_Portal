@@ -182,8 +182,7 @@ export const filterTransactions = (
             ? (String(t.transactionType).toLowerCase() === o.label.toLowerCase() ||
               String(t.transacitonType).toLowerCase() === o.label.toLowerCase())
             : !!t.transaction_Amount
-              ? o.label.toLowerCase() ===
-              local_Strings.CashDetails_Filter_Debit
+              ? o.label === local_Strings.CashDetails_Filter_Debit
                 ? t.transaction_Amount < 0
                 : t.transaction_Amount > 0
               : String(t.trxDescirption).toLowerCase() === o.label.toLowerCase()
@@ -490,16 +489,16 @@ export const transformingTransactionDetail = (
   const splitEachProperties = input.split("n\\r\\");
   splitEachProperties.map((s: string) => {
     const languageSpecificStr = s.split(";")[language === "en" ? 0 : 1];
-    const keyValuePairStr = languageSpecificStr.split(":");
-    const uniquePropStr = s
-      .split(";")[0]
-      .split(":")[0]
-      .replace(/\s/g, "")
-      .replace("/", "");
+    const keyValuePairStr = languageSpecificStr.indexOf(":") !== -1 ? languageSpecificStr.split(":") : languageSpecificStr.split(",");
+    
     const labelStr = keyValuePairStr[language === "en" ? 0 : 1]
       .replace("/", "")
       .trim();
-    const valueStr = s.split(";")[0].split(":")[1].trim();
+    const valueStr = s.split(";")[0].indexOf(":") !== -1 ? s.split(";")[0].split(":")[1].trim() : s.split(";")[0].split(",")[1].trim();
+
+    const uniquePropStr = labelStr
+      .replace(/\s/g, "")
+      .replace("/", "");
 
     outputJSONStr =
       outputJSONStr +

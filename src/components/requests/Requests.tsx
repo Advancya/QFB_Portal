@@ -9,7 +9,7 @@ import {
   emptyRequestDetail,
   IRequestDetail,
 } from "../../Helpers/publicInterfaces";
-import { SendOTP, GetRequestsByCIF } from "../../services/cmsService";
+import { GetRequestsByCIF } from "../../services/cmsService";
 import { AuthContext } from "../../providers/AuthProvider";
 
 function Requests() {
@@ -22,7 +22,8 @@ function Requests() {
   const [showNewRequest, setShowNewRequest] = useState(false);
   const [validateOTP, showValidateOTPForm] = useState(false);
   const [requests, setRequestsListData] = useState<IRequestDetail[]>(null);
-
+  const [submittedRequest, setRequestValue] = useState<any>(null);
+  
   useEffect(() => {
     if (!!currentContext.selectedCIF) {
       refresRequests();
@@ -69,15 +70,8 @@ function Requests() {
           setDetail(detail);
         }}
         showNewRequestModal={async () => {
-          
-          //setShowNewRequest(true);
-          setLoading(true);
-          const optResult = await SendOTP(currentContext.selectedCIF);
-          if (optResult === true) {
-            showValidateOTPForm(true);
-            setShowRequestsListing(false);
-          }
-          setLoading(false);
+          setShowRequestsListing(false);
+          setShowNewRequest(true);
         }}
         requests={requests}
         reloading={isLoading}
@@ -103,11 +97,11 @@ function Requests() {
         backNewRequestModal={() => {
           setShowNewRequest(false);
           setShowRequestsListing(true);
-        }}
-        refreshRequestsListing={() => {
+        }}        
+        showOTPValidationFormModal={(_values) => {
           setShowNewRequest(false);
-          setShowRequestsListing(true);
-          refresRequests();
+          showValidateOTPForm(true);
+          setRequestValue(_values);
         }}
       />
       <OTPValidationForm
@@ -115,11 +109,13 @@ function Requests() {
         hideOTPValidationFormModal={() => showValidateOTPForm(false)}
         backOTPValidationFormModal={() => {
           showValidateOTPForm(false);
-          setShowRequestsListing(true);
-        }}
-        showNewRequestModal={() => {
-          showValidateOTPForm(false);
           setShowNewRequest(true);
+        }}
+        submittedRequest={submittedRequest}
+        refreshRequestsListing={() => {
+          refresRequests();
+          showValidateOTPForm(false);
+          setShowRequestsListing(true);          
         }}
       />
     </>

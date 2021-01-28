@@ -834,6 +834,8 @@ const ar = {
   RichTextImageUploadHint: "Image attachment should be less than 5MB",
 
   MobileNumberLengthError: "يجب ألا يقل رقم الهاتف المحمول عن 10 أحرف",
+
+  RequestNumber: "رقم الطلب | ",
 };
 
 export default ar;

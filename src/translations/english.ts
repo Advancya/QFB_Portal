@@ -839,6 +839,7 @@ const en = {
   
   MobileNumberLengthError: "Mobile number must be at least 10 characters",
 
+  RequestNumber: "Request Number | ",
 };
 
 export default en;

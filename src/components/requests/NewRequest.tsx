@@ -11,39 +11,26 @@ import * as yup from "yup";
 import InvalidFieldError from "../../shared/invalid-field-error";
 import Swal from "sweetalert2";
 import xIcon from "../../images/x-icon.svg";
-
+import { SendOTP } from "../../services/cmsService";
 import {
   initialNewRequest,
-  INewRequestDetail,
 } from "../../Helpers/publicInterfaces";
 import {
-  AddRequest,
   GetExtraDetailCurrentDetail,
   GetExtraDetailsDepositDetails,
   GetRequestFields,
   GetRequstsTypes,
+  GetRequestDropDownListFromAPI
 } from "../../services/requestService";
-import {
-  GetDepositeListing,
-  GetInvestmentsListing,
-} from "../../services/cmsService";
-import { GetCashListing } from "../../services/apiServices";
 import DatePicker from "react-datepicker";
-import {
-  IDeposit,
-  IAccountBalance,
-  IInvestment,
-} from "../../Helpers/publicInterfaces";
-import axios from "axios";
 import FileUploader from "../../shared/FileUploader";
 import ViewAttachment from "../../shared/AttachmentViewer";
-import { AnySrvRecord } from "dns";
 
 interface iNewRequest {
   showNewRequestModal: boolean;
   hideNewRequestModal: () => void;
   backNewRequestModal: () => void;
-  refreshRequestsListing: () => void;
+  showOTPValidationFormModal: (submittedValues: any) => void;
 }
 
 interface iDDL {
@@ -59,7 +46,6 @@ function NewRequest(props: iNewRequest) {
 
   const [selectedRequestType, setSelectedRequestType] = useState("");
   const [selectedRequestTypeName, setSelectedRequestTypeName] = useState("");
-  const [isRequestTypeSelected, setIsRequestTypeSelected] = useState(false);
   const [requestTypes, setRequestTypes] = useState<iDDL[]>([
     { label: "", value: "" },
   ]);
@@ -67,76 +53,75 @@ function NewRequest(props: iNewRequest) {
   const [extraDetailsValue, setExtraDetailsValue] = useState("");
 
   const [formFields, setFormFields] = useState<any[]>([]);
-  const [showConfirmationDate, setShowConfirmationDate] = useState(false);
-  const [showFromDate, setShowFromDate] = useState(false);
-  const [showToDate, setShowToDate] = useState(false);
   const [attachmentName, setAttachmentName] = useState("");
-  const [attachmentUri, setAttachmentUri] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [showErrorMessage, setShowErrorMessage] = useState(false);
-  const [cashBalance, setCashData] = useState<IAccountBalance[]>(null);
-  const [deposits, setDepositData] = useState<IDeposit[]>(null);
-  const [investments, setInvestmentData] = useState<IInvestment[]>(null);
 
-  const getDropDownListValue = (type: string, value: string) => {
-    let data: iDDL[] = [];
+  const GetDropDownListValue = ({ type, value }) => {
 
-    if (type === "DDL") {
-      var items = value.indexOf("#@") != -1 ? value.split("#@")[0].split(",") : value.split(",");
-      for (let index = 0; index < items.length; index++) {
-        data.push({
-          label: items[index].replace(/"/g, ""),
-          value: items[index].replace(/"/g, ""),
-        });
-      }
-    } else {
-      if (value === "SP_MOB_CUST_CASH_LIST" || value === "SP_MOB_CUST_CASH_LIST_REQ") {
-        if (cashBalance && cashBalance.length > 0) {
-          cashBalance.forEach((element) =>
+    const [fieldValue, setFieldValue] = useState<any>(null);
+
+    useEffect(() => {
+      let isMounted = true;
+
+      const initialLoadMethod = async () => {
+        let data: iDDL[] = [];
+        if (type === "DDL") {
+          var items =
+            currentContext.language === "en"
+              ? value.split("#@")[0].split(",")
+              : value.lastIndexOf("#@") !== -1
+                ? value.split("#@")[1].split(",")
+                : value.split("#@")[0].split(",");
+          for (let index = 0; index < items.length; index++) {
             data.push({
-              label: element.accountNumber,
-              value: element.accountNumber,
-            })
-          );
-        }
-      }
-      if (value === "SP_MOB_CUST_INV_LIST" || value === "SP_MOB_CUST_INV_LIST_REQ") {
-        if (investments && investments.length > 0) {
-          investments.forEach((element) =>
-            data.push({
-              label: element.secDesciption,
-              value: element.secDesciption,
-            })
-          );
-        }
-      }
-      if (value === "SP_MOB_CUST_DEP_LIST" || value === "SP_MOB_CUST_DEP_LIST_REQ") {
-        if (deposits && deposits.length > 0) {
-          deposits.forEach((element) =>
-            data.push({
-              label: element.contractNumber,
-              value: element.contractNumber,
-            })
-          );
-        }
-      }
-    }
+              label: items[index].replace(/"/g, ""),
+              value: items[index].replace(/"/g, ""),
+            });
+          }
 
-    if (data && data.length > 0) {
+        } else {
+          await GetRequestDropDownListFromAPI(currentContext.selectedCIF, value)
+            .then((s) => {
+              if (s.length > 0) {
+                for (let index = 0; index < s.length; index++) {
+                  var element = s[index];
+                  data.push({
+                    label:
+                      currentContext.language === "en" ? element["name"] : element["nameAr"],
+                    value: element["id"],
+                  });
+                }
+              }
+            })
+            .catch((err) => { });
+        }
 
-      return (
+        setFieldValue(data);
+      }
+
+      initialLoadMethod();
+
+      return () => {
+        isMounted = false;
+      }; // use effect cleanup to set flag false, if unmounted
+    }, [currentContext.selectedCIF, currentContext.language]);
+
+
+    return fieldValue && fieldValue.length > 0 ?
+      (
         <>
           <option value="0">{local_Strings.SelectItem}</option>
-          {data.map((c, i) =>
+          {fieldValue.map((c, i) =>
             <option key={i} value={c.value}>
               {c.label}
             </option>)}
-        </>);
-    } else {
-      return (<option value="0">{local_Strings.SelectItem}</option>);
-    }
-
+        </>) :
+      <option value="0">{local_Strings.SelectItem}</option>
+      ;
   };
+
+  const MemoizedDropDownListValue = React.memo(GetDropDownListValue);
 
   const getExtraDetailsValue = (value: string, param: string) => {
     try {
@@ -184,44 +169,18 @@ function NewRequest(props: iNewRequest) {
     const initialLoadMethod = async () => {
       setLoading(true);
 
-      const getRequstsTypes = GetRequstsTypes();
-      const requestCashListing = GetCashListing(currentContext.selectedCIF);
-      const requestDepositsListing = GetDepositeListing(
-        currentContext.selectedCIF
-      );
-      const requestInvestmentsListing = GetInvestmentsListing(
-        currentContext.selectedCIF
-      );
-
-      axios
-        .all([
-          getRequstsTypes,
-          requestCashListing,
-          requestDepositsListing,
-          requestInvestmentsListing,
-        ])
-        .then((responseData: any) => {
-          if (isMounted && responseData && responseData.length > 0) {
-            const requstsTypesResponse = responseData[0];
-            let data: iDDL[] = [{ label: "", value: "" }];
-            for (let index = 0; index < requstsTypesResponse.length; index++) {
-              const element = requstsTypesResponse[index];
-              data.push({
-                label:
-                  currentContext.language === "ar"
-                    ? element["nameAr"]
-                    : element["nameEn"],
-                value: element["id"],
-              });
-            }
-
-            setRequestTypes(data.slice(1));
-            setCashData(responseData[1]);
-            setDepositData(responseData[2]);
-            setInvestmentData(responseData[3]);
+      GetRequstsTypes()
+        .then((s) => {
+          let data: iDDL[] = [{ label: "", value: "" }];
+          for (let index = 0; index < s.length; index++) {
+            const element = s[index];
+            data.push({
+              label: currentContext.language === "ar" ? element["nameAr"] : element["nameEn"],
+              value: element["id"],
+            });
           }
+          setRequestTypes(data.slice(1));
         })
-        .catch((e: any) => console.log(e))
         .finally(() => setLoading(false));
     };
 
@@ -233,6 +192,9 @@ function NewRequest(props: iNewRequest) {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
   }, [currentContext.selectedCIF, currentContext.language]);
+  useEffect(() => {
+    setShowRequestFields(false);
+  }, [props.showNewRequestModal]);
 
   const setBasicValidationSchema = (fieldName: string, type: string) => {
     if (fieldName === "FaxNumber") {
@@ -595,56 +557,49 @@ function NewRequest(props: iNewRequest) {
       setShowErrorMessage(false);
       setErrorMessage("");
 
-      const added = await AddRequest({
-        address: values["Address"],
-        auditorName: values["AuditorName/Requestor"],
-        cashAccount: values["CashAccount"],
-        cif: currentContext.selectedCIF,
-        city: values["City"],
-        confirmationDate: values["ConfirmationDate"],
-        contactPersonNumber: values["ContactPersonName(underPOA)"],
-        country: values["Country"],
-        currency: values["Currency"],
-        depositContractNumber: values["DepositContractNumber"],
-        documentType: values["DocumentType"],
-        extraDetails: extraDetailsValue,
-        faxNumber: values["FaxNumber"],
-        fileContent: values["Attachments"],
-        fileName: attachmentName,
-        fromDate: values["FromDate"],
-        id: 0,
-        investmentName: values["InvestmentName"],
-        landlineNumber: values["LandlineNumber"],
-        mobileNumber: values["MobileNumber"],
-        poBoxNumber: values["PoBox"],
-        remarks: values["Remarks"],
-        requestCreateDate: values["RequestCreateDate"],
-        requestTypeId: Number(selectedRequestType),
-        toDate: values["ToDate"],
-        requestStatus: values["RequestStatus"],
-        requestStatusChangeDate: values["RequestStatusChangeDate"],
-        requestSubject: selectedRequestTypeName,
-        col1: values["Col1"],
-        col2: values["Col2"],
-        col3: values["Col3"],
-        col4: values["Col4"],
-        col5: values["Col5"],
-        email: values["Email"],
-        statementType: values["StatementType"],
-        requestSubjectAr: "",
-        requestStatusAr: "",
-      });
-      if (added === true) {
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: local_Strings.RequestSuccessTitle,
-          html: local_Strings.RequestSuccessMessage,
-          showConfirmButton: false,
-          timer: Constant.AlertTimeout,
-        });
+      const otpSent = await SendOTP(currentContext.selectedCIF);
+      if (otpSent === true) {
         formikObj.resetForm();
-        props.refreshRequestsListing();
+        setShowRequestFields(false);
+        props.showOTPValidationFormModal({
+          address: values["Address"],
+          auditorName: values["AuditorName/Requestor"],
+          cashAccount: values["CashAccount"],
+          cif: currentContext.selectedCIF,
+          city: values["City"],
+          confirmationDate: values["ConfirmationDate"],
+          contactPersonNumber: values["ContactPersonName(underPOA)"],
+          country: values["Country"],
+          currency: values["Currency"],
+          depositContractNumber: values["DepositContractNumber"],
+          documentType: values["DocumentType"],
+          extraDetails: extraDetailsValue,
+          faxNumber: values["FaxNumber"],
+          fileContent: values["Attachments"],
+          fileName: attachmentName,
+          fromDate: values["FromDate"],
+          id: 0,
+          investmentName: values["InvestmentName"],
+          landlineNumber: values["LandlineNumber"],
+          mobileNumber: values["MobileNumber"],
+          poBoxNumber: values["PoBox"],
+          remarks: values["Remarks"],
+          requestCreateDate: values["RequestCreateDate"],
+          requestTypeId: Number(selectedRequestType),
+          toDate: values["ToDate"],
+          requestStatus: values["RequestStatus"],
+          requestStatusChangeDate: values["RequestStatusChangeDate"],
+          requestSubject: selectedRequestTypeName,
+          col1: values["Col1"],
+          col2: values["Col2"],
+          col3: values["Col3"],
+          col4: values["Col4"],
+          col5: values["Col5"],
+          email: values["Email"],
+          statementType: values["StatementType"],
+          requestSubjectAr: "",
+          requestStatusAr: "",
+        });
       } else {
         setErrorMessage(local_Strings.GenericErrorMessage);
         setShowErrorMessage(false);
@@ -774,7 +729,6 @@ function NewRequest(props: iNewRequest) {
 
                           setFormFields(data);
                           setFormValidationSchema(validationSchema);
-                          setIsRequestTypeSelected(true);
                           setShowErrorMessage(false);
                           setErrorMessage("");
                           handleReset();
@@ -822,11 +776,6 @@ function NewRequest(props: iNewRequest) {
                                       .replace(/ /g, "");
                                     setFieldValue("FileName", fileName, false);
                                     setFieldValue(
-                                      "FileContent",
-                                      fileContent,
-                                      false
-                                    );
-                                    setFieldValue(
                                       attachment,
                                       fileContent,
                                       false
@@ -836,14 +785,20 @@ function NewRequest(props: iNewRequest) {
                                 <ViewAttachment
                                   showDelete={true}
                                   fileName={values.FileName}
-                                  fileContent={values.FileContent}
+                                  fileContent={values[item["details"]
+                                    .split(";")[0]
+                                    .replace(/ /g, "")]}
                                   deleteThisFile={() => {
-                                    const attachment = item["details"]
-                                      .split(";")[0]
-                                      .replace(/ /g, "");
-                                    setFieldValue("FileName", "");
-                                    setFieldValue("FileContent", "");
-                                    setFieldValue(attachment, "");
+                                    try {
+                                      const attachment = item["details"]
+                                        .split(";")[0]
+                                        .replace(/ /g, "");
+                                      setFieldValue("FileName", "", false);
+                                      setFieldValue(attachment, "", false);
+                                    }
+                                    catch (e) {
+                                      console.log(e);
+                                    }
                                   }}
                                 />
                               </Form.Group>
@@ -1044,15 +999,6 @@ function NewRequest(props: iNewRequest) {
                                     const fName = item["details"]
                                       .split(";")[0]
                                       .replace(/ /g, "");
-                                    if (fName === "ConfirmationDate") {
-                                      setShowConfirmationDate(false);
-                                    }
-                                    if (fName === "FromDate") {
-                                      setShowFromDate(false);
-                                    }
-                                    if (fName === "ToDate") {
-                                      setShowToDate(false);
-                                    }
                                     setFieldValue(
                                       fName,
                                       moment(date).utc(true)
@@ -1094,10 +1040,10 @@ function NewRequest(props: iNewRequest) {
                                     ] || ""
                                   }
                                 >
-                                  {getDropDownListValue(
-                                    item["details"].split(";")[2],
-                                    item["details"].split(";")[3]
-                                  )}
+                                  <MemoizedDropDownListValue
+                                    type={item["details"].split(";")[2]}
+                                    value={item["details"].split(";")[3]}
+                                  />
                                 </Form.Control>
                               </Form.Group>
                             </Col>
@@ -1130,10 +1076,10 @@ function NewRequest(props: iNewRequest) {
                                     ] || ""
                                   }
                                 >
-                                  {getDropDownListValue(
-                                    item["details"].split(";")[2],
-                                    item["details"].split(";")[3]
-                                  )}
+                                  <MemoizedDropDownListValue
+                                    type={item["details"].split(";")[2]}
+                                    value={item["details"].split(";")[3]}
+                                  />
                                 </Form.Control>
                               </Form.Group>
                             </Col>

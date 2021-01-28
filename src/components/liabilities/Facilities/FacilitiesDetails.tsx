@@ -48,7 +48,7 @@ function FacilitiesDetails(props: iFacilitiesDetails) {
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [props.facilityItem.ldReference]);
+  }, [props.facilityItem.ldReference, currentContext.language]);
 
   return (
     <Modal
@@ -100,7 +100,7 @@ function FacilitiesDetails(props: iFacilitiesDetails) {
               <div className="row align-items-center">
                 <div className="col-sm-8">
                   <h3 className="text-capitalize color-gold">
-                    {local_Strings.LoanNo + " | " + props.facilityItem.ldReference}
+                    {props.facilityItem.ldReference}
                   </h3>
                   <h3 className="text-sm">
                     {item.OutstandingAmount.value || "0"}

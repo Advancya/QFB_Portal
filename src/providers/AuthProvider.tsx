@@ -67,19 +67,23 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     timeout: 1000 * 60 * 5,
     onIdle: async event => {
       console.log('user is idle', event);
-      await AddToLogs(
-        'user is idle',
-        'last active - ' + getLastActiveTime(),
-        selectedCIF
-      );
-      Swal.fire({
-        position: 'center',
-        icon: 'warning',
-        title: local_Strings.SessionTimeOutMessage,
-        confirmButtonColor: '#6b4f44',
-        showConfirmButton: true,
-        showCloseButton: false,
-      }).then(() => signout());
+
+      if (!!selectedCIF) {
+        await AddToLogs(
+          'user is idle',
+          'last active time - ' + getLastActiveTime(),
+          selectedCIF
+        );
+        signout();
+        Swal.fire({
+          position: 'center',
+          icon: 'warning',
+          title: local_Strings.SessionTimeOutMessage,
+          confirmButtonColor: '#6b4f44',
+          showConfirmButton: true,
+          showCloseButton: false,
+        });
+      }
     },
     debounce: 500
   });
@@ -108,6 +112,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   const signout = async () => {
+    await AddToLogs(
+      'user is signout successfully',
+      'last active time - ' + getLastActiveTime(),
+      selectedCIF
+    );
+
     setCIF(null);
     setUserRole("");
     setUserSettings(null);

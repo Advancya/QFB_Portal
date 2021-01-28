@@ -195,6 +195,29 @@ async function RequestCallback(
   }
 }
 
+async function RmReadOffer(id: string) {
+  try {
+    const response = await apiInstance.get(
+      `/api/OfferSubscriptions/SetIsRead?requestId=${id}`
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+async function GetRequestDropDownListFromAPI(cif: string, key: string) {
+  try {
+    const response = await apiInstance.get(
+      `/api/Requests/GetDropDownListFromAPI?cif=${cif}&key=${key}`
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export {
   RmReadRequest,
   RmReadTransaction,
@@ -206,4 +229,6 @@ export {
   GetExtraDetailsDepositDetails,
   RmUpdateStatus,
   RequestCallback,
+  RmReadOffer,
+  GetRequestDropDownListFromAPI
 };

@@ -2,9 +2,11 @@ import React, { useContext, useEffect, useState } from "react";
 import RMRequestListing from "./RMRequestListing";
 import RMRequestDetails from "./RMRequestDetails";
 import RMTranactionDetails from "./RMTranactionDetails";
+import RMOfferDetails from "./RMOfferDetails";
 import {
   GetRmRequestList,
   GetRmTransactionList,
+  GetRmOffersList
 } from "../../services/cmsService";
 import { iRmRequests } from "../../Helpers/publicInterfaces";
 import { localStrings as local_Strings } from "../../translations/localStrings";
@@ -17,8 +19,10 @@ const RM = () => {
   const [showRMListing, setShowRMListing] = useState(true);
   const [showRequestDetail, setRequestDetail] = useState(false);
   const [showTransactionDetail, setTransactionDetail] = useState(false);
+  const [showOfferRequests, setOfferRequests] = useState(false);
   const [requests, setRequests] = React.useState<iRmRequests[]>([]);
   const [tranactions, setTransactions] = React.useState<iRmRequests[]>([]);
+  const [offers, setOffers] = React.useState<iRmRequests[]>([]);
   const [itemId, selectItemId] = useState<number>(0);
 
   useEffect(() => {
@@ -26,6 +30,7 @@ const RM = () => {
 
       await fetchRequestsForRM();
       await fetchTransactionsForRM();
+      await fetchOfferRequestForRM();
 
     };
 
@@ -101,6 +106,37 @@ const RM = () => {
       .finally(() => setLoading(false));
   };
 
+  const fetchOfferRequestForRM = async () => {
+    setLoading(true);
+    const offersItems: iRmRequests[] = [];
+
+    GetRmOffersList(currentContext.selectedCIF)
+      .then((offers: []) => {
+        if (offers && offers.length > 0) {
+          for (let index = 0; index < offers.length; index++) {
+            offersItems.push({
+              cif: offers[index]["cif"],
+              requestCreateDate: offers[index]["requestCreateDate"],
+              customerMobile: offers[index]["customerMobile"],
+              customerName: offers[index]["customerName"],
+              id: offers[index]["id"],
+              requestStatus: offers[index]["requestStatus"],
+              requestStatusAr: offers[index]["requestStatusAR"],
+              requestSubject: offers[index]["requestSubject"],
+              requestSubjectAr: offers[index]["requestSubjectAR"],
+              type: "Offers",
+              requestTypeId: "",
+              isRead:
+                offers[index]["isRead"] !== null ? offers[index]["isRead"] : false,
+            });
+          }
+          setOffers(offersItems);
+        }
+      })
+      .catch((e: any) => console.log(e))
+      .finally(() => setLoading(false));
+  };
+  
   return (
     <div>
       {((requests && requests.length > 0)
@@ -117,6 +153,11 @@ const RM = () => {
           showTransactionDetailModal={(itemId: number) => {
             setShowRMListing(false);
             setTransactionDetail(true);
+            selectItemId(itemId);
+          }}
+          showOfferDetailModal={(itemId: number) => {
+            setShowRMListing(false);
+            setOfferRequests(true);
             selectItemId(itemId);
           }}
           backRMRequestListingModal={() => setShowRMListing(false)}
@@ -149,6 +190,19 @@ const RM = () => {
               setTransactionDetail(false);
               setShowRMListing(true);
               fetchTransactionsForRM();
+            }}
+            itemId={itemId}
+          />
+          <RMOfferDetails
+            showRMDetailsModal={showOfferRequests}
+            hideRMDetailsModal={() => {
+              setOfferRequests(false);
+              fetchOfferRequestForRM();
+            }}
+            backRMDetailsgModal={() => {
+              setOfferRequests(false);
+              setShowRMListing(true);
+              fetchOfferRequestForRM();
             }}
             itemId={itemId}
           />

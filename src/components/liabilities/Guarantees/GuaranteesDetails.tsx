@@ -46,7 +46,7 @@ function GuaranteesDetails(props: iGuaranteesDetails) {
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [props.params.gurRef]);
+  }, [props.params.gurRef, currentContext.language]);
 
   return (
     <Modal

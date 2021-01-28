@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import Constant from "../../constants/defaultData";
@@ -10,18 +10,17 @@ import * as yup from "yup";
 import InvalidFieldError from "../../shared/invalid-field-error";
 import Swal from "sweetalert2";
 import { SendOTP, ValidateOTP } from "../../services/cmsService";
-import {
-  initialRegisterationData,
-  IRegisterationData,
-} from "../../Helpers/publicInterfaces";
-import { signUp } from "../../services/authenticationService";
 import xIcon from "../../images/x-icon.svg";
+import {
+  AddRequest
+} from "../../services/requestService";
 
 interface iOTPValidationForm {
   showOTPValidationFormModal: boolean;
   hideOTPValidationFormModal: () => void;
   backOTPValidationFormModal: () => void;
-  showNewRequestModal: () => void;
+  refreshRequestsListing: () => void;
+  submittedRequest: any;
 }
 
 function OTPValidationForm(props: iOTPValidationForm) {
@@ -92,8 +91,28 @@ function OTPValidationForm(props: iOTPValidationForm) {
                 values.otp
               );
 
-              if (otpRes === true) {                
-                props.showNewRequestModal();
+              if (otpRes === true) {
+                const added = await AddRequest(props.submittedRequest);
+                if (added === true) {
+                  Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: local_Strings.RequestSuccessTitle,
+                    html: local_Strings.RequestSuccessMessage,
+                    showConfirmButton: false,
+                    timer: Constant.AlertTimeout,
+                  });
+                  setLoading(false);
+                  props.refreshRequestsListing();
+                } else {
+                  Swal.fire({
+                    position: "top-end",
+                    icon: "error",
+                    title: local_Strings.GenericErrorMessage,
+                    showConfirmButton: false,
+                    timer: Constant.AlertTimeout,
+                  });
+                }
               } else {
                 Swal.fire({
                   position: "top-end",
@@ -151,7 +170,7 @@ function OTPValidationForm(props: iOTPValidationForm) {
                               title: local_Strings.OTPSentMessage,
                               showConfirmButton: false,
                               timer: Constant.AlertTimeout,
-                            });                            
+                            });
                           } else {
                             Swal.fire({
                               position: "top-end",

@@ -1320,6 +1320,34 @@ async function AddToLogs(title: string, message: string, cif: string) {
   }
 }
 
+const GetRmOffersList = async (accountId: string) => {
+  try {
+    const result = await apiInstance.get(
+      `/api/OfferSubscriptions/GetByRm?rmId=${accountId}`
+    );
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+
+const GetOfferSubscriptionById = async (id: number) => {
+  try {
+    const result = await apiInstance.get(
+      `/api/OfferSubscriptions/GetById?id=${id}`
+    );
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+
 export {
   GetStockData,
   ValidateRegisterData,
@@ -1416,5 +1444,7 @@ export {
   GetRmTransactionList,
   AddAcceptTermsStatusForCustomer,
   AddAcceptTermsStatusForAnonymous,
-  AddToLogs
+  AddToLogs,
+  GetRmOffersList,
+  GetOfferSubscriptionById
 };

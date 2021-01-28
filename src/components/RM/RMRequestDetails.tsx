@@ -154,6 +154,7 @@ function RMRequestDetails(props: iRMDetails) {
   };
 
   useEffect(() => {
+    setSelectedStatus("");
     fetchFormData();
   }, [props.itemId, props.showRMDetailsModal]);
 
@@ -290,6 +291,7 @@ function RMRequestDetails(props: iRMDetails) {
                 id="submitOTPBtn"
                 className="btn btn-primary"
                 type="submit"
+                disabled={selectedStatus === ""}
                 onClick={async (e) => {
                   if (!!selectedStatus) {
                     setLoading(true);

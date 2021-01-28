@@ -201,6 +201,27 @@ async function RmTranasctionUpdateStatus(id: string, status: string) {
   }
 }
 
+async function RmOfferUpdateStatus(id: string, status: string) {
+  try {
+    const response = await apiInstance.get(
+      `/api/OfferSubscriptions/UpdateStatus?transactionId=${id}&status=${status}`
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function GetBeneficiariesByID(id: string) {
+  try {
+    const result = await apiInstance.get(`/api/Beneficiary/GetById?id=${id}`);
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return undefined;
+  }
+}
+
 export {
   AddBeneficiary,
   AddTransaction,
@@ -211,4 +232,6 @@ export {
   DeleteDeneficiary,
   UpdateBeneficiary,
   RmTranasctionUpdateStatus,
+  RmOfferUpdateStatus,  
+  GetBeneficiariesByID,
 };

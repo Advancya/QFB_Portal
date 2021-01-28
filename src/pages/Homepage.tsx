@@ -57,14 +57,18 @@ export const PortfolioContext = createContext<IUserPortfolio>(
   intialPortfolioData
 );
 
-export interface IInboxProps {
+export interface IInboxProps {  
   messages: IInboxDetail[];
   refreshInbox: () => void;
+  reloadNotifications: boolean;
+  refreshNotifications: (refresh: boolean) => void;
 }
 
 export const InboxContext = createContext<IInboxProps>({
   messages: [emptyInboxDetail],
   refreshInbox: () => { },
+  reloadNotifications: false,
+  refreshNotifications: (refresh) => { },
 });
 
 const HomePage = () => {
@@ -252,10 +256,15 @@ const HomePage = () => {
       .finally(() => setLoading(false));
   };
 
+  const [reloadNotifications, setReloadNotifications] = useState(false);
+  const refreshNotifications = (refresh: boolean) => {
+    setReloadNotifications(refresh);
+  }
+
   return (
     <div>
       {!!currentContext.selectedCIF && (
-        <InboxContext.Provider value={{ messages, refreshInbox }}>
+        <InboxContext.Provider value={{ messages, refreshInbox, reloadNotifications, refreshNotifications }}>
           <PortfolioContext.Provider value={userPortfolio}>
             <AuthCustomHeader />
             <Breadcrumb pageName={local_Strings.PortfolioTitle} />

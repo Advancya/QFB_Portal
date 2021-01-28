@@ -135,7 +135,7 @@ function RequestsListing(props: iRequestsListing) {
           <h4>
             {currentContext.language !== "ar"
               ? item.requestSubject
-              : item.requestSubjectAR}
+              : item.requestSubjectAr}
           </h4>
         </div>
         <div className="col-8 col-sm-3 text-sm-right">
@@ -143,7 +143,7 @@ function RequestsListing(props: iRequestsListing) {
           <span className="status-badge ">
             {currentContext.language !== "ar"
               ? item.requestStatus
-              : item.requestStatusAR}
+              : item.requestStatusAr}
           </span>{" "}
         </div>
         <div className="col-4 col-sm-1 text-right">

@@ -41,8 +41,8 @@ const TransactionListing = (props: ITransactionListingProps) => {
 
   const renderItem = (item: ITransaction, index: string) => {
     const transactionsDetails =
-      (item.transactionsDetails && !!item.transactionsDetails) ||
-        (item.paymentDetails && !!item.paymentDetails)
+      (item.transactionsDetails && !!item.transactionsDetails.trim()) ||
+        (item.paymentDetails && !!item.paymentDetails.trim())
         ? (helper.transformingTransactionDetail(
           item.paymentDetails
             ? item.paymentDetails
@@ -183,6 +183,26 @@ const TransactionListing = (props: ITransactionListingProps) => {
                       </div>
                       <div className="color-gray">
                         {transactionsDetails.BeneficiaryAccount.value}
+                      </div>
+                    </div>
+                  )}
+                  {transactionsDetails.FacilityReference && !!transactionsDetails.FacilityReference.value.trim() && (
+                    <div className="item-row py-2">
+                      <div className="color-black">
+                        {transactionsDetails.FacilityReference.label}
+                      </div>
+                      <div className="color-gray">
+                        {transactionsDetails.FacilityReference.value}
+                      </div>
+                    </div>
+                  )}
+                  {transactionsDetails.PastDueDays && !!transactionsDetails.PastDueDays.value.trim() && (
+                    <div className="item-row py-2">
+                      <div className="color-black">
+                        {transactionsDetails.PastDueDays.label}
+                      </div>
+                      <div className="color-gray">
+                        {transactionsDetails.PastDueDays.value}
                       </div>
                     </div>
                   )}

@@ -49,7 +49,7 @@ function InvestmentsDetails(props: iInvestmentsDetails) {
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [props.investment.subAssetID]);
+  }, [props.investment.subAssetID, currentContext.language]);
 
   return (
     <Modal
