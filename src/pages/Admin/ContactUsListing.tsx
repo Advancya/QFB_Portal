@@ -72,7 +72,7 @@ function ContactUsListing() {
                     {local_Strings.ContactUsQueryLabel}
                   </h6>
                 </div>
-                <div className="col-1 col-sm-1">
+                <div className="col-2 col-sm-2">
                   <h6 className="mb-1 text-600">
                     {local_Strings.WelcomeScreenRMMobileLabel}
                   </h6>
@@ -82,7 +82,7 @@ function ContactUsListing() {
                     {local_Strings.ContactUsEmailAddressLabel}
                   </h6>
                 </div>
-                <div className="col-2 col-sm-2">
+                <div className="col-1 col-sm-1">
                   <h6 className="mb-1 text-600">
                     {local_Strings.ContactUsCountryLabel}
                   </h6>
@@ -102,18 +102,18 @@ function ContactUsListing() {
                       </h6>
                     </div>
                     <div className="col-2 col-sm-2">
-                      <h6 className="mb-1">{item.name || ""}</h6>
+                      <h6 className="mb-1 text-break">{item.name || ""}</h6>
                     </div>
                     <div className="col-3 col-sm-3">
-                      <h6 className="mb-1">{item.query || ""}</h6>
+                      <h6 className="mb-1 ">{item.query || ""}</h6>
                     </div>
-                    <div className="col-1 col-sm-1">
+                    <div className="col-2 col-sm-2">
                       <h6 className="mb-1">{item.mobile || ""}</h6>
                     </div>
                     <div className="col-2 col-sm-2">
                       <h6 className="mb-1 text-break">{item.email || ""}</h6>
                     </div>
-                    <div className="col-2 col-sm-2">
+                    <div className="col-1 col-sm-1">
                       <h6 className="mb-1">{item.country || ""}</h6>
                     </div>
                   </div>
