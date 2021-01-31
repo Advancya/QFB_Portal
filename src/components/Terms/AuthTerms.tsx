@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { Modal } from "react-bootstrap";
 import dateIcon from "../../images/calendar-inactive.png";
 import { localStrings as local_Strings } from "../../translations/localStrings";
@@ -6,6 +6,8 @@ import { useHistory } from "react-router-dom";
 import ResponsiveEmbed from 'react-bootstrap/ResponsiveEmbed';
 import { AuthContext } from "../../providers/AuthProvider";
 import xIcon from "../../images/x-icon.svg";
+import Constant from "../../constants/defaultData";
+
 
 interface iAuthTerms {
   showAuthTermsModal: boolean;
@@ -49,12 +51,12 @@ function AuthTerms(authTermsProps: iAuthTerms) {
       <Modal.Body>
         {currentContext.language === "en" ? (
           <ResponsiveEmbed aspectRatio="16by9">
-            <embed type="text/html" src="https://portalcms.azurewebsites.net/TermsAuthen.html" />
+            <embed type="text/html" src={Constant.ApiBaseUrl + "/TermsAuthen.html"} />
 
           </ResponsiveEmbed>
         ) : (
             <ResponsiveEmbed aspectRatio="16by9">
-              <embed type="text/html" src="https://portalcms.azurewebsites.net/TermsAuthAr.html" />
+              <embed type="text/html" src={Constant.ApiBaseUrl + "/TermsAuthAr.html"} />
             </ResponsiveEmbed>
           )}
         <div className="text-right">

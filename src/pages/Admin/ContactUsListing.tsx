@@ -1,12 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Modal } from "react-bootstrap";
 import Breadcrumb from "../../components/Breadcrumb";
 import { GetAllContactUs } from "../../services/cmsService";
 import moment from "moment";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
-import { emptyContactUs, IContactUs } from "../../Helpers/publicInterfaces";
-import CustomHeader from "../../components/header/CustomHeader";
+import { IContactUs } from "../../Helpers/publicInterfaces";
+import AdminCustomHeader from "../../components/header/AdminCustomHeader";
 import Footer from "../../components/Footer";
 
 function ContactUsListing() {
@@ -45,7 +44,7 @@ function ContactUsListing() {
 
   return (
     <div>
-      <CustomHeader />
+      <AdminCustomHeader />
       <Breadcrumb pageName={""} />
       <div className="main-section">
         <div className="d-flex align-items-center my-3">
@@ -75,7 +74,7 @@ function ContactUsListing() {
                 </div>
                 <div className="col-1 col-sm-1">
                   <h6 className="mb-1 text-600">
-                    {local_Strings.ContactUsMobileLabel}
+                    {local_Strings.WelcomeScreenRMMobileLabel}
                   </h6>
                 </div>
                 <div className="col-2 col-sm-2">

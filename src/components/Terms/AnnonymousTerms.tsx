@@ -1,12 +1,11 @@
 import React, { useContext, useState } from "react";
 import { Modal } from "react-bootstrap";
-import dateIcon from "../../images/calendar-inactive.png";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { useHistory } from "react-router-dom";
-
 import { AuthContext } from "../../providers/AuthProvider";
 import xIcon from "../../images/x-icon.svg";
 import ResponsiveEmbed from 'react-bootstrap/ResponsiveEmbed';
+import Constant from "../../constants/defaultData";
 
 interface iAnnonymousTerms {
   showAnnonymousTermsModal: boolean;
@@ -46,7 +45,7 @@ function AnnonymousTerms(annonymousTermsProps: iAnnonymousTerms) {
       </Modal.Header>
       <Modal.Body>
         <ResponsiveEmbed aspectRatio="16by9">
-          <embed type="text/html" src="https://portalcms.azurewebsites.net/TermsAnnonymous.html" />
+          <embed type="text/html" src={Constant.ApiBaseUrl + "/TermsAnnonymous.html"} />
         </ResponsiveEmbed>
       </Modal.Body>
     </Modal>

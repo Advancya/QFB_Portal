@@ -840,6 +840,7 @@ const en = {
   MobileNumberLengthError: "Mobile number must be at least 10 characters",
 
   RequestNumber: "Request Number | ",
+  SendButtonText: "Send",
 };
 
 export default en;

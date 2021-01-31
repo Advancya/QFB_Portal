@@ -836,6 +836,7 @@ const ar = {
   MobileNumberLengthError: "يجب ألا يقل رقم الهاتف المحمول عن 10 أحرف",
 
   RequestNumber: "رقم الطلب | ",
+  SendButtonText: "Send",
 };
 
 export default ar;
