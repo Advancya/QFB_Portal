@@ -11,37 +11,61 @@ import InvalidFieldError from "../../shared/invalid-field-error";
 import Swal from "sweetalert2";
 import xIcon from "../../images/x-icon.svg";
 import MultiSelect from "react-multi-select-component";
-import { CustomerListContext } from "../../pages/Admin/Admin";
 import moment from "moment";
+import randomatic from "randomatic";
 import {
-  SendNotificationsToCIFs
+  GetAllCustomerList, AddPasswordToken, SendSMS
 } from "../../services/cmsService";
 
-interface iResetPasswordForm {
+interface iSendPasswordResetLink {
   showFormModal: boolean;
   hideFormModal: () => void;
 }
 
-function ResetPasswordForm(props: iResetPasswordForm) {
+function SendPasswordResetLink(props: iSendPasswordResetLink) {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
   const [isLoading, setLoading] = useState(false);
-  const customerList = useContext(CustomerListContext);
   const [showCustomerError, setCustomerError] = useState<boolean>(false);
+  const [customerList, setCustomerList] = useState<[]>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const initialLoadMethod = async () => {
+      await GetAllCustomerList()
+        .then((responseData: any) => {
+
+          if (responseData && responseData.length > 0 && isMounted) {
+            setCustomerList(responseData);
+          }
+        })
+        .catch((e: any) => console.log(e))
+        .finally(() => setLoading(false));
+    }
+
+    if (!!currentContext.selectedCIF) {
+      initialLoadMethod();
+    }
+
+    return () => {
+      isMounted = false;
+    }; // use effect cleanup to set flag false, if unmounted
+
+  }, [currentContext.selectedCIF, currentContext.language]);
 
   const formValidationSchema = yup.object({
-    selectedCIFs: yup
+    selectedCIF: yup
       .string()
       .nullable()
-      .min(1)
-      .required("Select at least one customer"),
+      .required("Select the customer"),
   });
 
   const options =
     customerList && customerList.length > 0
       ? customerList.map((c) => ({
-        value: c.id ? c.id : "",
-        label: c.shortName ? c.shortName : "",
+        value: c["id"] + ";" + c["mobile"],
+        label: c["shortName"] ? c["shortName"] : "",
       }))
       : [];
 
@@ -71,31 +95,47 @@ function ResetPasswordForm(props: iResetPasswordForm) {
         </Modal.Header>
         <Modal.Body>
           <Formik
-            initialValues={{ selectedCIFs: [] }}
+            initialValues={{ selectedCIF: [] }}
             validationSchema={formValidationSchema}
             onSubmit={async (values) => {
               setLoading(true);
-              const item = {
-                cif:
-                  values.selectedCIFs.length === customerList.length
-                    ? ""
-                    : values.selectedCIFs.flatMap((x) => x["value"]).toString(),
-                title: "Use this link to reset your password",
-                titleAr: "Use this link to reset your password",
-                expiryData: moment().add(1, "day").utc(true),
-                message: Constant.ApiBaseUrl + "/" + currentContext.language + "/ResetPassword",
-                messageAr: Constant.ApiBaseUrl + "/" + currentContext.language + "/ResetPassword",
+
+              const tokenItem =
+              {
+                "id": 0,
+                "token": randomatic("Aa0", 16),
+                "createdDate": moment().toISOString()
               };
-              const x = await SendNotificationsToCIFs(item);
-              if (x) {
-                Swal.fire({
-                  position: "top-end",
-                  icon: "success",
-                  title: local_Strings.NotificationsSavedMessage,
-                  showConfirmButton: false,
-                  timer: Constant.AlertTimeout,
-                });
-                props.hideFormModal();
+
+              const isTokenGenerated = await AddPasswordToken(tokenItem);
+              if (isTokenGenerated) {
+                const mobile =
+                  values.selectedCIF[0]["value"].split(";")[1];
+                const text = `Dear ${values.selectedCIF[0]["label"]},
+                Use this link to reset your password
+                ${Constant.PortalUrl}/${currentContext.language}
+                /ResetPassword?token=${tokenItem.token}`;
+
+                const x = await SendSMS("+919405417912", text);
+
+                if (x) {
+                  Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: local_Strings.NotificationsSavedMessage,
+                    showConfirmButton: false,
+                    timer: Constant.AlertTimeout,
+                  });
+                  props.hideFormModal();
+                } else {
+                  Swal.fire({
+                    position: "top-end",
+                    icon: "error",
+                    title: local_Strings.GenericErrorMessage,
+                    showConfirmButton: false,
+                    timer: Constant.AlertTimeout,
+                  });
+                }
               } else {
                 Swal.fire({
                   position: "top-end",
@@ -107,7 +147,7 @@ function ResetPasswordForm(props: iResetPasswordForm) {
               }
               setLoading(false);
             }}
-            enableReinitialize={true}
+            enableReinitialize={false}
           >
             {({
               values,
@@ -136,23 +176,24 @@ function ResetPasswordForm(props: iResetPasswordForm) {
                       hasSelectAll={false}
                       options={options}
                       value={
-                        values.selectedCIFs &&
-                          values.selectedCIFs.length > 0 &&
-                          values.selectedCIFs[0].value !== "0"
-                          ? values.selectedCIFs
+                        values.selectedCIF &&
+                          values.selectedCIF.length > 0 &&
+                          values.selectedCIF[0].value !== "0"
+                          ? values.selectedCIF
                           : null
                       }
                       onChange={(_item) => {
-                        setFieldValue("selectedCIFs", _item);
-                        handleBlur("selectedCIFs");
-                        if (_item.length !== 0) {
-                          setCustomerError(false);
-                        }
+
+                        setFieldValue("selectedCIF", _item);
+                        handleBlur("selectedCIF");
+                        // if (_item.length === 0 || _item.length > 1) {
+                        //   setCustomerError(false);
+                        // }
                       }}
                       labelledBy={"Select"}
                     />
                     {showCustomerError &&
-                      InvalidFieldError("Select at least one customer")}
+                      InvalidFieldError("Select only one customer")}
                   </div>
                 </div>
                 <div className="form-group">
@@ -162,26 +203,25 @@ function ResetPasswordForm(props: iResetPasswordForm) {
                     style={{ float: "right", margin: 20 }}
                     onClick={(e) => {
                       validateForm(values);
-                      if (isValid) {
+                      if (isValid && values.selectedCIF.length === 1) {
+                        setCustomerError(false);
                         handleSubmit();
                       } else {
                         Swal.fire({
                           position: "top-end",
                           icon: "error",
-                          title: local_Strings.formValidationMessage,
+                          title: "Select only one customer",
                           showConfirmButton: false,
                           timer: Constant.AlertTimeout,
                         });
                         if (
-                          values.selectedCIFs.length === 0 ||
-                          values.selectedCIFs[0].value === "0"
+                          !values.selectedCIF[0].value || values.selectedCIF.length > 1
                         ) {
                           setCustomerError(true);
                         } else {
                           setCustomerError(false);
                         }
-                        handleBlur("selectedCIFs");
-                        touched.selectedCIFs = true;
+                        handleBlur("selectedCIF");
                       }
                     }}
                   >
@@ -197,4 +237,4 @@ function ResetPasswordForm(props: iResetPasswordForm) {
   );
 }
 
-export default ResetPasswordForm;
+export default SendPasswordResetLink;

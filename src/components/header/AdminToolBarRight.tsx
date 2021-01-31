@@ -4,7 +4,7 @@ import { AuthContext } from "../../providers/AuthProvider";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import SettingsAnchor from "../Settings/SettingsAnchor";
 import ContactUsForm from "../ContactUs/ContactUsForm";
-import ResetPasswordForm from "../ResetPassword/ResetPasswordForm";
+import SendPasswordResetLink from "../ResetPassword/SendPasswordResetLink";
 import { Link } from "react-router-dom";
 
 function AdminToolBarRight() {
@@ -29,7 +29,7 @@ function AdminToolBarRight() {
         showContactUsFormModal={showContactUsForm}
         hideContactUsFormModal={() => setShowContactUsForm(false)}
       />
-      <ResetPasswordForm
+      <SendPasswordResetLink
         showFormModal={showResetPasswordForm}
         hideFormModal={() => setShowResetPasswordForm(false)}
       />

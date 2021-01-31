@@ -51,12 +51,12 @@ function AuthTerms(authTermsProps: iAuthTerms) {
       <Modal.Body>
         {currentContext.language === "en" ? (
           <ResponsiveEmbed aspectRatio="16by9">
-            <embed type="text/html" src={Constant.ApiBaseUrl + "/TermsAuthen.html"} />
+            <embed type="text/html" src={Constant.PortalUrl + "/TermsAuthen.html"} />
 
           </ResponsiveEmbed>
         ) : (
             <ResponsiveEmbed aspectRatio="16by9">
-              <embed type="text/html" src={Constant.ApiBaseUrl + "/TermsAuthAr.html"} />
+              <embed type="text/html" src={Constant.PortalUrl + "/TermsAuthAr.html"} />
             </ResponsiveEmbed>
           )}
         <div className="text-right">

@@ -27,6 +27,7 @@ function ForgotPasswordLanding() {
 
   const handleCloseForgotPasswordStep2 = () =>
     setShowForgotPasswordStep2(false);
+    
   const handleShowForgotPasswordStep2 = (cif: string) => {
     handleCloseForgotPasswordStep1();
     setShowForgotPasswordStep2(true);

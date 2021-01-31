@@ -10,10 +10,7 @@ interface iForgotPasswordStep4 {
   backForgotPasswordStep3Modal: () => void;
 }
 function ForgotPasswordStep4(ForgotPasswordStep4Props: iForgotPasswordStep4) {
-  const showMoreForgotPasswordStep4 = () => {
-    console.log("retrieve more from server");
-  };
-
+  
   return (
     <Modal
       show={ForgotPasswordStep4Props.showForgotPasswordStep4Modal}

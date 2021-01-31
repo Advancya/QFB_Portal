@@ -45,7 +45,7 @@ function AnnonymousTerms(annonymousTermsProps: iAnnonymousTerms) {
       </Modal.Header>
       <Modal.Body>
         <ResponsiveEmbed aspectRatio="16by9">
-          <embed type="text/html" src={Constant.ApiBaseUrl + "/TermsAnnonymous.html"} />
+          <embed type="text/html" src={Constant.PortalUrl + "/TermsAnnonymous.html"} />
         </ResponsiveEmbed>
       </Modal.Body>
     </Modal>

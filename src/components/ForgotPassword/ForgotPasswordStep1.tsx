@@ -30,9 +30,9 @@ function ForgotPasswordStep1(props: iForgotPasswordStep1) {
   const [isLoading, setLoading] = useState(false);
 
   const initialValues: IresetFormValues = {
-    username: "3255",
-    mobile: "+97450344671",
-    email: "demo@advancya.com",
+    username: "",
+    mobile: "",
+    email: "",
   };
 
   const resetPasswordValidationSchema = yup.object({

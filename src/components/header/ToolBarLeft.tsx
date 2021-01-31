@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome } from "@fortawesome/free-solid-svg-icons";
@@ -14,7 +14,6 @@ function ToolBarLeft() {
   const history = useHistory();
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
-  const [adminLink, setAdminLink] = useState<boolean>(false);
 
   const switchLanguage = (language: string) => {
     if (language === "en") {

@@ -6,6 +6,7 @@ import randomatic from "randomatic";
 import Parser from 'rss-parser';
 import queryString from "query-string";
 import { ConvertUTCDateToLocalDate } from "./commonDataServices";
+import moment from "moment";
 
 async function generateRegistrationToken() {
   try {
@@ -646,7 +647,7 @@ const GetAllCurrency = async () => {
 const GetSettingsByCIF = async (cif: string) => {
   try {
 
-    
+
     const result = await apiInstance.get(
       `/api/AccountSettings/GetByCIF?cif=${cif}`
     );
@@ -739,10 +740,10 @@ const GetPublicNews = async () => {
         item: ['thumbnail']
       }
     });
-    
+
     const result = await parser.parseURL(`https://www.qfb.com.qa/feed/`);
     return result.items;
-    
+
   } catch (err) {
     console.log(err);
     return null;
@@ -1255,7 +1256,7 @@ async function AddAcceptTermsStatusForCustomer(cif: string) {
       deviceId: "QFB portal",
       customerId: Number(cif),
     });
-    
+
     if (result.data) {
       localStorage.setItem(defaultData.CustomerTermsAcceptanceStorageKey, "Terms Accepted");
     }
@@ -1285,7 +1286,7 @@ async function AddAcceptTermsStatusForAnonymous() {
       }
     );
     if (result.data) {
-      
+
       localStorage.setItem(defaultData.AnonymousTermsAcceptanceStorageKey, "Terms Accepted");
     }
     return result.data;
@@ -1348,7 +1349,75 @@ const GetOfferSubscriptionById = async (id: number) => {
 };
 
 
+const SendSMS = async (mobile: string, text: string) => {
+  try {
+    const result = await apiInstance.get(
+      `/api/Helper/SendSMS?number=${mobile}&text=${text}`
+    );
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+async function IsPasswordTokenValid(_token: string) {
+  try {
+
+    const token = await generateRegistrationToken();
+    const result = await axios.get(
+      `${defaultData.ApiBaseUrl}/api/ResetPasswordToken/IsTokenExists?token=${_token}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token["access_token"]}`,
+        },
+      }
+    );
+
+    return result.data;
+  } catch (err) {
+    return [];
+  }
+}
+
+async function AddPasswordToken(token: any) {
+  try {
+
+    const result = await apiInstance.post(
+      `${defaultData.ApiBaseUrl}/api/ResetPasswordToken/Add`, token);
+
+    return result.data;
+
+  } catch (err) {
+    return false;
+  }
+}
+
+async function DeletePasswordToken(_token: string) {
+  try {
+
+    const token = await generateRegistrationToken();
+    const result = await axios.get(
+      `${defaultData.ApiBaseUrl}/api/ResetPasswordToken/Delete?token=${_token}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token["access_token"]}`,
+        },
+      }
+    );
+    
+    return result.data === true ? true : false;
+
+  } catch (err) {
+    return false;
+  }
+}
+
 export {
+  IsPasswordTokenValid,
+  AddPasswordToken,
+  DeletePasswordToken,
   GetStockData,
   ValidateRegisterData,
   ValidateOneTimeRegisterCode,
@@ -1446,5 +1515,6 @@ export {
   AddAcceptTermsStatusForAnonymous,
   AddToLogs,
   GetRmOffersList,
-  GetOfferSubscriptionById
+  GetOfferSubscriptionById,
+  SendSMS
 };

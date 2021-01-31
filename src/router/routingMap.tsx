@@ -8,7 +8,7 @@ import ContactUsListing from "../pages/Admin/ContactUsListing";
 import OfferSubscriptionsListing from "../pages/Admin/OfferSubscriptionsListing";
 import RMLanding from "../pages/RM/RMLanding";
 import ManagmentLanding from "../pages/Managment/ManagmentLanding";
-import ResetPassword from "../pages/Admin/ResetPassword";
+import ResetPassword from "../pages/ResetPassword/ResetPasswordLanding";
 
 const PageNotFound = () => <div>Page not found</div>;
 

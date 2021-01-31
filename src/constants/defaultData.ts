@@ -1,6 +1,7 @@
 export default { 
   IdentityBaseUrl: "https://identitydev.qfbonline.com",
   ApiBaseUrl: "https://apidev.qfbonline.com",
+  PortalUrl: "https://ibdev.qfbonline.com.com",
   AnonymousTermsAcceptanceStorageKey: "@storage_AcceptTermsStatusForAnonymous1",
   CustomerTermsAcceptanceStorageKey: "@storage_AcceptTermsStatusForCustomer",
   LoginDetailsStorageKey: "storage_LoginUsernameAndPassword",
