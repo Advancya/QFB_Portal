@@ -1,6 +1,6 @@
-export default {
-  IdentityBaseUrl: "https://identity-stg.azurewebsites.net",
-  ApiBaseUrl: "https://api-stg.azurewebsites.net",
+export default { 
+  IdentityBaseUrl: "https://identitydev.qfbonline.com",
+  ApiBaseUrl: "https://apidev.qfbonline.com",
   AnonymousTermsAcceptanceStorageKey: "@storage_AcceptTermsStatusForAnonymous1",
   CustomerTermsAcceptanceStorageKey: "@storage_AcceptTermsStatusForCustomer",
   LoginDetailsStorageKey: "storage_LoginUsernameAndPassword",
