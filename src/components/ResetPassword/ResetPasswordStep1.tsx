@@ -71,7 +71,8 @@ function ResetPasswordStep1(props: iResetPasswordStep1) {
   };
 
   const resetPasswordValidationSchema = yup.object({
-    username: yup.string().required(local_Strings.GeneralValidation),
+    username: yup.string().required(local_Strings.GeneralValidation)
+    .matches(/^\w+$/, local_Strings.Login_ArabicNumberHint),
     email: yup
       .string()
       .required(local_Strings.GeneralValidation)

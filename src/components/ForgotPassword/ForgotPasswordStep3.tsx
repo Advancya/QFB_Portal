@@ -36,10 +36,7 @@ function ForgotPasswordStep3(props: iForgotPasswordStep3) {
       .string()
       .required(local_Strings.ChangePassword_RequiredMsg)
       .min(7, local_Strings.ChangePassword_InvalidationMsg)
-      .matches(
-        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{7,}$/,
-        local_Strings.ChangePassword_InvalidationMsg
-      ),
+      .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{7,})/, local_Strings.ChangePassword_InvalidationMsg),
     confirmPassword: yup
       .string()
       .required(local_Strings.ChangePassword_ConfirmRequiredMsg)

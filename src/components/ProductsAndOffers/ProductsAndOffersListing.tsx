@@ -38,9 +38,11 @@ function ProductsAndOffersListing(props: iProductsAndOffersListing) {
     GetProductsAndOffersAll()
       .then((responseData: IProductAndOffersDetail[]) => {
         if (isMounted && responseData && responseData.length > 0) {
-          const _data = responseData.sort((a, b) =>
-            moment(b.createdDate).diff(moment(a.createdDate))
-          );
+          const _data = responseData
+            .filter((d) => new Date(d.expiryDate) > new Date())
+            .sort((a, b) =>
+              moment(b.createdDate).diff(moment(a.createdDate))
+            );
           setData(_data);
         } else {
           setData([]);
@@ -112,8 +114,8 @@ function ProductsAndOffersListing(props: iProductsAndOffersListing) {
             <div className="row">
               {data && data.length > 0 && data[0].id > 0
                 ? data
-                    .slice(0, offset)
-                    .map((item, index) => renderItem(item, index))
+                  .slice(0, offset)
+                  .map((item, index) => renderItem(item, index))
                 : NoResult(local_Strings.NoDataToShow)}
             </div>
             <FilterMoreButtonControl

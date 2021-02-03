@@ -53,12 +53,13 @@ function RegisterStep1(props: iRegisterStep1) {
 
   const registerFormStep1ValidationSchema = yup.object({
     oneTimePassword: yup.string().required(local_Strings.GeneralValidation),
-    cif: yup.string().required(local_Strings.GeneralValidation),
+    cif: yup.string().required(local_Strings.GeneralValidation)
+      .matches(/^\w+$/, local_Strings.Login_ArabicNumberHint),
     email: yup
       .string()
       .required(local_Strings.GeneralValidation)
       .email(local_Strings.InvalidEmail),
-    mobile: yup.string().required(local_Strings.ContactUs_Mobile_Format_Validation_Message)
+    mobile: yup.string().required(local_Strings.GeneralValidation)
       .min(10, local_Strings.MobileNumberLengthError)
       .matches(/^\+(?:[0-9]?){6,14}[0-​9]$/, local_Strings.ContactUs_Mobile_Format_Validation_Message),
   });
@@ -105,6 +106,8 @@ function RegisterStep1(props: iRegisterStep1) {
                 props.showRegisterStep2Modal(values);
               }}
               enableReinitialize={true}
+              validateOnChange={true}
+              validateOnBlur={true}
             >
               {({
                 values,
@@ -207,9 +210,9 @@ function RegisterStep1(props: iRegisterStep1) {
                       {touched.cif &&
                         errors.cif &&
                         InvalidFieldError(errors.cif)}
-                      {field1ShowError && !errors.oneTimePassword
+                      {field2ShowError && !errors.cif
                         && InvalidFieldError(local_Strings.Signup_CIF_Message)}
-                      {field1ShowError && !errors.cif
+                      {field22ShowError && !errors.cif
                         && InvalidFieldError(local_Strings.SignUpStep1CIFRegisterBefore)}
                     </div>
 
@@ -239,7 +242,7 @@ function RegisterStep1(props: iRegisterStep1) {
                               }
                             } else {
                               setField4Editable(false);
-                              setField3ShowError(false);
+                              setField3ShowError(true);
                               setShowSubmitButton(false);
                             }
                             setLoading(false);
@@ -277,11 +280,9 @@ function RegisterStep1(props: iRegisterStep1) {
                               } else {
                                 setField4ShowError(true);
                                 setShowSubmitButton(false);
-                                setShowSubmitButton(false);
                               }
                             } else {
-                              setField4ShowError(false);
-                              setShowSubmitButton(false);
+                              setField4ShowError(true);
                               setShowSubmitButton(false);
                             }
                             setLoading(false);
@@ -293,7 +294,7 @@ function RegisterStep1(props: iRegisterStep1) {
                       />
                       {touched.mobile &&
                         errors.mobile &&
-                        InvalidFieldError(local_Strings.GeneralValidation)}
+                        InvalidFieldError(errors.mobile)}
                       {field4ShowError && !errors.mobile &&
                         InvalidFieldError(local_Strings.Signup_Mobile_Number_Message)}
                     </div>

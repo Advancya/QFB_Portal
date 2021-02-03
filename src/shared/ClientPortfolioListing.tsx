@@ -20,7 +20,7 @@ const ClientPortfolioListing = () => {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
   const [isLoading, setLoading] = useState(false);
-  const rowLimit: number = Constant.RecordPerPage;
+  const rowLimit: number = Constant.RecordPerPage + 2;
   const [offset, setOffset] = useState<number>(rowLimit);
   const [clientList, setClientList] = useState<any>(null);
   const [filteredData, setFilteredData] = useState<any>(null);
@@ -68,7 +68,7 @@ const ClientPortfolioListing = () => {
             }}
           >
             <span className="text-600 ">
-              {local_Strings.RMSampleAccount + item["id"]}
+              {local_Strings.CustomerSampleAccount + item["id"]}
             </span>
 
             <div className="row align-items-center align-content-center">
@@ -114,24 +114,27 @@ const ClientPortfolioListing = () => {
             <CommonSearchControl
               applySearch={(_text) => {
                 if (!!_text) {
-                  const _filteredData = [...clientList];
-                  setFilteredData(
-                    _filteredData
-                      .filter(
-                        (f) =>
-                          Object.values(f).filter(
-                            (t: any) =>
-                              t &&
-                              t
-                                .toString()
-                                .toLowerCase()
-                                .indexOf(_text.toLowerCase()) !== -1
-                          ).length > 0
-                      )
-                      .slice(0, 10)
-                  );
+                  const _filteredData = [...clientList]
+                    .filter(
+                      (obj) =>
+                        obj["id"].toString().includes(_text) ||
+                        obj["mobile"].toString().includes(_text) ||
+                        obj["customerEmail"]
+                          .toString()
+                          .toLocaleUpperCase()
+                          .includes(_text.toLocaleUpperCase()) ||
+                        obj["shortName"]
+                          .toString()
+                          .toLocaleUpperCase()
+                          .includes(_text.toLocaleUpperCase())
+                    );
+                  if (_filteredData.length === 0) {
+                    setNoData(true);
+                  }
+                  setFilteredData(_filteredData);
                 } else {
-                  setFilteredData(clientList.slice(0, 10));
+                  setOffset(rowLimit);
+                  setFilteredData(clientList);
                 }
               }}
             />
@@ -153,11 +156,11 @@ const ClientPortfolioListing = () => {
           <ul className="box-list" id="reqList">
             {filteredData && filteredData.length > 0 && !!filteredData[0].mobile
               ? filteredData
-                  .slice(0, offset)
-                  .map((item, index) => renderItem(item, index))
+                .slice(0, offset)
+                .map((item, index) => renderItem(item, index))
               : !showNoData
-              ? null
-              : NoResult(local_Strings.NoDataToShow)}
+                ? null
+                : NoResult(local_Strings.NoDataToShow)}
           </ul>
         </div>
         <FilterMoreButtonControl
@@ -166,7 +169,7 @@ const ClientPortfolioListing = () => {
             filteredData.length > rowLimit &&
             offset < filteredData.length
           }
-          onClickMore={() => setOffset(offset + 5)}
+          onClickMore={() => setOffset(offset + rowLimit)}
         />
       </div>
     </div>

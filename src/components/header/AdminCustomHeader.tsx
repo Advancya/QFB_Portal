@@ -67,7 +67,7 @@ function AdminCustomHeader() {
         <div className="container-fluid">
           <div className="row align-items-center">
             <Logo />
-            <AdminNavigation />
+            <AdminNavigation userType={link} />
           </div>
         </div>
       </header>

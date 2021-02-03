@@ -7,6 +7,7 @@ import LiabilitiesLanding from "../components/liabilities/LiabilitiesLanding";
 import TotalNetWorth from "../components/TotalNetWorth";
 import RelationManger from "../components/RelationManger";
 import InboxLanding from "../components/Inbox/InboxLanding";
+import InboxListing from "../components/Inbox/InboxListing";
 import InboxDetails from "../components/Inbox/InboxDetails";
 import { useHistory } from "react-router-dom";
 import { AuthContext } from "../providers/AuthProvider";
@@ -57,7 +58,7 @@ export const PortfolioContext = createContext<IUserPortfolio>(
   intialPortfolioData
 );
 
-export interface IInboxProps {  
+export interface IInboxProps {
   messages: IInboxDetail[];
   refreshInbox: () => void;
   reloadNotifications: boolean;
@@ -81,16 +82,10 @@ const HomePage = () => {
     emptyInboxDetail,
   ]);
   const [message, setMessageDetail] = useState<IInboxDetail>(emptyInboxDetail);
-
+  const [showInboxListing, setShowInboxListing] = useState(false);
   const [showInboxDetails, setshowInboxDetails] = useState(false);
-  const handleCloseInboxDetails = () => setshowInboxDetails(false);
-  const handleShowInboxDetails = (detail: IInboxDetail) => {
-    setshowInboxDetails(true);
-    setMessageDetail(detail);
-  };
-  const handleBackInboxDetails = () => {
-    setshowInboxDetails(false);
-  };
+  const [showViewMoreListing, setViewMoreListing] = useState(false);
+
   currentContext.language === "en"
     ? document.getElementsByTagName("html")[0].setAttribute("dir", "ltr")
     : document.getElementsByTagName("html")[0].setAttribute("dir", "rtl");
@@ -293,7 +288,15 @@ const HomePage = () => {
                     <div className="col-lg-3">
                       <div className="sidebar-container">
                         <InboxLanding
-                          showInboxDetailsModal={handleShowInboxDetails}
+                          showInboxDetailsModal={(detail: IInboxDetail) => {
+                            setshowInboxDetails(true);
+                            setViewMoreListing(false);
+                            setMessageDetail(detail);
+                          }}
+                          showInboxListingModal={() => {
+                            setShowInboxListing(true);
+                            setViewMoreListing(true);
+                          }}
                         />
                         <RelationManger />
                       </div>
@@ -301,13 +304,33 @@ const HomePage = () => {
                   </div>
                 </div>
               )}
-
+              {messages &&
+                messages.length > 0 &&
+                !!messages[0].adviceDate && (
+                  <InboxListing
+                    showInboxListingModal={showInboxListing}
+                    hideInboxListingModal={() => setShowInboxListing(false)}
+                    showInboxDetailsModal={(detail: IInboxDetail) => {
+                      setShowInboxListing(false);
+                      setshowInboxDetails(true);
+                      setMessageDetail(detail);
+                    }}
+                  />
+                )}
               {message && !!message.adviceDate && (
                 <InboxDetails
                   item={message}
                   showInboxDetailsModal={showInboxDetails}
-                  hideInboxDetailsModal={handleCloseInboxDetails}
-                  backInboxListingModal={handleBackInboxDetails}
+                  hideInboxDetailsModal={() => setshowInboxDetails(false)}
+                  backInboxListingModal={() => {
+                    if (showViewMoreListing) {
+                      setshowInboxDetails(false);
+                      setShowInboxListing(true);
+                    } else {
+                      setshowInboxDetails(false);
+                    }
+                  }}
+                  refreshInboxListing={() => refreshInbox()}
                 />
               )}
             </section>

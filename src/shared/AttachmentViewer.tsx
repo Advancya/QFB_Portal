@@ -52,8 +52,9 @@ const ViewAttachment = (props: any) => {
       </div>
       {props.showDelete && (
         <div className="col-2 col-lg-1 text-center">
-          <button
+          <a
             className="btnFileDelete"
+            href="#"
             onClick={() => {
               Swal.fire({
                 title: local_Strings.deleteSure,
@@ -71,7 +72,7 @@ const ViewAttachment = (props: any) => {
             }}
           >
             <i className="fa fa-trash-o"></i>
-          </button>
+          </a>
         </div>
       )}
     </div>

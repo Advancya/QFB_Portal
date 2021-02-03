@@ -202,21 +202,15 @@ function RMRequestListing(props: iRMRequestListing) {
                   const _filteredData = [...props.requests];
                   setFilteredData(
                     _filteredData
-                      .filter(
-                        (f) =>
-                          Object.values(f).filter(
-                            (t: any) =>
-                              t &&
-                              t
-                                .toString()
-                                .toLowerCase()
-                                .indexOf(_text.toLowerCase()) !== -1
-                          ).length > 0
-                      )
-                      .slice(0, 10)
+                    .filter(
+                      (obj) =>
+                        obj["cif"].toString().includes(_text) ||
+                        obj["customerMobile"].toString().includes(_text)
+                    )
                   );
                 } else {
-                  setFilteredData(props.requests.slice(0, 10));
+                  setOffset(rowLimit);
+                  setFilteredData(props.requests);
                 }
               }}
             />

@@ -14,7 +14,6 @@ import {
 } from "../../services/cmsService";
 import NoResult from "../../shared/NoResult";
 import FilterMoreButtonControl from "../../shared/FilterMoreButtonControl";
-import { InboxContext } from "../../pages/Homepage";
 import xIcon from "../../images/x-icon.svg";
 import { GetUserLocalData } from "../../Helpers/authHelper";
 import { saveAs } from "file-saver";
@@ -24,12 +23,13 @@ interface iInboxDetails {
   hideInboxDetailsModal: () => void;
   backInboxListingModal: () => void;
   item: IInboxDetail;
+  refreshInboxListing: () => void;
 }
 
-function InboxDetails(props: iInboxDetails) {
+const InboxDetails: React.FC<iInboxDetails> = (props) => {
+
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
-  const InboxMessages = useContext(InboxContext);
   const [data, setData] = useState<IInboxDetail[]>([emptyInboxDetail]);
   const [filteredData, setFilteredData] = useState<IInboxDetail[]>([
     emptyInboxDetail,
@@ -44,7 +44,7 @@ function InboxDetails(props: iInboxDetails) {
     let isMounted = true;
     setLoading(true);
 
-    if (!!currentContext.selectedCIF) {
+    if (!!currentContext.selectedCIF && !props.item.isRead) {
       setThisInboxItemAsRead();
     }
 
@@ -59,7 +59,7 @@ function InboxDetails(props: iInboxDetails) {
 
           setData(previousItems);
           setFilteredData(previousItems);
-          
+
           if (previousItems && previousItems.length > 0 && previousItems.length < rowLimit) {
             setOffset(previousItems.length);
           } else {
@@ -79,7 +79,8 @@ function InboxDetails(props: iInboxDetails) {
     const userData = await GetUserLocalData();
     if (userData) {
       if (userData.customerId === currentContext.selectedCIF) {
-        await SetInboxItemAsRead({ ...props.item, isRead: true });        
+        await SetInboxItemAsRead({ ...props.item, isRead: true });
+        props.refreshInboxListing();
       }
     }
   };

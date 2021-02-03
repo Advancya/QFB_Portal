@@ -9,10 +9,17 @@ import {
 import Notfications from "../Notifications/Notifications";
 import usericon from "../../images/user-icon.svg";
 
-function AdminNavigation() {
+interface IAdminNavigation {
+  userType: {
+    Admin: boolean;
+    RM: boolean;
+    Management: boolean
+  };
+}
+
+const AdminNavigation: React.FC<IAdminNavigation> = ( props ) => {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
-  const [userInfo, setUserInfo] = useState<IUserInfo>(emptyUserInfo);
   const [rmName, setRmName] = React.useState("");
 
   useEffect(() => {
@@ -20,34 +27,30 @@ function AdminNavigation() {
 
     const fetchRmName = async () => {
       const res = await GetRmDisplayName(currentContext.selectedCIF);
-      GetUserWelcomeData(currentContext.selectedCIF)
-        .then((responseData: any) => {
-          if (responseData && responseData.length > 0) {
-            setUserInfo(responseData[0] as IUserInfo);
-          }
-        })
-        .catch((e: any) => console.log(e));
       if (isMounted) {
         setRmName(res);
       }
     };
 
-    if (!!currentContext.selectedCIF) {
+    if (!!currentContext.selectedCIF && props.userType.RM) {
       fetchRmName();
+    } else if (props.userType.Admin) {
+      setRmName(local_Strings.AdminLandingTitle);
+    } else if (props.userType.Management) {
+      setRmName(local_Strings.ManagementLandingTitle);
     }
 
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [currentContext.selectedCIF, currentContext.language]);
+  }, [currentContext.selectedCIF, currentContext.language, props.userType]);
 
   return (
     <div className="col-md-7">
       <div className="welcomeText text-right mt-3  d-flex justify-content-end align-items-center">
         <span>
-          {local_Strings.navigationUserMessage +
-            (rmName || userInfo.name) +
-            " "}
+          {props.userType.RM ? local_Strings.navigationUserMessage + rmName
+            : rmName}
           <img className="mx-1" width="20" src={usericon} />
         </span>
         &nbsp;

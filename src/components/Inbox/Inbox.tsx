@@ -52,15 +52,12 @@ function Inbox() {
         <InboxDetails
           item={message}
           showInboxDetailsModal={showInboxDetails}
-          hideInboxDetailsModal={() => {
-            InboxMessages.refreshInbox();
-            setshowInboxDetails(false);
-          }}
+          hideInboxDetailsModal={() => setshowInboxDetails(false)}
           backInboxListingModal={() => {
-            InboxMessages.refreshInbox();
             setshowInboxDetails(false);
             setShowInboxListing(true);
           }}
+          refreshInboxListing={() => InboxMessages.refreshInbox()}
         />
       )}
     </>

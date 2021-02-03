@@ -407,7 +407,7 @@ export const emptyInvestmentDetail = {
 export interface ILoanItem {
   ldReference: string;
   productBalance: number;
-  profitRate?: string;
+  profitRate: string;
   currency: string;
 }
 
@@ -733,10 +733,10 @@ export interface IRegisterationData {
 }
 
 export const initialRegisterationData: IRegisterationData = {
-  oneTimePassword: "123456",
-  cif: "1934",
-  email: "demo@advancya.com",
-  mobile: "+97477663836",
+  oneTimePassword: "",
+  cif: "",
+  email: "",
+  mobile: "",
   password: "",
 };
 

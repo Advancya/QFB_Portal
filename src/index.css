@@ -130,11 +130,11 @@
   font-weight: 500;
 }
 
-[dir="ltr"] input[type="email"] {
+[dir="ltr"] input[type="email"],  [dir="ltr"] input.mobile-style{
   text-align: start!important;
 }
 
-[dir="rtl"] input[type="email"] {
+[dir="rtl"] input[type="email"], [dir="rtl"] input.mobile-style {
   text-align: end!important;
   direction: ltr;
 }

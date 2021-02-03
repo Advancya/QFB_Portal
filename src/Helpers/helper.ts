@@ -493,6 +493,7 @@ export const transformingTransactionDetail = (
     const uniquePropStr = s
       .split(";")[0]
       .split(":")[0]
+      .split(",")[0]
       .replace(/\s/g, "")
       .replace("/", "");
 

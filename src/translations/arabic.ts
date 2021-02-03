@@ -837,6 +837,8 @@ const ar = {
 
   RequestNumber: "رقم الطلب | ",
   SendButtonText: "Send",
+  AdminLandingTitle: "مرحبًا ، مسؤول البوابة",
+  
 };
 
 export default ar;

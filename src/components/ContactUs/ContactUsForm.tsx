@@ -32,7 +32,7 @@ interface iContactUsForm {
 function ContactUsForm(props: iContactUsForm) {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(false);
   
   const mapStyles = {
     height: "200px",
@@ -272,6 +272,7 @@ function ContactUsForm(props: iContactUsForm) {
                               onBlur={handleBlur("mobile")}
                               value={values.mobile || ""}
                               maxLength={16}
+                              className="mobile-style"
                             />
                             {touched.mobile &&
                               errors.mobile &&

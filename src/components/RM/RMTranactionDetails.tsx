@@ -45,8 +45,10 @@ function RMTranactionDetails(props: iRMDetails) {
 
   useEffect(() => {
     setSelectedStatus("");
-    fetchFormData();
-  }, [props.itemId]);
+    if (props.showRMDetailsModal) {
+      fetchFormData();
+    }
+  }, [props.itemId, props.showRMDetailsModal]);
 
   return (
     <Modal
@@ -185,7 +187,9 @@ function RMTranactionDetails(props: iRMDetails) {
                 id="submitOTPBtn"
                 className="btn btn-primary"
                 type="submit"
-                disabled={selectedStatus === ""}
+                disabled={selectedStatus === "" || (currentContext.language !== "ar"
+                  ? item.requestStatus
+                  : item.requestStatusAR) === selectedStatus}
                 onClick={async (e) => {
                   if (!!selectedStatus) {
                     setLoading(true);

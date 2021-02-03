@@ -68,7 +68,7 @@ function AuthOfferRequest(props: iAuthOfferRequest) {
     amount: yup
       .number()
       .required(local_Strings.GeneralValidation)
-      .min(0.1, local_Strings.Transactions_Amount_Validation),
+      .min(1, local_Strings.Transactions_Amount_Validation),
     currency: yup.string().required(local_Strings.GeneralValidation),
   });
 
@@ -212,7 +212,9 @@ function AuthOfferRequest(props: iAuthOfferRequest) {
                     >
                       {curruncies &&
                         curruncies.length > 0 &&
-                        curruncies.map((c, i) => (
+                        curruncies.filter(
+                          (i) => i.name === "QAR" || i.name === "USD"
+                        ).map((c, i) => (
                           <option key={i} value={c.name}>
                             {currentContext.language === "en"
                               ? c.name

@@ -36,14 +36,15 @@ function ForgotPasswordStep1(props: iForgotPasswordStep1) {
   };
 
   const resetPasswordValidationSchema = yup.object({
-    username: yup.string().required(local_Strings.GeneralValidation),
+    username: yup.string().required(local_Strings.GeneralValidation)
+      .matches(/^\w+$/, local_Strings.Login_ArabicNumberHint),
     email: yup
       .string()
       .required(local_Strings.GeneralValidation)
       .email(local_Strings.InvalidEmail),
     mobile: yup
       .string()
-      .required(local_Strings.ContactUs_Mobile_Format_Validation_Message)
+      .required(local_Strings.GeneralValidation)
       .min(10, local_Strings.MobileNumberLengthError)
       .matches(
         /^\+(?:[0-9]?){6,14}[0-​9]$/,
@@ -101,7 +102,7 @@ function ForgotPasswordStep1(props: iForgotPasswordStep1) {
                 if (data.toString() !== "") {
                   if (
                     values.email.toLowerCase() ===
-                      data[0]["Email"].toLowerCase() &&
+                    data[0]["Email"].toLowerCase() &&
                     values.mobile.toLowerCase() === data[0]["SMS"].toLowerCase()
                   ) {
                     //Send OTP here
@@ -171,7 +172,7 @@ function ForgotPasswordStep1(props: iForgotPasswordStep1) {
                       />
                       {touched.mobile &&
                         errors.mobile &&
-                        InvalidFieldError(local_Strings.GeneralValidation)}
+                        InvalidFieldError(errors.mobile)}
                     </div>
 
                     <div className="col-lg-12 form-group">

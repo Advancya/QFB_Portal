@@ -841,6 +841,7 @@ const en = {
 
   RequestNumber: "Request Number | ",
   SendButtonText: "Send",
+  AdminLandingTitle: "Welcome, Portal Admin",
 };
 
 export default en;

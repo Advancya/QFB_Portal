@@ -29,7 +29,7 @@ const Login: React.FC<IProps> = (props) => {
     username: yup
       .string()
       .required(local_Strings.GeneralValidation)
-      .matches(/^[a-zA-Z0-9]+$/, local_Strings.Login_ArabicNumberHint),
+      .matches(/^\w+$/, local_Strings.Login_ArabicNumberHint),
     password: yup.string().required(local_Strings.GeneralValidation),
   });
 
@@ -117,6 +117,7 @@ const Login: React.FC<IProps> = (props) => {
                   value={values.username || ""}
                   onChange={handleChange("username")}
                   onBlur={handleBlur("username")}
+                  maxLength={50}
                 />
                 {touched.username &&
                   errors.username &&
@@ -131,6 +132,7 @@ const Login: React.FC<IProps> = (props) => {
                   value={values.password || ""}
                   onChange={handleChange("password")}
                   onBlur={handleBlur("password")}
+                  maxLength={8}
                 />
                 {touched.password &&
                   errors.password &&

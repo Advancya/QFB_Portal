@@ -112,7 +112,7 @@ function FacilitiesDetails(props: iFacilitiesDetails) {
                   </strong>
                   <br />
                   <strong className="status-badge status-badge-lg">
-                    {props.facilityItem.profitRate || ""}
+                    {(props.facilityItem.profitRate || "") + "%"}
                   </strong>
                 </div>
               </div>

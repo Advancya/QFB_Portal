@@ -155,7 +155,9 @@ function RMRequestDetails(props: iRMDetails) {
 
   useEffect(() => {
     setSelectedStatus("");
-    fetchFormData();
+    if (props.showRMDetailsModal) {
+      fetchFormData();
+    }
   }, [props.itemId, props.showRMDetailsModal]);
 
   return (
@@ -231,33 +233,33 @@ function RMRequestDetails(props: iRMDetails) {
               </label>
               {item["details"].split(";")[2] !== "FILE_UPLOAD" ? (
                 item["details"].split(";")[2] === "MULTILINE_TEXT" ||
-                (item["details"].split(";")[2] === "READ_ONLY" &&
-                  item["details"].split(";")[3].toString() !== "NULL") ? (
-                  <Form.Control
-                    as="textarea"
-                    readOnly={true}
-                    defaultValue={getRequestFieldValue(
-                      item["details"].split(";")[0].replace(/ /g, "")
-                    )}
-                    maxLength={400}
-                  />
-                ) : (
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: getRequestFieldValue(
+                  (item["details"].split(";")[2] === "READ_ONLY" &&
+                    item["details"].split(";")[3].toString() !== "NULL") ? (
+                    <Form.Control
+                      as="textarea"
+                      readOnly={true}
+                      defaultValue={getRequestFieldValue(
                         item["details"].split(";")[0].replace(/ /g, "")
-                      ),
-                    }}
-                    className="request-detail-control"
-                  />
-                )
+                      )}
+                      maxLength={400}
+                    />
+                  ) : (
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: getRequestFieldValue(
+                          item["details"].split(";")[0].replace(/ /g, "")
+                        ),
+                      }}
+                      className="request-detail-control"
+                    />
+                  )
               ) : (
-                <ViewAttachment
-                  showDelete={false}
-                  fileName={getRequestFieldValue("FileName")}
-                  fileContent={getRequestFieldValue("FileContent")}
-                />
-              )}
+                  <ViewAttachment
+                    showDelete={false}
+                    fileName={getRequestFieldValue("FileName")}
+                    fileContent={getRequestFieldValue("FileContent")}
+                  />
+                )}
             </div>
           ))}
           <div className="">
@@ -291,7 +293,9 @@ function RMRequestDetails(props: iRMDetails) {
                 id="submitOTPBtn"
                 className="btn btn-primary"
                 type="submit"
-                disabled={selectedStatus === ""}
+                disabled={selectedStatus === "" || (currentContext.language !== "ar"
+                  ? currentRequest.requestStatus
+                  : currentRequest.requestStatusAr) === selectedStatus}
                 onClick={async (e) => {
                   if (!!selectedStatus) {
                     setLoading(true);

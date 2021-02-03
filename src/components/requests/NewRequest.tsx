@@ -67,7 +67,7 @@ function NewRequest(props: iNewRequest) {
       const initialLoadMethod = async () => {
         let data: iDDL[] = [];
         if (type === "DDL") {
-          var items =
+          const items =
             currentContext.language === "en"
               ? value.split("#@")[0].split(",")
               : value.lastIndexOf("#@") !== -1
@@ -85,7 +85,7 @@ function NewRequest(props: iNewRequest) {
             .then((s) => {
               if (s.length > 0) {
                 for (let index = 0; index < s.length; index++) {
-                  var element = s[index];
+                  const element = s[index];
                   data.push({
                     label:
                       currentContext.language === "en" ? element["name"] : element["nameAr"],
@@ -297,7 +297,7 @@ function NewRequest(props: iNewRequest) {
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
               .string()
-              .required(local_Strings.ContactUs_Mobile_Format_Validation_Message)
+              .required(local_Strings.GeneralValidation)
               .min(10, local_Strings.MobileNumberLengthError)
               .matches(/^\+(?:[0-9]?){6,14}[0-​9]$/, local_Strings.ContactUs_Mobile_Format_Validation_Message),
       });
@@ -310,7 +310,7 @@ function NewRequest(props: iNewRequest) {
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
               .string()
-              .required(local_Strings.ContactUs_Mobile_Format_Validation_Message)
+              .required(local_Strings.GeneralValidation)
               .min(10, local_Strings.MobileNumberLengthError)
               .matches(/^\+(?:[0-9]?){6,14}[0-​9]$/, local_Strings.ContactUs_Mobile_Format_Validation_Message),
       });
@@ -323,7 +323,7 @@ function NewRequest(props: iNewRequest) {
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
               .string()
-              .required(local_Strings.ContactUs_Mobile_Format_Validation_Message)
+              .required(local_Strings.GeneralValidation)
               .min(10, local_Strings.MobileNumberLengthError)
               .matches(/^\+(?:[0-9]?){6,14}[0-​9]$/, local_Strings.ContactUs_Mobile_Format_Validation_Message),
       });
@@ -667,11 +667,11 @@ function NewRequest(props: iNewRequest) {
               setLoading(false);
             }}
             enableReinitialize={true}
+            validateOnBlur={true}
           >
             {({
               values,
               handleBlur,
-              handleChange,
               handleSubmit,
               handleReset,
               errors,
@@ -712,17 +712,14 @@ function NewRequest(props: iNewRequest) {
                               );
                             }
 
+                            const fName = d["details"]
+                              .split(";")[0]
+                              .replace(/ /g, "");
                             if (d["details"].split(";")[4] === "YES") {
-                              var fName = d["details"]
-                                .split(";")[0]
-                                .replace(/ /g, "");
-                              var fType = d["details"].split(";")[2];
+                              const fType = d["details"].split(";")[2];
                               setValidationSchema(fName, fType);
                             } else {
-                              var fName = d["details"]
-                                .split(";")[0]
-                                .replace(/ /g, "");
-                              var fType = d["details"].split(";")[2];
+                              const fType = d["details"].split(";")[2];
                               setBasicValidationSchema(fName, fType);
                             }
                           });
@@ -780,6 +777,7 @@ function NewRequest(props: iNewRequest) {
                                       fileContent,
                                       false
                                     );
+                                    handleBlur(attachment);
                                   }}
                                 />
                                 <ViewAttachment
@@ -828,6 +826,7 @@ function NewRequest(props: iNewRequest) {
                                       .split(";")[0]
                                       .replace(/ /g, "");
                                     setFieldValue(fName, e.target.value, false);
+                                    handleBlur(fName);
                                   }}
                                   rows={4}
                                   maxLength={
@@ -888,7 +887,7 @@ function NewRequest(props: iNewRequest) {
                                     } else {
                                       setFieldValue(fName, e.target.value, false);
                                     }
-
+                                    handleBlur(fName);
                                   }}
                                   maxLength={
                                     item["details"].split(";")[5] !== "NULL"
@@ -918,12 +917,11 @@ function NewRequest(props: iNewRequest) {
                                     ] || ""
                                   }
                                   onChange={(e) => {
-                                    if (e.currentTarget.validity.valid) {
-                                      const fName = item["details"]
-                                        .split(";")[0]
-                                        .replace(/ /g, "");
-                                      setFieldValue(fName, e.target.value, false);
-                                    }
+                                    const fName = item["details"]
+                                      .split(";")[0]
+                                      .replace(/ /g, "");
+                                    setFieldValue(fName, e.target.value, false);
+                                    handleBlur(fName);
                                   }}
                                   maxLength={
                                     item["details"].split(";")[5] !== "NULL"
@@ -959,9 +957,13 @@ function NewRequest(props: iNewRequest) {
                                       ? Number(item["details"].split(";")[5])
                                       : 50
                                   }
-                                  onChange={(e) => setFieldValue(item["details"]
-                                    .split(";")[0]
-                                    .replace(/ /g, ""), e.target.value.replace(/[^0-9]*/, ''))}
+                                  onChange={(e) => {
+                                    const fName = item["details"]
+                                      .split(";")[0]
+                                      .replace(/ /g, "");
+                                    setFieldValue(fName, e.target.value);
+                                    handleBlur(fName);
+                                  }}
                                 />
                               </Form.Group>
                             </Col>
@@ -1003,6 +1005,7 @@ function NewRequest(props: iNewRequest) {
                                       fName,
                                       moment(date).utc(true)
                                     );
+                                    handleBlur(fName);
                                   }}
                                 />
                               </Form.Group>
@@ -1025,12 +1028,13 @@ function NewRequest(props: iNewRequest) {
                                       "MOB_REQ_EX_DET_FLD_DEP_BRK,SP_MOB_CUST_DEP_LIST",
                                       e.currentTarget.value
                                     );
-                                    setFieldValue(
-                                      item["details"]
-                                        .split(";")[0]
-                                        .replace(/ /g, ""),
+                                    const fName = item["details"]
+                                      .split(";")[0]
+                                      .replace(/ /g, "");
+                                    setFieldValue(fName,
                                       e.currentTarget.value
                                     );
+                                    handleBlur(fName);
                                   }}
                                   value={
                                     values[
@@ -1061,12 +1065,13 @@ function NewRequest(props: iNewRequest) {
                                 <Form.Control
                                   as="select"
                                   onChange={async (e) => {
-                                    setFieldValue(
-                                      item["details"]
-                                        .split(";")[0]
-                                        .replace(/ /g, ""),
+                                    const fName = item["details"]
+                                      .split(";")[0]
+                                      .replace(/ /g, "");
+                                    setFieldValue(fName,
                                       e.target.value
                                     );
+                                    handleBlur(fName);
                                   }}
                                   value={
                                     values[
@@ -1110,6 +1115,14 @@ function NewRequest(props: iNewRequest) {
                         validateForm(values);
                         if (isValid) {
                           handleSubmit();
+                        } else if (JSON.stringify(values, ((key, value) => !value ? "" : value)) === JSON.stringify(initialNewRequest, ((key, value) => !value ? "" : value))) {
+                          Swal.fire({
+                            position: "top-end",
+                            icon: "error",
+                            title: local_Strings.NewRequestSubmitRequiredMessage,
+                            showConfirmButton: false,
+                            timer: Constant.AlertTimeout,
+                          });
                         } else {
                           Swal.fire({
                             position: "top-end",
@@ -1130,7 +1143,7 @@ function NewRequest(props: iNewRequest) {
           </Formik>
         </div>
       </Modal.Body>
-    </Modal>
+    </Modal >
   );
 }
 

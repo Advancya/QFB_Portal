@@ -11,6 +11,7 @@ import {
 import { iRmRequests } from "../../Helpers/publicInterfaces";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
+import moment from "moment";
 
 const RM = () => {
   const currentContext = useContext(AuthContext);
@@ -136,7 +137,7 @@ const RM = () => {
       .catch((e: any) => console.log(e))
       .finally(() => setLoading(false));
   };
-  
+
   return (
     <div>
       {((requests && requests.length > 0)
@@ -162,7 +163,11 @@ const RM = () => {
             selectItemId(itemId);
           }}
           backRMRequestListingModal={() => setShowRMListing(false)}
-          requests={[...requests, ...tranactions, ...offers]}
+          requests={[...requests, ...tranactions, ...offers].sort((a, b) => (
+            moment(b.requestCreateDate).toDate().getTime() -
+            moment(a.requestCreateDate).toDate().getTime()
+          ))
+          }
           reloading={isLoading}
         />
       }

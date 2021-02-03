@@ -34,7 +34,7 @@ function RegisterStep2(props: iRegisterStep2) {
       .string()
       .required(local_Strings.ChangePassword_RequiredMsg)
       .min(7, local_Strings.ChangePassword_InvalidationMsg)
-      .matches(/[a-zA-Z]/, local_Strings.ChangePassword_InvalidationMsg),
+      .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{7,})/, local_Strings.ChangePassword_InvalidationMsg),
     confirmPassword: yup
       .string()
       .required(local_Strings.ChangePassword_ConfirmRequiredMsg)
