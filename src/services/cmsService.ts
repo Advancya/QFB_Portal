@@ -1006,21 +1006,6 @@ async function AddOfferSubscription(
   }
 }
 
-async function GetCountries() {
-  try {
-    let config: typeof AxiosRequestConfig = {
-      method: "get",
-      url: `${defaultData.ApiBaseUrl}/api/Countries/All`,
-      headers: {},
-    };
-
-    const response = await axios(config);
-    return response.data;
-  } catch (error) {
-    console.log(error);
-  }
-}
-
 async function GetBanks() {
   try {
     const response = await apiInstance.get("/api/Banks/All");
@@ -1492,7 +1477,6 @@ export {
   DeleteDocumentById,
   UpdateDocumentDetail,
   AddOfferSubscription,
-  GetCountries,
   GetBanks,
   SetNotificationItemAsRead,
   GetBeneficiariesTypes,

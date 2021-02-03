@@ -140,7 +140,8 @@ const RM = () => {
   return (
     <div>
       {((requests && requests.length > 0)
-        || (tranactions && tranactions.length > 0))
+        || (tranactions && tranactions.length > 0)
+        || (offers && offers.length > 0))
         &&
         <RMRequestListing
           showRMRequestListingModal={showRMListing}
@@ -161,7 +162,7 @@ const RM = () => {
             selectItemId(itemId);
           }}
           backRMRequestListingModal={() => setShowRMListing(false)}
-          requests={[...requests, ...tranactions]}
+          requests={[...requests, ...tranactions, ...offers]}
           reloading={isLoading}
         />
       }

@@ -111,12 +111,9 @@ function SendPasswordResetLink(props: iSendPasswordResetLink) {
               if (isTokenGenerated) {
                 const mobile =
                   values.selectedCIF[0]["value"].split(";")[1];
-                const text = `Dear ${values.selectedCIF[0]["label"]},
-                Use this link to reset your password
-                ${Constant.PortalUrl}/${currentContext.language}
-                /ResetPassword?token=${tokenItem.token}`;
+                const text = `Dear ${values.selectedCIF[0]["label"]}, You can use the following link to reset the password of your QFB online banking account: ${Constant.PortalUrl}/${currentContext.language}/ResetPassword?token=${tokenItem.token}`;
 
-                const x = await SendSMS("+919405417912", text);
+                const x = await SendSMS(mobile, text);
 
                 if (x) {
                   Swal.fire({

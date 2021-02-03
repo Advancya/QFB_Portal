@@ -734,12 +734,12 @@ const ar = {
   contactUsLandingInfo: "انقر هنا للاتصال بأي استفسار.",
   contactUsLandingButton: "اتصل",
 
-  OfferSubscriptionsTite: "Subscriptions Lists",
-  OfferSubscriptionsDateLabel: "Subscriptions Date",
-  OfferSubscriptionsRequestLabel: "Subscriptions Request",
-  OfferSubscriptionsOfferLabel: "Subscribe for Offer ",
-  OfferSubscriptionsAmountLabel: "Amount",
-  OfferSubscriptionsCurrencyLabel: "Currency",
+  OfferSubscriptionsTite: "قوائم الاشتراكات",
+  OfferSubscriptionsDateLabel: "تاريخ الاشتراكات",
+  OfferSubscriptionsRequestLabel: "طلب الاشتراكات",
+  OfferSubscriptionsOfferLabel: "اشترك في العرض ",
+  OfferSubscriptionsAmountLabel: "كمية",
+  OfferSubscriptionsCurrencyLabel: "عملة",
 
   pagingNext: "التالى",
   pagingPrevious: "السابق",
@@ -778,33 +778,33 @@ const ar = {
   documentListingPriority: "أفضلية",
   DrillBackButtonText: "عودة",
 
-  PortfolioNoInvestments: "No Investments Yet",
-  PortfolioNoDeposits: "No Deposits  Yet",
-  PortfolioNoFacilities: "No Facilities Found",
+  PortfolioNoInvestments: "لا استثمارات بعد",
+  PortfolioNoDeposits: "لا توجد ودائع حتى الآن",
+  PortfolioNoFacilities: "لم يتم العثور على مرافق",
 
   OfferRequestSubmitMessage:
-    'Your subscription request to the offer "[REPLACE ME]" has been submitted',
-  ContactUsSelectCountry: "Select Country",
-  OTPSentMessage: "An OTP has been sent successfully, kindly check.",
-  fileDeleteConfirmMessage: "You want to delete this file?",
+    'تم إرسال طلب اشتراكك في العرض "[REPLACE ME]"',
+  ContactUsSelectCountry: "حدد الدولة",
+  OTPSentMessage: "تم إرسال كلمة المرور لمرة واحدة بنجاح ، يرجى التحقق.",
+  fileDeleteConfirmMessage: "تريد حذف هذا الملف؟",
 
-  NewBeneficiaryMsgTitle: "Beneficiary Sent",
+  NewBeneficiaryMsgTitle: "المستفيد مرسل",
   NewBeneficiaryMsgBody:
-    "Your beneficiary has been sent successfully to your RM",
+    "تم إرسال المستفيد الخاص بك بنجاح إلى RM الخاص بك",
 
-  AccessDeniedMsgTitle: "Access Denied",
-  AccessDeniedMessage: "Your are not authorize to accesss this section.",
+  AccessDeniedMsgTitle: "تم الرفض",
+  AccessDeniedMessage: "ليس لديك إذن للوصول إلى هذا القسم.",
 
   ChartProfitRecieved: "الارباح",
   ChartDepositsAmount: "المبالغ",
 
-  NoLiveHoldingsMesageDeposit: "No Live Holdings Yet for Deposit",
-  NoLiveHoldingsMesageInvestment: "No Live Holdings Yet for Investment",
-  NoClosedHoldingsMesageInvestment: "No Closed Holdings Yet for Investment",
-  NoClosedHoldingsMesageDeposit: "No Closed Holdings Yet for Deposit",
+  NoLiveHoldingsMesageDeposit: "لا توجد مقتنيات حية حتى الآن للإيداع",
+  NoLiveHoldingsMesageInvestment: "لا توجد مقتنيات حية حتى الآن للاستثمار",
+  NoClosedHoldingsMesageInvestment: "لا توجد ممتلكات مغلقة بعد للاستثمار",
+  NoClosedHoldingsMesageDeposit: "لا توجد حيازات مغلقة للإيداع",
 
-  BreadcrumbLandingTitle: "Landing",
-  BreadcrumbAdminTitle: "Admin",
+  BreadcrumbLandingTitle: "الهبوط",
+  BreadcrumbAdminTitle: "مشرف",
 
   RMSampleAccount: "رقم تعريف مدير العلاقة | ",
   CustomerSampleAccount: "رقم تعريف العميل | ",
@@ -815,23 +815,23 @@ const ar = {
   ContactUs_Mobile_Format_Validation_Message:
     " رقم الهاتف المحمول (يحتوي على كود الدولة, مثال +9741234567)",
 
-  Signup_Autherization_Code: "Autherization code is not valid",
-  Signup_CIF_Message: "Identification Number is not valid",
+  Signup_Autherization_Code: "رمز المصادقة غير صالح",
+  Signup_CIF_Message: "رقم التعريف غير صالح",
   Signup_Email_Message: "من فضلك أدخل بريد أليكترونى صحيح",
   Signup_Mobile_Number_Message: "من فضلك أدخل رقم جوال صحيح",
 
-  Transactions_Amount_Validation: "Only number accepted",
-  BeneficiaryInvalidAccountOrIban: "Invalid Account Number or IBAN",
-  BeneficiaryInvalidSwiftCode: "Invalid Swift Code",
+  Transactions_Amount_Validation: "الرقم الوحيد المقبول",
+  BeneficiaryInvalidAccountOrIban: "رقم الحساب أو IBAN غير صالح",
+  BeneficiaryInvalidSwiftCode: "رمز Swift غير صالح",
 
   NoDepositsHoldingsFound: "لم يتم العثور على ودائع القابضة",
   NoInvestmentsHoldingsFound: "لم يتم العثور على استثمارات القابضة",
   InvalidEmail: "من فضلك أدخل بريد أليكترونى صحيح",
 
 
-  TransactionWithinSameAccount: "Transaction within same account is not allowed",
+  TransactionWithinSameAccount: "لا يسمح بالمعاملات داخل نفس الحساب",
   TransactionAmountLabel2: "المبلغ",
-  RichTextImageUploadHint: "Image attachment should be less than 5MB",
+  RichTextImageUploadHint: "يجب أن تكون الصورة المرفقة أقل من 5 ميغا بايت",
 
   MobileNumberLengthError: "يجب ألا يقل رقم الهاتف المحمول عن 10 أحرف",
 

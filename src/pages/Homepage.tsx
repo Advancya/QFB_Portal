@@ -192,25 +192,25 @@ const HomePage = () => {
               let _userPortfolio = responseData[0][0] as IUserPortfolio;
               _userPortfolio = {
                 ..._userPortfolio,
-                totalAssets: helper.ConvertToQfbNumberFormat(
+                totalAssets: helper.ConvertToQfbNumberFormatWithFraction(
                   _userPortfolio.totalAssets
                 ),
-                totalCash: helper.ConvertToQfbNumberFormat(
+                totalCash: helper.ConvertToQfbNumberFormatWithFraction(
                   _userPortfolio.totalCash
                 ),
-                totalDeposits: helper.ConvertToQfbNumberFormat(
+                totalDeposits: helper.ConvertToQfbNumberFormatWithFraction(
                   _userPortfolio.totalDeposits
                 ),
-                totalInvestment: helper.ConvertToQfbNumberFormat(
+                totalInvestment: helper.ConvertToQfbNumberFormatWithFraction(
                   _userPortfolio.totalInvestment
                 ),
-                totalLoans: helper.ConvertToQfbNumberFormat(
+                totalLoans: helper.ConvertToQfbNumberFormatWithFraction(
                   _userPortfolio.totalLoans
                 ),
-                networth: helper.ConvertToQfbNumberFormat(
+                networth: helper.ConvertToQfbNumberFormatWithFraction(
                   _userPortfolio.networth
                 ),
-                totalLiabilities: helper.ConvertToQfbNumberFormat(
+                totalLiabilities: helper.ConvertToQfbNumberFormatWithFraction(
                   _userPortfolio.totalLiabilities
                 ),
                 totalGuarantees: "",
@@ -219,7 +219,7 @@ const HomePage = () => {
               if (responseData[1].length > 0) {
                 setUserPortfolio({
                   ..._userPortfolio,
-                  totalGuarantees: helper.ConvertToQfbNumberFormat(
+                  totalGuarantees: helper.ConvertToQfbNumberFormatWithFraction(
                     responseData[1][0].totalGurQAR
                   ),
                 });

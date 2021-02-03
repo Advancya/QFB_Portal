@@ -17,19 +17,10 @@ function ResetPasswordStep4(props: iResetPasswordStep4) {
             <img src={successIcon} className="img-fluid" width="100" />
           </div>
           <div className="col-md-9 text-center text-md-left mt-2">
-            <h3>{local_Strings.PasswordResetSuccessTitle}</h3>
+            <h3>{local_Strings.PasswordResetTitle}</h3>
             <h6>{local_Strings.PasswordResetSuccessMessage}</h6>
           </div>
-        </div>
-        <div className="text-center text-md-right mt-3">
-          <button
-            id="applyReqBtn"
-            className="btn btn-primary"
-            onClick={props.hideResetPasswordStep4}
-          >
-            {local_Strings.ConfirmationDone}
-          </button>
-        </div>
+        </div>        
       </div>
     </div>
   ) : null;

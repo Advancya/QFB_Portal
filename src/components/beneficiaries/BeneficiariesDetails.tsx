@@ -97,7 +97,11 @@ function BeneficiariesDetails(props: iBeneficiariesDetails) {
                 </div>
                 <div className="col-sm-4 text-sm-right">
                   <span className="status-badge">
-                    {props.beneficiary?.country || ""}
+                    {props.beneficiary.country && currentContext.countries.length > 0
+                      ? currentContext.language === "en"
+                        ? currentContext.countries.filter((obj) => obj.nameEn === props.beneficiary?.country)[0]?.nameEn
+                        : currentContext.countries.filter((obj) => obj.nameEn === props.beneficiary?.country)[0]?.nameAr
+                      : local_Strings.BeneficiariesListingCountrySample}
                   </span>
                 </div>
               </div>
@@ -167,6 +171,12 @@ function BeneficiariesDetails(props: iBeneficiariesDetails) {
                       </div>
                     </div>
                     <div className="col-lg-6 form-group">
+                      <label>{local_Strings.BeneficiaryIBANLabel}</label>
+                      <div className="readonly">
+                        {props.beneficiary.beneficiaryIban || ""}
+                      </div>
+                    </div>
+                    <div className="col-lg-6 form-group">
                       <label>
                         {local_Strings.BeneficiaryForeignCurrencyLabel}
                       </label>
@@ -193,28 +203,24 @@ function BeneficiariesDetails(props: iBeneficiariesDetails) {
                         {props.beneficiary.beneficiaryId || ""}
                       </div>
                     </div>
-
                     <div className="col-lg-6 form-group">
                       <label>{local_Strings.BeneficiaryFullNameLabel}</label>
                       <div className="readonly">
                         {props.beneficiary.beneficiaryFullName || ""}
                       </div>
                     </div>
-
                     <div className="col-lg-6 form-group">
                       <label>{local_Strings.BeneficiarySwiftCodeLabel}</label>
                       <div className="readonly">
                         {props.beneficiary.beneficiarySwiftCode || ""}
                       </div>
                     </div>
-
                     <div className="col-lg-6 form-group">
                       <label>{local_Strings.BeneficiaryBankLabel}</label>
                       <div className="readonly">
                         {props.beneficiary.beneficiaryBank || ""}
                       </div>
                     </div>
-
                     <div className="col-lg-6 form-group">
                       <label>
                         {local_Strings.BeneficiaryAccountNumberLabel}
@@ -229,6 +235,7 @@ function BeneficiariesDetails(props: iBeneficiariesDetails) {
                         {props.beneficiary.beneficiaryIban || ""}
                       </div>
                     </div>
+
                     <div className="col-lg-6 form-group">
                       <label>{local_Strings.BeneficiaryAddressLabel}</label>
                       <div className="readonly">
@@ -238,7 +245,11 @@ function BeneficiariesDetails(props: iBeneficiariesDetails) {
                     <div className="col-lg-6 form-group">
                       <label>{local_Strings.BeneficiaryCountryLabel}</label>
                       <div className="readonly">
-                        {props.beneficiary.country || ""}
+                        {props.beneficiary.country && currentContext.countries.length > 0
+                          ? currentContext.language === "en"
+                            ? currentContext.countries.filter((obj) => obj.nameEn === props.beneficiary?.country)[0]?.nameEn
+                            : currentContext.countries.filter((obj) => obj.nameEn === props.beneficiary?.country)[0]?.nameAr
+                          : local_Strings.BeneficiariesListingCountrySample}
                       </div>
                     </div>
                     <div className="col-lg-6 form-group">

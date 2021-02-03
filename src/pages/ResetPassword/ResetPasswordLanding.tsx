@@ -52,7 +52,7 @@ const ResetPassword = () => {
   };
   const handleCloseResetPasswordStep3 = () => {
     setShowResetPasswordStep3(false);
-    history.push(`/${currentContext.language}`);
+    //history.push(`/${currentContext.language}`);
   }
 
   const handleShowResetPasswordStep3 = () => {
@@ -66,8 +66,7 @@ const ResetPassword = () => {
     setShowResetPasswordStep2(true);
   };
   const handleCloseResetPasswordStep4 = () => {
-    setShowResetPasswordStep4(false);
-    history.push(`/${currentContext.language}`);
+    setShowResetPasswordStep4(false);    
   };
 
   const handleShowResetPasswordStep4 = () => {

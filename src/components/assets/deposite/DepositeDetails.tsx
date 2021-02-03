@@ -103,7 +103,9 @@ function DepositeDetails(props: iDepositeDetails) {
                     {local_Strings.DepositeListingAccountNumberLabel +
                       props.depositItem.contractNumber}
                   </h3>
-                  <h3 className="text-sm">{item.DepositAmount.value || ""}</h3>
+                  <h3 className="text-sm">
+                    {item.DepositAmount ? item.DepositAmount.value : ""}
+                  </h3>
                 </div>
                 <div className="col-sm-4 text-sm-right">
                   <strong className="status-badge status-badge-lg color-gold text-xs">
@@ -118,22 +120,30 @@ function DepositeDetails(props: iDepositeDetails) {
             </li>
           </ul>
           <div className="px-4">
-            <div className="formGrp">
-              <label>{item.StartDate.label}</label>
-              <p>{item.StartDate.value || ""}</p>
-            </div>
-            <div className="formGrp">
-              <label>{item.MaturityDate.label}</label>
-              <p>{item.MaturityDate.value || ""}</p>
-            </div>
-            <div className="formGrp">
-              <label>{item.ExpectedProfitRate.label}</label>
-              <p>{item.ExpectedProfitRate.value || ""}</p>
-            </div>
-            <div className="formGrp">
-              <label>{item.ProfitDistributionFrequency.label}</label>
-              <p>{item.ProfitDistributionFrequency.value || ""}</p>
-            </div>
+            {item.StartDate &&
+              <div className="formGrp">
+                <label>{item.StartDate.label}</label>
+                <p>{item.StartDate.value || ""}</p>
+              </div>
+            }
+            {item.MaturityDate &&
+              <div className="formGrp">
+                <label>{item.MaturityDate.label}</label>
+                <p>{item.MaturityDate.value || ""}</p>
+              </div>
+            }
+            {item.ExpectedProfitRate &&
+              <div className="formGrp">
+                <label>{item.ExpectedProfitRate.label}</label>
+                <p>{item.ExpectedProfitRate.value || ""}</p>
+              </div>
+            }
+            {item.ProfitDistributionFrequency &&
+              <div className="formGrp">
+                <label>{item.ProfitDistributionFrequency.label}</label>
+                <p>{item.ProfitDistributionFrequency.value || ""}</p>
+              </div>
+            }
           </div>
           <div className="text-right px-4">
             <a

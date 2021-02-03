@@ -72,7 +72,7 @@ function InvestmentsListing(props: iInvestmentsListing) {
             {local_Strings.Investment + " | " + (item.secDesciption || "")}
           </h3>
           <h3 className="text-18">
-            {helper.ConvertToQfbNumberFormat(item.nominalAmount)}
+            {helper.ConvertToQfbNumberFormatWithFraction(item.nominalAmount)}
           </h3>
         </div>
         <div className="col-sm-3 col-lg-2  text-md-center">
@@ -131,7 +131,7 @@ function InvestmentsListing(props: iInvestmentsListing) {
                 <div className="ib-text">
                   <h4>{local_Strings.PortfolioAssetsOption2}</h4>
                   <h5>
-                    {helper.ConvertToQfbNumberFormat(userPortfolio.totalInvestment || 0) +
+                    {userPortfolio.totalInvestment +
                       " " +
                       currentContext.userSettings.currency}
                   </h5>

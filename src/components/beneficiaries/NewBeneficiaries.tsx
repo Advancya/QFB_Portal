@@ -21,7 +21,6 @@ import {
 } from "../../services/transactionService";
 import {
   GetBanks,
-  GetCountries,
   GetCurrencies,
 } from "../../services/commonDataServices";
 
@@ -145,7 +144,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
 
   const validationSchemaInternational = yup.object({
     beneficiaryId: yup.string().required(local_Strings.GeneralValidation),
-    // beneficiaryBank: yup.string().required(),
+    beneficiaryBank: yup.string().required(local_Strings.GeneralValidation),
     beneficiarySwiftCode: yup
       .string()
       .required(local_Strings.GeneralValidation),
@@ -216,16 +215,16 @@ function NewBeneficiary(props: iNewBeneficiary) {
 
   const fetchCountries = async () => {
     setLoading(true);
-    const data = await GetCountries();
+    const data = currentContext.countries;
     let result: iDDL[] = [{ label: "", value: "" }];
     for (let index = 0; index < data.length; index++) {
       const element = data[index];
       result.push({
         label:
           currentContext.language === "ar"
-            ? element["nameAr"]
-            : element["nameEn"],
-        value: element["nameEn"],
+            ? element.nameAr
+            : element.nameEn,
+        value: element.nameEn,
       });
     }
     setCountries(
@@ -239,7 +238,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
       fetchTransactionType();
       fetchCurrencies();
       fetchBanks();
-      fetchCountries();
+      
     };
 
     if (!!currentContext.selectedCIF) {
@@ -251,15 +250,19 @@ function NewBeneficiary(props: iNewBeneficiary) {
     () =>
       setTransactionTypeId(
         props.beneficiary ? props.beneficiary.typeId : transactionTypeId
-      ),
-    [props.beneficiary]
-  );
+      ), [props.beneficiary]);
 
   useEffect(() => {
     if (!props.beneficiary && props.showNewBeneficiaryModal) {
       setTransactionTypeId("");
     }
   }, [props.showNewBeneficiaryModal]);
+
+  useEffect(() => {
+    if (currentContext.countries.length > 0) {
+      fetchCountries();
+    }
+  }, [currentContext.countries, currentContext.language]);
 
   return (
     <Modal
@@ -324,46 +327,46 @@ function NewBeneficiary(props: iNewBeneficiary) {
               </li>
             </ul>
           ) : (
-            <div className="container-fluid">
-              <div className="row  col-xl-12">
-                <div className="col-lg-12 form-group">
-                  <label>Beneficiary Type</label>
-                  <select
-                    className="form-control"
-                    id="reqTypeSelect"
-                    onChange={(e: any) => {
-                      setTransactionTypeId(e.target.value);
-                      if (
-                        formikRef_WitihinQFB &&
-                        formikRef_WitihinQFB.current
-                      ) {
-                        formikRef_WitihinQFB.current.handleReset();
-                      }
-                      if (formikRef_Local && formikRef_Local.current) {
-                        formikRef_Local.current.handleReset();
-                      }
-                      if (
-                        formikRef_International &&
-                        formikRef_International.current
-                      ) {
-                        formikRef_International.current.handleReset();
-                      }
-                    }}
-                  >
-                    <option value="">{local_Strings.SelectItem}</option>
-                    {transactionTypes &&
-                      transactionTypes.length > 0 &&
-                      !!transactionTypes[0].label &&
-                      transactionTypes.map((c, i) => (
-                        <option key={i} value={c.value}>
-                          {c.label}
-                        </option>
-                      ))}
-                  </select>
+              <div className="container-fluid">
+                <div className="row  col-xl-12">
+                  <div className="col-lg-12 form-group">
+                    <label>Beneficiary Type</label>
+                    <select
+                      className="form-control"
+                      id="reqTypeSelect"
+                      onChange={(e: any) => {
+                        setTransactionTypeId(e.target.value);
+                        if (
+                          formikRef_WitihinQFB &&
+                          formikRef_WitihinQFB.current
+                        ) {
+                          formikRef_WitihinQFB.current.handleReset();
+                        }
+                        if (formikRef_Local && formikRef_Local.current) {
+                          formikRef_Local.current.handleReset();
+                        }
+                        if (
+                          formikRef_International &&
+                          formikRef_International.current
+                        ) {
+                          formikRef_International.current.handleReset();
+                        }
+                      }}
+                    >
+                      <option value="">{local_Strings.SelectItem}</option>
+                      {transactionTypes &&
+                        transactionTypes.length > 0 &&
+                        !!transactionTypes[0].label &&
+                        transactionTypes.map((c, i) => (
+                          <option key={i} value={c.value}>
+                            {c.label}
+                          </option>
+                        ))}
+                    </select>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
           {!!transactionTypeId && transactionTypeId.toString() === "1" && (
             <Formik
@@ -398,6 +401,8 @@ function NewBeneficiary(props: iNewBeneficiary) {
                 setLoading(false);
               }}
               innerRef={formikRef_WitihinQFB}
+              validateOnBlur={props.beneficiary ? true : false}
+              validateOnChange={props.beneficiary ? true : false}
             >
               {({
                 values,
@@ -481,7 +486,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                         {touched.qfbaccount &&
                           errors.qfbaccount &&
                           InvalidFieldError(errors.qfbaccount)}
-                        {!isValidIban &&
+                        {!isValidIban && !errors.qfbaccount &&
                           InvalidFieldError(
                             local_Strings.BeneficiaryInvalidAccountOrIban
                           )}
@@ -523,6 +528,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           });
                         }
                       }}
+                      disabled={props.beneficiary ? JSON.stringify(values, ((key, value) => !value ? "" : value)) === JSON.stringify(props.beneficiary, ((key, value) => !value ? "" : value)) : false}
                     >
                       {local_Strings.BeneficiarySaveButton}
                     </button>
@@ -574,6 +580,8 @@ function NewBeneficiary(props: iNewBeneficiary) {
                 setLoading(false);
               }}
               innerRef={formikRef_Local}
+              validateOnBlur={props.beneficiary ? true : false}
+              validateOnChange={props.beneficiary ? true : false}
             >
               {({
                 values,
@@ -649,9 +657,9 @@ function NewBeneficiary(props: iNewBeneficiary) {
                               </option>
                             ))}
                         </select>
-                        {touched.beneficiaryBank &&
-                          errors.beneficiaryBank &&
-                          InvalidFieldError(errors.beneficiaryBank)}
+                        {touched.beneficiaryBankSwiftCode &&
+                          errors.beneficiaryBankSwiftCode &&
+                          InvalidFieldError(local_Strings.GeneralValidation)}
                       </div>
                       <div className="col-lg-6 form-group">
                         <label>{local_Strings.BeneficiarySwiftCodeLabel}</label>
@@ -662,6 +670,9 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           value={values.beneficiaryBankSwiftCode || ""}
                           readOnly
                         />
+                        {touched.beneficiaryBankSwiftCode &&
+                          errors.beneficiaryBankSwiftCode &&
+                          InvalidFieldError(local_Strings.GeneralValidation)}
                       </div>
                     </div>
                     <div className="row  col-xl-12 mb-5">
@@ -690,7 +701,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                         {touched.beneficiaryIban &&
                           errors.beneficiaryIban &&
                           InvalidFieldError(errors.beneficiaryIban)}
-                        {!isValidIban &&
+                        {!isValidIban && !errors.qfbaccount &&
                           InvalidFieldError(
                             local_Strings.BeneficiaryInvalidIban
                           )}
@@ -756,6 +767,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           });
                         }
                       }}
+                      disabled={props.beneficiary ? JSON.stringify(values, ((key, value) => !value ? "" : value)) === JSON.stringify(props.beneficiary, ((key, value) => !value ? "" : value)) : false}
                     >
                       {local_Strings.BeneficiarySaveButton}
                     </button>
@@ -809,6 +821,8 @@ function NewBeneficiary(props: iNewBeneficiary) {
                 setLoading(false);
               }}
               innerRef={formikRef_International}
+              validateOnBlur={props.beneficiary ? true : false}
+              validateOnChange={props.beneficiary ? true : false}
             >
               {({
                 values,
@@ -866,7 +880,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           className="form-control"
                           placeholder=""
                           value={values.beneficiarySwiftCode || ""}
-                          onChange={handleChange("beneficiarySwiftCode")}
+                          onChange={(e) => setFieldValue("beneficiarySwiftCode", e.target.value, true)}
                           onBlur={async () => {
                             if (!!values.beneficiarySwiftCode) {
                               setLoading(true);
@@ -881,8 +895,14 @@ function NewBeneficiary(props: iNewBeneficiary) {
                                 );
                               }
                               setLoading(false);
+                            } else {
+                              setFieldValue(
+                                "beneficiaryBank", "", true
+                              );
                             }
+
                             handleBlur("beneficiarySwiftCode");
+                            handleBlur("beneficiaryBank");
                           }}
                         />
                         {touched.beneficiarySwiftCode &&
@@ -891,28 +911,15 @@ function NewBeneficiary(props: iNewBeneficiary) {
                       </div>
                       <div className="col-lg-6 form-group">
                         <label>{local_Strings.BeneficiaryBankLabel}</label>
-                        <select
+                        <input
+                          type="text"
                           className="form-control"
-                          onBlur={handleBlur("beneficiaryBank")}
+                          placeholder=""
                           value={values.beneficiaryBank || ""}
-                          onChange={(e) => {
-                            setFieldValue("beneficiaryBank", e.target.value);
-                            setBankSwift(e.target.value);
-                            setFieldValue(
-                              "beneficiaryBankSwiftCode",
-                              e.target.value
-                            );
-                          }}
-                        >
-                          <option value="">{local_Strings.SelectItem}</option>
-                          {banks &&
-                            banks.length > 0 &&
-                            banks.map((c, i) => (
-                              <option key={i} value={c.value}>
-                                {c.label}
-                              </option>
-                            ))}
-                        </select>
+                          onChange={handleChange("beneficiaryBank")}
+                          onBlur={handleBlur("beneficiaryBank")}
+                          readOnly={true}
+                        />
                         {touched.beneficiaryBank &&
                           errors.beneficiaryBank &&
                           InvalidFieldError(errors.beneficiaryBank)}
@@ -954,6 +961,9 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           onBlur={handleBlur("beneficiaryAddress")}
                           onChange={handleChange("beneficiaryAddress")}
                         />
+                        {touched.beneficiaryAddress &&
+                          errors.beneficiaryAddress &&
+                          InvalidFieldError(errors.beneficiaryAddress)}
                       </div>
                       <div className="col-lg-6 form-group">
                         <label>{local_Strings.BeneficiaryCountryLabel}</label>
@@ -1019,7 +1029,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           }}
                           onChange={handleChange("beneficiaryIban")}
                         />
-                        {!isValidIban &&
+                        {!isValidIban && !errors.qfbaccount &&
                           InvalidFieldError(
                             local_Strings.BeneficiaryInvalidIban
                           )}
@@ -1116,9 +1126,14 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           handleSubmit();
                         } else {
                           touched.beneficiaryId = true;
+                          touched.beneficiaryBank = true;
+                          touched.beneficiarySwiftCode = true;
                           touched.beneficiaryFullName = true;
-                          touched.qfbaccount = true;
+                          touched.beneficiaryAccountNumber = true;
+                          touched.beneficiaryCity = true;
+                          touched.country = true;
                           touched.beneficiaryCurrency = true;
+                          touched.beneficiaryAddress = true;
                           Swal.fire({
                             position: "top-end",
                             icon: "error",
@@ -1128,6 +1143,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           });
                         }
                       }}
+                      disabled={props.beneficiary ? JSON.stringify(values, ((key, value) => !value ? "" : value)) === JSON.stringify(props.beneficiary, ((key, value) => !value ? "" : value)) : false}
                     >
                       {local_Strings.BeneficiarySaveButton}
                     </button>

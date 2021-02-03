@@ -41,7 +41,6 @@ function NewTransaction(props: iNewTransaction) {
   const formikRef_LocalOrInternational = useRef<any>();
 
   const [transactionTypes, setTransactionTypes] = useState<iDDL[]>([]);
-  const [currencies, setCurrencies] = useState<iDDL[]>([]);
   const [accounts, setAccounts] = useState<iDDL[]>([]);
   const [beneficiaries, setBeneficiaries] = useState<iDDL[]>([]);
   const [beneficiariesData, setBeneficiariesData] = useState([]);
@@ -50,7 +49,6 @@ function NewTransaction(props: iNewTransaction) {
   const [showFormLocal, setShowFormLocal] = useState(false);
   const [showFormInternational, setShowInternational] = useState(false);
 
-  let controller;
   const initialValuesWithin: ITransactionDetail = {
     amount: undefined,
     beneficiaryId: undefined,
@@ -102,7 +100,7 @@ function NewTransaction(props: iNewTransaction) {
       .number()
       .required(local_Strings.GeneralValidation)
       .min(0.1, local_Strings.Transactions_Amount_Validation),
-    requestDate: yup.string().required(local_Strings.GeneralValidation),
+    transactionDate: yup.string().required(local_Strings.GeneralValidation),
     beneficiaryId: yup.string().required(local_Strings.GeneralValidation),
     description: yup.string().required(local_Strings.GeneralValidation),
   });
@@ -132,18 +130,16 @@ function NewTransaction(props: iNewTransaction) {
     let result: iDDL[] = [{ label: "", value: "" }];
     for (let index = 0; index < data.length; index++) {
       const element = data[index];
-      if (typeId.toString() === "2") {
-        if (element["typeId"].toString() !== "3") {
+      if (element["typeId"].toString() === typeId.toString()) {
+        if (typeId.toString() == "3") {
           result.push({
-            label: element["beneficiaryFullName"],
+            label: `${element["beneficiaryFullName"]} ${element["country"] == null ? "" : `(${element["country"]})`
+              } (${element["beneficiaryCurrency"]})`,
             value: element["id"],
           });
-        }
-      }
-      if (typeId.toString() === "3") {
-        if (element["typeId"].toString() === "3") {
+        } else {
           result.push({
-            label: element["beneficiaryFullName"],
+            label: `${element["beneficiaryFullName"]} (${local_Strings.BeneficiariesListingCountrySample})`,
             value: element["id"],
           });
         }
@@ -151,27 +147,6 @@ function NewTransaction(props: iNewTransaction) {
     }
 
     setBeneficiaries(result.slice(1));
-    setLoading(false);
-  };
-
-  const fetchCurrencies = async () => {
-    setLoading(true);
-    const data = await GetCurrencies();
-    let result: iDDL[] = [{ label: "", value: "" }];
-    for (let index = 0; index < data.length; index++) {
-      const element = data[index];
-      result.push({
-        label:
-          currentContext.language === "ar"
-            ? element["nameAr"]
-            : element["name"],
-        value:
-          currentContext.language === "ar"
-            ? element["nameAr"]
-            : element["name"],
-      });
-    }
-    setCurrencies(result.slice(1));
     setLoading(false);
   };
 
@@ -194,7 +169,6 @@ function NewTransaction(props: iNewTransaction) {
   useEffect(() => {
     const initialLoadMethod = async () => {
       fetchTransactionType();
-      fetchCurrencies();
       fetchAccountCashList();
     };
 
@@ -348,6 +322,19 @@ function NewTransaction(props: iNewTransaction) {
                             setFieldValue(
                               "transferFromAccount", e.target.value
                             );
+                            if (!!e.target.value) {
+                              const index = e.target.selectedIndex;
+                              setFieldValue(
+                                "currency",
+                                e.target[index].innerText.substr(
+                                  e.target[index].innerText.indexOf("(") + 1, 5
+                                ).replace(")", "")
+                              );
+                            } else {
+                              setFieldValue(
+                                "currency", "", true
+                              );
+                            }
                             setFieldValue(
                               "transferToAccount", ""
                             );
@@ -489,6 +476,20 @@ function NewTransaction(props: iNewTransaction) {
                               "transferFromAccount",
                               e.target.value
                             );
+                            if (!!e.target.value) {
+                              const index = e.target.selectedIndex;
+                              setFieldValue(
+                                "currency",
+                                e.target[index].innerText.substr(
+                                  e.target[index].innerText.indexOf("(") + 1, 5
+                                ).replace(")", "")
+                              );
+                            } else {
+                              setFieldValue(
+                                "currency", "", true
+                              );
+                            }
+                            handleBlur("currency");
                           }}
                         >
                           <option value="">{local_Strings.SelectItem}</option>
@@ -515,18 +516,20 @@ function NewTransaction(props: iNewTransaction) {
                           value={values.beneficiaryId || ""}
                           onChange={(e) => {
                             setFieldValue("beneficiaryId", e.target.value);
-                            var ben = beneficiariesData.filter(
-                              (obj) => obj["id"] === e.target.value
-                            );
-                            if (ben.length > 0) {
-                              setFieldValue(
-                                "currency",
-                                ben[0]["beneficiaryCurrency"]
-                              );
-                              controller.selectItem(
-                                ben[0]["beneficiaryCurrency"]
-                              );
-                            }
+                            // var ben = beneficiariesData.filter(
+                            //   (obj) => String(obj["id"]) === e.target.value
+                            // );
+                            // if (ben.length > 0) {
+                            //   setFieldValue(
+                            //     "currency",
+                            //     ben[0]["beneficiaryCurrency"]
+                            //   );
+                            // } else {
+                            //   setFieldValue(
+                            //     "currency", "", true
+                            //   );
+                            // }
+                            // handleBlur("currency");
                           }}
                         >
                           <option value="">{local_Strings.SelectItem}</option>
@@ -545,23 +548,13 @@ function NewTransaction(props: iNewTransaction) {
 
                       <div className="col-lg-6 form-group">
                         <label>{local_Strings.TransactionCurrencyLabel}</label>
-                        <select
+                        <input
+                          type="text"
                           className="form-control"
-                          value={values.currency || ""}
-                          onBlur={handleBlur("currency")}
-                          onChange={(e) => {
-                            setFieldValue("currency", e.target.value);
-                          }}
-                        >
-                          <option value="">{local_Strings.SelectItem}</option>
-                          {currencies &&
-                            currencies.length > 0 &&
-                            currencies.map((c, i) => (
-                              <option key={i} value={c.value}>
-                                {c.label}
-                              </option>
-                            ))}
-                        </select>
+                          placeholder=""
+                          defaultValue={values.currency || ""}
+                          readOnly={true}
+                        />
                         {touched.currency &&
                           errors.currency &&
                           InvalidFieldError(errors.currency)}
@@ -597,6 +590,11 @@ function NewTransaction(props: iNewTransaction) {
                           onChange={(date: Date) => {
                             setFieldValue(
                               "transactionDate",
+                              moment(date).utc(true),
+                              false
+                            );
+                            setFieldValue(
+                              "requestDate",
                               moment(date).utc(true),
                               false
                             );
@@ -640,6 +638,7 @@ function NewTransaction(props: iNewTransaction) {
                           touched.beneficiaryId = true;
                           touched.currency = true;
                           touched.amount = true;
+                          touched.requestDate = true;
                           touched.description = true;
                           Swal.fire({
                             position: "top-end",
@@ -660,7 +659,7 @@ function NewTransaction(props: iNewTransaction) {
           )}
         </div>
       </Modal.Body>
-    </Modal>
+    </Modal >
   );
 }
 

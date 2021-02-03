@@ -103,7 +103,7 @@ function FacilitiesDetails(props: iFacilitiesDetails) {
                     {props.facilityItem.ldReference}
                   </h3>
                   <h3 className="text-sm">
-                    {item.OutstandingAmount.value || "0"}
+                    {item.OutstandingAmount ? item.OutstandingAmount.value : "0"}
                   </h3>
                 </div>
                 <div className="col-sm-4 text-sm-right">
@@ -119,30 +119,42 @@ function FacilitiesDetails(props: iFacilitiesDetails) {
             </li>
           </ul>
           <div className="px-4">
-            <div className="formGrp">
-              <label>{item.FacilityReference.label}</label>
-              <p>{item.FacilityReference.value || ""}</p>
-            </div>
-            <div className="formGrp">
-              <label>{item.Currency.label}</label>
-              <p>{item.Currency.value || ""}</p>
-            </div>
-            <div className="formGrp">
-              <label>{item.OutstandingAmount.label}</label>
-              <p>{item.OutstandingAmount.value || ""}</p>
-            </div>
-            <div className="formGrp">
-              <label>{item.StartDate.label}</label>
-              <p>{item.StartDate.value || ""}</p>
-            </div>
-            <div className="formGrp">
-              <label>{item.MaturityDate.label}</label>
-              <p>{item.MaturityDate.value || ""}</p>
-            </div>
-            <div className="formGrp">
-              <label>{item.ProfitRate.label}</label>
-              <p>{item.ProfitRate.value || ""}</p>
-            </div>
+            {item.FacilityReference &&
+              <div className="formGrp">
+                <label>{item.FacilityReference.label}</label>
+                <p>{item.FacilityReference.value || ""}</p>
+              </div>
+            }
+            {item.Currency &&
+              <div className="formGrp">
+                <label>{item.Currency.label}</label>
+                <p>{item.Currency.value || ""}</p>
+              </div>
+            }
+            {item.OutstandingAmount &&
+              <div className="formGrp">
+                <label>{item.OutstandingAmount.label}</label>
+                <p>{item.OutstandingAmount.value || ""}</p>
+              </div>
+            }
+            {item.StartDate &&
+              <div className="formGrp">
+                <label>{item.StartDate.label}</label>
+                <p>{item.StartDate.value || ""}</p>
+              </div>
+            }
+            {item.MaturityDate &&
+              <div className="formGrp">
+                <label>{item.MaturityDate.label}</label>
+                <p>{item.MaturityDate.value || ""}</p>
+              </div>
+            }
+            {item.ProfitRate &&
+              <div className="formGrp">
+                <label>{item.ProfitRate.label}</label>
+                <p>{item.ProfitRate.value || ""}</p>
+              </div>
+            }
           </div>
           <div className="text-right px-4">
             <button

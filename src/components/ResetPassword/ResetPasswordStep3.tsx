@@ -65,16 +65,16 @@ function ResetPasswordStep3(props: iResetPasswordStep3) {
           if (res) {
 
             await DeletePasswordToken(queryStrings.token);
-            
-            Swal.fire({
-              position: "top-end",
-              icon: "success",
-              title: local_Strings.PasswordResetTitle,
-              html: local_Strings.PasswordResetSuccessMessage,
-              showConfirmButton: false,
-              timer: Constant.AlertTimeout,
-            });
-            props.hideResetPasswordStep3();
+
+            // Swal.fire({
+            //   position: "top-end",
+            //   icon: "success",
+            //   title: local_Strings.PasswordResetTitle,
+            //   html: local_Strings.PasswordResetSuccessMessage,
+            //   showConfirmButton: false,
+            //   timer: Constant.AlertTimeout,
+            // });
+            props.showResetPasswordStep4();
           }
 
           setLoading(false);
@@ -138,8 +138,10 @@ function ResetPasswordStep3(props: iResetPasswordStep3) {
                   InvalidFieldError(errors.confirmPassword)}
               </div>
             </div>
-
-            <div className="text-right">
+            <div className="text-xs color-grey">
+              {local_Strings.registerStep2Label3}
+            </div>
+            <div className="text-right p-3 ">
               <button
                 id="applyReqBtn"
                 className="btn btn-primary"

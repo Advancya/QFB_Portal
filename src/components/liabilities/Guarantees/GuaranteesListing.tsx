@@ -71,10 +71,10 @@ function GuaranteesListing(props: iGuaranteesListing) {
       >
         <div className="col-sm-9 col-lg-10 mb-2">
           <h3 className="text-capitalize color-gold text-16">
-            {local_Strings.LoanNo} {item.id || ""}
+            {item.id || ""}
           </h3>
           <h3 className="text-18">
-            {helper.ConvertToQfbNumberFormat(item.principalAmount)}
+            {helper.ConvertToQfbNumberFormatWithFraction(item.principalAmount)}
           </h3>
         </div>
         <div className="col-sm-3 col-lg-2  text-md-center">
@@ -126,7 +126,7 @@ function GuaranteesListing(props: iGuaranteesListing) {
                 <div className="ib-text">
                   <h4>{local_Strings.PortfolioLiabilitiesOption2}</h4>
                   <h5>
-                    {helper.ConvertToQfbNumberFormat(userPortfolio.totalGuarantees || 0) +
+                    {userPortfolio.totalGuarantees +
                       " " +
                       currentContext.userSettings.currency}
                   </h5>

@@ -96,7 +96,7 @@ function TransactionsListing(props: iTransactionsListing) {
               ? item.requestSubjectAR
               : item.requestSubject) +
               " (" +
-              helper.ConvertToQfbNumberFormat(item.amount) +
+              helper.ConvertToQfbNumberFormatWithFraction(item.amount) +
               " " +
               (item.currency || currentContext.userSettings.currency) +
               ")"}

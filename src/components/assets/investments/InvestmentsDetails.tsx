@@ -103,7 +103,7 @@ function InvestmentsDetails(props: iInvestmentsDetails) {
                   <h3 className="text-capitalize color-gold">
                     {local_Strings.Investment +
                       " | " +
-                      item.InvestmentName ? item.InvestmentName.value : ""}
+                      props.investment.secDesciption}
                   </h3>
                   <h3 className="text-sm">
                     {item.InvestmentAmount ? item.InvestmentAmount.value : ""}

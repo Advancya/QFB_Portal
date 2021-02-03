@@ -7,7 +7,6 @@ import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
-import { GetCountries } from "../../services/cmsService";
 import { AddContactUs, iContactUs } from "../../services/authenticationService";
 import { Formik } from "formik";
 import * as yup from "yup";
@@ -15,12 +14,6 @@ import InvalidFieldError from "../../shared/invalid-field-error";
 import Swal from "sweetalert2";
 import xIcon from "../../images/x-icon.svg";
 import deleteIcon from "../../images/delete-icon.svg";
-
-interface ICountry {
-  id: number;
-  nameEn: string;
-  nameAr: string;
-}
 
 const initialValues: iContactUs = {
   id: 0,
@@ -40,8 +33,7 @@ function ContactUsForm(props: iContactUsForm) {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
   const [isLoading, setLoading] = useState(true);
-  const [countries, setCountries] = React.useState<ICountry[]>([]);
-
+  
   const mapStyles = {
     height: "200px",
     width: "100%",
@@ -62,24 +54,6 @@ function ContactUsForm(props: iContactUsForm) {
     },
   ];
 
-  useEffect(() => {
-    let isMounted = true;
-    setLoading(true);
-
-    GetCountries()
-      .then((responseData: ICountry[]) => {
-        if (responseData && responseData.length > 0 && isMounted) {
-          setCountries(responseData);
-        }
-      })
-      .catch((e: any) => console.log(e))
-      .finally(() => setTimeout(() => setLoading(false), 2000));
-
-    return () => {
-      isMounted = false;
-    }; // use effect cleanup to set flag false, if unmounted
-  }, []);
-
   const conactUsVlidationSchema = yup.object({
     email: yup
       .string()
@@ -88,7 +62,7 @@ function ContactUsForm(props: iContactUsForm) {
     country: yup.string().required(local_Strings.GeneralValidation),
     mobile: yup
       .string()
-      .required(local_Strings.GeneralValidation)
+      .required(local_Strings.ContactUs_Mobile_Format_Validation_Message)
       .min(10, local_Strings.MobileNumberLengthError)
       .matches(
         /^\+(?:[0-9]?){6,14}[0-​9]$/,
@@ -265,10 +239,10 @@ function ContactUsForm(props: iContactUsForm) {
                               <option value="">
                                 {local_Strings.SelectItem}
                               </option>
-                              {countries &&
-                                countries.length > 0 &&
-                                !!countries[0].nameEn &&
-                                countries.map((c, i) => (
+                              {currentContext.countries &&
+                                currentContext.countries.length > 0 &&
+                                !!currentContext.countries[0].nameEn &&
+                                currentContext.countries.map((c, i) => (
                                   <option key={i} value={c.nameEn}>
                                     {currentContext.language === "en"
                                       ? c.nameEn

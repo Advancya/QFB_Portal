@@ -58,7 +58,7 @@ function RegisterStep1(props: iRegisterStep1) {
       .string()
       .required(local_Strings.GeneralValidation)
       .email(local_Strings.InvalidEmail),
-    mobile: yup.string().required(local_Strings.GeneralValidation)
+    mobile: yup.string().required(local_Strings.ContactUs_Mobile_Format_Validation_Message)
       .min(10, local_Strings.MobileNumberLengthError)
       .matches(/^\+(?:[0-9]?){6,14}[0-​9]$/, local_Strings.ContactUs_Mobile_Format_Validation_Message),
   });

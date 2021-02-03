@@ -84,7 +84,7 @@ function Transactions() {
       );
 
       if (responseData && responseData.length > 0) {
-        setBeneficiaries(responseData.sort((a, b) => (a.beneficiaryFullName.localeCompare(b.beneficiaryFullName))));
+        setBeneficiaries(responseData.sort((a, b) => (a.id > b.id ? -1 : 1)));
       }
 
       setLoading(false);

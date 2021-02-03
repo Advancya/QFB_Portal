@@ -874,3 +874,10 @@ export interface iRmRequests {
   requestTypeId: string;
   isRead?: boolean;
 }
+
+
+export interface ICountry {
+  id: number;
+  nameEn: string;
+  nameAr: string;
+}

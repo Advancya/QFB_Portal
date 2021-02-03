@@ -81,20 +81,18 @@ function InvestmentsBuyAndSell(props: iInvestmentsBuyAndSell) {
       dialogClassName="myModal"
     >
       <Modal.Header>
-        <div className="modal-header-text">
-          <div className="row align-items-center">
-            <div className="col-2 col-sm-1 text-center">
-              <a
-                href="#"
-                onClick={props.backInvestmentsBuyAndSellModal}
-                className="backToAccountsList"
-              >
-                <i className="fa fa-chevron-left"></i>
-              </a>
-            </div>
-            <div className="ib-text">
-              <h4>{local_Strings.BuyAndSellTransactionsText}</h4>
-            </div>
+        <div className="d-flex align-items-center">
+          <div className="modal-header-text">
+            <a
+              href="#"
+              onClick={props.backInvestmentsBuyAndSellModal}
+              className="backToAccountsList"
+            >
+              <i className="fa fa-chevron-left"></i>
+            </a>
+          </div>
+          <div className="ib-text">
+            <h4>{local_Strings.BuyAndSellTransactionsText}</h4>
           </div>
         </div>
         <button

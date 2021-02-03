@@ -68,7 +68,7 @@ const TransactionListing = (props: ITransactionListingProps) => {
             {Number(item.amount || item.transaction_Amount) < 0
               ? `(${helper.ConvertToQfbNumberFormatWithFraction(
                 item.amount || item.transaction_Amount
-              ).substring(1)})`
+              )})`
               : helper.ConvertToQfbNumberFormatWithFraction(
                 item.amount || item.transaction_Amount
               )}

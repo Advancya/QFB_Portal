@@ -490,15 +490,20 @@ export const transformingTransactionDetail = (
   splitEachProperties.map((s: string) => {
     const languageSpecificStr = s.split(";")[language === "en" ? 0 : 1];
     const keyValuePairStr = languageSpecificStr.indexOf(":") !== -1 ? languageSpecificStr.split(":") : languageSpecificStr.split(",");
-    
+    const uniquePropStr = s
+      .split(";")[0]
+      .split(":")[0]
+      .replace(/\s/g, "")
+      .replace("/", "");
+
     const labelStr = keyValuePairStr[language === "en" ? 0 : 1]
       .replace("/", "")
       .trim();
     const valueStr = s.split(";")[0].indexOf(":") !== -1 ? s.split(";")[0].split(":")[1].trim() : s.split(";")[0].split(",")[1].trim();
 
-    const uniquePropStr = labelStr
-      .replace(/\s/g, "")
-      .replace("/", "");
+    // const uniquePropStr = labelStr
+    //   .replace(/\s/g, "")
+    //   .replace("/", "");
 
     outputJSONStr =
       outputJSONStr +
@@ -847,17 +852,9 @@ export function ConvertToQfbNumberFormat(amount: any) {
 export function ConvertToQfbNumberFormatWithFraction(amount: any) {
   try {
     let number = Number(
-      parseFloat(!!amount ? amount.toString() : "0").toFixed(2)
-    );
-    let finalNumber = "";
+      (!!amount ? amount.toString() : "0")).toFixed(2);
+    let finalNumber = number.toLocaleString();
 
-    if (isNaN(number)) {
-      finalNumber = amount;
-    } else {
-      finalNumber = number.toLocaleString("en", {
-        minimumFractionDigits: 0,
-      });
-    }
     return finalNumber.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
 
   } catch (err) {

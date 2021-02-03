@@ -43,7 +43,7 @@ function ForgotPasswordStep1(props: iForgotPasswordStep1) {
       .email(local_Strings.InvalidEmail),
     mobile: yup
       .string()
-      .required(local_Strings.GeneralValidation)
+      .required(local_Strings.ContactUs_Mobile_Format_Validation_Message)
       .min(10, local_Strings.MobileNumberLengthError)
       .matches(
         /^\+(?:[0-9]?){6,14}[0-​9]$/,

@@ -43,7 +43,7 @@ const TotalNetWorthDetails = () => {
                 <div className="ib-text">
                   <h4>{local_Strings.PortfolioTotalNetWorth}</h4>
                   <h5>
-                    {helper.ConvertToQfbNumberFormatWithFraction(userPortfolio.networth || 0) +
+                    {userPortfolio.networth +
                       " " +
                       currentContext.userSettings.currency}
                   </h5>

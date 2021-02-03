@@ -161,8 +161,10 @@ function ForgotPasswordStep3(props: iForgotPasswordStep3) {
                       InvalidFieldError(errors.confirmPassword)}
                   </div>
                 </div>
-
-                <div className="text-right">
+                <div className="text-xs color-grey">
+                  {local_Strings.registerStep2Label3}
+                </div>
+                <div className="text-right p-3 ">
                   <button
                     id="applyReqBtn"
                     className="btn btn-primary"

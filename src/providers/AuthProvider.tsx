@@ -5,7 +5,7 @@ import {
   GetUserLocalData,
   SaveUserDataLocally,
 } from "../Helpers/authHelper";
-import React, { useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { authenticate } from "../services/authenticationService";
 import * as helper from "../Helpers/helper";
 import { getUserRole } from "../services/apiServices";
@@ -18,6 +18,9 @@ import oidc from "../services/oidc-config.json";
 import Swal from 'sweetalert2';
 import Constant from "../constants/defaultData";
 import { localStrings as local_Strings } from '../translations/localStrings';
+import { GetCountries } from "../services/commonDataServices";
+import { ICountry } from "../Helpers/publicInterfaces";
+import { useHistory } from "react-router-dom";
 
 registerLocale('ar', arSA);
 
@@ -27,6 +30,7 @@ interface IAppContext {
   userRole: string;
   language: string;
   selectedCIF: string;
+  countries: ICountry[],
   login: (user: User) => Promise<boolean>;
   logout: () => void;
   changeLanguage: (language: string) => void;
@@ -34,11 +38,12 @@ interface IAppContext {
   selectCIF: (cif: string) => void;
 }
 
-export const AuthContext = React.createContext<IAppContext>({
+export const AuthContext = createContext<IAppContext>({
   userSettings: initialSettingsData,
   userRole: "",
   language: "en",
   selectedCIF: initialSettingsData.customerId,
+  countries: [],
   login: (user) => {
     return new Promise((resolve, reject) => {
       return false;
@@ -59,6 +64,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [language, setLanguage] = useState(helper.getLanguage() || "en");
   const [userRole, setUserRole] = useState<string>("");
   const [selectedCIF, setCIF] = useState<string>(initialSettingsData.customerId);
+  const [countries, setCountries] = useState<ICountry[]>([]);
+  const history = useHistory();
+
   local_Strings.setLanguage(language);
   moment.locale(language);
   setDefaultLocale(language);
@@ -66,12 +74,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const { getLastActiveTime } = useIdleTimer({
     timeout: 1000 * 60 * 5,
     onIdle: async event => {
-      console.log('user is idle', event);
 
+      const lastActiveTime = moment(getLastActiveTime()).toLocaleString();
+      
       if (!!selectedCIF) {
+
+        console.log('user is idle since ', lastActiveTime);
         await AddToLogs(
-          'user is idle',
-          'last active time - ' + getLastActiveTime(),
+          'user is idle since ' + lastActiveTime,
+          '',
           selectedCIF
         );
         signout();
@@ -89,32 +100,51 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   });
 
   useEffect(() => {
+    let isMounted = true;
+
     const getUserData = async () => {
       const userData = await GetUserLocalData();
       if (userData) {
-        setUserSettings(userData);
+        if (isMounted) {
+          setUserSettings(userData);
+        }
         const role = await getUserRole(userData.customerId || initialSettingsData.customerId);
-        if (role && !!role) {
+        if (role && !!role && isMounted) {
           setCIF(userData.customerId);
           setUserRole(role.name);
         } else {
-          setCIF(initialSettingsData.customerId);
+          if (isMounted) {
+            setCIF(initialSettingsData.customerId);
+          }
         }
       } else {
-        setCIF(initialSettingsData.customerId);
-        setUserRole("");
-        setUserSettings(initialSettingsData);
-        //window.location.href = `/${language}`;
+        if (isMounted) {
+          setCIF(initialSettingsData.customerId);
+          setUserRole("");
+          setUserSettings(initialSettingsData);
+        }
       }
+
+      await GetCountries()
+        .then((responseData: ICountry[]) => {
+          if (responseData && responseData.length > 0 && isMounted) {
+            setCountries(responseData);
+          }
+        })
+        .catch((e: any) => console.log(e))
     };
     getUserData();
+
+    return () => {
+      isMounted = false;
+    }; // use effect cleanup to set flag false, if unmounted
 
   }, []);
 
   const signout = async () => {
     await AddToLogs(
       'user is signout successfully',
-      'last active time - ' + getLastActiveTime(),
+      '',
       selectedCIF
     );
 
@@ -123,7 +153,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setUserSettings(null);
     await SaveUserDataLocally(null);
     localStorage.removeItem(oidc.storage_key);
-    window.location.href = `/${language}`;
+    history.push(`/${language}`);
   }
 
   return (
@@ -133,6 +163,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         userRole,
         language,
         selectedCIF,
+        countries,
         login: async (userData) => {
           const resutl = await authenticate(
             userData.username,

@@ -80,7 +80,7 @@ function CashListing(props: iCashListing) {
         <div className="col-8 offset-2 offset-sm-0 col-sm-6">
           <h5>{local_Strings.CashDetailsBalanceLabel}</h5>
           <h4>
-            {helper.ConvertToQfbNumberFormat(item.balance) +
+            {item.balance +
               " " +
               item.currency}
           </h4>
@@ -111,7 +111,7 @@ function CashListing(props: iCashListing) {
             <div className="ib-text">
               <h4>{local_Strings.CashListingCash}</h4>
               <h5>
-                {helper.ConvertToQfbNumberFormat(userPortfolio.totalCash || 0) +
+                {userPortfolio.totalCash +
                   " " +
                   (currentContext.userSettings.currency || "")}
               </h5>

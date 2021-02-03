@@ -28,7 +28,7 @@ function BeneficiariesListing(props: iBeneficiariesListing) {
   const rowLimit: number = Constant.RecordPerPage;
   const [offset, setOffset] = useState<number>(rowLimit);
   const [allowEdit, setAllowEdit] = useState<boolean>(false);
-  
+
   useEffect(() => {
     let isMounted = true;
     const initialLoadMethod = async () => {
@@ -72,7 +72,13 @@ function BeneficiariesListing(props: iBeneficiariesListing) {
           <h5>{item.beneficiaryFullName}</h5>
         </div>
         <div className="col-8 col-sm-3 text-sm-right">
-          <span className="status-badge ">{item.country || "NA"}</span>
+          <span className="status-badge ">
+            {item.country && currentContext.countries.length > 0
+              ? currentContext.language === "en"
+              ? currentContext.countries.filter((obj) => obj.nameEn === item.country)[0]?.nameEn
+              : currentContext.countries.filter((obj) => obj.nameEn === item.country)[0]?.nameAr
+              : local_Strings.BeneficiariesListingCountrySample}
+          </span>
         </div>
         <div className="col-4 col-sm-1 text-right">
           <i className="fa fa-chevron-right"></i>
@@ -140,8 +146,8 @@ function BeneficiariesListing(props: iBeneficiariesListing) {
             <ul className="box-list" id="dataList">
               {filteredData && filteredData.length > 0 && filteredData[0].id > 0
                 ? filteredData
-                    .slice(0, offset)
-                    .map((item, index) => renderItem(item, index))
+                  .slice(0, offset)
+                  .map((item, index) => renderItem(item, index))
                 : NoResult(local_Strings.NoDataToShow)}
             </ul>
           </div>

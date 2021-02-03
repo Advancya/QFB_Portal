@@ -297,7 +297,7 @@ function NewRequest(props: iNewRequest) {
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
               .string()
-              .required(local_Strings.GeneralValidation)
+              .required(local_Strings.ContactUs_Mobile_Format_Validation_Message)
               .min(10, local_Strings.MobileNumberLengthError)
               .matches(/^\+(?:[0-9]?){6,14}[0-​9]$/, local_Strings.ContactUs_Mobile_Format_Validation_Message),
       });
@@ -310,7 +310,7 @@ function NewRequest(props: iNewRequest) {
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
               .string()
-              .required(local_Strings.GeneralValidation)
+              .required(local_Strings.ContactUs_Mobile_Format_Validation_Message)
               .min(10, local_Strings.MobileNumberLengthError)
               .matches(/^\+(?:[0-9]?){6,14}[0-​9]$/, local_Strings.ContactUs_Mobile_Format_Validation_Message),
       });
@@ -323,7 +323,7 @@ function NewRequest(props: iNewRequest) {
             ? yup.string().required(local_Strings.GeneralValidation)
             : yup
               .string()
-              .required(local_Strings.GeneralValidation)
+              .required(local_Strings.ContactUs_Mobile_Format_Validation_Message)
               .min(10, local_Strings.MobileNumberLengthError)
               .matches(/^\+(?:[0-9]?){6,14}[0-​9]$/, local_Strings.ContactUs_Mobile_Format_Validation_Message),
       });

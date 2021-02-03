@@ -164,7 +164,7 @@ const en = {
   PortfolioLiabilitiesOption1: "Facilities",
   PortfolioLiabilitiesOption2: "Guarantees",
   PortfolioCurrencyType: "QAR",
-  PortfolioTotalNetWorth: "Total Net Worth",
+  PortfolioTotalNetWorth: "Net Position",
 
   landingPageInvaildLoginMessage: "Invalid Username or Password.",
 
@@ -248,7 +248,7 @@ const en = {
   NoDataToShow: "No Data to Show",
   OfferList_NoData: "No data available",
 
-  DepositNo: "Deposit No.",
+  DepositNo: "Deposit No. | ",
   AccountNo: "Account No.",
   InvestmentNo: "Investment No.",
   LoanNo: "Facility No.",
@@ -298,10 +298,10 @@ const en = {
   TransactionScreenFilter_LTE: "Less than or equal to",
   TransactionScreenFilter_LT: "Less than",
 
-  BankGuarantee: "Bank Guarantee",
+  BankGuarantee: "Bank Guarantees",
   GuaranteeNo: "Guarantee No | ",
-  BankGuaranteeListing: "Bank Guarantee Listing",
-  BankGuaranteeDetails: "Bank Guarantee Details",
+  BankGuaranteeListing: "Bank Guarantees Listing",
+  BankGuaranteeDetails: "Bank Guarantees Details",
   InvestmentsDetailsTitle: "Investments Details",
   InvestmentsDetailsFromLabel: "From",
   InvestmentsDetailsLocationLabel: "Location",
@@ -414,7 +414,7 @@ const en = {
   BeneficiaryDeleteButton: "Delete",
   BeneficiaryInvalidIban: "Invalid IBAN Number",
   BeneficiaryIDLabelInternational: "Beneficiary ID(system assigned)",
-  DeleteConfirmationTitle: "Confiramtion Message",
+  DeleteConfirmationTitle: "Confirmation Message",
   DeleteConfirmationBody: "Are you sure?",
 
   BeneficiariesDetailsTitle: "Beneficiary Details",
@@ -489,7 +489,7 @@ const en = {
 
   PasswordResetSuccessTitle: "Request Sent",
   PasswordResetSuccessMessage:
-    "Your Password reset is done, click here to login",
+    "Your password reset is done successfully.",
 
   GenericErrorMessage: "Something went wrong, please try again later",
   NewRequestSubmitRequiredMessage:

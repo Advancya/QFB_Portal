@@ -26,8 +26,11 @@ const Login: React.FC<IProps> = (props) => {
   const initialValues: User = { username: "", password: "", otp: "" };
   local_Strings.setLanguage(currentContext.language);
   const loginFormValidationSchema = yup.object({
-    username: yup.string().required("User name is required"),
-    password: yup.string().required("Password is required"),
+    username: yup
+      .string()
+      .required(local_Strings.GeneralValidation)
+      .matches(/^[a-zA-Z0-9]+$/, local_Strings.Login_ArabicNumberHint),
+    password: yup.string().required(local_Strings.GeneralValidation),
   });
 
   const submitLogin = async (values: User) => {

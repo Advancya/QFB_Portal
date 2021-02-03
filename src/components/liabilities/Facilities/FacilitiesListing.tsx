@@ -68,7 +68,7 @@ function FacilitiesListing(props: iFacilitiesListing) {
             {item.ldReference || ""}
           </h3>
           <h3 className="text-18">
-            {helper.ConvertToQfbNumberFormat(item.productBalance)}
+            {helper.ConvertToQfbNumberFormatWithFraction(item.productBalance)}
           </h3>
         </div>
         <div className="col-sm-3 col-lg-2  text-md-center">
@@ -127,7 +127,7 @@ function FacilitiesListing(props: iFacilitiesListing) {
                 <div className="ib-text">
                   <h4>{local_Strings.PortfolioLiabilitiesOption1}</h4>
                   <h5>
-                    {helper.ConvertToQfbNumberFormat(userPortfolio.totalLoans || 0) +
+                    {userPortfolio.totalLoans +
                       " " +
                       currentContext.userSettings.currency}
                   </h5>
