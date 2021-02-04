@@ -209,7 +209,7 @@ function Transactions() {
         }}
         backBeneficiaryDetailsModal={() => {
           setShowNewBeneficiary(false);
-          setshowBeneficiariesDetails(true);
+          setShowBeneficiariesListing(true);
         }}
         beneficiary={selectedBeneficiary}
       />

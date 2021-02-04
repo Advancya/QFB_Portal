@@ -1,15 +1,18 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import transactionIconColor from "../../images/transaction-icon-color.svg";
-import FilterCommonControl from "../../shared/FilterCommonControl";
+import FilterDateControl from "../../shared/FilterDateControl";
+import FilterCustomDateControl from "../../shared/FilterCustomDateControl";
+import FilterDropDownControl from "../../shared/FilterDropDownControl";
+import FilterButtonControl from "../../shared/FilterButtonControl";
 import FilterMoreButtonControl from "../../shared/FilterMoreButtonControl";
 import moment from "moment";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
 import {
   emptyTransactionDetail,
-  emptyCommonFilter,
-  ICommonFilter,
+  emptyRequestFilter,
+  IRequestFilter,
   ITransactionDetail,
 } from "../../Helpers/publicInterfaces";
 import * as helper from "../../Helpers/helper";
@@ -19,6 +22,9 @@ import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import xIcon from "../../images/x-icon.svg";
 import { GetUserLocalData } from "../../Helpers/authHelper";
+import {
+  GetTransactionTypes,
+} from "../../services/commonDataServices";
 
 interface iTransactionsListing {
   showTransactionsListingModal: boolean;
@@ -30,6 +36,11 @@ interface iTransactionsListing {
   reloading: boolean;
 }
 
+interface iDDL {
+  label: string;
+  value: any;
+}
+
 function TransactionsListing(props: iTransactionsListing) {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
@@ -37,7 +48,12 @@ function TransactionsListing(props: iTransactionsListing) {
   const [offset, setOffset] = useState<number>(rowLimit);
   const [filteredData, setFilteredData] = useState<ITransactionDetail[]>([emptyTransactionDetail]);
   const [allowEdit, setAllowEdit] = useState<boolean>(false);
-  const [filters, setFilter] = useState<ICommonFilter>(emptyCommonFilter);
+  const [filters, setFilter] = useState<IRequestFilter>(emptyRequestFilter);
+  const [transactionTypes, setTransactionTypes] = useState<iDDL[]>([]);
+
+  useEffect(() => {
+    fetchTransactionType();
+  }, []);
 
   useEffect(() => {
     let isMounted = true;
@@ -60,14 +76,14 @@ function TransactionsListing(props: iTransactionsListing) {
   }, [currentContext.selectedCIF, currentContext.language]);
 
   useEffect(() => {
-    
+
     setFilteredData(props.transactions);
     if (props.transactions && props.transactions.length > 0 && props.transactions.length < rowLimit) {
       setOffset(props.transactions.length);
     } else {
       setOffset(rowLimit);
     }
-    
+
     if (filters.filterApplied) {
       const _filteredData = helper.filterTransactionList(
         props.transactions,
@@ -115,6 +131,35 @@ function TransactionsListing(props: iTransactionsListing) {
       </a>
     </li>
   );
+
+  const fetchTransactionType = async () => {
+    const data = await GetTransactionTypes();
+    let result: iDDL[] = [
+      { label: local_Strings.TransactionScreenFilter_None, value: "0" },
+    ];
+    for (let index = 0; index < data.length; index++) {
+      const element = data[index];
+      result.push({
+        label: currentContext.language === "ar" ? element["nameAr"] : element["name"],
+        value: element["id"].toString(),
+      });
+    }
+    setTransactionTypes(result);
+  };
+
+  const statusFilterOptions: iDDL[] = [
+    { label: local_Strings.TransactionScreenFilter_None, value: "0" },
+    {
+      label: local_Strings.RequestListingFilterStatusOption1,
+      value: "بانتظار المراجعة",
+    },
+    { label: local_Strings.RequestListingFilterStatusOption2, value: "Closed" },
+    {
+      label: local_Strings.RequestListingFilterStatusOption3,
+      value: "In Progress",
+    },
+    { label: local_Strings.RequestListingFilterStatusOption4, value: "Cancelled" },
+  ];
 
   return (
     <div>
@@ -165,25 +210,73 @@ function TransactionsListing(props: iTransactionsListing) {
         </Modal.Header>
         <Modal.Body>
           {props.transactions && props.transactions.length > 0 && !!props.transactions[0].transactionDate &&
-            <FilterCommonControl
-              clearFilter={() => {
-                setFilteredData(props.transactions);
-                setFilter(emptyCommonFilter);
-                if (props.transactions.length < rowLimit) {
-                  setOffset(props.transactions.length);
-                } else {
-                  setOffset(rowLimit);
-                }
-              }}
-              applyFilter={(filters: ICommonFilter) => {                
-                const _filteredData = helper.filterTransactionList(
-                  props.transactions,
-                  filters
-                );
-                setFilteredData(_filteredData);
-                setFilter(filters);
-              }}
-            />
+            <form className="filter-box">
+              <div className="row headRow align-items-center">
+                <div className="col-sm-3">
+                  <FilterDateControl
+                    value={filters.DateOption}
+                    onChange={(_value: string) =>
+                      setFilter({ ...filters, DateOption: _value })
+                    }
+                  />
+                </div>
+                <div className="col-sm-3">
+                  <FilterDropDownControl
+                    label={local_Strings.RequestListingFilterStatus}
+                    options={statusFilterOptions}
+                    value={filters.Status || "0"}
+                    onChange={(_value: string) =>
+                      setFilter({ ...filters, Status: _value })
+                    }
+                    initialSelectRequired={true}
+                  />
+                </div>
+                <div className="col-sm-3">
+                  <FilterDropDownControl
+                    label={local_Strings.RequestListingFilterType}
+                    options={transactionTypes}
+                    value={filters.Type || "0"}
+                    onChange={(_value: string) =>
+                      setFilter({ ...filters, Type: _value })
+                    }
+                    initialSelectRequired={true}
+                  />
+                </div>
+                <div className="col-sm-3">
+                  <FilterButtonControl
+                    clearFilter={() => {
+                      setFilteredData(props.transactions);
+                      setFilter(emptyRequestFilter);
+                      if (props.transactions.length < rowLimit) {
+                        setOffset(props.transactions.length);
+                      } else {
+                        setOffset(rowLimit);
+                      }
+                    }}
+                    applyFilter={() => {
+                      const _filteredData = helper.filterTransactionList(
+                        props.transactions,
+                        filters
+                      );
+                      setFilteredData(_filteredData);
+                      setFilter(filters);
+                    }}
+                    showClearFilter={filters.filterApplied}
+                  />
+                </div>
+                <FilterCustomDateControl
+                  onStartDateChange={(_value: string) =>
+                    setFilter({ ...filters, StartDate: moment(_value).toDate() })
+                  }
+                  onEndDateChange={(_value: string) =>
+                    setFilter({ ...filters, EndDate: moment(_value).toDate() })
+                  }
+                  StartDate={filters.StartDate}
+                  EndDate={filters.EndDate}
+                  showCustomDateFilter={filters.DateOption === "4"}
+                />
+              </div>
+            </form>
           }
           <div className="box modal-box">
             <ul className="box-list" id="reqList">

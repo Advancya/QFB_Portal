@@ -72,7 +72,7 @@ const en = {
   AnonymousLandingStockSectionTitle: " Qatar First Bank Stock Price",
   AnonymousLandingStockSectionStockPriceLabel: "Current Price",
   AnonymousLandingStockSectionChangeLabel: "Change",
-  AnonymousLandingStockSectionLastPriceLabel: "Prevuios Close",
+  AnonymousLandingStockSectionLastPriceLabel: "Previous Close",
   AnonymousLandingProductsAndOffers: "Products and Offers ",
   AnonymousLandingPublicNews: "Latest News",
 
@@ -142,7 +142,7 @@ const en = {
   WelcomeScreenTitle: "Relation Manager",
   WelcomeScreenMsg:
     "Welcome {0} to QFB bank, we are glade to serve you and have you as a customer, we hope to satisfy all your needs..",
-  WelcomeScreenPopUpTitle: "CALL ME BACK RREQUSET",
+  WelcomeScreenPopUpTitle: "CALL ME BACK REQUSET",
   WelcomeScreenPopUpMessage: "Your request has been sent.",
   WelcomeScreenClose: "Close",
   WelcomeScreenCall: "Call",
@@ -183,7 +183,7 @@ const en = {
   CashDetailsFilterSelect: "Select",
 
   CashDetailsHint:
-    "The below transactions show a maximum of 3 months transactions",
+    "The below transactions show a maximum of 6 months transactions",
   CashDetailsBalanceLabel: "Balance",
   CashDetailsDescriptionLabel: "Description",
   CashDetailsAmountLabel: "Amount",
@@ -274,6 +274,7 @@ const en = {
 
   ReceivedProfitText: "Profit Received",
   ViewReceivedProfit: "View Received Profit",
+  ViewReceivedProfitNew: "View Received Profit Transacrion",
   ViewReceivedProfitTransactions: "Received Profit Transaction",
   BuyAndSellText: "Buy & Sell",
   BuyAndSellTransactionsText: "Buy & Sell Transaction",
@@ -312,11 +313,11 @@ const en = {
   InvestmentsDetailsBuyAndSell: "Buy and sell transaction",
   InvestmentsDetailsLocationSample: "Doha, Qatar",
 
-  NewsListingTitle: "QFP Public News Listing",
+  NewsListingTitle: "QFB Public News Listing",
   NewsListingDateSample: "08-08-2020",
   NewsListingTitleSample:
     "Qatar First Bank acquires BSN Sports’ HQ Building “Varsity Brands” located in Texas",
-  NewsDetailsTitle: "QFP Public News Details",
+  NewsDetailsTitle: "QFB Public News Details",
 
   OffersListingTitle: "Offers",
   OffersDetailsTitle: "Offers Details",
@@ -378,7 +379,7 @@ const en = {
   TransactionTransferTypeLabel: "Transfer Type",
   TransactionRequestButton: "Submit",
 
-  TransactionOTPTitle: "Tranaction Confirmation",
+  TransactionOTPTitle: "Transaction Confirmation",
 
   BeneficiariesListingTitle: "My Beneficiaries Listing",
   BeneficiariesListingIDLabel: "Beneficiaries ID | ",
@@ -412,7 +413,7 @@ const en = {
   BeneficiaryCancelButton: "Cancel",
   BeneficiaryEditButton: "Edit",
   BeneficiaryDeleteButton: "Delete",
-  BeneficiaryInvalidIban: "Invalid IBAN Number",
+  BeneficiaryInvalidIban:"Invalid Account Number or IBAN number",
   BeneficiaryIDLabelInternational: "Beneficiary ID(system assigned)",
   DeleteConfirmationTitle: "Confirmation Message",
   DeleteConfirmationBody: "Are you sure?",
@@ -619,11 +620,11 @@ const en = {
   BankPositionsTotalAssetSub3: "Placements",
   BankPositionsTotalAssetSub4: "Past Dues",
   BankPositionsTotalAssetSub5: "Cash Balances",
-  BankPositionsTotalAssetSub6: "Private Bank Loans Balances",
+  BankPositionsTotalAssetSub6: "Investments",
   BankPositionsTotalAssetSub7: "Loans",
 
   BankPositionsTotalLiabilitiesSub1: "Client’s Cash",
-  BankPositionsTotalLiabilitiesSub2: "Deposits",
+  BankPositionsTotalLiabilitiesSub2: "Customers Deposits",
   BankPositionsTotalLiabilitiesSub3: "FI Borrowings",
 
   StandardSettlementTitle: "Standard Settlement Instructions",
@@ -827,6 +828,7 @@ const en = {
 
   Transactions_Amount_Validation: "Only number accepted",
   BeneficiaryInvalidAccountOrIban: "Invalid Account Number or IBAN",
+  BeneficiaryInvalidIbanNumber: "Invalid IBAN",
   BeneficiaryInvalidSwiftCode: "Invalid Swift Code",
 
   NoDepositsHoldingsFound: "No Deposits Holdings Found",
@@ -842,6 +844,11 @@ const en = {
   RequestNumber: "Request Number | ",
   SendButtonText: "Send",
   AdminLandingTitle: "Welcome, Portal Admin",
+  AmountExceedBalance: "Amount exceed your balance",
+  
+  EarningTillDate: "Earnings Todate",
+  MaxSizeAllowed: "Maximum allowed file size is 2.5 MB",
+  ContactUs_Name_Format_Validation_Message: "Name Should be only letters",
 };
 
 export default en;

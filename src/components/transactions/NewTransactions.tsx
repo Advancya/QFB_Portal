@@ -4,10 +4,9 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { GetBeneficiariesByCif } from "../../services/transactionService";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { AuthContext } from "../../providers/AuthProvider";
-import { ITransactionDetail } from "../../Helpers/publicInterfaces";
+import { IAccountBalance, ITransactionDetail } from "../../Helpers/publicInterfaces";
 import { GetCashListing, SendOTP } from "../../services/cmsService";
 import {
-  GetCurrencies,
   GetTransactionTypes,
 } from "../../services/commonDataServices";
 import Swal from "sweetalert2";
@@ -29,7 +28,8 @@ interface iNewTransaction {
 
 interface iDDL {
   label: string;
-  value: any;
+  value: string;
+  balance?: number;
 }
 
 function NewTransaction(props: iNewTransaction) {
@@ -64,6 +64,8 @@ function NewTransaction(props: iNewTransaction) {
     requestStatus: "Awaiting Review",
     requestStatusChangeDate: undefined,
     requestSubject: "",
+    status: "",
+    balance: 0,
   };
 
   const initialValuesLocalOrInternational: ITransactionDetail = {
@@ -80,6 +82,8 @@ function NewTransaction(props: iNewTransaction) {
     transferToAccount: undefined,
     requestStatus: "Awaiting Review",
     requestStatusChangeDate: undefined,
+    status: "",
+    balance: 0,
   };
 
   const validationSchemaWithin = yup.object({
@@ -90,7 +94,8 @@ function NewTransaction(props: iNewTransaction) {
     amount: yup
       .number()
       .required(local_Strings.GeneralValidation)
-      .min(0.1, local_Strings.Transactions_Amount_Validation),
+      .min(1, local_Strings.Transactions_Amount_Validation)
+      .lessThan(yup.ref('balance'), local_Strings.AmountExceedBalance),
   });
 
   const validationSchemaLocalOrInternational = yup.object({
@@ -99,7 +104,8 @@ function NewTransaction(props: iNewTransaction) {
     amount: yup
       .number()
       .required(local_Strings.GeneralValidation)
-      .min(0.1, local_Strings.Transactions_Amount_Validation),
+      .min(1, local_Strings.Transactions_Amount_Validation)
+      .lessThan(yup.ref('balance'), local_Strings.AmountExceedBalance),
     transactionDate: yup.string().required(local_Strings.GeneralValidation),
     beneficiaryId: yup.string().required(local_Strings.GeneralValidation),
     description: yup.string().required(local_Strings.GeneralValidation),
@@ -126,22 +132,43 @@ function NewTransaction(props: iNewTransaction) {
   const fetchBeneficiariesByCif = async (typeId: string) => {
     setLoading(true);
     let data = await GetBeneficiariesByCif(currentContext.selectedCIF);
+
     setBeneficiariesData(data);
     let result: iDDL[] = [{ label: "", value: "" }];
     for (let index = 0; index < data.length; index++) {
       const element = data[index];
-      if (element["typeId"].toString() === typeId.toString()) {
-        if (typeId.toString() == "3") {
-          result.push({
-            label: `${element["beneficiaryFullName"]} ${element["country"] == null ? "" : `(${element["country"]})`
-              } (${element["beneficiaryCurrency"]})`,
-            value: element["id"],
-          });
-        } else {
-          result.push({
-            label: `${element["beneficiaryFullName"]} (${local_Strings.BeneficiariesListingCountrySample})`,
-            value: element["id"],
-          });
+      if (typeId.toString() === "2") {
+        if (
+          element["typeId"].toString() === typeId.toString() ||
+          element["typeId"].toString() === "1"
+        ) {
+          if (typeId.toString() == "3") {
+            result.push({
+              label: `${element["beneficiaryFullName"]} ${element["country"] == null ? "" : `(${element["country"]})`
+                } (${element["beneficiaryCurrency"]})`,
+              value: element["id"],
+            });
+          } else {
+            result.push({
+              label: `${element["beneficiaryFullName"]} (Qatar)`,
+              value: element["id"],
+            });
+          }
+        }
+      } else {
+        if (element["typeId"].toString() === typeId.toString()) {
+          if (typeId.toString() == "3") {
+            result.push({
+              label: `${element["beneficiaryFullName"]} ${element["country"] == null ? "" : `(${element["country"]})`
+                } (${element["beneficiaryCurrency"]})`,
+              value: element["id"],
+            });
+          } else {
+            result.push({
+              label: `${element["beneficiaryFullName"]} (Qatar)`,
+              value: element["id"],
+            });
+          }
         }
       }
     }
@@ -152,14 +179,15 @@ function NewTransaction(props: iNewTransaction) {
 
   const fetchAccountCashList = async () => {
     setLoading(true);
-    const data = await GetCashListing(currentContext.selectedCIF.toString());
+    const data = await GetCashListing(currentContext.selectedCIF.toString()) as IAccountBalance[];
     let result: iDDL[] = [{ label: "", value: "" }];
 
     for (let index = 0; index < data.length; index++) {
       const element = data[index];
       result.push({
-        label: `${element["accountNumber"]} (${element["currency"]})`,
-        value: element["accountNumber"],
+        label: `${element.accountNumber} (${element.currency})`,
+        value: element.accountNumber,
+        balance: element.balance
       });
     }
     setAccounts(result.slice(1));
@@ -319,20 +347,32 @@ function NewTransaction(props: iNewTransaction) {
                           value={values.transferFromAccount || ""}
                           onBlur={handleBlur("transferFromAccount")}
                           onChange={(e) => {
-                            setFieldValue(
-                              "transferFromAccount", e.target.value
-                            );
+
                             if (!!e.target.value) {
-                              const index = e.target.selectedIndex;
+                              const cashInAccount = accounts.filter(
+                                (obj) => obj.value === e.target.value
+                              )[0];
+                              setFieldValue(
+                                "transferFromAccount", cashInAccount.label
+                              );
+                              setFieldValue(
+                                "balance", cashInAccount.balance, true
+                              );
                               setFieldValue(
                                 "currency",
-                                e.target[index].innerText.substr(
-                                  e.target[index].innerText.indexOf("(") + 1, 5
+                                cashInAccount.label.substr(
+                                  cashInAccount.label.indexOf("(") + 1, 5
                                 ).replace(")", "")
                               );
                             } else {
                               setFieldValue(
+                                "transferFromAccount", ""
+                              );
+                              setFieldValue(
                                 "currency", "", true
+                              );
+                              setFieldValue(
+                                "balance", 0, true
                               );
                             }
                             setFieldValue(
@@ -343,7 +383,9 @@ function NewTransaction(props: iNewTransaction) {
                           <option value="">{local_Strings.SelectItem}</option>
                           {accounts &&
                             accounts.length > 0 &&
-                            accounts.map((c, i) => (
+                            accounts.filter(
+                              (obj) => obj.label !== values.transferToAccount
+                            ).map((c, i) => (
                               <option key={i} value={c.value}>
                                 {c.label}
                               </option>
@@ -359,7 +401,9 @@ function NewTransaction(props: iNewTransaction) {
                           className="form-control"
                           value={values.transferToAccount || ""}
                           onBlur={handleBlur("transferToAccount")}
-                          onChange={handleChange("transferToAccount")}
+                          onChange={(e) => setFieldValue(
+                            "transferToAccount", e.target[e.target.selectedIndex].innerText
+                          )}
                         >
                           <option value="">{local_Strings.SelectItem}</option>
                           {accounts &&
@@ -367,7 +411,7 @@ function NewTransaction(props: iNewTransaction) {
                             accounts
                               .filter(
                                 (obj) =>
-                                  obj.value !== values.transferFromAccount
+                                  obj.label !== values.transferFromAccount
                               )
                               .map((c, i) => (
                                 <option key={i} value={c.value}>
@@ -382,12 +426,13 @@ function NewTransaction(props: iNewTransaction) {
                       <div className="col-lg-6 form-group">
                         <label>{local_Strings.TransactionAmountLabel}</label>
                         <input
-                          type="number"
+                          type="text"
                           className="form-control"
                           placeholder=""
+                          pattern="[0-9]*"
                           value={values.amount?.toString() || ""}
                           onBlur={handleBlur("amount")}
-                          onChange={handleChange("amount")}
+                          onChange={(e) => setFieldValue("amount", e.target.value.replace(/[^0-9]*/, ''))}
                         />
                         {touched.amount &&
                           errors.amount &&
@@ -472,24 +517,25 @@ function NewTransaction(props: iNewTransaction) {
                           onBlur={handleBlur("transferFromAccount")}
                           value={values.transferFromAccount || ""}
                           onChange={(e) => {
-                            setFieldValue(
-                              "transferFromAccount",
-                              e.target.value
-                            );
                             if (!!e.target.value) {
-                              const index = e.target.selectedIndex;
+                              const cashInAccount = accounts.filter(
+                                (obj) => obj.value === e.target.value
+                              )[0];
                               setFieldValue(
-                                "currency",
-                                e.target[index].innerText.substr(
-                                  e.target[index].innerText.indexOf("(") + 1, 5
-                                ).replace(")", "")
+                                "transferFromAccount", cashInAccount.value
+                              );
+                              setFieldValue(
+                                "balance", cashInAccount.balance, true
                               );
                             } else {
                               setFieldValue(
-                                "currency", "", true
+                                "balance", 0, true
+                              );
+                              setFieldValue(
+                                "transferFromAccount",
+                                ""
                               );
                             }
-                            handleBlur("currency");
                           }}
                         >
                           <option value="">{local_Strings.SelectItem}</option>
@@ -516,20 +562,20 @@ function NewTransaction(props: iNewTransaction) {
                           value={values.beneficiaryId || ""}
                           onChange={(e) => {
                             setFieldValue("beneficiaryId", e.target.value);
-                            // var ben = beneficiariesData.filter(
-                            //   (obj) => String(obj["id"]) === e.target.value
-                            // );
-                            // if (ben.length > 0) {
-                            //   setFieldValue(
-                            //     "currency",
-                            //     ben[0]["beneficiaryCurrency"]
-                            //   );
-                            // } else {
-                            //   setFieldValue(
-                            //     "currency", "", true
-                            //   );
-                            // }
-                            // handleBlur("currency");
+                            var ben = beneficiariesData.filter(
+                              (obj) => String(obj["id"]) === e.target.value
+                            );
+                            if (ben.length > 0) {
+                              setFieldValue(
+                                "currency",
+                                ben[0]["beneficiaryCurrency"]
+                              );
+                            } else {
+                              setFieldValue(
+                                "currency", "", true
+                              );
+                            }
+                            handleBlur("currency");
                           }}
                         >
                           <option value="">{local_Strings.SelectItem}</option>
@@ -563,12 +609,13 @@ function NewTransaction(props: iNewTransaction) {
                       <div className="col-lg-6 form-group">
                         <label>{local_Strings.TransactionAmountLabel}</label>
                         <input
-                          type="number"
+                          type="text"
                           className="form-control"
                           placeholder=""
+                          pattern="[0-9]*"
                           value={values.amount?.toString() || ""}
                           onBlur={handleBlur("amount")}
-                          onChange={handleChange("amount")}
+                          onChange={(e) => setFieldValue("amount", e.target.value.replace(/[^0-9]*/, ''))}
                         />
                         {touched.amount &&
                           errors.amount &&
@@ -590,11 +637,6 @@ function NewTransaction(props: iNewTransaction) {
                           onChange={(date: Date) => {
                             setFieldValue(
                               "transactionDate",
-                              moment(date).utc(true),
-                              false
-                            );
-                            setFieldValue(
-                              "requestDate",
                               moment(date).utc(true),
                               false
                             );
@@ -638,7 +680,7 @@ function NewTransaction(props: iNewTransaction) {
                           touched.beneficiaryId = true;
                           touched.currency = true;
                           touched.amount = true;
-                          touched.requestDate = true;
+                          touched.transactionDate = true;
                           touched.description = true;
                           Swal.fire({
                             position: "top-end",

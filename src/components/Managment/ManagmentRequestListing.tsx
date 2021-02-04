@@ -293,6 +293,16 @@ function ManagmentRequestListing(
                           </h4>
                         </div>
                       </div>
+                      <div className="row align-items-center">
+                        <div className="col-sm-9">
+                          <h6 className="text-15 mb-0">
+                            {local_Strings.NetAverageRate}
+                          </h6>
+                        </div>
+                        <div className="col-sm-3 text-sm-right">
+                          <span className="status-badge-small ">{helper.ConvertToQfbNumberFormatWithFraction(data["fiLiabNetAverageRate"] || "") + "%" || ""}</span>
+                        </div>
+                      </div>
                     </a>
                   </li>
 
@@ -308,6 +318,7 @@ function ManagmentRequestListing(
                           </h4>
                         </div>
                       </div>
+                      
                     </a>
                   </li>
 

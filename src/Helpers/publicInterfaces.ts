@@ -186,9 +186,11 @@ export interface ITransactionDetail {
   requestStatusAR?: string;
   beneficiaryFullName?: string;
   requestStatusChangeDate?: string;
+  status: string;
+  balance?: number;
 }
 
-export const emptyTransactionDetail = {
+export const emptyTransactionDetail: ITransactionDetail = {
   id: 0,
   transactionDate: "",
   requestDate: "",
@@ -199,6 +201,7 @@ export const emptyTransactionDetail = {
   description: "",
   transactionTypeId: 0,
   beneficiaryId: "",
+  status: "",
 }
 
 export interface ICommonFilter {
@@ -220,14 +223,6 @@ export const emptyCommonFilter = {
   AmountOperator: "",
   Amount: "",
   OptionalCheck: [{ label: "", value: false }, { label: "", value: false }]
-}
-
-export interface IRequestFilter {
-  DateOption: string;
-  StartDate?: Date;
-  EndDate?: Date;
-  Status: string;
-  Type: string;
 }
 
 export interface IRequestDetail {
@@ -259,7 +254,14 @@ export interface IRequestFilter {
   Type: string;
 }
 
-
+export const emptyRequestFilter: IRequestFilter = {
+  filterApplied: false,
+  DateOption: "0",
+  StartDate: moment().toDate(),
+  EndDate: moment().toDate(),
+  Status: "0",
+  Type: "0",
+}
 export interface IUserInfo {
   id: string;
   name: string;

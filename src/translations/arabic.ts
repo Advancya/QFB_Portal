@@ -181,7 +181,7 @@ const ar = {
   CashDetailsFilterButton: "تطبيق",
   CashDetailsFilterSelect: "اختر",
 
-  CashDetailsHint: "تظهر المعاملات أدناه بحد أقصى 3 أشهر من المعاملات",
+  CashDetailsHint: "تظهر المعاملات أدناه بحد أقصى 6 أشهر من المعاملات",
   CashDetailsBalanceLabel: "الرصيد",
   CashDetailsDescriptionLabel: "الوصف",
   CashDetailsAmountLabel: "المبلغ",
@@ -241,7 +241,7 @@ const ar = {
   DepositDetail_NoData: "لا توجد بيانات للعرض",
   DepositListing_NoData: "لم يتم العثور على معاملات الإيداع",
   InvestmentListing_NoData: "لا توجد استثمارات",
-  HistoricalPayments_NoData: "لم يتم العثور على دفعات تاريخية",
+  HistoricalPayments_NoData: " لم يتم العثور على دفعات سابقة",
   OutstandingPayments_NoData: "لم يتم العثور على مدفوعات معلقة",
   NoDataToShow: "لا توجد بيانات لعرضها",
   OfferList_NoData: "لا تتوافر بيانات",
@@ -301,6 +301,7 @@ const ar = {
   BankGuaranteeDetails: "تفاصيل الضمان البنكي",
 
   ViewReceivedProfit: "الأرباح المستلمة",
+  ViewReceivedProfitNew: "الأرباح المستلمة",
   ViewReceivedProfitTransactions: "الأرباح المستلمة",
 
   InvestmentsDetailsTitle: "تفاصيل الاستثمار",
@@ -333,7 +334,7 @@ const ar = {
   RequestListingSampleStatus: "مغلق",
   RequestListingRemoveFilterButton: "إزالة التصفية",
   RequestListingFilterDate: "تاريخ",
-  RequestListingFilterStatus: "حالة الطلب",
+  RequestListingFilterStatus: "الحالة",
   RequestListingFilterType: "نوع الطلب",
   RequestListingFilterSubmitButton: "تطبيق",
   RequestListingFilterSelect: "اختر",
@@ -493,7 +494,7 @@ const ar = {
   ManagementLandingTitle: "مرحبا الإدارة",
   ManagementLandingItem1Title: "محفظة البنك",
   ManagementLandingItem2Title: "محفظة العملاء ",
-  ManagementLandingItem1Desc: "انقر هنا لمشاهدة جميع مقاييس مركز البنك",
+  ManagementLandingItem1Desc: "اضغط هنا لعرض صافي مركز البنك",
   ManagementLandingItem2Desc: "عرض جميع محافظ عملاء البنك هنا",
 
   SettingsLandingTitle: "إعدادات",
@@ -604,19 +605,19 @@ const ar = {
   TotalAssets: "إجمالي الأصول",
   TotalLiabilities: "اجمالي المطلوبات",
   TotalBalances: "إجمالي الأرصدة",
-  NetAverageRate: "معدل صافي المتوسط",
+  NetAverageRate: "متوسط ​​سعر الفائدة الصافي",
 
   BankPositionsTotalAssetSub1: "صكوك",
   BankPositionsTotalAssetSub2: "صندوق سوق المال",
-  BankPositionsTotalAssetSub3: "صندوق سوق المال",
+  BankPositionsTotalAssetSub3: "ودائع في بنوك أخرى",
   BankPositionsTotalAssetSub4: "متأخرات العملاء",
-  BankPositionsTotalAssetSub5: "الإستثمارات المتاحه",
-  BankPositionsTotalAssetSub6: "ودائع في بنوك اخرى",
-  BankPositionsTotalAssetSub7: "قروض العملاء",
+  BankPositionsTotalAssetSub5: "الرصيد النقدي",
+  BankPositionsTotalAssetSub6: "قروض العملاء",
+  BankPositionsTotalAssetSub7: "الاستثمارات",
 
-  BankPositionsTotalLiabilitiesSub1: " نقد العملاء",
-  BankPositionsTotalLiabilitiesSub2: "الودائع",
-  BankPositionsTotalLiabilitiesSub3: "الرصيد النقدي",
+  BankPositionsTotalLiabilitiesSub1: "الاقتراض من البنوك",
+  BankPositionsTotalLiabilitiesSub2: "نقد العملاء",
+  BankPositionsTotalLiabilitiesSub3: "الودائع",
 
   otpErrorMessage: "رمز المرور غير صحيح, من فضلك حاول مره اخرى",
 
@@ -631,7 +632,7 @@ const ar = {
   NoConnectionAlertBody: "الرجاء التحقق من اتصال الانترنت الخاص بك",
   Login_ArabicNumberHint:
     "من فضلك استخدم الارقام باللغة الانجليزية لتتمكن من تسجيل الدخول",
-  SessionTimeOutMessage: "تم انتهاء وقت جلستك يرجي تسجيل الدخول مره اخري",
+    SessionTimeOutMessage: "تم انتهاء وقت جلستك يرجي تسجيل الدخول مره أخرى",
 
   CorrespondentBank: "البنك المراسل",
   Location: "الموقع",
@@ -780,7 +781,7 @@ const ar = {
 
   PortfolioNoInvestments: "لا استثمارات بعد",
   PortfolioNoDeposits: "لا توجد ودائع حتى الآن",
-  PortfolioNoFacilities: "لم يتم العثور على مرافق",
+  PortfolioNoFacilities: "لم يتم العثور تسهيلات",
 
   OfferRequestSubmitMessage:
     'تم إرسال طلب اشتراكك في العرض "[REPLACE ME]"',
@@ -822,6 +823,7 @@ const ar = {
 
   Transactions_Amount_Validation: "الرقم الوحيد المقبول",
   BeneficiaryInvalidAccountOrIban: "رقم الحساب أو IBAN غير صالح",
+  BeneficiaryInvalidIbanNumber: "Invalid IBAN",
   BeneficiaryInvalidSwiftCode: "رمز Swift غير صالح",
 
   NoDepositsHoldingsFound: "لم يتم العثور على ودائع القابضة",
@@ -837,8 +839,11 @@ const ar = {
 
   RequestNumber: "رقم الطلب | ",
   SendButtonText: "Send",
-  AdminLandingTitle: "مرحبًا ، مسؤول البوابة",
-  
+  AdminLandingTitle: "مرحبًا ، مسؤول البوابة",  
+  AmountExceedBalance: "المبلغ أكبر من رصيدك",
+  EarningTillDate: "الأرباح حتى تاريخه",
+  MaxSizeAllowed: "الحجم الأقصي للملف المسموح بتحميله 2.5 ميجابايت",
+  ContactUs_Name_Format_Validation_Message: "الاسم يجب أن يكون أحرف فقط",
 };
 
 export default ar;

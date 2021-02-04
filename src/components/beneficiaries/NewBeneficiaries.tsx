@@ -238,7 +238,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
       fetchTransactionType();
       fetchCurrencies();
       fetchBanks();
-      
+
     };
 
     if (!!currentContext.selectedCIF) {
@@ -532,8 +532,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                     >
                       {local_Strings.BeneficiarySaveButton}
                     </button>
-                    {props.beneficiary && (
-                      <button
+                    <button
                         id="applyReqBtn"
                         className="btn btn-primary"
                         type="button"
@@ -541,7 +540,6 @@ function NewBeneficiary(props: iNewBeneficiary) {
                       >
                         {local_Strings.BeneficiaryCancelButton}
                       </button>
-                    )}
                   </div>
                 </div>
               )}
@@ -701,7 +699,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                         {touched.beneficiaryIban &&
                           errors.beneficiaryIban &&
                           InvalidFieldError(errors.beneficiaryIban)}
-                        {!isValidIban && !errors.qfbaccount &&
+                        {!isValidIban && !errors.beneficiaryIban &&
                           InvalidFieldError(
                             local_Strings.BeneficiaryInvalidIban
                           )}
@@ -771,16 +769,14 @@ function NewBeneficiary(props: iNewBeneficiary) {
                     >
                       {local_Strings.BeneficiarySaveButton}
                     </button>
-                    {props.beneficiary && (
-                      <button
-                        id="applyReqBtn"
-                        className="btn btn-primary"
-                        type="button"
-                        onClick={(e) => props.backBeneficiaryDetailsModal()}
-                      >
-                        {local_Strings.BeneficiaryCancelButton}
-                      </button>
-                    )}
+                    <button
+                      id="applyReqBtn"
+                      className="btn btn-primary"
+                      type="button"
+                      onClick={(e) => props.backBeneficiaryDetailsModal()}
+                    >
+                      {local_Strings.BeneficiaryCancelButton}
+                    </button>
                   </div>
                 </div>
               )}
@@ -893,7 +889,12 @@ function NewBeneficiary(props: iNewBeneficiary) {
                                   "beneficiaryBank",
                                   result.bicdata[0]["institution_name"]
                                 );
+                              } else {
+                                setFieldValue(
+                                  "beneficiaryBank", "", true
+                                );
                               }
+
                               setLoading(false);
                             } else {
                               setFieldValue(
@@ -908,6 +909,9 @@ function NewBeneficiary(props: iNewBeneficiary) {
                         {touched.beneficiarySwiftCode &&
                           errors.beneficiarySwiftCode &&
                           InvalidFieldError(errors.beneficiarySwiftCode)}
+                        {touched.beneficiaryBank &&
+                          !values.beneficiaryBank &&
+                          InvalidFieldError(local_Strings.BeneficiaryInvalidSwiftCode)}
                       </div>
                       <div className="col-lg-6 form-group">
                         <label>{local_Strings.BeneficiaryBankLabel}</label>
@@ -957,7 +961,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           className="form-control"
                           value={values.beneficiaryAddress || ""}
                           rows={4}
-                          maxLength={300}
+                          maxLength={400}
                           onBlur={handleBlur("beneficiaryAddress")}
                           onChange={handleChange("beneficiaryAddress")}
                         />
@@ -1024,14 +1028,16 @@ function NewBeneficiary(props: iNewBeneficiary) {
                                 setIsValidIban(false);
                               }
                               setLoading(false);
+                            } else {
+                              setIsValidIban(true);
                             }
                             handleBlur("beneficiaryIban");
                           }}
                           onChange={handleChange("beneficiaryIban")}
                         />
-                        {!isValidIban && !errors.qfbaccount &&
+                        {touched.beneficiaryIban && !isValidIban &&
                           InvalidFieldError(
-                            local_Strings.BeneficiaryInvalidIban
+                            local_Strings.BeneficiaryInvalidIbanNumber
                           )}
                       </div>
 
@@ -1080,9 +1086,6 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           }}
                           onChange={handleChange("intermediaryBankSwiftCode")}
                         />
-                        {touched.intermediaryBankSwiftCode &&
-                          errors.intermediaryBankSwiftCode &&
-                          InvalidFieldError(errors.intermediaryBankSwiftCode)}
                       </div>
                       <div className="col-lg-6 form-group">
                         <label>
@@ -1096,9 +1099,6 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           onBlur={handleBlur("intermediaryBankName")}
                           onChange={handleChange("intermediaryBankName")}
                         />
-                        {touched.intermediaryBankName &&
-                          errors.intermediaryBankName &&
-                          InvalidFieldError(errors.intermediaryBankName)}
                       </div>
                       <div className="col-lg-6 form-group">
                         <label>
@@ -1147,16 +1147,14 @@ function NewBeneficiary(props: iNewBeneficiary) {
                     >
                       {local_Strings.BeneficiarySaveButton}
                     </button>
-                    {props.beneficiary && (
-                      <button
-                        id="applyReqBtn"
-                        className="btn btn-primary"
-                        type="button"
-                        onClick={(e) => props.backBeneficiaryDetailsModal()}
-                      >
-                        {local_Strings.BeneficiaryCancelButton}
-                      </button>
-                    )}
+                    <button
+                      id="applyReqBtn"
+                      className="btn btn-primary"
+                      type="button"
+                      onClick={(e) => props.backBeneficiaryDetailsModal()}
+                    >
+                      {local_Strings.BeneficiaryCancelButton}
+                    </button>
                   </div>
                 </div>
               )}

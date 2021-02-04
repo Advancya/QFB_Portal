@@ -322,7 +322,7 @@ export const filterRMRequests = (
 
 export const filterTransactionList = (
   transactions: ITransactionDetail[],
-  filter: ICommonFilter
+  filter: any
 ) => {
   let filteredTransactions = [] as ITransactionDetail[];
   switch (filter.DateOption) {
@@ -366,39 +366,16 @@ export const filterTransactionList = (
       break;
   }
 
+  if (filter.Status && filter.Status !== "0") {
+    filteredTransactions = filteredTransactions.filter(
+      (t) => String(t.status).toLowerCase() === filter.Status.toLowerCase()
+    );
+  }
 
-  if (
-    filter.AmountOperator &&
-    filter.AmountOperator !== "" &&
-    filter.Amount !== ""
-  ) {
-    switch (filter.AmountOperator) {
-      case "=":
-        filteredTransactions = filteredTransactions.filter(
-          (t) => parseFloat(t.amount) === parseFloat(filter.Amount)
-        );
-        break;
-      case ">=":
-        filteredTransactions = filteredTransactions.filter(
-          (t) => parseFloat(t.amount) >= parseFloat(filter.Amount)
-        );
-        break;
-      case ">":
-        filteredTransactions = filteredTransactions.filter(
-          (t) => parseFloat(t.amount) > parseFloat(filter.Amount)
-        );
-        break;
-      case "<=":
-        filteredTransactions = transactions.filter(
-          (t) => parseFloat(t.amount) <= parseFloat(filter.Amount)
-        );
-        break;
-      case "<":
-        filteredTransactions = filteredTransactions.filter(
-          (t) => parseFloat(t.amount) < parseFloat(filter.Amount)
-        );
-        break;
-    }
+  if (filter.Type && filter.Type !== "0") {
+    filteredTransactions = filteredTransactions.filter(
+      (t) => String(t.transactionTypeId) === String(filter.Type)
+    );
   }
 
   return filteredTransactions;
@@ -975,10 +952,25 @@ export const prepareManagementData = (
     },
     xAxis: {
       categories: categories,
+      labels: {
+        style: {
+          fontWeight: "bold",
+          color: "black",
+        },
+      },
     },
     yAxis: {
       title: {
         text: "",
+      },
+      labels: {
+        style: {
+          fontWeight: "bold",
+          color: "black",
+        },
+        formatter: function (e) {
+          return e.value.toLocaleString();
+        },
       },
     },
     credits: {

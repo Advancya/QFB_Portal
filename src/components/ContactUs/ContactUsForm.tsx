@@ -33,7 +33,7 @@ function ContactUsForm(props: iContactUsForm) {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
   const [isLoading, setLoading] = useState(false);
-  
+
   const mapStyles = {
     height: "200px",
     width: "100%",
@@ -68,7 +68,11 @@ function ContactUsForm(props: iContactUsForm) {
         /^\+(?:[0-9]?){6,14}[0-​9]$/,
         local_Strings.ContactUs_Mobile_Format_Validation_Message
       ),
-    name: yup.string().required(local_Strings.GeneralValidation).min(1),
+    name: yup.string().required(local_Strings.GeneralValidation)
+      .min(1).matches(
+        /[A-Za-z \u0621-\u064A0]$/,
+        local_Strings.ContactUs_Name_Format_Validation_Message
+      ),
     query: yup.string().required(local_Strings.GeneralValidation),
   });
 
@@ -128,7 +132,7 @@ function ContactUsForm(props: iContactUsForm) {
                     position={item.location}
                   >
                     <InfoBox
-                      onLoad={(_v) => {}}
+                      onLoad={(_v) => { }}
                       options={{
                         closeBoxURL: "",
                         enableEventPropagation: true,
