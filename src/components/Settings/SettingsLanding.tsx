@@ -35,53 +35,41 @@ function SettingsLanding(props: iSettingsLanding) {
   const [allowEdit, setAllowEdit] = useState<boolean>(false);
   const [rmName, setRmName] = React.useState("");
   const [userInfo, setUserInfo] = useState<IUserInfo>({
+
     name: "",
     telephone: "",
     rmEmail: "",
     customerShortName: "",
   });
   const [userRole, setRole] = React.useState("");
-  const fetchRmName = async () => {
-    const res = await GetRmDisplayName(currentContext.selectedCIF);
+  const fetchRmName = async (cif: string) => {
+    const res = await GetRmDisplayName(cif);
     setRmName(res);
   };
 
   useEffect(() => {
     let isMounted = true;
     const initialLoadMethod = async () => {
+
+      setLoading(true);
       const userData = await GetUserLocalData();
       if (userData) {
+        fetchRmName(userData.customerId);
         if (isMounted && userData.customerId === currentContext.selectedCIF) {
           setAllowEdit(true);
         }
+
+        const role = await getUserRole(userData.customerId);
+        if (role && !!role) {
+          setRole(role.name);
+        }
       }
 
-      const role = await getUserRole(currentContext.selectedCIF);
-
-      if (role && !!role) {
-        setRole(role.name);
-      }
-    };
-
-    if (!!currentContext.selectedCIF) {
-      initialLoadMethod();
-    }
-
-    return () => {
-      isMounted = false;
-    }; // use effect cleanup to set flag false, if unmounted
-  }, [currentContext.selectedCIF, currentContext.language]);
-
-  useEffect(() => {
-    let isMounted = true;
-
-    const initialLoadMethod = async () => {
-      setLoading(true);
-      fetchRmName();
-      GetUserWelcomeDataWithUserData(currentContext.selectedCIF)
+      GetUserWelcomeDataWithUserData(userData.customerId)
         .then((responseData: any) => {
           if (responseData && responseData.length > 0 && isMounted) {
-            setUserInfo(responseData[0] as IUserInfo);
+            const _userInfo = responseData[0] as IUserInfo;
+            setUserInfo({..._userInfo, name: userData.customerId});
           }
         })
         .catch((e: any) => console.log(e))
@@ -141,7 +129,7 @@ function SettingsLanding(props: iSettingsLanding) {
                 <div className="row no-gutters align-items-center">
                   <div className="col-md-6">
                     <h6 className="mb-1 text-600 text-18 ">
-                      {userRole === Constant.RM
+                    {userRole === Constant.RM
                         ? rmName
                         : userInfo["customerShortName"] ||
                         userInfo["rmEmail"] ||
@@ -151,7 +139,7 @@ function SettingsLanding(props: iSettingsLanding) {
                       {(userRole === Constant.RM ?
                         local_Strings.RMSampleAccount : (userRole === Constant.Management ?
                           local_Strings.ManagementSampleAccount : local_Strings.CustomerSampleAccount)) +
-                        currentContext.selectedCIF}
+                          userInfo.name}
                     </div>
                   </div>
                   <div className="col-md-6 text-right">
@@ -181,13 +169,12 @@ function SettingsLanding(props: iSettingsLanding) {
             </li>
           </ul>
           <div className="p-4">
-            {(!allowEdit || currentContext.userRole === "CUSTOMER") &&
+            {allowEdit &&
               <div className="row mb-4">
                 <button
                   id="applyReqBtn"
                   className="btn btn-primary col-sm-8 col-md-5   mx-auto"
                   onClick={props.showChangeCurrencyModal}
-                  disabled={!allowEdit}
                 >
                   {local_Strings.SettingsLandingButton1}
                 </button>
@@ -197,7 +184,7 @@ function SettingsLanding(props: iSettingsLanding) {
                 id="applyReqBtn"
                 className="btn btn-primary col-sm-8 col-md-5   mx-auto"
                 onClick={props.showChangePasswordModal}
-                disabled={!allowEdit}
+              //disabled={!allowEdit}
               >
                 {local_Strings.SettingsLandingButton2}
               </button>
@@ -207,7 +194,7 @@ function SettingsLanding(props: iSettingsLanding) {
                 id="applyReqBtn"
                 className="btn btn-primary col-sm-8 col-md-5   mx-auto"
                 onClick={props.showChangeOTPMethodModal}
-                disabled={!allowEdit}
+              //disabled={!allowEdit}
               >
                 {local_Strings.SettingsLandingButton3}
               </button>
@@ -217,7 +204,7 @@ function SettingsLanding(props: iSettingsLanding) {
                 id="applyReqBtn"
                 className="btn btn-primary col-sm-8 col-md-5   mx-auto"
                 onClick={props.showChangeLanguageModal}
-                disabled={!allowEdit}
+              //disabled={!allowEdit}
               >
                 {local_Strings.SettingsLandingButton4}
               </button>

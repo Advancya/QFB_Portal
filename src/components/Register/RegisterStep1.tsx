@@ -220,7 +220,7 @@ function RegisterStep1(props: iRegisterStep1) {
                       <label>{local_Strings.registerStep1Label3}</label>
                       <input
                         type="text"
-                        className="form-control"
+                        className="mobile-style form-control"
                         placeholder=""
                         value={values.email || ""}
                         onChange={handleChange("email")}
@@ -261,7 +261,7 @@ function RegisterStep1(props: iRegisterStep1) {
                       <label>{local_Strings.registerStep1Label4}</label>
                       <input
                         type="text"
-                        className="form-control"
+                        className="mobile-style form-control"
                         placeholder=""
                         value={values.mobile || ""}
                         onChange={handleChange("mobile")}

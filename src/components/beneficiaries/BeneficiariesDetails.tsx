@@ -223,6 +223,14 @@ function BeneficiariesDetails(props: iBeneficiariesDetails) {
                     </div>
                     <div className="col-lg-6 form-group">
                       <label>
+                        {local_Strings.BeneficiaryForeignCurrencyLabel}
+                      </label>
+                      <div className="readonly">
+                        {props.beneficiary.beneficiaryCurrency || ""}
+                      </div>
+                    </div>
+                    <div className="col-lg-6 form-group">
+                      <label>
                         {local_Strings.BeneficiaryAccountNumberLabel}
                       </label>
                       <div className="readonly">

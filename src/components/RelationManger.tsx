@@ -9,6 +9,7 @@ import { GetUserWelcomeData } from "../services/cmsService";
 import { localStrings as local_Strings } from "../translations/localStrings";
 import { RequestCallback } from "../services/requestService";
 import Swal from "sweetalert2";
+import Constant from "../constants/defaultData";
 
 interface IUserInfo {
   accountOfficer?: string;
@@ -134,7 +135,7 @@ function RelationManger() {
               <div className="text-center px-3">
                 <a className="btn btn-primary btn-block" href="#"
                   onClick={() => {
-                    if (currentContext.userRole === "CUSTOMER") {
+                    if (currentContext.userRole === Constant.Customer) {
                       RequestCallback(
                         currentContext.language === "en"
                         ? item.name.split(";")[0]

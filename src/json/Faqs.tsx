@@ -82,12 +82,12 @@ const Data = {
         {
           Question: "how to add a beneficiary ",
           Answer:
-            "1- click on the TRX tab <br/>2- click on the 'My Beneficiaries' button <br/>3- click on 'Add new' <br/>4- select the desired beneficiary type and fill in all required information ",
+            "1- click on the Transfer tab <br/>2- click on the 'My Beneficiaries' button <br/>3- click on 'Add new' <br/>4- select the desired beneficiary type and fill in all required information ",
         },
         {
           Question: "how to create a new transaction instruction request",
           Answer:
-            "1- click on the TRX tab <br/>2- click on 'New Request'<br/>3- select the desired transfer type<br/>4- fill in all required information",
+            "1- click on the Transfer tab <br/>2- click on 'New Request'<br/>3- select the desired transfer type<br/>4- fill in all required information",
         },
       ],
     },
@@ -205,12 +205,12 @@ const Data = {
         {
           Question: "كيفية إضافة مستفيد",
           Answer:
-            "1- اضغط على علامة التبويب TRX<br/>2- اضغط على زر 'المستفيدون'<br/>3- اضغط على 'إضافة جديد'<br/>4- حدد نوع المستفيد المطلوب واملأ جميع المعلومات المطلوبة",
+            "1- اضغط على علامة التبويب المعاملات<br/>2- اضغط على زر 'المستفيدون'<br/>3- اضغط على 'إضافة جديد'<br/>4- حدد نوع المستفيد المطلوب واملأ جميع المعلومات المطلوبة",
         },
         {
           Question: "كيفية إنشاء طلب تعليمات معاملة جديد",
           Answer:
-            "1- اضغط على علامة التبويب TRX<br/>2- اضغط على 'طلب جديد'<br/>3- حدد نوع التحويل المطلوب<br/>4- املأ جميع المعلومات المطلوبة",
+            "1- اضغط على علامة التبويب المعاملات<br/>2- اضغط على 'طلب جديد'<br/>3- حدد نوع التحويل المطلوب<br/>4- املأ جميع المعلومات المطلوبة",
         },
       ],
     },

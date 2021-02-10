@@ -27,6 +27,7 @@ interface iInvestmentsRecievedProfit {
   backInvestmentsRecievedProfitModal: () => void;
   investment: IInvestment;
 }
+
 function InvestmentsRecievedProfit(props: iInvestmentsRecievedProfit) {
   const currentContext = useContext(AuthContext);
   const userPortfolio = useContext(PortfolioContext);
@@ -44,6 +45,7 @@ function InvestmentsRecievedProfit(props: iInvestmentsRecievedProfit) {
     let isMounted = true;
 
     const initialLoadMethod = async () => {
+
       setLoading(true);
       GetInvestmentsReceivedProfit(
         currentContext.selectedCIF,
@@ -63,14 +65,17 @@ function InvestmentsRecievedProfit(props: iInvestmentsRecievedProfit) {
         .finally(() => setLoading(false));
     };
 
-    if (!!currentContext.selectedCIF) {
+    if (!!currentContext.selectedCIF && props.showInvestmentsRecievedProfitModal) {
       initialLoadMethod();
+    } else {
+      setData([emptyTransaction]);
+      setFilteredData([emptyTransaction]);
     }
 
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [props.investment.subAssetID]);
+  }, [props.investment.subAssetID, props.showInvestmentsRecievedProfitModal]);
 
   return (
     <Modal

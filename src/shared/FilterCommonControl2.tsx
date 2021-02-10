@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { localStrings as local_Strings } from '../translations/localStrings';
 import { AuthContext } from "../providers/AuthProvider";
 import FilterDateControl from './FilterDateControl';
@@ -15,11 +15,25 @@ interface IFilterCommonControl2Props {
     CheckBoxLabels?: string[];
 }
 
-const FilterCommonControl2 = (props: IFilterCommonControl2Props) => {
+function FilterCommonControl2(props: IFilterCommonControl2Props) {
 
     const currentContext = useContext(AuthContext);
     local_Strings.setLanguage(currentContext.language);
     const [filters, setFilter] = useState<ICommonFilter>(emptyCommonFilter);
+
+    useEffect(() => {
+        const OptionalCheck = [...filters.OptionalCheck];
+        OptionalCheck[0].label = props.CheckBoxLabels[0];
+        OptionalCheck[0].value = false;
+        OptionalCheck[1].label = props.CheckBoxLabels[1];
+        OptionalCheck[1].value = false;
+
+        setFilter({
+            ...filters, OptionalCheck
+        });
+
+        setFilter(emptyCommonFilter);
+    }, [currentContext.language]);
 
     return (
         <form className="filter-box">
@@ -46,7 +60,7 @@ const FilterCommonControl2 = (props: IFilterCommonControl2Props) => {
                                 name="radioType"
                                 className="custom-control-input"
                                 id="customCheck1"
-                                value={filters.OptionalCheck[0].value}
+                                checked={filters.OptionalCheck[0]?.value || false}
                                 onChange={(e) => {
                                     const OptionalCheck = [...filters.OptionalCheck];
                                     OptionalCheck[0].label = props.CheckBoxLabels[0];
@@ -65,7 +79,7 @@ const FilterCommonControl2 = (props: IFilterCommonControl2Props) => {
                                 name="radioType"
                                 className="custom-control-input"
                                 id="customCheck2"
-                                value={filters.OptionalCheck[1].value}
+                                checked={filters.OptionalCheck[1]?.value || false}
                                 onChange={(e) => {
                                     const OptionalCheck = [...filters.OptionalCheck];
                                     OptionalCheck[1].label = props.CheckBoxLabels[1];

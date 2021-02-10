@@ -8,7 +8,7 @@ interface IFilterButtonControlProps {
   showClearFilter: boolean;
 }
 
-const FilterButtonControl: React.FC<IFilterButtonControlProps> = (props) => {
+function FilterButtonControl(props: IFilterButtonControlProps) {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
 

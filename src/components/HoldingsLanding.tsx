@@ -358,15 +358,6 @@ const HoldingsLanding = () => {
         </Modal.Header>
         <Modal.Body>
           <div className="box modal-box py-0 mb-0 scrollabel-modal-box">
-            <LoadingOverlay
-              active={isLoading}
-              spinner={
-                <PuffLoader
-                  size={Constant.SpnnerSize}
-                  color={Constant.SpinnerColor}
-                />
-              }
-            />
             <Tabs
               defaultActiveKey="home"
               className="m-4 nav-pills"
@@ -379,7 +370,7 @@ const HoldingsLanding = () => {
                 onEntered={() => showLiveHoldings()}
               >
                 <div className="border-bottom mb-5">
-                  {deposit_live_1stDrill && !isLoading ? (
+                  {deposit_live_1stDrill ? (
                     <PieChart
                       highcharts={Highcharts}
                       options={deposit_live_1stDrill}
@@ -387,7 +378,15 @@ const HoldingsLanding = () => {
                   ) : !showNoDataDepositLive ? null :
                       NoResult(local_Strings.NoLiveHoldingsMesageDeposit)}
                 </div>
-
+                <LoadingOverlay
+                  active={isLoading}
+                  spinner={
+                    <PuffLoader
+                      size={Constant.SpnnerSize}
+                      color={Constant.SpinnerColor}
+                    />
+                  }
+                />
                 {!isLive2ndDrillShow && !isLoading ? (
 
                   <PieChart
@@ -420,7 +419,7 @@ const HoldingsLanding = () => {
                 onEntered={() => showClosedHoldings()}
               >
                 <div className="border-bottom mb-5">
-                  {deposit_Closed_1stDrill && !isLoading ? (
+                  {deposit_Closed_1stDrill ? (
                     <PieChart
                       highcharts={Highcharts}
                       options={deposit_Closed_1stDrill}
@@ -428,6 +427,15 @@ const HoldingsLanding = () => {
                   ) : !showNoDataDepositClosed ? null :
                       NoResult(local_Strings.NoClosedHoldingsMesageDeposit)}
                 </div>
+                <LoadingOverlay
+                  active={isLoading}
+                  spinner={
+                    <PuffLoader
+                      size={Constant.SpnnerSize}
+                      color={Constant.SpinnerColor}
+                    />
+                  }
+                />
                 {!isClosed2ndDrillShow && !isLoading ? (
                   <PieChart
                     highcharts={Highcharts}

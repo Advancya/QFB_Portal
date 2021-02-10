@@ -498,16 +498,7 @@ export const transformingTransactionDetail = (
 export const prepareDepositHoldings1stDrill = (chartData: any, language: string) => {
   local_Strings.setLanguage(moment.locale());
 
-  let sdata = [
-    {
-      name: local_Strings.ChartDepositsAmount,
-      y: chartData[0].totalDepositsAmount || chartData[0].totalClosedDeposits,
-      amount: ConvertToQfbNumberFormat(
-        chartData[0].totalDepositsAmount || chartData[0].totalClosedDeposits
-      ),
-      color: "#493026",
-      drilldown: false
-    },
+  let sdata = [    
     {
       name: local_Strings.ChartProfitRecieved,
       y: chartData[0].totalProfitRecieved || chartData[0].totalClosedProfit,
@@ -515,6 +506,15 @@ export const prepareDepositHoldings1stDrill = (chartData: any, language: string)
         chartData[0].totalProfitRecieved || chartData[0].totalClosedProfit
       ),
       color: "#A79A94",
+      drilldown: false
+    },
+    {
+      name: local_Strings.ChartDepositsAmount,
+      y: chartData[0].totalDepositsAmount || chartData[0].totalClosedDeposits,
+      amount: ConvertToQfbNumberFormat(
+        chartData[0].totalDepositsAmount || chartData[0].totalClosedDeposits
+      ),
+      color: "#493026",
       drilldown: false
     },
   ];
@@ -540,7 +540,7 @@ export const prepareDepositHoldings1stDrill = (chartData: any, language: string)
       enabled: false,
     },
     legend: {
-      rtl: language === "ar",
+      rtl: moment.locale() === "ar",
     },
     plotOptions: {
       pie: {
@@ -677,7 +677,7 @@ export const prepareInvestmentHoldings2ndDrill = (
       enabled: false,
     },
     legend: {
-      rtl: language === "ar",
+      rtl: moment.locale() === "ar",
     },
     plotOptions: {
       column: {
@@ -977,7 +977,7 @@ export const prepareManagementData = (
       enabled: false,
     },
     legend: {
-      rtl: language === "ar",
+      rtl: moment.locale() === "ar",
     },
     plotOptions: {
       column: {

@@ -117,63 +117,66 @@ function RMRequestListing(props: iRMRequestListing) {
 
   }, [props.requests, props.reloading]);
 
+  const viewRequest = (item: iRmRequests) => {
+    if (item["type"] === "Request") {
+      RmReadRequest(item["id"]);
+      props.showRequestDetailModal(item.id);
+    } else if (item["type"] === "Tranasction") {
+      RmReadTransaction(item["id"]);
+      props.showTransactionDetailModal(item.id);
+    } else {
+      RmReadOffer(String(item.id));
+      props.showOfferDetailModal(item.id);
+    }
+  }
+
   const renderItem = (item: iRmRequests, index: number) => (
     <li className="shown border-0 py-2" key={index}>
-      <a
-        className="d-block p-0"
-        href="#"
-        onClick={() => {
-          if (item["type"] === "Request") {
-            RmReadRequest(item["id"]);
-            props.showRequestDetailModal(item.id);
-          } else if (item["type"] === "Tranasction") {
-            RmReadTransaction(item["id"]);
-            props.showTransactionDetailModal(item.id);
-          } else {
-            RmReadOffer(String(item.id));
-            props.showOfferDetailModal(item.id);
-          }
-        }}
-      >
-        <div className="row align-items-center border-bottom  pb-2 mb-2">
-          <div className="col-sm-8">
-            <h5>
-              <span className={!item.isRead ? "unread" : ""}>
-                {moment(item["requestCreateDate"]).format("DD-MM-YYYY")}
-              </span>
-            </h5>
-            <h4>
-              {currentContext.language === "ar"
-                ? item["requestSubjectAr"] || ""
-                : item["requestSubject"] || ""}
-            </h4>
-          </div>
-          <div className="col-sm-4 text-sm-right">
-            <span className="status-badge ">
-              {currentContext.language === "ar"
-                ? item["requestStatusAr"] || ""
-                : item["requestStatus"] || ""}
+      <div className="row align-items-center border-bottom  pb-2 mb-2 cursor-pointer"
+        onClick={() => viewRequest(item)}>
+        <div className="col-sm-8">
+          <h5>
+            <span className={!item.isRead ? "unread" : ""}>
+              {moment(item["requestCreateDate"]).format("DD-MM-YYYY")}
             </span>
-          </div>
+          </h5>
+          <h4>
+            {currentContext.language === "ar"
+              ? item["requestSubjectAr"] || ""
+              : item["requestSubject"] || ""}
+          </h4>
         </div>
-        <div className="row align-items-center">
-          <div className="col-sm-8">
-            <h6 className="text-15 mb-0">{item["customerName"] || ""}</h6>
-            <span className="color-light-gold">
-              {local_Strings.RMSampleAccount + item["cif"] || ""}
-            </span>
-          </div>
-          <div className="col-sm-4 text-sm-right">
+        <div className="col-sm-4 text-sm-right">
+          <span className="status-badge ">
+            {currentContext.language === "ar"
+              ? item["requestStatusAr"] || ""
+              : item["requestStatus"] || ""}
+          </span>
+        </div>
+      </div>
+      <div className="row align-items-center">
+        <div className="col-sm-8 cursor-pointer" onClick={() => viewRequest(item)}>
+          <h6 className="text-15 mb-0">{item["customerName"] || ""}</h6>
+          <span className="color-light-gold">
+            {local_Strings.RMSampleAccount + item["cif"] || ""}
+          </span>
+        </div>
+
+        <div className="col-sm-4 text-sm-right">
+          <a
+            href={`tel:${item.customerMobile}`}
+          >
             <span className="icon-badge-text">
               {local_Strings.WelcomeScreenCall}
             </span>
             <span className="icon-badge">
               <i className="fa fa-mobile text-sm" aria-hidden="true"></i>
             </span>
-          </div>
+          </a>
         </div>
-      </a>
-    </li >
+
+      </div>
+    </li>
   );
 
   const typeFilterOptions = [];
@@ -202,11 +205,11 @@ function RMRequestListing(props: iRMRequestListing) {
                   const _filteredData = [...props.requests];
                   setFilteredData(
                     _filteredData
-                    .filter(
-                      (obj) =>
-                        obj["cif"].toString().includes(_text) ||
-                        obj["customerMobile"].toString().includes(_text)
-                    )
+                      .filter(
+                        (obj) =>
+                          obj["cif"].toString().includes(_text) ||
+                          obj["customerMobile"].toString().includes(_text)
+                      )
                   );
                 } else {
                   setOffset(rowLimit);

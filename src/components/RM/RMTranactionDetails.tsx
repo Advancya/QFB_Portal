@@ -127,7 +127,10 @@ function RMTranactionDetails(props: iRMDetails) {
               )}
               <div className="col-lg-6 form-group">
                 <label>{local_Strings.TransactionAmountLabel}</label>
-                <div className="readonly">{item.amount || ""}</div>
+                <div className="readonly">
+                  {item.amount || ""}
+                  {" " + (item.currency || "")}
+                </div>
               </div>
               {item.transactionTypeId !== 1 && (
                 <React.Fragment>

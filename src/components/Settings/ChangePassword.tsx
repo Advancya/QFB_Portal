@@ -37,7 +37,7 @@ function ChangePassword(props: iChangePassword) {
       .string()
       .required(local_Strings.ChangePassword_RequiredMsg)
       .min(7, local_Strings.ChangePassword_InvalidationMsg)
-      .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{7,})/, local_Strings.ChangePassword_InvalidationMsg),
+      .matches(/^(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*#?&_()+=-])(?=.{7,})/, local_Strings.ChangePassword_InvalidationMsg),
     confirmPassword: yup
       .string()
       .required(local_Strings.ChangePassword_ConfirmRequiredMsg)

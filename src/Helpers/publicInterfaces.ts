@@ -215,7 +215,7 @@ export interface ICommonFilter {
 }
 
 
-export const emptyCommonFilter = {
+export const emptyCommonFilter: ICommonFilter = {
   filterApplied: false,
   DateOption: "0",
   StartDate: moment().toDate(),   //moment().add(-7, "days").toDate(),

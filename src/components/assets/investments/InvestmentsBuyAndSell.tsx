@@ -61,14 +61,17 @@ function InvestmentsBuyAndSell(props: iInvestmentsBuyAndSell) {
         .finally(() => setLoading(false));
     };
 
-    if (!!currentContext.selectedCIF) {
+    if (!!currentContext.selectedCIF && props.showInvestmentsBuyAndSellModal) {
       initialLoadMethod();
+    } else {
+      setData([emptyTransaction]);
+      setFilteredData([emptyTransaction]);
     }
 
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [props.investment.subAssetID]);
+  }, [props.investment.subAssetID, props.showInvestmentsBuyAndSellModal]);
 
   return (
     <Modal
@@ -119,7 +122,7 @@ function InvestmentsBuyAndSell(props: iInvestmentsBuyAndSell) {
               setFilteredData(data);
             }}
             applyFilter={(filters: ICommonFilter) => {
-              console.log(filters);
+              
               const _filteredData = helper.filterTransactions(data, filters);
               setFilteredData(_filteredData);
             }}

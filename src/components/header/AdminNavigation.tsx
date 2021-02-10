@@ -1,13 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
 import { localStrings as local_Strings } from "../../translations/localStrings";
-import { emptyUserInfo, IUserInfo } from "../../Helpers/publicInterfaces";
 import {
-  GetUserWelcomeData,
   GetRmDisplayName,
 } from "../../services/cmsService";
-import Notfications from "../Notifications/Notifications";
 import usericon from "../../images/user-icon.svg";
+import { GetUserLocalData } from "../../Helpers/authHelper";
 
 interface IAdminNavigation {
   userType: {
@@ -17,7 +15,7 @@ interface IAdminNavigation {
   };
 }
 
-const AdminNavigation: React.FC<IAdminNavigation> = ( props ) => {
+const AdminNavigation: React.FC<IAdminNavigation> = (props) => {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
   const [rmName, setRmName] = React.useState("");
@@ -26,9 +24,12 @@ const AdminNavigation: React.FC<IAdminNavigation> = ( props ) => {
     let isMounted = true;
 
     const fetchRmName = async () => {
-      const res = await GetRmDisplayName(currentContext.selectedCIF);
-      if (isMounted) {
-        setRmName(res);
+      const userData = await GetUserLocalData();
+      if (userData) {
+        const res = await GetRmDisplayName(userData.customerId);
+        if (isMounted) {
+          setRmName(res);
+        }
       }
     };
 

@@ -527,14 +527,14 @@ function NewTransaction(props: iNewTransaction) {
                         <select
                           className="form-control"
                           onBlur={handleBlur("transferFromAccount")}
-                          value={values.transferFromAccount || ""}
+                          //value={values.transferFromAccount || ""}
                           onChange={(e) => {
                             if (!!e.target.value) {
                               const cashInAccount = accounts.filter(
                                 (obj) => obj.value === e.target.value
                               )[0];
                               setFieldValue(
-                                "transferFromAccount", cashInAccount.value
+                                "transferFromAccount", cashInAccount.label
                               );
                               setFieldValue(
                                 "balance", cashInAccount.balance, true
@@ -627,7 +627,7 @@ function NewTransaction(props: iNewTransaction) {
                           pattern="[0-9]*"
                           value={values.amount?.toString() || ""}
                           onBlur={handleBlur("amount")}
-                          onChange={(e) => setFieldValue("amount", e.target.value.replace(/[^0-9]*/, ''))}
+                          onChange={(e) => setFieldValue("amount", e.target.value.replace(/[^\d]/g, ''))}
                         />
                         {touched.amount &&
                           errors.amount &&

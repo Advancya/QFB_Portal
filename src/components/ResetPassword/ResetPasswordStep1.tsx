@@ -176,7 +176,7 @@ function ResetPasswordStep1(props: iResetPasswordStep1) {
                 <label>{local_Strings.PasswordResetMobileLabel}</label>
                 <input
                   type="text"
-                  className="form-control"
+                  className="mobile-style form-control"
                   value={values.mobile || ""}
                   onChange={handleChange("mobile")}
                   onBlur={handleBlur("mobile")}
@@ -191,7 +191,7 @@ function ResetPasswordStep1(props: iResetPasswordStep1) {
                 <label>{local_Strings.PasswordResetEmailLabel}</label>
                 <input
                   type="text"
-                  className="form-control"
+                  className="mobile-style form-control"
                   value={values.email || ""}
                   onChange={handleChange("email")}
                   onBlur={handleBlur("email")}

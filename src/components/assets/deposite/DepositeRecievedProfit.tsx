@@ -58,14 +58,17 @@ function DepositeRecievedProfit(props: iDepositeRecievedProfit) {
         .finally(() => setLoading(false));
     };
 
-    if (!!currentContext.selectedCIF) {
+    if (!!currentContext.selectedCIF && props.showDepositeRecievedProfitModal) {
       initialLoadMethod();
+    } else {
+      setData([emptyTransaction]);
+      setFilteredData([emptyTransaction]);
     }
 
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [props.depositItem]);
+  }, [props.depositItem, props.showDepositeRecievedProfitModal]);
 
   return (
     <Modal

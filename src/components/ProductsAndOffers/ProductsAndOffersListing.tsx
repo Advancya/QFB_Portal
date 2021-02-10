@@ -39,7 +39,7 @@ function ProductsAndOffersListing(props: iProductsAndOffersListing) {
       .then((responseData: IProductAndOffersDetail[]) => {
         if (isMounted && responseData && responseData.length > 0) {
           const _data = responseData
-            .filter((d) => new Date(d.expiryDate) > new Date())
+            .filter((d) => new Date(d.expiryDate) >= new Date())
             .sort((a, b) =>
               moment(b.createdDate).diff(moment(a.createdDate))
             );
@@ -111,13 +111,18 @@ function ProductsAndOffersListing(props: iProductsAndOffersListing) {
         </Modal.Header>
         <Modal.Body>
           <div className="box modal-box p-4 scrollabel-modal-box">
-            <div className="row">
-              {data && data.length > 0 && data[0].id > 0
-                ? data
+            {data && data.length > 0 && data[0].id > 0
+              ? <div className="row">
+                {data
                   .slice(0, offset)
                   .map((item, index) => renderItem(item, index))
-                : NoResult(local_Strings.NoDataToShow)}
-            </div>
+                }
+              </div>
+              :
+              <div className="text-center">
+                {NoResult(local_Strings.NoDataToShow)}
+              </div>
+            }
             <FilterMoreButtonControl
               showMore={data && data.length > rowLimit && offset < data.length}
               onClickMore={() => setOffset(offset + 5)}

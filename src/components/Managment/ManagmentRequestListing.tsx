@@ -90,7 +90,7 @@ function ManagmentRequestListing(
                   </div>
                   <a href="#" className="ib-text">
                     <h4>{local_Strings.ManagementLandingAssetsTitle}</h4>
-                    <h5>{helper.ConvertToQfbNumberFormat(data["totalAssets"] || "") + " " + currentContext.userSettings.currency}</h5>
+                    <h5>{helper.ConvertToQfbNumberFormat(data["totalAssets"] || "")}</h5>
                   </a>
                 </div>
               </div>
@@ -104,7 +104,7 @@ function ManagmentRequestListing(
                         </div>
                         <div className="col-sm-6 text-sm-right">
                           <h4 className="justify-content-end">
-                            {helper.ConvertToQfbNumberFormat(data["sukukBalance"] || "") + " " + currentContext.userSettings.currency}
+                            {helper.ConvertToQfbNumberFormat(data["sukukBalance"] || "")}
                           </h4>
                         </div>
                       </div>
@@ -130,7 +130,7 @@ function ManagmentRequestListing(
                         </div>
                         <div className="col-sm-6 text-sm-right">
                           <h4 className="justify-content-end">
-                            {helper.ConvertToQfbNumberFormat(data["mmFundBalance"] || "") + " " + currentContext.userSettings.currency}
+                            {helper.ConvertToQfbNumberFormat(data["mmFundBalance"] || "")}
                           </h4>
                         </div>
                       </div>
@@ -158,7 +158,7 @@ function ManagmentRequestListing(
                           <h4 className="justify-content-end">
                             {helper.ConvertToQfbNumberFormat(
                               data["treasuryPlacements"] || ""
-                            ) + " " + currentContext.userSettings.currency}
+                            )}
                           </h4>
                         </div>
                       </div>
@@ -184,7 +184,7 @@ function ManagmentRequestListing(
                         </div>
                         <div className="col-sm-6 text-sm-right">
                           <h4 className="justify-content-end">
-                            {helper.ConvertToQfbNumberFormat(data["pastDuesBalance"] || "") + " " + currentContext.userSettings.currency}
+                            {helper.ConvertToQfbNumberFormat(data["pastDuesBalance"] || "")}
                           </h4>
                         </div>
                       </div>
@@ -201,7 +201,7 @@ function ManagmentRequestListing(
                           <h4 className="justify-content-end">
                             {helper.ConvertToQfbNumberFormat(
                               data["totalInvestmentsinProducts"] || ""
-                            ) + " " + currentContext.userSettings.currency}
+                            )}
                           </h4>
                         </div>
                       </div>
@@ -218,7 +218,7 @@ function ManagmentRequestListing(
                           <h4 className="justify-content-end">
                             {helper.ConvertToQfbNumberFormat(
                               data["holdingCompanyLoansBalances"] || ""
-                            ) + " " + currentContext.userSettings.currency}
+                            )}
                           </h4>
                         </div>
                       </div>
@@ -246,7 +246,7 @@ function ManagmentRequestListing(
                           <h4 className="justify-content-end">
                             {helper.ConvertToQfbNumberFormat(
                               data["privateBankLoansBalances"] || ""
-                            ) + " " + currentContext.userSettings.currency}
+                            )}
                           </h4>
                         </div>
                       </div>
@@ -276,7 +276,7 @@ function ManagmentRequestListing(
                     <h4>{local_Strings.ManagementLandingLiabilitiesTitle}</h4>
                     <h5>{helper.ConvertToQfbNumberFormat(
                       data["totalLiabilities"] || ""
-                    ) + " " + currentContext.userSettings.currency}</h5>
+                    )}</h5>
                   </a>
                 </div>
               </div>
@@ -287,13 +287,13 @@ function ManagmentRequestListing(
                     <a className="d-block p-0">
                       <div className="row align-items-center  ">
                         <div className="col-sm-6">
-                          <h4>{local_Strings.BankPositionsTotalAssetSub3} </h4>
+                          <h4>{local_Strings.BankPositionsTotalLiabilitiesSub3} </h4>
                         </div>
                         <div className="col-sm-6 text-sm-right">
                           <h4 className="justify-content-end">
                             {helper.ConvertToQfbNumberFormat(
                               data["cashBalance"] || ""
-                            ) + " " + currentContext.userSettings.currency}
+                            )}
                           </h4>
                         </div>
                       </div>
@@ -316,11 +316,11 @@ function ManagmentRequestListing(
                     <a className="d-block p-0">
                       <div className="row align-items-center  ">
                         <div className="col-sm-6">
-                          <h4>{local_Strings.BankPositionsTotalAssetSub1} </h4>
+                          <h4>{local_Strings.BankPositionsTotalLiabilitiesSub1} </h4>
                         </div>
                         <div className="col-sm-6 text-sm-right">
                           <h4 className="justify-content-end">
-                            {helper.ConvertToQfbNumberFormat(data["customersCash"] || "") + " " + currentContext.userSettings.currency}
+                            {helper.ConvertToQfbNumberFormat(data["customersCash"] || "")}
                           </h4>
                         </div>
                       </div>
@@ -331,11 +331,11 @@ function ManagmentRequestListing(
                     <a className="d-block p-0">
                       <div className="row align-items-center  ">
                         <div className="col-sm-6">
-                          <h4>{local_Strings.BankPositionsTotalAssetSub2} </h4>
+                          <h4>{local_Strings.BankPositionsTotalLiabilitiesSub2} </h4>
                         </div>
                         <div className="col-sm-6 text-sm-right">
                           <h4 className="justify-content-end">
-                            {helper.ConvertToQfbNumberFormat(data["customersDeposits"] || "") + " " + currentContext.userSettings.currency}
+                            {helper.ConvertToQfbNumberFormat(data["customersDeposits"] || "")}
                           </h4>
                         </div>
                       </div>

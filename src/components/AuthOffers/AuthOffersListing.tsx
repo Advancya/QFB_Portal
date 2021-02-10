@@ -35,7 +35,7 @@ function AuthOffersListing(props: iAuthOffersListing) {
         .then((responseData: IOfferDetail[]) => {
           if (isMounted && responseData && responseData.length > 0) {
             const _data = responseData.filter(
-              (d) => new Date(d.expireDate) > new Date()
+              (d) => new Date(d.expireDate) >= new Date()
             );
             setData(_data);
             if (_data.length < rowLimit) {

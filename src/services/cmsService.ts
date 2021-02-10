@@ -724,7 +724,15 @@ const GetNotificationsByCIF = async (cif: string) => {
 
 const GetProductsAndOffersAll = async () => {
   try {
-    const result = await apiInstance.get(`/api/ProductsAndOffers/All`);
+    const token = await generateRegistrationToken();
+    const result = await axios.get(
+      `${defaultData.ApiBaseUrl}/api/ProductsAndOffers/All`,
+      {
+        headers: {
+          Authorization: `Bearer ${token["access_token"]}`,
+        },
+      }
+    );
 
     return result.data;
   } catch (err) {

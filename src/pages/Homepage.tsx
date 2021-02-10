@@ -27,6 +27,7 @@ import * as helper from "../Helpers/helper";
 import { getUserRole } from "../services/apiServices";
 import Swal from "sweetalert2";
 import AuthTerms from "../components/Terms/AuthTerms";
+import AdminCustomHeader from "../components/header/AdminCustomHeader";
 
 export interface IUserPortfolio {
   customerCode: string;
@@ -85,6 +86,7 @@ const HomePage = () => {
   const [showInboxListing, setShowInboxListing] = useState(false);
   const [showInboxDetails, setshowInboxDetails] = useState(false);
   const [showViewMoreListing, setViewMoreListing] = useState(false);
+  const [showCustomerHeader, setCustomerHeader] = useState(true);
 
   currentContext.language === "en"
     ? document.getElementsByTagName("html")[0].setAttribute("dir", "ltr")
@@ -120,6 +122,7 @@ const HomePage = () => {
       if (role && !!role) {
         if (!(role && role.name === Constant.Customer)) {
           setLoading(false);
+          setCustomerHeader(false);
           if (role.name === Constant.RM) {
             history.push(`/${currentContext.language}/RMLanding`);
           } else if (role.name === Constant.Management) {
@@ -146,7 +149,7 @@ const HomePage = () => {
           }
         }
       } else {
-
+        setCustomerHeader(true);
         /*
         Swal.fire({
           title:
@@ -261,7 +264,7 @@ const HomePage = () => {
       {!!currentContext.selectedCIF && (
         <InboxContext.Provider value={{ messages, refreshInbox, reloadNotifications, refreshNotifications }}>
           <PortfolioContext.Provider value={userPortfolio}>
-            <AuthCustomHeader />
+            {currentContext.userRole === Constant.Customer ? <AuthCustomHeader /> : <AdminCustomHeader />}
             <Breadcrumb pageName={local_Strings.PortfolioTitle} />
             <LoadingOverlay
               active={isLoading}

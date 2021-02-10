@@ -62,14 +62,17 @@ function CashDetails(props: iCashDetails) {
         .finally(() => setLoading(false));
     };
 
-    if (!!currentContext.selectedCIF) {
+    if (!!currentContext.selectedCIF && props.showCashDetailsModal) {
       initialLoadMethod();
+    } else {
+      setData([emptyTransaction]);
+      setFilteredData([emptyTransaction]);
     }
 
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [props.cashItem.accountNumber]);
+  }, [props.cashItem.accountNumber, props.showCashDetailsModal]);
 
   return (
     <Modal

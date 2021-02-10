@@ -141,7 +141,7 @@ const en = {
   DrawerContentSwitchLangLabel: "العربية",
   WelcomeScreenTitle: "Relation Manager",
   WelcomeScreenMsg:
-    "Welcome {0} to QFB bank, we are glade to serve you and have you as a customer, we hope to satisfy all your needs..",
+    "Welcome {0} to Qatar First Bank, we are glad to serve you and have you as a client, we hope to satisfy all your financial needs..",
   WelcomeScreenPopUpTitle: "CALL ME BACK REQUSET",
   WelcomeScreenPopUpMessage: "Your request has been sent.",
   WelcomeScreenClose: "Close",
@@ -413,7 +413,7 @@ const en = {
   BeneficiaryCancelButton: "Cancel",
   BeneficiaryEditButton: "Edit",
   BeneficiaryDeleteButton: "Delete",
-  BeneficiaryInvalidIban:"Invalid Account Number or IBAN number",
+  BeneficiaryInvalidIban: "Invalid Account Number or IBAN number",
   BeneficiaryIDLabelInternational: "Beneficiary ID(system assigned)",
   DeleteConfirmationTitle: "Confirmation Message",
   DeleteConfirmationBody: "Are you sure?",
@@ -509,8 +509,8 @@ const en = {
 
   SettingsLandingButton1: "Change Portfolio Currency",
   SettingsLandingButton2: "Change Password",
-  SettingsLandingButton3: "Change One Time Password",
-  SettingsLandingButton4: "Change Language",
+  SettingsLandingButton3: "Change One Time Password (OTP)",
+  SettingsLandingButton4: "Change Communication Language",
 
   SettingSaveButton: "Save",
   SettingsCancelButton: "Cancel",
@@ -521,13 +521,13 @@ const en = {
   ChangeCurrencyGPB: "GPB",
   ChangeCurrencyEUR: "EUR",
 
-  ChangeOTPTitle: "Change One Time Password",
+  ChangeOTPTitle: "Change One Time Password (OTP)",
   ChangeOTPLabel: "Choose OTP",
   ChangeOTPSMS: "SMS",
   ChangeOTPEmail: "Email",
   ChangeOTPSMSAndEMail: "SMS & Email",
 
-  ChangeLanguageTitle: "Change Language",
+  ChangeLanguageTitle: "Change Communication Language",
   ChangeLanguageLabel: "Choose Language",
   ChangeLanguageArabic: "Arabic",
   ChangeLanguageEnglish: "English",
@@ -549,7 +549,7 @@ const en = {
   ChangePassword_CurrentRequiredMsg: "Current password is required",
   ChangePassword_RequiredMsg: "Password is required",
   ChangePassword_InvalidationMsg:
-    "Password must be minimum 7 characters & include at least 1 number and capital letter",
+    "Password must be minimum 7 characters & include at least 1 number and capital letter and should include at least 1 special character",
   ChangePassword_ConfirmRequiredMsg: "Confirm password is required",
   ChangePassword_MustMatchMsg: "Password doesn't match",
 
@@ -720,7 +720,7 @@ const en = {
   registerStep2Label1: "Enter Password",
   registerStep2Label2: "Confirm Password",
   registerStep2Label3:
-    "Password must be minimum 7 characters & include at least 1 number and 1 capital letter.",
+    "Password must be minimum 7 characters & include at least 1 number and capital letter and should include at least 1 special character",
   registerStep3Label1: "Enter OTP",
   registerStep3Label2: "Resend OTP ?",
 
@@ -838,14 +838,14 @@ const en = {
   TransactionWithinSameAccount: "Transaction within same account is not allowed",
   TransactionAmountLabel2: "Amount",
   RichTextImageUploadHint: "Image attachment should be less than 5MB",
-  
+
   MobileNumberLengthError: "Mobile number must be at least 10 characters",
 
   RequestNumber: "Request Number | ",
   SendButtonText: "Send",
   AdminLandingTitle: "Welcome, Portal Admin",
   AmountExceedBalance: "Amount exceed your balance",
-  
+
   EarningTillDate: "Earnings Todate",
   MaxSizeAllowed: "Maximum allowed file size is 2.5 MB",
   ContactUs_Name_Format_Validation_Message: "Name Should be only letters",

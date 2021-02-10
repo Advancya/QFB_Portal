@@ -112,7 +112,7 @@ function ChangeOTPMethod(props: iChangeOTPMethod) {
                   e.target.checked
                     ? setUserSettings({
                       ...userSettings,
-                      otp: local_Strings.ChangeOTPSMS
+                      otp: "SMS"
                     })
                     : {}
                 }
@@ -135,7 +135,7 @@ function ChangeOTPMethod(props: iChangeOTPMethod) {
                   e.target.checked
                     ? setUserSettings({
                       ...userSettings,
-                      otp: local_Strings.ChangeOTPEmail
+                      otp: "Email"
                     })
                     : {}
                 }
@@ -158,7 +158,7 @@ function ChangeOTPMethod(props: iChangeOTPMethod) {
                   e.target.checked
                     ? setUserSettings({
                       ...userSettings,
-                      otp: local_Strings.ChangeOTPSMSAndEMail
+                      otp: "Both"
                     })
                     : {}
                 }

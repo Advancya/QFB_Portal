@@ -20,17 +20,37 @@ const ViewAttachment = (props: any) => {
     fileSize = Math.round((Number(_calSize) + Number.EPSILON) * 100) / 100;
   }
 
+
+  const previewAttachment = () => {
+    const blob = helper.b64toBlob(
+      props.fileContent,
+      mime.getType(props.fileName)
+    );
+
+    const fileURL = URL.createObjectURL(blob);
+    window.open(fileURL);
+  };
+
+  const downloadAttachment = () => {
+    const blob = helper.b64toBlob(
+      props.fileContent,
+      mime.getType(props.fileName)
+    );
+
+    saveAs(blob, props.fileName);
+  };
+
   return !!props.fileName ? (
-    <div className="row no-gutters align-items-center view-attachment">
-      <div className="col-2 col-lg-2 text-center">
+    <div className="row no-gutters align-items-center">
+      {/* <div className="col-2 col-lg-2 text-center">
         <img
           alt=""
           src={pdfIcon}
           style={{ maxWidth: "75%" }}
           className="img-fluid"
         />
-      </div>
-      <div
+      </div> */}
+      {/* <div
         className="col-6 col-lg-9 cursor-pointer"
         onClick={() => {
           const blob = helper.b64toBlob(
@@ -49,32 +69,50 @@ const ViewAttachment = (props: any) => {
             </small>
           )}
         </h5>
-      </div>
-      {props.showDelete && (
-        <div className="col-2 col-lg-1 text-center">
+      </div> */}
+      <div className="col-md-8">
+        <span className="download-link d-inline-block ">
           <a
-            className="btnFileDelete"
+            className="d-inline-block "
+            target="_blank"
             href="#"
-            onClick={() => {
-              Swal.fire({
-                title: local_Strings.deleteSure,
-                text: local_Strings.fileDeleteConfirmMessage,
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#6b4f44",
-                confirmButtonText: local_Strings.OfferDeleteButton,
-                cancelButtonText: local_Strings.cancelBtn,
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  props.deleteThisFile();
-                }
-              });
-            }}
+            onClick={previewAttachment}
           >
-            <i className="fa fa-trash-o"></i>
+            <i className="mx-1 fa fa-file color-white"></i>
           </a>
-        </div>
-      )}
+          <a
+            className="d-inline-block "
+            target="_self"
+            href="#"
+            onClick={downloadAttachment}
+          >
+            <i className="mx-1 fa fa-download color-white"></i>
+          </a>
+          {props.showDelete &&
+            <a
+              className="d-inline-block "
+              href="#"
+              onClick={() => {
+                Swal.fire({
+                  title: local_Strings.deleteSure,
+                  text: local_Strings.fileDeleteConfirmMessage,
+                  icon: "warning",
+                  showCancelButton: true,
+                  confirmButtonColor: "#6b4f44",
+                  confirmButtonText: local_Strings.OfferDeleteButton,
+                  cancelButtonText: local_Strings.cancelBtn,
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    props.deleteThisFile();
+                  }
+                });
+              }}
+            >
+              <i className="fa fa-trash-o color-white"></i>
+            </a>
+          }
+        </span>
+      </div>      
     </div>
   ) : null;
 };

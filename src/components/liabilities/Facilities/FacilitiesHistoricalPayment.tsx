@@ -59,14 +59,17 @@ function FacilitiesHistoricalPayment(props: iFacilitiesHistoricalPayment) {
         .finally(() => setLoading(false));
     };
 
-    if (!!currentContext.selectedCIF) {
+    if (!!currentContext.selectedCIF && props.showFacilitiesHistoricalPaymentModal) {
       initialLoadMethod();
+    } else {
+      setData(null);
+      setFilteredData(null);
     }
 
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-  }, [props.facilityItem.ldReference]);
+  }, [props.facilityItem.ldReference, props.showFacilitiesHistoricalPaymentModal]);
 
   return (
     <Modal

@@ -296,6 +296,7 @@ function ContactUsForm(props: iContactUsForm) {
                               onBlur={handleBlur("email")}
                               value={values.email || ""}
                               maxLength={50}
+                              className="mobile-style"
                             />
                             {touched.email &&
                               errors.email &&

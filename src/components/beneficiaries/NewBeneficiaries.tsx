@@ -403,7 +403,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
               }}
               innerRef={formikRef_WitihinQFB}
               validateOnBlur={true}
-              validateOnChange={props.beneficiary ? true : false}
+              validateOnChange={true}
             >
               {({
                 values,
@@ -582,7 +582,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
               }}
               innerRef={formikRef_Local}
               validateOnBlur={true}
-              validateOnChange={props.beneficiary ? true : false}
+              validateOnChange={true}
             >
               {({
                 values,
@@ -823,7 +823,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
               }}
               innerRef={formikRef_International}
               validateOnBlur={true}
-              validateOnChange={props.beneficiary ? true : false}
+              validateOnChange={true}
             >
               {({
                 values,

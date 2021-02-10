@@ -161,7 +161,7 @@ const ar = {
   PortfolioLiabilitiesOption2: "الضمانات البنكيه",
   // PortfolioBG: require("../../assets/images/Intersection2Ar.png"),
   PortfolioCurrencyType: "ريال",
-  PortfolioTotalNetWorth: "إجمالي القيمة الصافية",
+  PortfolioTotalNetWorth: "اجمالي التسهيلات",
   DrawerContentHomeLabel: "الرئيسية",
   DrawerContentSwitchLangLabel: "English",
 
@@ -632,7 +632,7 @@ const ar = {
   NoConnectionAlertBody: "الرجاء التحقق من اتصال الانترنت الخاص بك",
   Login_ArabicNumberHint:
     "من فضلك استخدم الارقام باللغة الانجليزية لتتمكن من تسجيل الدخول",
-    SessionTimeOutMessage: "تم انتهاء وقت جلستك يرجي تسجيل الدخول مره أخرى",
+    SessionTimeOutMessage: "تم انتهاء وقت جلستك يرجى تسجيل الدخول مره أخرى",
 
   CorrespondentBank: "البنك المراسل",
   Location: "الموقع",
@@ -746,7 +746,7 @@ const ar = {
   pagingPrevious: "السابق",
 
   navigationUserMessage: "مرحبا ،    ",
-  navigationItem1: "القابضة",
+  navigationItem1: "الأصول",
   navigationItem2: "المعاملات",
   navigationItem3: "العروض",
   navigationItem4: "الطلبات",
@@ -814,17 +814,18 @@ const ar = {
   ChartDrillDownHint: "إضغط لعرض الأرباح المتراكمة المحصلة",
 
   ContactUs_Mobile_Format_Validation_Message:
-    " رقم الهاتف المحمول (يحتوي على كود الدولة, مثال +9741234567)",
+    "رقم الهاتف المحمول (يحتوي علي كود الدولة, مثال 97412345678+)",
 
-  Signup_Autherization_Code: "رمز المصادقة غير صالح",
-  Signup_CIF_Message: "رقم التعريف غير صالح",
-  Signup_Email_Message: "من فضلك أدخل بريد أليكترونى صحيح",
-  Signup_Mobile_Number_Message: "من فضلك أدخل رقم جوال صحيح",
+    Signup_Autherization_Code: "رمز التفويض غير صحيح",
+    Signup_CIF_Message: "رقم تعريف العميل غير صحيح",
+    Signup_Email_Message: "البريد الإلكتروني غير صحيح",
+    Signup_Mobile_Number_Message: "الهاتف المحمول غير صحيح",
 
-  Transactions_Amount_Validation: "الرقم الوحيد المقبول",
-  BeneficiaryInvalidAccountOrIban: "رقم الحساب أو IBAN غير صالح",
-  BeneficiaryInvalidIbanNumber: "Invalid IBAN",
-  BeneficiaryInvalidSwiftCode: "رمز Swift غير صالح",
+    Transactions_Amount_Validation: "من فضلك ادخل ارقام فقط",
+    BeneficiaryInvalidAccountOrIban:
+    "رقم حساب في بنك قطر الأول أو الأيبان غير صحيح",
+  BeneficiaryInvalidIbanNumber: "رقم حساب في بنك قطر الأول أو الأيبان غير صحيح",
+  BeneficiaryInvalidSwiftCode: "رقم السويفت غير صحيح",
 
   NoDepositsHoldingsFound: "لم يتم العثور على ودائع القابضة",
   NoInvestmentsHoldingsFound: "لم يتم العثور على استثمارات القابضة",

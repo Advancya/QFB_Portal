@@ -193,10 +193,12 @@ function AuthOfferRequest(props: iAuthOfferRequest) {
                   <div className="col-lg-6 form-group">
                     <label>{local_Strings.OfferSubscriptionAmountLabel}</label>
                     <input
-                      type="number"
+                      type="text"
                       className="form-control"
                       placeholder=""
-                      onChange={handleChange("amount")}
+                      pattern="[0-9]*"
+                      value={values.amount?.toString() || ""}
+                      onChange={(e) => setFieldValue("amount", e.target.value.replace(/[^\d]/g, ''))}
                       onBlur={handleBlur("amount")}
                     />
                     {touched.amount &&

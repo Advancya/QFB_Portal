@@ -667,6 +667,7 @@ function NewRequest(props: iNewRequest) {
               setLoading(false);
             }}
             enableReinitialize={true}
+            validateOnChange={true}
             validateOnBlur={true}
           >
             {({
@@ -909,6 +910,7 @@ function NewRequest(props: iNewRequest) {
                                     : item["details"].split(";")[0]}
                                 </Form.Label>
                                 <Form.Control
+                                  className="mobile-style"
                                   value={
                                     values[
                                     item["details"]
@@ -944,7 +946,7 @@ function NewRequest(props: iNewRequest) {
                                 </Form.Label>
                                 <input
                                   type="text"
-                                  className="form-control"
+                                  className="mobile-style form-control"
                                   value={
                                     values[
                                     item["details"]
