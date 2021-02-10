@@ -52,7 +52,7 @@ function InboxListing(props: iInboxListing) {
       setOffset(rowLimit);
     }
 
-    if (filters.filterApplied) {
+    if (filters.filterApplied && InboxMessages.messages && InboxMessages.messages.length > 0) {
       const _filteredData = helper.filterReadableList(
         InboxMessages.messages,
         filters
@@ -131,63 +131,70 @@ function InboxListing(props: iInboxListing) {
               />
             }
           />
-          <form className="filter-box">
-            <div className="row headRow align-items-center justify-content-between">
-              <div className="col-md-5">
-                <FilterDropDownControl
-                  label={local_Strings.InboxMessageListingFilterWithLabel}
-                  options={statusFilterOptions}
-                  value={filters.Status || "All Messages"}
-                  onChange={(_value: string) =>
-                    setFilter({ ...filters, Status: _value })
-                  }
-                  initialSelectRequired={false}
-                />
-              </div>
 
-              <div className="px-3">
-                <FilterButtonControl
-                  clearFilter={() => {
-                    setFilter({
-                      filterApplied: false,
-                      Status: "All Messages",
-                    });
-                    setFilteredData(InboxMessages.messages);
-                    setOffset(rowLimit);
-                  }}
-                  applyFilter={() => {
-                    setFilter({ ...filters, filterApplied: true });
-                    const _filteredData = helper.filterReadableList(
-                      InboxMessages.messages,
-                      filters
-                    );
-                    setFilteredData(_filteredData);
-                  }}
-                  showClearFilter={filters.filterApplied}
-                />
-              </div>
-            </div>
-          </form>
+          {!isLoading && (
+            <React.Fragment>
+              {InboxMessages.messages && InboxMessages.messages.length > 0 &&
+                <form className="filter-box">
+                  <div className="row headRow align-items-center justify-content-between">
+                    <div className="col-md-5">
+                      <FilterDropDownControl
+                        label={local_Strings.InboxMessageListingFilterWithLabel}
+                        options={statusFilterOptions}
+                        value={filters.Status || "All Messages"}
+                        onChange={(_value: string) =>
+                          setFilter({ ...filters, Status: _value })
+                        }
+                        initialSelectRequired={false}
+                      />
+                    </div>
 
-          <div className="box modal-box py-0 mb-0 scrollabel-modal-box">
-            <ul className="box-list" id="dataList">
-              {filteredData &&
-                filteredData.length > 0 &&
-                !!filteredData[0].adviceDate
-                ? filteredData
-                  .slice(0, offset)
-                  .map((item, index) => renderItem(item, index))
-                : NoResult(local_Strings.NoDataToShow)}
-            </ul>
-          </div>
-          <FilterMoreButtonControl
-            showMore={
-              InboxMessages.messages &&
-              InboxMessages.messages.length > rowLimit &&
-              offset < filteredData.length
-            }
-            onClickMore={() => setOffset(offset + 5)}
-          />
+                    <div className="px-3">
+                      <FilterButtonControl
+                        clearFilter={() => {
+                          setFilter({
+                            filterApplied: false,
+                            Status: "All Messages",
+                          });
+                          setFilteredData(InboxMessages.messages);
+                          setOffset(rowLimit);
+                        }}
+                        applyFilter={() => {
+                          setFilter({ ...filters, filterApplied: true });
+                          const _filteredData = helper.filterReadableList(
+                            InboxMessages.messages,
+                            filters
+                          );
+                          setFilteredData(_filteredData);
+                        }}
+                        showClearFilter={filters.filterApplied}
+                      />
+                    </div>
+                  </div>
+                </form>
+              }
+
+              <div className="box modal-box py-0 mb-0 scrollabel-modal-box">
+                <ul className="box-list" id="dataList">
+                  {filteredData &&
+                    filteredData.length > 0 &&
+                    !!filteredData[0].adviceDate
+                    ? filteredData
+                      .slice(0, offset)
+                      .map((item, index) => renderItem(item, index))
+                    : NoResult(local_Strings.OfferList_NoData)}
+                </ul>
+              </div>
+              <FilterMoreButtonControl
+                showMore={
+                  InboxMessages.messages &&
+                  InboxMessages.messages.length > rowLimit &&
+                  offset < filteredData.length
+                }
+                onClickMore={() => setOffset(offset + 5)}
+              />
+            </React.Fragment>
+          )}
         </Modal.Body>
       </Modal>
     </div>

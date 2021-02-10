@@ -181,16 +181,17 @@ function SettingsLanding(props: iSettingsLanding) {
             </li>
           </ul>
           <div className="p-4">
-            <div className="row mb-4">
-              <button
-                id="applyReqBtn"
-                className="btn btn-primary col-sm-8 col-md-5   mx-auto"
-                onClick={props.showChangeCurrencyModal}
-                disabled={!allowEdit}
-              >
-                {local_Strings.SettingsLandingButton1}
-              </button>
-            </div>
+            {(!allowEdit || currentContext.userRole === "CUSTOMER") &&
+              <div className="row mb-4">
+                <button
+                  id="applyReqBtn"
+                  className="btn btn-primary col-sm-8 col-md-5   mx-auto"
+                  onClick={props.showChangeCurrencyModal}
+                  disabled={!allowEdit}
+                >
+                  {local_Strings.SettingsLandingButton1}
+                </button>
+              </div>}
             <div className="row mb-4">
               <button
                 id="applyReqBtn"

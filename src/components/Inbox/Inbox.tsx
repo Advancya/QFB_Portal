@@ -35,19 +35,15 @@ function Inbox() {
           }
         />
       </a>
-      {InboxMessages.messages &&
-        InboxMessages.messages.length > 0 &&
-        !!InboxMessages.messages[0].adviceDate && (
-          <InboxListing
-            showInboxListingModal={showInboxListing}
-            hideInboxListingModal={() => setShowInboxListing(false)}
-            showInboxDetailsModal={(detail: IInboxDetail) => {
-              setShowInboxListing(false);
-              setshowInboxDetails(true);
-              setMessageDetail(detail);
-            }}
-          />
-        )}
+      <InboxListing
+        showInboxListingModal={showInboxListing}
+        hideInboxListingModal={() => setShowInboxListing(false)}
+        showInboxDetailsModal={(detail: IInboxDetail) => {
+          setShowInboxListing(false);
+          setshowInboxDetails(true);
+          setMessageDetail(detail);
+        }}
+      />
       {message && !!message.adviceDate && (
         <InboxDetails
           item={message}

@@ -57,7 +57,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
     props.beneficiary ? props.beneficiary.typeId : ""
   );
   const [isValidIban, setIsValidIban] = useState(true);
-
+  const [isValidSwift, setIsValidSwift] = React.useState(true);
   const initialValuesWithin: iBeneficiary = {
     id: 0,
     cif: currentContext.selectedCIF,
@@ -336,6 +336,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                       id="reqTypeSelect"
                       onChange={(e: any) => {
                         setTransactionTypeId(e.target.value);
+                        setIsValidIban(true);
                         if (
                           formikRef_WitihinQFB &&
                           formikRef_WitihinQFB.current
@@ -401,7 +402,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                 setLoading(false);
               }}
               innerRef={formikRef_WitihinQFB}
-              validateOnBlur={props.beneficiary ? true : false}
+              validateOnBlur={true}
               validateOnChange={props.beneficiary ? true : false}
             >
               {({
@@ -478,6 +479,8 @@ function NewBeneficiary(props: iNewBeneficiary) {
                                 setIsValidIban(false);
                               }
                               setLoading(false);
+                            } else {
+                              touched.qfbaccount = true;
                             }
                             handleBlur("qfbaccount");
                           }}
@@ -578,7 +581,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                 setLoading(false);
               }}
               innerRef={formikRef_Local}
-              validateOnBlur={props.beneficiary ? true : false}
+              validateOnBlur={true}
               validateOnChange={props.beneficiary ? true : false}
             >
               {({
@@ -691,6 +694,8 @@ function NewBeneficiary(props: iNewBeneficiary) {
                               } else {
                                 setIsValidIban(false);
                               }
+                            } else {
+                              touched.beneficiaryIban = true;
                             }
                             handleBlur("beneficiaryIban");
                           }}
@@ -701,7 +706,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           InvalidFieldError(errors.beneficiaryIban)}
                         {!isValidIban && !errors.beneficiaryIban &&
                           InvalidFieldError(
-                            local_Strings.BeneficiaryInvalidIban
+                            local_Strings.BeneficiaryInvalidIbanNumber
                           )}
                       </div>
                       <div className="col-lg-6 form-group">
@@ -817,7 +822,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                 setLoading(false);
               }}
               innerRef={formikRef_International}
-              validateOnBlur={props.beneficiary ? true : false}
+              validateOnBlur={true}
               validateOnChange={props.beneficiary ? true : false}
             >
               {({
@@ -878,6 +883,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           value={values.beneficiarySwiftCode || ""}
                           onChange={(e) => setFieldValue("beneficiarySwiftCode", e.target.value, true)}
                           onBlur={async () => {
+                            
                             if (!!values.beneficiarySwiftCode) {
                               setLoading(true);
 
@@ -885,11 +891,13 @@ function NewBeneficiary(props: iNewBeneficiary) {
                                 values.beneficiarySwiftCode!
                               );
                               if (result && result.bicdata) {
+                                setIsValidSwift(true);
                                 setFieldValue(
                                   "beneficiaryBank",
                                   result.bicdata[0]["institution_name"]
                                 );
                               } else {
+                                setIsValidSwift(false);
                                 setFieldValue(
                                   "beneficiaryBank", "", true
                                 );
@@ -897,9 +905,11 @@ function NewBeneficiary(props: iNewBeneficiary) {
 
                               setLoading(false);
                             } else {
+                              setIsValidSwift(true);
                               setFieldValue(
                                 "beneficiaryBank", "", true
                               );
+                              touched.beneficiarySwiftCode = true;
                             }
 
                             handleBlur("beneficiarySwiftCode");
@@ -909,8 +919,8 @@ function NewBeneficiary(props: iNewBeneficiary) {
                         {touched.beneficiarySwiftCode &&
                           errors.beneficiarySwiftCode &&
                           InvalidFieldError(errors.beneficiarySwiftCode)}
-                        {touched.beneficiaryBank &&
-                          !values.beneficiaryBank &&
+                        {!isValidSwift &&
+                          !errors.beneficiarySwiftCode &&
                           InvalidFieldError(local_Strings.BeneficiaryInvalidSwiftCode)}
                       </div>
                       <div className="col-lg-6 form-group">
@@ -1029,6 +1039,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                               }
                               setLoading(false);
                             } else {
+                              touched.beneficiaryIban = true;
                               setIsValidIban(true);
                             }
                             handleBlur("beneficiaryIban");

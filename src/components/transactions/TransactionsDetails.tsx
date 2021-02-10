@@ -100,7 +100,10 @@ function TransactionsDetails(props: iTransactionsDetails) {
               <div className="col-lg-6 form-group">
                 <label>{local_Strings.TransactionAmountLabel}</label>
                 <div className="readonly">
-                  {helper.ConvertToQfbNumberFormatWithFraction(props.item.amount || "")}</div>
+                  {helper.ConvertToQfbNumberFormatWithFraction(props.item.amount || "") + " "}
+                  {props.item.currency ||
+                    currentContext.userSettings.currency}
+                </div>
               </div>
               {props.item.transactionTypeId !== 1 && (
                 <React.Fragment>
@@ -122,8 +125,8 @@ function TransactionsDetails(props: iTransactionsDetails) {
                     <div className="readonly date d-flex justify-content-between align-items-center">
                       {props.item.transactionDate
                         ? moment(props.item.transactionDate).format(
-                            "DD/MM/YYYY"
-                          )
+                          "DD/MM/YYYY"
+                        )
                         : ""}
                       <i className="fa fa-calendar-o" aria-hidden="true"></i>
                     </div>

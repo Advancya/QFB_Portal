@@ -107,8 +107,8 @@ async function GetBeneficiariesByCif(cif: string) {
 async function ValidateBankIBAN(iban: string) {
   try {
 
-    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-    const result: any = await fetch(proxyUrl + `https://api.iban.com/clients/api/v4/iban/?format=json&api_key=4c80e9b4389abe84b453d0c133f62ff9&iban=${iban}`)
+    //const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    const result: any = await fetch(`https://api.iban.com/clients/api/v4/iban/?format=json&api_key=4c80e9b4389abe84b453d0c133f62ff9&iban=${iban}`)
       .then(res => res.json())
       .catch((e: any) => console.log(e));
       
@@ -137,8 +137,8 @@ async function ValidateBankSwift(swift: string) {
     //   })
     //   .catch(error => console.log('error', error));
 
-    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-    const result: any = await fetch(proxyUrl + `https://api.iban.com/clients/api/swiftv1/simple.php?format=json&api_key=4c80e9b4389abe84b453d0c133f62ff9&bic=${swift}`)
+    //const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    const result: any = await fetch(`https://api.iban.com/clients/api/swiftv1/simple.php?format=json&api_key=4c80e9b4389abe84b453d0c133f62ff9&bic=${swift}`)
       .then(res => res.json())
       .catch((e: any) => console.log(e));
 

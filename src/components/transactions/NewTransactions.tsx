@@ -180,7 +180,7 @@ function NewTransaction(props: iNewTransaction) {
   const fetchAccountCashList = async () => {
     setLoading(true);
     const data = await GetCashListing(currentContext.selectedCIF.toString()) as IAccountBalance[];
-    let result: iDDL[] = [{ label: "", value: "" }];
+    let result: iDDL[] = [];
 
     for (let index = 0; index < data.length; index++) {
       const element = data[index];
@@ -190,7 +190,7 @@ function NewTransaction(props: iNewTransaction) {
         balance: element.balance
       });
     }
-    setAccounts(result.slice(1));
+    setAccounts(result);
     setLoading(false);
   };
 
@@ -344,7 +344,7 @@ function NewTransaction(props: iNewTransaction) {
                         </label>
                         <select
                           className="form-control"
-                          value={values.transferFromAccount || ""}
+                          //value={values.transferFromAccount || ""}
                           onBlur={handleBlur("transferFromAccount")}
                           onChange={(e) => {
 
@@ -375,9 +375,9 @@ function NewTransaction(props: iNewTransaction) {
                                 "balance", 0, true
                               );
                             }
-                            setFieldValue(
-                              "transferToAccount", ""
-                            );
+                            // setFieldValue(
+                            //   "transferToAccount", ""
+                            // );
                           }}
                         >
                           <option value="">{local_Strings.SelectItem}</option>
@@ -399,11 +399,22 @@ function NewTransaction(props: iNewTransaction) {
                         <label>{local_Strings.TransactionToAccountLabel}</label>
                         <select
                           className="form-control"
-                          value={values.transferToAccount || ""}
+                          //value={values.transferToAccount || ""}
                           onBlur={handleBlur("transferToAccount")}
-                          onChange={(e) => setFieldValue(
-                            "transferToAccount", e.target[e.target.selectedIndex].innerText
-                          )}
+                          onChange={(e) => {
+                            if (!!e.target.value) {
+                              const cashInAccount = accounts.filter(
+                                (obj) => obj.value === e.target.value
+                              )[0];
+                              setFieldValue(
+                                "transferToAccount", cashInAccount.label
+                              )
+                            } else {
+                              setFieldValue(
+                                "transferToAccount", ""
+                              );
+                            }
+                          }}
                         >
                           <option value="">{local_Strings.SelectItem}</option>
                           {accounts &&
@@ -432,7 +443,8 @@ function NewTransaction(props: iNewTransaction) {
                           pattern="[0-9]*"
                           value={values.amount?.toString() || ""}
                           onBlur={handleBlur("amount")}
-                          onChange={(e) => setFieldValue("amount", e.target.value.replace(/[^0-9]*/, ''))}
+                          disabled={!values.transferFromAccount || values.balance === 0}
+                          onChange={(e) => setFieldValue("amount", e.target.value.replace(/[^\d]/g, ''))}
                         />
                         {touched.amount &&
                           errors.amount &&

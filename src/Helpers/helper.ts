@@ -368,7 +368,7 @@ export const filterTransactionList = (
 
   if (filter.Status && filter.Status !== "0") {
     filteredTransactions = filteredTransactions.filter(
-      (t) => String(t.status).toLowerCase() === filter.Status.toLowerCase()
+      (t) => String(t.status || t.requestStatus).toLowerCase() === filter.Status.toLowerCase()
     );
   }
 

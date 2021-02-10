@@ -148,7 +148,7 @@ function BeneficiariesListing(props: iBeneficiariesListing) {
                 ? filteredData
                   .slice(0, offset)
                   .map((item, index) => renderItem(item, index))
-                : NoResult(local_Strings.NoDataToShow)}
+                : NoResult(local_Strings.OfferList_NoData)}
             </ul>
           </div>
 

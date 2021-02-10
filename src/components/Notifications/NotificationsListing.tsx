@@ -49,7 +49,7 @@ function NotficationsListing(props: iNotficationsListing) {
       setOffset(rowLimit);
     }
 
-    if (filters.filterApplied) {
+    if (props.notfications && props.notfications.length > 0 && filters.filterApplied) {
       const _filteredData = helper.filterReadableList(
         props.notfications,
         filters
@@ -88,7 +88,7 @@ function NotficationsListing(props: iNotficationsListing) {
   );
 
   const statusFilterOptions = [
-    { label: local_Strings.MessageFilter_All, value: "All Messages" },
+    { label: local_Strings.NotificationFilter_All, value: "All Messages" },
     { label: local_Strings.MessageFilter_Read, value: "Read Messages" },
     { label: local_Strings.MessageFilter_UnRead, value: "UnRead Messages" },
   ];
@@ -129,44 +129,45 @@ function NotficationsListing(props: iNotficationsListing) {
           />
           {!props.reloading && (
             <React.Fragment>
-              <form className="filter-box">
-                <div className="row headRow align-items-center justify-content-between">
-                  <div className="col-md-5">
-                    <FilterDropDownControl
-                      label={local_Strings.NotificationsListingFilter}
-                      options={statusFilterOptions}
-                      value={filters.Status || "All Messages"}
-                      onChange={(_value: string) =>
-                        setFilter({ ...filters, Status: _value })
-                      }
-                      initialSelectRequired={false}
-                    />
-                  </div>
+              {props.notfications && props.notfications.length > 0 &&
+                <form className="filter-box">
+                  <div className="row headRow align-items-center justify-content-between">
+                    <div className="col-md-5">
+                      <FilterDropDownControl
+                        label={local_Strings.NotificationsListingFilter}
+                        options={statusFilterOptions}
+                        value={filters.Status || "All Messages"}
+                        onChange={(_value: string) =>
+                          setFilter({ ...filters, Status: _value })
+                        }
+                        initialSelectRequired={false}
+                      />
+                    </div>
 
-                  <div className="px-3">
-                    <FilterButtonControl
-                      clearFilter={() => {
-                        setFilter({
-                          filterApplied: false,
-                          Status: "All Messages",
-                        });
-                        setFilteredData(props.notfications);
-                        setOffset(rowLimit);
-                      }}
-                      applyFilter={() => {
-                        setFilter({ ...filters, filterApplied: true });
-                        const _filteredData = helper.filterReadableList(
-                          props.notfications,
-                          filters
-                        );
-                        setFilteredData(_filteredData);
-                      }}
-                      showClearFilter={filters.filterApplied}
-                    />
+                    <div className="px-3">
+                      <FilterButtonControl
+                        clearFilter={() => {
+                          setFilter({
+                            filterApplied: false,
+                            Status: "All Messages",
+                          });
+                          setFilteredData(props.notfications);
+                          setOffset(rowLimit);
+                        }}
+                        applyFilter={() => {
+                          setFilter({ ...filters, filterApplied: true });
+                          const _filteredData = helper.filterReadableList(
+                            props.notfications,
+                            filters
+                          );
+                          setFilteredData(_filteredData);
+                        }}
+                        showClearFilter={filters.filterApplied}
+                      />
+                    </div>
                   </div>
-                </div>
-              </form>
-
+                </form>
+              }
               <div className="box modal-box py-0 mb-0 scrollabel-modal-box">
                 <ul className="box-list" id="dataList">
                   {filteredData &&
@@ -175,7 +176,7 @@ function NotficationsListing(props: iNotficationsListing) {
                     ? filteredData
                       .slice(0, offset)
                       .map((item, index) => renderItem(item, index))
-                    : NoResult(local_Strings.NoDataToShow)}
+                    : NoResult(local_Strings.OfferList_NoData)}
                 </ul>
               </div>
               <FilterMoreButtonControl

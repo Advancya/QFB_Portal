@@ -95,18 +95,20 @@ function OffersForm(props: DetailsProps) {
       await AddNewOffer(item).catch((e: any) => console.log(e));
     });
 
-    setLoading(false);
+    setTimeout(() => {
+      setLoading(false);
 
-    Swal.fire({
-      position: "top-end",
-      icon: "success",
-      title: local_Strings.OfferSavedMessage,
-      showConfirmButton: false,
-      timer: Constant.AlertTimeout,
-    });
-    props.refreshList();
-    props.OnHide();
-
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: local_Strings.OfferSavedMessage,
+        showConfirmButton: false,
+        timer: Constant.AlertTimeout,
+      });
+      props.refreshList();
+      props.OnHide();
+    }, 60000);
+    
   };
 
   const updateRecord = async (values: any) => {

@@ -67,19 +67,17 @@ function Notfications() {
           className={notfications && notfications.filter((i: any) => !i.isRead).length > 0 ? "fa fa-bell unread" : "fa fa-bell"}
         />
       </a>
-      {notfications &&
-        notfications.length > 0 &&
-        <NotficationsListing
-          showNotficationsListingModal={showNotficationsListing}
-          hideNotficationsListingModal={() => setShowNotficationsListing(false)}
-          showNotficationDetailModal={(detail: INotificationDetail) => {
-            setShowNotficationsListing(false);
-            setNotficationDetail(true);
-            setMessageDetail(detail);
-          }}
-          notfications={notfications}
-          reloading={isLoading}
-        />}
+      <NotficationsListing
+        showNotficationsListingModal={showNotficationsListing}
+        hideNotficationsListingModal={() => setShowNotficationsListing(false)}
+        showNotficationDetailModal={(detail: INotificationDetail) => {
+          setShowNotficationsListing(false);
+          setNotficationDetail(true);
+          setMessageDetail(detail);
+        }}
+        notfications={notfications}
+        reloading={isLoading}
+      />
       {notfication && notfication.id > 0 && (
         <NotficationsDetails
           item={notfication}

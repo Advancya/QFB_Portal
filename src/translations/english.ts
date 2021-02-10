@@ -545,7 +545,7 @@ const en = {
 
   NotificationsListingTitle: "Notifications",
   NotificationsDetailsTitle: "Notifications Details",
-  NotificationsListingFilter: "Filter Notifications",
+  NotificationsListingFilter: "Notification Type",
   ChangePassword_CurrentRequiredMsg: "Current password is required",
   ChangePassword_RequiredMsg: "Password is required",
   ChangePassword_InvalidationMsg:
@@ -579,7 +579,7 @@ const en = {
   ManagementLandingAssetsTitle: "Assets",
   ManagementLandingLiabilitiesTitle: "Liabilities",
   NotificationListingTitle: "Notifications",
-  NotificationFilter_All: "All",
+  NotificationFilter_All: "All Notifications",
   RequestListingFilterStatusOption1: "Awaiting Review",
   RequestListingFilterStatusOption2: "Closed",
   RequestListingFilterStatusOption3: "In Progress",

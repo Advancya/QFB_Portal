@@ -134,9 +134,7 @@ function TransactionsListing(props: iTransactionsListing) {
 
   const fetchTransactionType = async () => {
     const data = await GetTransactionTypes();
-    let result: iDDL[] = [
-      { label: local_Strings.TransactionScreenFilter_None, value: "0" },
-    ];
+    let result: iDDL[] = [];
     for (let index = 0; index < data.length; index++) {
       const element = data[index];
       result.push({
@@ -148,10 +146,9 @@ function TransactionsListing(props: iTransactionsListing) {
   };
 
   const statusFilterOptions: iDDL[] = [
-    { label: local_Strings.TransactionScreenFilter_None, value: "0" },
     {
       label: local_Strings.RequestListingFilterStatusOption1,
-      value: "بانتظار المراجعة",
+      value: "Awaiting Review",
     },
     { label: local_Strings.RequestListingFilterStatusOption2, value: "Closed" },
     {
@@ -259,7 +256,7 @@ function TransactionsListing(props: iTransactionsListing) {
                         filters
                       );
                       setFilteredData(_filteredData);
-                      setFilter(filters);
+                      setFilter({ ...filters, filterApplied: true });
                     }}
                     showClearFilter={filters.filterApplied}
                   />
@@ -286,7 +283,7 @@ function TransactionsListing(props: iTransactionsListing) {
                 ? filteredData
                   .slice(0, offset)
                   .map((item, index) => renderItem(item, index))
-                : NoResult(local_Strings.NoDataToShow)}
+                : NoResult(local_Strings.OfferList_NoData)}
             </ul>
           </div>
           <FilterMoreButtonControl showMore={props.transactions && filteredData && props.transactions.length > rowLimit &&
