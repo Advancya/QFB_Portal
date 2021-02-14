@@ -109,8 +109,8 @@ function FacilitiesHistoricalPayment(props: iFacilitiesHistoricalPayment) {
           <FilterCommonControl2
             CheckBoxTitle={local_Strings.CashDetailsFilterType}
             CheckBoxLabels={[
-              local_Strings.HistoricalPayments_PastDueSettlement,
-              local_Strings.HistoricalPayments_SettlemenOfPayment,
+              { label: local_Strings.HistoricalPayments_PastDueSettlement, value: "Past Due Settlement" },
+              { label: local_Strings.HistoricalPayments_SettlemenOfPayment, value: "Payment of Installment" },
             ]}
             clearFilter={() => {
               // const _data = data.filter(

@@ -12,7 +12,6 @@ function ToolBarRight() {
   const history = useHistory();
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
-  const [showContactUsForm, setShowContactUsForm] = useState(false);
 
   return (
     <div className="col-md-9">
@@ -23,15 +22,8 @@ function ToolBarRight() {
           Offers Subscriptions
         </Link> */}
         <SettingsAnchor/>
-        <Faqs/>
-        <a href="#" onClick={() => setShowContactUsForm(true)}>
-          {local_Strings.topBarRightItem4}
-        </a>
-      </div>
-      <ContactUsForm
-        showContactUsFormModal={showContactUsForm}
-        hideContactUsFormModal={() => setShowContactUsForm(false)}
-      />
+        <Faqs/>        
+      </div>      
     </div>
   );
 }

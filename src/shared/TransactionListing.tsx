@@ -64,7 +64,7 @@ const TransactionListing = (props: ITransactionListingProps) => {
               !!item.bookingDate ? item.bookingDate : item.installmentDate
             ).format("DD/MM/YYYY")}{" "}
           </td>
-          <td colSpan={2} className={(item.amount || item.transaction_Amount) < 0 ? "color-red" : ""}>
+          <td colSpan={2} className={props.showBalanceField && (item.amount || item.transaction_Amount) < 0 ? "color-red" : ""}>
             {Number(item.amount || item.transaction_Amount) < 0
               ? `(${helper.ConvertToQfbNumberFormatWithFraction(
                 item.amount || item.transaction_Amount

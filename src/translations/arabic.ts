@@ -146,6 +146,7 @@ const ar = {
   WelcomeScreenEmail: "البريد",
   WelcomeScreenCallMeBackLabel: "يرجى من مدير العلاقة التواصل معنا",
   WelcomeScreenRMNameLabel: "اسم مدير العلاقة",
+  RmLandingScreenLabel: "مرحبا",
   WelcomeScreenRMPhoneLabel: "رقم المكتب",
   WelcomeScreenRMMobileLabel: "رقم الهاتف المحمول",
   WelcomeScreenRMEmailLabel: "البريد الإلكتروني",
@@ -161,7 +162,7 @@ const ar = {
   PortfolioLiabilitiesOption2: "الضمانات البنكيه",
   // PortfolioBG: require("../../assets/images/Intersection2Ar.png"),
   PortfolioCurrencyType: "ريال",
-  PortfolioTotalNetWorth: "اجمالي التسهيلات",
+  PortfolioTotalNetWorth: "إجمالي القيمة الصافية",
   DrawerContentHomeLabel: "الرئيسية",
   DrawerContentSwitchLangLabel: "English",
 
@@ -263,7 +264,7 @@ const ar = {
   HistoricalPayments_PastDueSettlement: "تسوية المتاخرات",
   HistoricalPayments_SettlemenOfPayment: "تسوية المدفوعات",
   OutstandingPayments_PastDueSettlement: "تسوية المتاخرات",
-  OutstandingPayments_SettlemenOfPayment: "تسوية المدفوعات",
+  OutstandingPayments_SettlemenOfPayment: "تسوية التسهيلات",
 
   DepositsAndReceivedProfit: "الودائع والأرباح المحصلة",
   ClickToViewTheAccumulatedProfitReceived:
@@ -422,7 +423,7 @@ const ar = {
   DocumentsDetailsTitle: "تفاصيل المستندات",
   DocumentsDetailsDownloadButton: "تحميل",
   DocumentTitleSample: "الوثيقة رقم واحد",
-  LiveHoldingTab: "الأصول الحية",
+  LiveHoldingTab: "الأصول الحالية",
   ExitediveHoldingTab: "الأصول المنتهية",
 
   RMLandingBankPositionsLabel: "طلبات العملاء",
@@ -437,6 +438,10 @@ const ar = {
 
   SearchText: "بحث",
   RMClientsRequestListingTitle: "طلب قائمة العملاء",
+  RMSampleAccount: "رقم تعريف مدير العلاقة | ",
+  CustomerSampleAccount: "رقم تعريف العميل | ",
+  RequestNumber: "رقم الطلب | ",
+  ManagementSampleAccount: "الادارة | ",
   RMSampleTitle: "كشف حساب",
   RMIsRegisterAccount: "مسجل",
   RMIsNotRegisterAccount: "غير مسجل",
@@ -545,7 +550,7 @@ const ar = {
   ChangePassword_CurrentRequiredMsg: "كلمة المرور الحالية مطلوبة",
   ChangePassword_RequiredMsg: "كلمة المرور مطلوبة",
   ChangePassword_InvalidationMsg:
-    "يجب أن تتكون كلمة المرور من 7 أحرف على الأقل وأن تتضمن رقمًا واحدًا على الأقل ورقمًا واحدًا وحرفًا كبيرًا",
+  "يجب أن تتكون كلمة المرور من 7 أحرف على الأقل وأن تتضمن رقمًا واحدًا على الأقل ورقمًا واحدًا وحرفًا كبيرًا وحرفاً مميزاً",
   ChangePassword_ConfirmRequiredMsg: "تأكيد كلمة المرور مطلوب",
   ChangePassword_MustMatchMsg: "الكلمة السريه يجب ان تتطابق",
 
@@ -599,11 +604,11 @@ const ar = {
   TotalCash: "مجموع المبالغ النقدية",
   TotalInvestments: "إجمالي الإستثمارات",
   TotalDeposits: "إجمالي الودائع",
-  TotalLoans: "إجمالي القروض",
+  TotalLoans: "إجمالي التسهيلات",
   BankGurantees: "الضمانات البنكية",
   Networth: "صافي القيمة",
   TotalAssets: "إجمالي الأصول",
-  TotalLiabilities: "اجمالي المطلوبات",
+  TotalLiabilities: "إجمالي المطلوبات",
   TotalBalances: "إجمالي الأرصدة",
   NetAverageRate: "متوسط ​​سعر الفائدة الصافي",
 
@@ -632,7 +637,7 @@ const ar = {
   NoConnectionAlertBody: "الرجاء التحقق من اتصال الانترنت الخاص بك",
   Login_ArabicNumberHint:
     "من فضلك استخدم الارقام باللغة الانجليزية لتتمكن من تسجيل الدخول",
-    SessionTimeOutMessage: "تم انتهاء وقت جلستك يرجى تسجيل الدخول مره أخرى",
+  SessionTimeOutMessage: "تم انتهاء وقت جلستك يرجى تسجيل الدخول مره أخرى",
 
   CorrespondentBank: "البنك المراسل",
   Location: "الموقع",
@@ -640,6 +645,9 @@ const ar = {
   IBAN: "رقم آيبان ",
   NostroAccountNumber: "رقم حساب نوسترو",
   SettingChangePasswordError: "من فضلك ادخل البيانات الصحيحة",
+  ManagemetSelectPeriod: "اختر فترة",
+  ChartProfitRecieved: "الارباح",
+  ChartDepositsAmount: "المبالغ",
   ProductsAndOffersAddNew: "اضافة جديد",
   ProductsAndOffersNameLabel: "Name ",
   ProductsAndOffersArNameLabel: "Arabic Name ",
@@ -714,8 +722,6 @@ const ar = {
   registerStep1Label4: "الهاتف المتحرك المسجل لدى QFB",
   registerStep2Label1: "أدخل كلمة المرور",
   registerStep2Label2: "تأكيد كلمة المرور",
-  registerStep2Label3:
-    "يجب ألا تقل كلمة المرور عن 7 أحرف وأن تشتمل على رقم واحد على الأقل وحرف كبير واحد.",
   registerStep3Label1: "أدخل OTP",
   registerStep3Label2: "إعادة إرسال OTP؟",
 
@@ -796,9 +802,6 @@ const ar = {
   AccessDeniedMsgTitle: "تم الرفض",
   AccessDeniedMessage: "ليس لديك إذن للوصول إلى هذا القسم.",
 
-  ChartProfitRecieved: "الارباح",
-  ChartDepositsAmount: "المبالغ",
-
   NoLiveHoldingsMesageDeposit: "لا توجد مقتنيات حية حتى الآن للإيداع",
   NoLiveHoldingsMesageInvestment: "لا توجد مقتنيات حية حتى الآن للاستثمار",
   NoClosedHoldingsMesageInvestment: "لا توجد ممتلكات مغلقة بعد للاستثمار",
@@ -807,28 +810,25 @@ const ar = {
   BreadcrumbLandingTitle: "الهبوط",
   BreadcrumbAdminTitle: "مشرف",
 
-  RMSampleAccount: "رقم تعريف مدير العلاقة | ",
-  CustomerSampleAccount: "رقم تعريف العميل | ",
-  ManagementSampleAccount: "الادارة | ",
   ChartDepositProfitRecieved: "الودائع والأرباح المحصلة",
   ChartDrillDownHint: "إضغط لعرض الأرباح المتراكمة المحصلة",
 
   ContactUs_Mobile_Format_Validation_Message:
     "رقم الهاتف المحمول (يحتوي علي كود الدولة, مثال 97412345678+)",
 
-    Signup_Autherization_Code: "رمز التفويض غير صحيح",
-    Signup_CIF_Message: "رقم تعريف العميل غير صحيح",
-    Signup_Email_Message: "البريد الإلكتروني غير صحيح",
-    Signup_Mobile_Number_Message: "الهاتف المحمول غير صحيح",
+  Signup_Autherization_Code: "رمز التفويض غير صحيح",
+  Signup_CIF_Message: "رقم تعريف العميل غير صحيح",
+  Signup_Email_Message: "البريد الإلكتروني غير صحيح",
+  Signup_Mobile_Number_Message: "الهاتف المحمول غير صحيح",
 
-    Transactions_Amount_Validation: "من فضلك ادخل ارقام فقط",
-    BeneficiaryInvalidAccountOrIban:
+  Transactions_Amount_Validation: "من فضلك ادخل ارقام فقط",
+  BeneficiaryInvalidAccountOrIban:
     "رقم حساب في بنك قطر الأول أو الأيبان غير صحيح",
   BeneficiaryInvalidIbanNumber: "رقم حساب في بنك قطر الأول أو الأيبان غير صحيح",
   BeneficiaryInvalidSwiftCode: "رقم السويفت غير صحيح",
 
-  NoDepositsHoldingsFound: "لم يتم العثور على ودائع القابضة",
-  NoInvestmentsHoldingsFound: "لم يتم العثور على استثمارات القابضة",
+  NoDepositsHoldingsFound: "لم يتم العثور على ودائع",
+  NoInvestmentsHoldingsFound: "لم يتم العثور على أي استثمارات",
   InvalidEmail: "من فضلك أدخل بريد أليكترونى صحيح",
 
 
@@ -838,9 +838,8 @@ const ar = {
 
   MobileNumberLengthError: "يجب ألا يقل رقم الهاتف المحمول عن 10 أحرف",
 
-  RequestNumber: "رقم الطلب | ",
   SendButtonText: "Send",
-  AdminLandingTitle: "مرحبًا ، مسؤول البوابة",  
+  AdminLandingTitle: "مرحبًا ، مسؤول البوابة",
   AmountExceedBalance: "المبلغ أكبر من رصيدك",
   EarningTillDate: "الأرباح حتى تاريخه",
   MaxSizeAllowed: "الحجم الأقصي للملف المسموح بتحميله 2.5 ميجابايت",

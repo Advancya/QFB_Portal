@@ -9752,6 +9752,11 @@ react-datepicker@^3.3.0:
     react-onclickoutside "^6.9.0"
     react-popper "^1.3.4"
 
+react-detect-offline@^2.4.1:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/react-detect-offline/-/react-detect-offline-2.4.1.tgz#c6dfde64de1645742fc30b19e7ae09cd2cd357e3"
+  integrity sha512-Gg5pZrDvgSqVw8fOBo387zl2Q2+l0yYgELu9vowv6c/9AtjqWWGcnne4qbw6qDRP2vIiLcTNJh/LbTdBMq226Q==
+
 react-dev-utils@^11.0.1:
   version "11.0.1"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-11.0.1.tgz#30106c2055acfd6b047d2dc478a85c356e66fe45"

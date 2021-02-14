@@ -145,6 +145,9 @@ function RMRequestListing(props: iRMRequestListing) {
               ? item["requestSubjectAr"] || ""
               : item["requestSubject"] || ""}
           </h4>
+          <h4>
+            {local_Strings.RequestNumber + item.id}
+          </h4>
         </div>
         <div className="col-sm-4 text-sm-right">
           <span className="status-badge ">

@@ -27,6 +27,7 @@ function Footer() {
           <AuthTerms
             showAuthTermsModal={showAuthTerms}
             hideAuthTermsModal={() => setShowAuthTerms(false)}
+            showButtons={false}
           /> :
           <AnnonymousTerms
             showAnnonymousTermsModal={showAnnonymousTerms}

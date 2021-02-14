@@ -70,6 +70,9 @@ function TransactionsDetails(props: iTransactionsDetails) {
                       ? props.item.requestSubjectAR
                       : props.item.requestSubject}
                   </h4>
+                  <h4>
+                  {local_Strings.RequestNumber + props.item.id}
+                  </h4>
                 </div>
                 <div className="col-sm-4 text-sm-right">
                   <span className="status-badge">

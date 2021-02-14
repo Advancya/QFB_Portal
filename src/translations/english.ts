@@ -264,7 +264,7 @@ const en = {
   CashDetails_Filter_Credit: "Credit",
   HistoricalPayments_PastDueSettlement: "Past Due Settlement",
   HistoricalPayments_SettlemenOfPayment: "Settlement of Payment",
-  OutstandingPayments_PastDueSettlement: "Past Due Payment",
+  OutstandingPayments_PastDueSettlement: "Past Due",
   OutstandingPayments_SettlemenOfPayment: "Payment of Facility",
 
   DepositsAndReceivedProfit: "Deposits and Received Profit",
@@ -336,7 +336,7 @@ const en = {
   RequestListingFilterDate: "Date",
   RequestListingFilterStatus: "Request Status",
   RequestListingFilterType: "Request Type",
-  RequestListingFilterSubmitButton: "Apply",
+  RequestListingFilterSubmitButton: "SUBMIT REQUEST TO RM",
   RequestListingFilterSelect: "Select",
   RequestDetailsTitle: "Request Details",
   NewRequestTitle: "New Request",
@@ -719,8 +719,6 @@ const en = {
   registerStep1Label4: "QFB registerd Mobile",
   registerStep2Label1: "Enter Password",
   registerStep2Label2: "Confirm Password",
-  registerStep2Label3:
-    "Password must be minimum 7 characters & include at least 1 number and capital letter and should include at least 1 special character",
   registerStep3Label1: "Enter OTP",
   registerStep3Label2: "Resend OTP ?",
 
@@ -849,6 +847,7 @@ const en = {
   EarningTillDate: "Earnings Todate",
   MaxSizeAllowed: "Maximum allowed file size is 2.5 MB",
   ContactUs_Name_Format_Validation_Message: "Name Should be only letters",
+  
 };
 
 export default en;

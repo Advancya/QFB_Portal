@@ -111,8 +111,8 @@ function InvestmentsBuyAndSell(props: iInvestmentsBuyAndSell) {
           <FilterCommonControl2
             CheckBoxTitle={local_Strings.CashDetailsFilterType}
             CheckBoxLabels={[
-              local_Strings.BuyAndSellTransactions_Status_Buy,
-              local_Strings.BuyAndSellTransactions_Status_Sell,
+              { label: local_Strings.BuyAndSellTransactions_Status_Buy, value: "Buy" },
+              { label: local_Strings.BuyAndSellTransactions_Status_Sell, value: "Sell" },
             ]}
             clearFilter={() => {
               // const _data = data.filter(
@@ -122,7 +122,7 @@ function InvestmentsBuyAndSell(props: iInvestmentsBuyAndSell) {
               setFilteredData(data);
             }}
             applyFilter={(filters: ICommonFilter) => {
-              
+
               const _filteredData = helper.filterTransactions(data, filters);
               setFilteredData(_filteredData);
             }}

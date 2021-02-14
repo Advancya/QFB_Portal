@@ -13,13 +13,18 @@ import {
   IInvestment
 } from "../../../Helpers/publicInterfaces";
 import * as helper from "../../../Helpers/helper";
-import { GetInvestmentsReceivedProfit } from "../../../services/cmsService";
+import { GetInvestmentsReceivedProfit, GetInvestmentsReceivedProfitTotal } from "../../../services/cmsService";
 import Constant from "../../../constants/defaultData";
 import LoadingOverlay from "react-loading-overlay";
 import PuffLoader from "react-spinners/PuffLoader";
 import ReactExport from "react-export-excel";
 import { PortfolioContext } from "../../../pages/Homepage";
 import xIcon from "../../../images/x-icon.svg";
+import axios from "axios";
+interface IReceivedProfit {
+  totalProfitRecoeved: string;
+  transactionAmount: number;
+}
 
 interface iInvestmentsRecievedProfit {
   showInvestmentsRecievedProfitModal: boolean;
@@ -37,6 +42,10 @@ function InvestmentsRecievedProfit(props: iInvestmentsRecievedProfit) {
   const [filteredData, setFilteredData] = useState<ITransaction[]>([
     emptyTransaction,
   ]);
+  const [totalData, setTotalData] = useState<IReceivedProfit>({
+    totalProfitRecoeved: "",
+    transactionAmount: 0,
+  });
   const ExcelFile = ReactExport.ExcelFile;
   const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
   const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
@@ -47,22 +56,33 @@ function InvestmentsRecievedProfit(props: iInvestmentsRecievedProfit) {
     const initialLoadMethod = async () => {
 
       setLoading(true);
-      GetInvestmentsReceivedProfit(
+      const requestOne = GetInvestmentsReceivedProfitTotal(
         currentContext.selectedCIF,
         props.investment.subAssetID
-      )
-        .then((responseData: ITransaction[]) => {
-          if (isMounted && responseData && responseData.length > 0) {
-            // const _data = responseData.filter(
-            //   (d) =>
-            //     new Date(d.bookingDate) > moment().add(-3, "months").toDate()
-            // );
-            setData(responseData);
-            setFilteredData(responseData);
+      );
+      const requestTwo = GetInvestmentsReceivedProfit(
+        currentContext.selectedCIF,
+        props.investment.subAssetID
+      );
+
+      axios
+        .all([requestOne, requestTwo])
+        .then((responseData: any) => {
+          if (responseData && responseData.length > 0 && isMounted) {
+            try {
+              if (responseData[0].length > 0)
+                setTotalData(responseData[0][0] as IReceivedProfit);
+              // const _data = (responseData[1] as ITransaction[]).filter(
+              //   (d) =>
+              //     new Date(d.bookingDate) > moment().add(-3, "months").toDate()
+              // );
+              setData(responseData[1] as ITransaction[]);
+              setFilteredData(responseData[1]);
+            } catch (error) { }
           }
         })
         .catch((e: any) => console.log(e))
-        .finally(() => setLoading(false));
+        .finally(() => setTimeout(() => setLoading(false), 555));
     };
 
     if (!!currentContext.selectedCIF && props.showInvestmentsRecievedProfitModal) {
@@ -134,6 +154,12 @@ function InvestmentsRecievedProfit(props: iInvestmentsRecievedProfit) {
               props.investment.secDesciption +
               " | " +
               local_Strings.RecievedProfit +
+              " " +
+              helper.ConvertToQfbNumberFormatWithFraction(
+                !!totalData.totalProfitRecoeved
+                  ? totalData.totalProfitRecoeved
+                  : "0"
+              ) +
               " (" +
               props.investment.securityCCY +
               ")"}

@@ -108,7 +108,7 @@ function OffersForm(props: DetailsProps) {
       props.refreshList();
       props.OnHide();
     }, 60000);
-    
+
   };
 
   const updateRecord = async (values: any) => {
@@ -117,6 +117,7 @@ function OffersForm(props: DetailsProps) {
     values.selectedOfferDetails = helper.appendAnchorToImageTag(values.selectedOfferDetails);
     values.selectedOfferDetailsAr = helper.appendAnchorToImageTag(values.selectedOfferDetailsAr);
 
+    delete values["selectedCIFs"];
     const x = await UpdateOfferDetail(values);
     if (x) {
       Swal.fire({
@@ -240,7 +241,7 @@ function OffersForm(props: DetailsProps) {
           initialValues={data}
           validationSchema={formValidationSchema}
           onSubmit={(values) =>
-            values.id > 0 ? updateRecord(values) : submitTheRecord(values)
+            values.id > 0 ? updateRecord({ ...values }) : submitTheRecord({ ...values })
           }
           enableReinitialize={true}
           validateOnChange={props.editable}

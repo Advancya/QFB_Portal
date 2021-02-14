@@ -65,7 +65,7 @@ function FacilitiesListing(props: iFacilitiesListing) {
       >
         <div className="col-sm-9 col-lg-10 mb-2">
           <h3 className="text-capitalize color-gold text-16">
-            {item.ldReference || ""}
+            {local_Strings.LoanNo + " | " + item.ldReference}
           </h3>
           <h3 className="text-18">
             {helper.ConvertToQfbNumberFormatWithFraction(item.productBalance)}
@@ -139,8 +139,8 @@ function FacilitiesListing(props: iFacilitiesListing) {
             <ul className="box-list" id="dataList">
               {data && data.length > 0 && !!data[0].ldReference
                 ? data
-                    .slice(0, offset)
-                    .map((item, index) => renderItem(item, index))
+                  .slice(0, offset)
+                  .map((item, index) => renderItem(item, index))
                 : NoResult(local_Strings.NoDataToShow)}
             </ul>
           </div>

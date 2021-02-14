@@ -117,6 +117,9 @@ function TransactionsListing(props: iTransactionsListing) {
               (item.currency || currentContext.userSettings.currency) +
               ")"}
           </h4>
+          <h4>
+            {local_Strings.RequestNumber + item.id}
+          </h4>
         </div>
         <div className="col-8 col-sm-3 text-sm-right">
           <span className="status-badge ">

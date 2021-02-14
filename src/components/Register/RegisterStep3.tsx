@@ -177,8 +177,7 @@ function RegisterStep3(props: iRegisterStep3) {
                               title: local_Strings.OTPSentMessage,
                               showConfirmButton: false,
                               timer: Constant.AlertTimeout,
-                            });
-                            props.hideRegisterStep3Modal();
+                            });                            
                           } else {
                             Swal.fire({
                               position: "top-end",

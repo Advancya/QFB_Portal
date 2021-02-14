@@ -135,6 +135,14 @@ function InvestmentsListing(props: iInvestmentsListing) {
                       " " +
                       currentContext.userSettings.currency}
                   </h5>
+                  <br/>
+                  <br/>
+                  <h4>{local_Strings.EarningTillDate}</h4>
+                  <h5>
+                    {userPortfolio.totalInvProfit +
+                      " " +
+                      currentContext.userSettings.currency}
+                  </h5>
                 </div>
               </div>
             </div>
@@ -144,8 +152,8 @@ function InvestmentsListing(props: iInvestmentsListing) {
             <ul className="box-list" id="dataList">
               {data && data.length > 0 && !!data[0].subAssetID
                 ? data
-                    .slice(0, offset)
-                    .map((item, index) => renderItem(item, index))
+                  .slice(0, offset)
+                  .map((item, index) => renderItem(item, index))
                 : NoResult(local_Strings.InvestmentListing_NoData)}
             </ul>
           </div>

@@ -107,11 +107,12 @@ async function GetBeneficiariesByCif(cif: string) {
 async function ValidateBankIBAN(iban: string) {
   try {
 
-    //const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-    const result: any = await fetch(`https://api.iban.com/clients/api/v4/iban/?format=json&api_key=4c80e9b4389abe84b453d0c133f62ff9&iban=${iban}`)
-      .then(res => res.json())
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    
+    const result = await fetch(`https://api.iban.com/clients/api/v4/iban/?format=json&api_key=4c80e9b4389abe84b453d0c133f62ff9&iban=${iban}`)
+      .then(res => res.json())      
       .catch((e: any) => console.log(e));
-      
+    
     return result["bank_data"];
 
   } catch (err) {
@@ -122,23 +123,9 @@ async function ValidateBankIBAN(iban: string) {
 
 async function ValidateBankSwift(swift: string) {
   try {
-
-    // const myInit: RequestInit = {
-    //   method: 'HEAD',
-    //   mode: 'no-cors',
-    //   redirect: 'follow'
-    // };
-
-    // fetch(`https://api.iban.com/clients/api/swiftv1/simple.php?format=json&api_key=4c80e9b4389abe84b453d0c133f62ff9&bic=${swift}`, myInit)
-    //   //.then(response => response.json())
-    //   .then((result: any) => {
-    //     console.log(result.data);
-    //     return result.data;
-    //   })
-    //   .catch(error => console.log('error', error));
-
-    //const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-    const result: any = await fetch(`https://api.iban.com/clients/api/swiftv1/simple.php?format=json&api_key=4c80e9b4389abe84b453d0c133f62ff9&bic=${swift}`)
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    
+    const result = await fetch(`https://api.iban.com/clients/api/swiftv1/simple.php?format=json&api_key=4c80e9b4389abe84b453d0c133f62ff9&bic=${swift}`)
       .then(res => res.json())
       .catch((e: any) => console.log(e));
 
@@ -232,6 +219,6 @@ export {
   DeleteDeneficiary,
   UpdateBeneficiary,
   RmTranasctionUpdateStatus,
-  RmOfferUpdateStatus,  
+  RmOfferUpdateStatus,
   GetBeneficiariesByID,
 };

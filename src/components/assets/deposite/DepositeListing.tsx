@@ -132,6 +132,14 @@ function DepositeListing(props: iDepositeListing) {
                       " " +
                       currentContext.userSettings.currency}
                   </h5>
+                  <br />
+                  <br />
+                  <h4>{local_Strings.EarningTillDate}</h4>
+                  <h5>
+                    {userPortfolio.totalDepProfit +
+                      " " +
+                      currentContext.userSettings.currency}
+                  </h5>
                 </div>
               </div>
             </div>
@@ -141,8 +149,8 @@ function DepositeListing(props: iDepositeListing) {
             <ul className="box-list" id="dataList">
               {data && data.length > 0 && !!data[0].contractNumber
                 ? data
-                    .slice(0, offset)
-                    .map((item, index) => renderItem(item, index))
+                  .slice(0, offset)
+                  .map((item, index) => renderItem(item, index))
                 : NoResult(local_Strings.DepositListing_NoData)}
             </ul>
           </div>

@@ -182,7 +182,7 @@ export const filterTransactions = (
             ? (String(t.transactionType).toLowerCase() === o.label.toLowerCase() ||
               String(t.transacitonType).toLowerCase() === o.label.toLowerCase())
             : !!t.transaction_Amount
-              ? o.label === local_Strings.CashDetails_Filter_Debit
+              ? o.label.toLowerCase() === "debit"
                 ? t.transaction_Amount < 0
                 : t.transaction_Amount > 0
               : String(t.trxDescirption).toLowerCase() === o.label.toLowerCase()
@@ -498,7 +498,7 @@ export const transformingTransactionDetail = (
 export const prepareDepositHoldings1stDrill = (chartData: any, language: string) => {
   local_Strings.setLanguage(moment.locale());
 
-  let sdata = [    
+  let sdata = [
     {
       name: local_Strings.ChartProfitRecieved,
       y: chartData[0].totalProfitRecieved || chartData[0].totalClosedProfit,
@@ -986,6 +986,12 @@ export const prepareManagementData = (
           format: "<b>{point.amount}{point.symbol}</b>",
         },
         showInLegend: legend,
+        events: {
+          legendItemClick: function (e) {
+            e.preventDefault();
+            return false
+          }
+        }
       },
     },
     series: series,

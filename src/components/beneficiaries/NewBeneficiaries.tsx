@@ -52,12 +52,14 @@ function NewBeneficiary(props: iNewBeneficiary) {
   const [currencies, setCurrencies] = useState<iDDL[]>([]);
   const [countries, setCountries] = useState<iDDL[]>([]);
   const [banks, setBanks] = useState<iDDL[]>([]);
-  const [bankSwift, setBankSwift] = useState("");
   const [transactionTypeId, setTransactionTypeId] = useState(
     props.beneficiary ? props.beneficiary.typeId : ""
   );
   const [isValidIban, setIsValidIban] = useState(true);
   const [isValidSwift, setIsValidSwift] = React.useState(true);
+  const [isValidIntermediarySwift, setIsValidIntermediarySwift] = React.useState(true);
+  const [isValidOptionalIban, setIsValidOptionalIban] = useState(true);
+
   const initialValuesWithin: iBeneficiary = {
     id: 0,
     cif: currentContext.selectedCIF,
@@ -256,6 +258,14 @@ function NewBeneficiary(props: iNewBeneficiary) {
     if (!props.beneficiary && props.showNewBeneficiaryModal) {
       setTransactionTypeId("");
     }
+
+    if (!props.showNewBeneficiaryModal) {
+      setIsValidIban(true);
+      setIsValidSwift(true);
+      setIsValidIntermediarySwift(true);
+      setIsValidOptionalIban(true);
+    }
+
   }, [props.showNewBeneficiaryModal]);
 
   useEffect(() => {
@@ -337,6 +347,10 @@ function NewBeneficiary(props: iNewBeneficiary) {
                       onChange={(e: any) => {
                         setTransactionTypeId(e.target.value);
                         setIsValidIban(true);
+                        setIsValidSwift(true);
+                        setIsValidIntermediarySwift(true);
+                        setIsValidOptionalIban(true);
+
                         if (
                           formikRef_WitihinQFB &&
                           formikRef_WitihinQFB.current
@@ -515,7 +529,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                       type="submit"
                       onClick={(e) => {
                         validateForm(values);
-                        if (isValid) {
+                        if (isValid && isValidSwift && isValidIban && isValidIntermediarySwift && isValidOptionalIban) {
                           handleSubmit();
                         } else {
                           touched.beneficiaryId = true;
@@ -536,13 +550,13 @@ function NewBeneficiary(props: iNewBeneficiary) {
                       {local_Strings.BeneficiarySaveButton}
                     </button>
                     <button
-                        id="applyReqBtn"
-                        className="btn btn-primary"
-                        type="button"
-                        onClick={(e) => props.backBeneficiaryDetailsModal()}
-                      >
-                        {local_Strings.BeneficiaryCancelButton}
-                      </button>
+                      id="applyReqBtn"
+                      className="btn btn-primary"
+                      type="button"
+                      onClick={(e) => props.backBeneficiaryDetailsModal()}
+                    >
+                      {local_Strings.BeneficiaryCancelButton}
+                    </button>
                   </div>
                 </div>
               )}
@@ -752,7 +766,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                       type="submit"
                       onClick={(e) => {
                         validateForm(values);
-                        if (isValid) {
+                        if (isValid && isValidSwift && isValidIban && isValidIntermediarySwift && isValidOptionalIban) {
                           handleSubmit();
                         } else {
                           touched.beneficiaryId = true;
@@ -883,14 +897,14 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           value={values.beneficiarySwiftCode || ""}
                           onChange={(e) => setFieldValue("beneficiarySwiftCode", e.target.value, true)}
                           onBlur={async () => {
-                            
+
                             if (!!values.beneficiarySwiftCode) {
                               setLoading(true);
 
                               const result = await ValidateBankSwift(
                                 values.beneficiarySwiftCode!
                               );
-                              if (result && result.bicdata) {
+                              if (result && result["bicdata"]) {
                                 setIsValidSwift(true);
                                 setFieldValue(
                                   "beneficiaryBank",
@@ -1033,20 +1047,20 @@ function NewBeneficiary(props: iNewBeneficiary) {
                                 values.beneficiaryIban!
                               );
                               if (result && !!result.bic) {
-                                setIsValidIban(true);
+                                setIsValidOptionalIban(true);
                               } else {
-                                setIsValidIban(false);
+                                setIsValidOptionalIban(false);
                               }
                               setLoading(false);
                             } else {
                               touched.beneficiaryIban = true;
-                              setIsValidIban(true);
+                              setIsValidOptionalIban(true);
                             }
                             handleBlur("beneficiaryIban");
                           }}
                           onChange={handleChange("beneficiaryIban")}
                         />
-                        {touched.beneficiaryIban && !isValidIban &&
+                        {!!values.beneficiaryIban && !isValidOptionalIban &&
                           InvalidFieldError(
                             local_Strings.BeneficiaryInvalidIbanNumber
                           )}
@@ -1078,25 +1092,33 @@ function NewBeneficiary(props: iNewBeneficiary) {
                           placeholder=""
                           value={values.intermediaryBankSwiftCode || ""}
                           onBlur={async () => {
-                            if (!!values.beneficiaryIban) {
+                            if (!!values.intermediaryBankSwiftCode) {
                               setLoading(true);
 
                               const result = await ValidateBankSwift(
                                 values.intermediaryBankSwiftCode!
                               );
-                              if (result && !!result.bicdata) {
+                              if (result && !!result["bicdata"]) {
                                 setFieldValue(
                                   "intermediaryBankName",
                                   result["bicdata"][0]["institution_name"]
                                 );
+                                setIsValidIntermediarySwift(true);
+                              } else {
+                                setIsValidIntermediarySwift(false);
                               }
 
                               setLoading(false);
+                            } else {
+                              setIsValidIntermediarySwift(true);
                             }
                             handleBlur("intermediaryBankSwiftCode");
                           }}
                           onChange={handleChange("intermediaryBankSwiftCode")}
                         />
+                        {!isValidIntermediarySwift &&
+                          !!values.intermediaryBankSwiftCode &&
+                          InvalidFieldError(local_Strings.BeneficiaryInvalidSwiftCode)}
                       </div>
                       <div className="col-lg-6 form-group">
                         <label>
@@ -1133,7 +1155,7 @@ function NewBeneficiary(props: iNewBeneficiary) {
                       type="submit"
                       onClick={(e) => {
                         validateForm(values);
-                        if (isValid) {
+                        if (isValid && isValidSwift && isValidIban && isValidIntermediarySwift && isValidOptionalIban) {
                           handleSubmit();
                         } else {
                           touched.beneficiaryId = true;

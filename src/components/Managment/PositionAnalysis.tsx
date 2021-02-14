@@ -56,10 +56,20 @@ const PositionAnalysis = (props: iPositionAnalysis) => {
   const [chartData, setChartData] = useState(null);
   const [isLoading, setLoading] = useState(false);
 
+  // useEffect(() => {
+  //   getCustomerInvestmentData();
+  //   setCard("0");
+  // }, []);
+
   useEffect(() => {
-    getCustomerInvestmentData();
-    setCard("0");
-  }, []);
+    if (props.showPositionAnalysisModal) {
+      setCard("99");
+      getCustomerInvestmentData();
+      setCard("0");
+    } else {
+      setCard("-1");
+    }
+  }, [currentContext.language, props.showPositionAnalysisModal]);
 
   const getCustomerInvestmentData = () => {
     if (activeCard !== "0") {
@@ -207,7 +217,7 @@ const PositionAnalysis = (props: iPositionAnalysis) => {
             setCard("5");
           } else {
             setChartData(null);
-            setNoMMFundData(true);            
+            setNoMMFundData(true);
           }
         })
         .catch((e: any) => console.log(e))
@@ -365,7 +375,7 @@ const PositionAnalysis = (props: iPositionAnalysis) => {
                 </Card.Body>
               </Accordion.Collapse>
             </Card>
-            
+
             {/* SUKUK Balances */}
             <Card>
               <Card.Header>
@@ -386,7 +396,7 @@ const PositionAnalysis = (props: iPositionAnalysis) => {
                 </Card.Body>
               </Accordion.Collapse>
             </Card>
-            
+
             {/* Treasury Placements Balances */}
             <Card>
               <Card.Header>
@@ -407,7 +417,7 @@ const PositionAnalysis = (props: iPositionAnalysis) => {
                 </Card.Body>
               </Accordion.Collapse>
             </Card>
-            
+
             {/* Bank Cash Balances */}
             <Card>
               <Card.Header>
@@ -450,7 +460,7 @@ const PositionAnalysis = (props: iPositionAnalysis) => {
                 </Card.Body>
               </Accordion.Collapse>
             </Card>
-            
+
             {/* Past Dues PB and HC */}
             <Card>
               <Card.Header>
@@ -471,7 +481,7 @@ const PositionAnalysis = (props: iPositionAnalysis) => {
                 </Card.Body>
               </Accordion.Collapse>
             </Card>
-            
+
             {/* Customers Deposits and rates */}
             <Card>
               <Card.Header>
@@ -492,7 +502,7 @@ const PositionAnalysis = (props: iPositionAnalysis) => {
                 </Card.Body>
               </Accordion.Collapse>
             </Card>
-            
+
             {/* MM FUND Balances */}
             <Card>
               <Card.Header>
@@ -513,7 +523,7 @@ const PositionAnalysis = (props: iPositionAnalysis) => {
                 </Card.Body>
               </Accordion.Collapse>
             </Card>
-                        
+
           </Accordion>
         </div>
       </Modal.Body>

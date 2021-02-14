@@ -845,9 +845,17 @@ const SendNotificationsToCIFs = async (item: any) => {
 
 
 const SendNotificationsToAll = async (item: any) => {
+  
   try {
-    const result = await apiInstance.post(
-      `/api/Notifications/SendToAllWithLang`, item
+    const token = JSON.parse(localStorage.getItem(oidc.storage_key)) || "";
+    const httpClient = axios.create({
+      baseURL: defaultData.ApiBaseUrl,
+      timeout: 100000000000,
+      headers: { Authorization: `Bearer ${token["access_token"]}` }
+    });
+
+    const result = await httpClient.post(
+      `${defaultData.ApiBaseUrl}/api/Notifications/SendToAllWithLang`, item
     );
 
     return result.data;
@@ -1399,7 +1407,7 @@ async function DeletePasswordToken(_token: string) {
         },
       }
     );
-    
+
     return result.data === true ? true : false;
 
   } catch (err) {

@@ -113,8 +113,8 @@ function FacilitiesOutstandingPayment(props: iFacilitiesOutstandingPayment) {
           <FilterCommonControl2
             CheckBoxTitle={local_Strings.CashDetailsFilterType}
             CheckBoxLabels={[
-              local_Strings.OutstandingPayments_PastDueSettlement,
-              local_Strings.OutstandingPayments_SettlemenOfPayment,
+              { label: local_Strings.OutstandingPayments_PastDueSettlement, value: "Past Due Payment" },
+              { label: local_Strings.OutstandingPayments_SettlemenOfPayment, value: "Payment of Facility" },
             ]}
             clearFilter={() => {
               // const _data = data.filter(

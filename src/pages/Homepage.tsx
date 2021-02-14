@@ -40,6 +40,8 @@ export interface IUserPortfolio {
   networth: string;
   totalLiabilities: string;
   totalGuarantees: string;
+  totalInvProfit: string;
+  totalDepProfit: string;
 }
 
 const intialPortfolioData = {
@@ -53,6 +55,8 @@ const intialPortfolioData = {
   networth: "",
   totalLiabilities: "",
   totalGuarantees: "",
+  totalInvProfit: "",
+  totalDepProfit: "",
 };
 
 export const PortfolioContext = createContext<IUserPortfolio>(
@@ -350,6 +354,7 @@ const HomePage = () => {
           await AddAcceptTermsStatusForCustomer(currentContext.selectedCIF);
           setShowAuthTerms(false);
         }}
+        showButtons={true}
       />
     </div>
   );

@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import React, { useContext } from "react";
 import { localStrings as local_Strings } from "../translations/localStrings";
 import { AuthContext } from "../providers/AuthProvider";
 import Swal from "sweetalert2";
@@ -70,24 +70,39 @@ const ViewAttachment = (props: any) => {
           )}
         </h5>
       </div> */}
-      <div className="col-md-8">
+      <div className="col-md-6 pl-1">
+        <h5 className="text-break">
+          {props.fileName}
+          <br />
+          {fileSize && fileSize > 0 && (
+            <small>
+              {local_Strings.sizeLabel}: {fileSize} MB
+            </small>
+          )}
+        </h5>
+      </div>
+      <div className="col-md-6">
         <span className="download-link d-inline-block ">
-          <a
-            className="d-inline-block "
-            target="_blank"
-            href="#"
-            onClick={previewAttachment}
-          >
-            <i className="mx-1 fa fa-file color-white"></i>
-          </a>
-          <a
-            className="d-inline-block "
-            target="_self"
-            href="#"
-            onClick={downloadAttachment}
-          >
-            <i className="mx-1 fa fa-download color-white"></i>
-          </a>
+          {!props.showDelete &&
+            <React.Fragment>
+              <a
+                className="d-inline-block "
+                target="_blank"
+                href="#"
+                onClick={previewAttachment}
+              >
+                <i className="mx-1 fa fa-file color-white"></i>
+              </a>
+              <a
+                className="d-inline-block "
+                target="_self"
+                href="#"
+                onClick={downloadAttachment}
+              >
+                <i className="mx-1 fa fa-download color-white"></i>
+              </a>
+            </React.Fragment>
+          }
           {props.showDelete &&
             <a
               className="d-inline-block "
@@ -112,7 +127,7 @@ const ViewAttachment = (props: any) => {
             </a>
           }
         </span>
-      </div>      
+      </div>
     </div>
   ) : null;
 };

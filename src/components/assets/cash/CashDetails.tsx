@@ -123,8 +123,8 @@ function CashDetails(props: iCashDetails) {
           <FilterCommonControl2
             CheckBoxTitle={local_Strings.CashDetailsFilterType}
             CheckBoxLabels={[
-              local_Strings.CashDetails_Filter_Debit,
-              local_Strings.CashDetails_Filter_Credit,
+              { label: local_Strings.CashDetails_Filter_Debit, value: "Debit" },
+              { label: local_Strings.CashDetails_Filter_Credit, value: "Credit" },
             ]}
             clearFilter={() => {
               // const _data = data.filter(
@@ -134,7 +134,7 @@ function CashDetails(props: iCashDetails) {
               setFilteredData(data);
             }}
             applyFilter={(filters: ICommonFilter) => {
-              
+
               const _filteredData = helper.filterTransactions(data, filters);
               setFilteredData(_filteredData);
             }}

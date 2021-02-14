@@ -206,6 +206,7 @@ function RequestsDetails(props: iRequestsDetails) {
                       ? props.item.requestSubject
                       : props.item.requestSubjectAr}
                   </h4>
+                  {local_Strings.RequestNumber + props.item.id}
                 </div>
                 <div className="col-sm-4 text-sm-right">
                   {" "}

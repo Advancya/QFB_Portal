@@ -51,7 +51,7 @@ const RM = () => {
           for (let index = 0; index < requests.length; index++) {
             requestsItems.push({
               cif: requests[index]["cif"],
-              requestCreateDate: requests[index]["crequestCreateDate"],
+              requestCreateDate: requests[index]["requestCreateDate"],
               customerMobile: requests[index]["customerMobile"],
               customerName: requests[index]["customerName"],
               id: requests[index]["id"],
@@ -138,6 +138,11 @@ const RM = () => {
       .finally(() => setLoading(false));
   };
 
+  const combineRequests = [...requests, ...tranactions, ...offers].sort((a, b) =>
+    moment(b.requestCreateDate).toDate().getTime() -
+    moment(a.requestCreateDate).toDate().getTime()
+  );
+
   return (
     <div>
       {((requests && requests.length > 0)
@@ -163,11 +168,7 @@ const RM = () => {
             selectItemId(itemId);
           }}
           backRMRequestListingModal={() => setShowRMListing(false)}
-          requests={[...requests, ...tranactions, ...offers].sort((a, b) => (
-            moment(b.requestCreateDate).toDate().getTime() -
-            moment(a.requestCreateDate).toDate().getTime()
-          ))
-          }
+          requests={combineRequests}
           reloading={isLoading}
         />
       }

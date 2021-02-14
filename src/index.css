@@ -63,7 +63,8 @@
   color: #6B4F44;
 }
 
-.paging-block .page-link:hover, .paging-block .page-item.active .page-link {
+.paging-block .page-link:hover,
+.paging-block .page-item.active .page-link {
   color: #FFF;
   background-color: #6B4F44;
   border-radius: 0.25rem;
@@ -130,12 +131,14 @@
   font-weight: 500;
 }
 
-[dir="ltr"] input[type="email"],  [dir="ltr"] input.mobile-style{
-  text-align: start!important;
+[dir="ltr"] input[type="email"],
+[dir="ltr"] input.mobile-style {
+  text-align: start !important;
 }
 
-[dir="rtl"] input[type="email"], [dir="rtl"] input.mobile-style {
-  text-align: end!important;
+[dir="rtl"] input[type="email"],
+[dir="rtl"] input.mobile-style {
+  text-align: end !important;
   direction: ltr;
 }
 
@@ -144,5 +147,9 @@ figure.image img {
 }
 
 label.imageAttachmentHint.text-left {
-    text-transform: none;
+  text-transform: none;
+}
+
+div._loading_overlay_overlay {
+  position: fixed;
 }

@@ -64,6 +64,21 @@ function RegisterStep1(props: iRegisterStep1) {
       .matches(/^\+(?:[0-9]?){6,14}[0-​9]$/, local_Strings.ContactUs_Mobile_Format_Validation_Message),
   });
 
+  useEffect(() => {
+    if (!props.showRegisterStep1Modal) {
+      setField1ShowError(false);
+      setField2ShowError(false);
+      setField22ShowError(false);
+      setField3ShowError(false);
+      setField4ShowError(false);
+      setField2Editable(false);
+      setField3Editable(false);
+      setField4Editable(false);
+      setShowSubmitButton(false);
+    }
+
+  }, [props.showRegisterStep1Modal]);
+
   return (
     <div>
       <Modal
@@ -118,6 +133,8 @@ function RegisterStep1(props: iRegisterStep1) {
                 touched,
                 isValid,
                 validateForm,
+                setFieldValue,
+                setFieldTouched,
               }) => (
                 <div className="container-fluid">
                   <div className="row mb-3">
@@ -144,6 +161,8 @@ function RegisterStep1(props: iRegisterStep1) {
 
                           if (!!values.oneTimePassword) {
                             setLoading(true);
+                            setField2Editable(false);
+                            setField1ShowError(false);
                             const data = await ValidateOneTimeRegisterCode(
                               values.oneTimePassword
                             );
@@ -178,6 +197,9 @@ function RegisterStep1(props: iRegisterStep1) {
 
                           if (field2Editable) {
                             setLoading(true);
+                            setField3Editable(false);
+                            setField2ShowError(false);
+                            setField22ShowError(false);
                             const data = await ValidateOneTimeRegisterCodeWithCif(
                               values.oneTimePassword,
                               values.cif
@@ -205,14 +227,14 @@ function RegisterStep1(props: iRegisterStep1) {
                             handleBlur("cif");
                           }
                         }}
-                        readOnly={!field2Editable}
+                        disabled={!field2Editable}
                       />
                       {touched.cif &&
                         errors.cif &&
                         InvalidFieldError(errors.cif)}
                       {field2ShowError && !errors.cif
                         && InvalidFieldError(local_Strings.Signup_CIF_Message)}
-                      {field22ShowError && !errors.cif
+                      {field22ShowError && !errors.cif && !field2ShowError
                         && InvalidFieldError(local_Strings.SignUpStep1CIFRegisterBefore)}
                     </div>
 
@@ -225,9 +247,10 @@ function RegisterStep1(props: iRegisterStep1) {
                         value={values.email || ""}
                         onChange={handleChange("email")}
                         onBlur={async () => {
-
-                          if (field3Editable) {
+                          if (!errors.email) {
                             setLoading(true);
+                            setField4Editable(false);
+                            setField3ShowError(false);
                             const data = await getRegisterData(values.cif);
                             if (data.toString() !== "") {
                               if (
@@ -246,10 +269,13 @@ function RegisterStep1(props: iRegisterStep1) {
                               setShowSubmitButton(false);
                             }
                             setLoading(false);
-                            handleBlur("email");
+                          } else {
+                            setShowSubmitButton(false);
                           }
+                          handleBlur("email");
+                          setFieldTouched("email", true);
                         }}
-                        readOnly={!field3Editable}
+                        disabled={!field3Editable}
                       />
                       {touched.email &&
                         errors.email &&
@@ -267,8 +293,9 @@ function RegisterStep1(props: iRegisterStep1) {
                         onChange={handleChange("mobile")}
                         onBlur={async () => {
 
-                          if (field4Editable) {
+                          if (!errors.mobile) {
                             setLoading(true);
+                            setField4ShowError(false);
                             const data = await getRegisterData(values.cif);
                             if (data.toString() !== "") {
                               if (
@@ -286,11 +313,15 @@ function RegisterStep1(props: iRegisterStep1) {
                               setShowSubmitButton(false);
                             }
                             setLoading(false);
-                            handleBlur("mobile");
+                          } else {
+                            setShowSubmitButton(false);
                           }
+
+                          handleBlur("mobile");
+                          setFieldTouched("mobile", true);
                         }}
                         maxLength={16}
-                        readOnly={!field4Editable}
+                        disabled={!field4Editable}
                       />
                       {touched.mobile &&
                         errors.mobile &&

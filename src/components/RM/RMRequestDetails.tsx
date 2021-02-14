@@ -203,6 +203,7 @@ function RMRequestDetails(props: iRMDetails) {
                       ? currentRequest.requestSubject
                       : currentRequest.requestSubjectAr}
                   </h4>
+                  {local_Strings.RequestNumber + currentRequest.id}
                 </div>
                 <div className="col-sm-4 text-sm-right">
                   {" "}

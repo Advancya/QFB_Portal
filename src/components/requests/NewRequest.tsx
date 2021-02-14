@@ -678,8 +678,6 @@ function NewRequest(props: iNewRequest) {
               errors,
               touched,
               setFieldValue,
-              validateForm,
-              isValid,
             }) => (
               <React.Fragment>
                 <div className="py-2 px-3">
@@ -1034,7 +1032,7 @@ function NewRequest(props: iNewRequest) {
                                       .split(";")[0]
                                       .replace(/ /g, "");
                                     setFieldValue(fName,
-                                      e.currentTarget.value
+                                      e.currentTarget.value, true
                                     );
                                     handleBlur(fName);
                                   }}
@@ -1064,17 +1062,16 @@ function NewRequest(props: iNewRequest) {
                                     ? item["details"].split(";")[1]
                                     : item["details"].split(";")[0]}
                                 </Form.Label>
-                                <Form.Control
-                                  as="select"
-                                  onChange={async (e) => {
-                                    const fName = item["details"]
-                                      .split(";")[0]
-                                      .replace(/ /g, "");
-                                    setFieldValue(fName,
-                                      e.target.value
-                                    );
-                                    handleBlur(fName);
-                                  }}
+                                <select
+                                  className="form-control"
+                                  onBlur={() => handleBlur(item["details"]
+                                    .split(";")[0]
+                                    .replace(/ /g, ""))}
+                                  onChange={(e) => setFieldValue(item["details"]
+                                    .split(";")[0]
+                                    .replace(/ /g, ""),
+                                    e.target.value, true
+                                  )}
                                   value={
                                     values[
                                     item["details"]
@@ -1087,7 +1084,7 @@ function NewRequest(props: iNewRequest) {
                                     type={item["details"].split(";")[2]}
                                     value={item["details"].split(";")[3]}
                                   />
-                                </Form.Control>
+                                </select>
                               </Form.Group>
                             </Col>
                           </Form.Row>
@@ -1114,10 +1111,7 @@ function NewRequest(props: iNewRequest) {
                       className="btn btn-primary"
                       type="submit"
                       onClick={(e) => {
-                        validateForm(values);
-                        if (isValid) {
-                          handleSubmit();
-                        } else if (JSON.stringify(values, ((key, value) => !value ? "" : value)) === JSON.stringify(initialNewRequest, ((key, value) => !value ? "" : value))) {
+                        if (JSON.stringify(values, ((key, value) => !value ? "" : value)) === JSON.stringify(initialNewRequest, ((key, value) => !value ? "" : value))) {
                           Swal.fire({
                             position: "top-end",
                             icon: "error",
@@ -1126,13 +1120,7 @@ function NewRequest(props: iNewRequest) {
                             timer: Constant.AlertTimeout,
                           });
                         } else {
-                          Swal.fire({
-                            position: "top-end",
-                            icon: "error",
-                            title: local_Strings.formValidationMessage,
-                            showConfirmButton: false,
-                            timer: Constant.AlertTimeout,
-                          });
+                          handleSubmit();
                         }
                       }}
                     >

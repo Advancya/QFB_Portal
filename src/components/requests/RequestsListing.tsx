@@ -94,13 +94,13 @@ function RequestsListing(props: iRequestsListing) {
     } else {
       setOffset(rowLimit);
     }
-    
+
     if (filters.filterApplied) {
       const _filteredData = helper.filterRequests(
         props.requests,
         filters
       );
-      
+
       setFilteredData(_filteredData);
     }
 
@@ -136,6 +136,9 @@ function RequestsListing(props: iRequestsListing) {
             {currentContext.language !== "ar"
               ? item.requestSubject
               : item.requestSubjectAr}
+          </h4>
+          <h4>
+            {local_Strings.RequestNumber + item.id}
           </h4>
         </div>
         <div className="col-8 col-sm-3 text-sm-right">
@@ -296,11 +299,11 @@ function RequestsListing(props: iRequestsListing) {
           <div className="box modal-box">
             <ul className="box-list" id="reqList">
               {filteredData &&
-              filteredData.length > 0 &&
-              !!filteredData[0].requestSubject
+                filteredData.length > 0 &&
+                !!filteredData[0].requestSubject
                 ? filteredData
-                    .slice(0, offset)
-                    .map((item, index) => renderItem(item, index))
+                  .slice(0, offset)
+                  .map((item, index) => renderItem(item, index))
                 : NoResult(local_Strings.OfferList_NoData)}
             </ul>
           </div>

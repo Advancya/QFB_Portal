@@ -100,7 +100,7 @@ function FacilitiesDetails(props: iFacilitiesDetails) {
               <div className="row align-items-center">
                 <div className="col-sm-8">
                   <h3 className="text-capitalize color-gold">
-                    {props.facilityItem.ldReference}
+                    {local_Strings.LoanNo + " | " + props.facilityItem.ldReference}
                   </h3>
                   <h3 className="text-sm">
                     {item.OutstandingAmount ? item.OutstandingAmount.value : "0"}

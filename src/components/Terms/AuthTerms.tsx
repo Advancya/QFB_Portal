@@ -13,9 +13,10 @@ interface iAuthTerms {
   showAuthTermsModal: boolean;
   hideAuthTermsModal: () => void;
   showWelcomePage?: () => void;
+  showButtons: boolean;
 }
 
-function AuthTerms(authTermsProps: iAuthTerms) {
+function AuthTerms(props: iAuthTerms) {
   const history = useHistory();
   const currentContext = useContext(AuthContext);
   const auth = useContext(AuthContext);
@@ -23,8 +24,8 @@ function AuthTerms(authTermsProps: iAuthTerms) {
 
   return (
     <Modal
-      show={authTermsProps.showAuthTermsModal}
-      onHide={authTermsProps.hideAuthTermsModal}
+      show={props.showAuthTermsModal}
+      onHide={props.hideAuthTermsModal}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
@@ -43,7 +44,7 @@ function AuthTerms(authTermsProps: iAuthTerms) {
         <button
           type="button"
           className="close"
-          onClick={authTermsProps.hideAuthTermsModal}
+          onClick={props.hideAuthTermsModal}
         >
           <img src={xIcon} width="15" />
         </button>
@@ -59,17 +60,19 @@ function AuthTerms(authTermsProps: iAuthTerms) {
               <embed type="text/html" src={Constant.PortalUrl + "/TermsAuthAr.html"} />
             </ResponsiveEmbed>
           )}
-        <div className="text-right">
-          <button className="btn btn-sm btn-primary mt-1 mr-2"
-            type="submit"
-            onClick={(e) => authTermsProps.showWelcomePage()}>
-            {local_Strings.AnonymousTermsAccept}
-          </button>
-          <button className="btn btn-sm btn-primary mt-1 mr-2"
-            type="submit"
-            onClick={(e) => currentContext.logout()}>
-            {local_Strings.AnonymousTermsCancel}</button>
-        </div>
+        {props.showButtons &&
+          <div className="text-right">
+            <button className="btn btn-sm btn-primary mt-1 mr-2"
+              type="submit"
+              onClick={(e) => props.showWelcomePage()}>
+              {local_Strings.AnonymousTermsAccept}
+            </button>
+            <button className="btn btn-sm btn-primary mt-1 mr-2"
+              type="submit"
+              onClick={(e) => currentContext.logout()}>
+              {local_Strings.AnonymousTermsCancel}</button>
+          </div>
+        }
       </Modal.Body>
     </Modal>
   );

@@ -21,6 +21,7 @@ import { localStrings as local_Strings } from '../translations/localStrings';
 import { GetCountries } from "../services/commonDataServices";
 import { ICountry } from "../Helpers/publicInterfaces";
 import { useHistory } from "react-router-dom";
+import { Offline } from "react-detect-offline";
 
 registerLocale('ar', arSA);
 
@@ -76,7 +77,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     onIdle: async event => {
 
       const lastActiveTime = moment(getLastActiveTime()).toLocaleString();
-      
+
       if (!!selectedCIF) {
 
         console.log('user is idle since ', lastActiveTime);
@@ -131,7 +132,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             setCountries(responseData);
           }
         })
-        .catch((e: any) => console.log(e))
+        .catch((e: any) => console.log(e));
     };
     getUserData();
 
@@ -216,6 +217,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }}
     >
       {children}
+      <Offline
+        onChange={(online) => {
+          if (!online && !!selectedCIF) {
+            signout();
+            Swal.fire({
+              position: 'center',
+              icon: 'warning',
+              title: local_Strings.NoConnectionAlertBody,
+              confirmButtonColor: '#6b4f44',
+              showConfirmButton: false,
+              showCloseButton: false,
+            });
+          }
+        }}
+      />
     </AuthContext.Provider>
   );
 };

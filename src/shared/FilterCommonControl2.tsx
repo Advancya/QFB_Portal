@@ -5,14 +5,14 @@ import FilterDateControl from './FilterDateControl';
 import FilterCustomDateControl from './FilterCustomDateControl';
 import FilterAmountControl from './FilterAmountControl';
 import FilterButtonControl from './FilterButtonControl';
-import { emptyCommonFilter, ICommonFilter } from "../Helpers/publicInterfaces";
+import { emptyCommonFilter, ICommonFilter, IKeyValuePair } from "../Helpers/publicInterfaces";
 import moment from "moment";
 
 interface IFilterCommonControl2Props {
     applyFilter: (filters: ICommonFilter) => void;
     clearFilter: () => void;
     CheckBoxTitle?: string;
-    CheckBoxLabels?: string[];
+    CheckBoxLabels?: IKeyValuePair[];
 }
 
 function FilterCommonControl2(props: IFilterCommonControl2Props) {
@@ -22,17 +22,16 @@ function FilterCommonControl2(props: IFilterCommonControl2Props) {
     const [filters, setFilter] = useState<ICommonFilter>(emptyCommonFilter);
 
     useEffect(() => {
+        setFilter(emptyCommonFilter);
         const OptionalCheck = [...filters.OptionalCheck];
-        OptionalCheck[0].label = props.CheckBoxLabels[0];
+        OptionalCheck[0].label = props.CheckBoxLabels[0].value;
         OptionalCheck[0].value = false;
-        OptionalCheck[1].label = props.CheckBoxLabels[1];
+        OptionalCheck[1].label = props.CheckBoxLabels[1].value;
         OptionalCheck[1].value = false;
 
         setFilter({
             ...filters, OptionalCheck
         });
-
-        setFilter(emptyCommonFilter);
     }, [currentContext.language]);
 
     return (
@@ -60,10 +59,10 @@ function FilterCommonControl2(props: IFilterCommonControl2Props) {
                                 name="radioType"
                                 className="custom-control-input"
                                 id="customCheck1"
-                                checked={filters.OptionalCheck[0]?.value || false}
+                                checked={filters.OptionalCheck[0].value}
                                 onChange={(e) => {
                                     const OptionalCheck = [...filters.OptionalCheck];
-                                    OptionalCheck[0].label = props.CheckBoxLabels[0];
+                                    OptionalCheck[0].label = props.CheckBoxLabels[0].value;
                                     OptionalCheck[0].value = e.target.checked;
 
                                     setFilter({
@@ -71,7 +70,7 @@ function FilterCommonControl2(props: IFilterCommonControl2Props) {
                                     });
                                 }}
                             />
-                            <label className="custom-control-label" htmlFor="customCheck1" style={{ textTransform: "none" }}>{props.CheckBoxLabels[0]}</label>
+                            <label className="custom-control-label" htmlFor="customCheck1" style={{ textTransform: "none" }}>{props.CheckBoxLabels[0].label}</label>
                         </div>
                         <div className="custom-control custom-checkbox custom-control-inline">
                             <input
@@ -79,10 +78,10 @@ function FilterCommonControl2(props: IFilterCommonControl2Props) {
                                 name="radioType"
                                 className="custom-control-input"
                                 id="customCheck2"
-                                checked={filters.OptionalCheck[1]?.value || false}
+                                checked={filters.OptionalCheck[1].value}
                                 onChange={(e) => {
                                     const OptionalCheck = [...filters.OptionalCheck];
-                                    OptionalCheck[1].label = props.CheckBoxLabels[1];
+                                    OptionalCheck[1].label = props.CheckBoxLabels[1].value;
                                     OptionalCheck[1].value = e.target.checked;
 
                                     setFilter({
@@ -90,7 +89,7 @@ function FilterCommonControl2(props: IFilterCommonControl2Props) {
                                     });
                                 }}
                             />
-                            <label className="custom-control-label" htmlFor="customCheck2" style={{ textTransform: "none" }}>{props.CheckBoxLabels[1]}</label>
+                            <label className="custom-control-label" htmlFor="customCheck2" style={{ textTransform: "none" }}>{props.CheckBoxLabels[1].label}</label>
                         </div>
                     </div>
                 </div>
@@ -98,6 +97,21 @@ function FilterCommonControl2(props: IFilterCommonControl2Props) {
                     <FilterButtonControl
                         clearFilter={() => {
                             setFilter(emptyCommonFilter);
+                            const OptionalCheck = [...filters.OptionalCheck];
+                            OptionalCheck[0].label = props.CheckBoxLabels[0].value;
+                            OptionalCheck[0].value = false;
+                            OptionalCheck[1].label = props.CheckBoxLabels[1].value;
+                            OptionalCheck[1].value = false;
+
+                            setFilter({
+                                ...filters, OptionalCheck,
+                                filterApplied: false,
+                                DateOption: "0",
+                                StartDate: moment().toDate(),   //moment().add(-7, "days").toDate(),
+                                EndDate: moment().toDate(),
+                                AmountOperator: "",
+                                Amount: "",
+                            });
                             props.clearFilter();
                         }}
                         applyFilter={() => {

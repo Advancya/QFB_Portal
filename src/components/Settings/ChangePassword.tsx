@@ -188,7 +188,7 @@ function ChangePassword(props: iChangePassword) {
                 </div>
               </div>
               <div className="text-xs color-grey">
-                {local_Strings.registerStep2Label3}
+                {local_Strings.ChangePassword_InvalidationMsg}
               </div>
 
               <div className="text-right p-3 ">

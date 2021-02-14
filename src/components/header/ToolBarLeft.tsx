@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { localStrings as local_Strings } from "../../translations/localStrings";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome } from "@fortawesome/free-solid-svg-icons";
@@ -14,6 +14,30 @@ function ToolBarLeft() {
   const history = useHistory();
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
+  const [showLanguageSwither, setShowLanguageSwither] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const initialLoadMethod = async () => {
+      const userData = await GetUserLocalData();
+      if (userData && userData.customerId) {
+        const role = await getUserRole(userData.customerId);
+        if (role.name === Constant.CMSADMIN) {
+          setShowLanguageSwither(false);
+        } else {
+          setShowLanguageSwither(true);
+        }
+      }
+    };
+
+    initialLoadMethod();
+
+    return () => {
+      isMounted = false;
+    }; // use effect cleanup to set flag false, if unmounted
+
+  }, [currentContext.selectedCIF]);
 
   const switchLanguage = (language: string) => {
     if (language === "en") {
@@ -56,11 +80,13 @@ function ToolBarLeft() {
         <a href="#" onClick={redirectToHome}>
           <FontAwesomeIcon icon={faHome} />
         </a>
-        <a href="#" onClick={() => switchLanguage(currentContext.language)}>
-          {currentContext.language === "en"
-            ? local_Strings.arabic
-            : local_Strings.english}
-        </a>
+        {showLanguageSwither &&
+          <a href="#" onClick={() => switchLanguage(currentContext.language)}>
+            {currentContext.language === "en"
+              ? local_Strings.arabic
+              : local_Strings.english}
+          </a>
+        }
       </div>
     </div>
   );

@@ -269,7 +269,7 @@ const HoldingsLanding = () => {
         }
       })
       .catch((e: any) => console.log(e))
-      .finally(() => setTimeout(() => setLoading(false), 4000));
+      .finally(() => setLoading(false));
   };
 
   const showClosedHoldings = () => {
@@ -315,7 +315,7 @@ const HoldingsLanding = () => {
         }
       })
       .catch((e: any) => console.log(e))
-      .finally(() => setTimeout(() => setLoading(false), 4000));
+      .finally(() => setLoading(false));
   };
 
   return (
@@ -376,7 +376,7 @@ const HoldingsLanding = () => {
                       options={deposit_live_1stDrill}
                     />
                   ) : !showNoDataDepositLive ? null :
-                      NoResult(local_Strings.NoLiveHoldingsMesageDeposit)}
+                      NoResult(local_Strings.NoDepositsHoldingsFound)}
                 </div>
                 <LoadingOverlay
                   active={isLoading}
@@ -387,7 +387,7 @@ const HoldingsLanding = () => {
                     />
                   }
                 />
-                {!isLive2ndDrillShow && !isLoading ? (
+                {!isLive2ndDrillShow && !showNoDataInvestmentLive && !isLoading ? (
 
                   <PieChart
                     highcharts={Highcharts}
@@ -395,7 +395,7 @@ const HoldingsLanding = () => {
                   />
 
                 ) : !showNoDataInvestmentLive ? null :
-                    NoResult(local_Strings.NoLiveHoldingsMesageInvestment)}
+                    NoResult(local_Strings.NoInvestmentsHoldingsFound)}
                 {isLive2ndDrillShow && !isLoading && (
                   <React.Fragment>
                     <a
@@ -425,7 +425,7 @@ const HoldingsLanding = () => {
                       options={deposit_Closed_1stDrill}
                     />
                   ) : !showNoDataDepositClosed ? null :
-                      NoResult(local_Strings.NoClosedHoldingsMesageDeposit)}
+                      NoResult(local_Strings.NoDepositsHoldingsFound)}
                 </div>
                 <LoadingOverlay
                   active={isLoading}
@@ -436,13 +436,13 @@ const HoldingsLanding = () => {
                     />
                   }
                 />
-                {!isClosed2ndDrillShow && !isLoading ? (
+                {!isClosed2ndDrillShow && !showNoDataInvestmentClosed && !isLoading ? (
                   <PieChart
                     highcharts={Highcharts}
                     options={investment_Closed_1stDrill}
                   />
                 ) : !showNoDataInvestmentClosed ? null :
-                    NoResult(local_Strings.NoClosedHoldingsMesageInvestment)}
+                    NoResult(local_Strings.NoInvestmentsHoldingsFound)}
                 {isClosed2ndDrillShow && !isLoading && (
                   <React.Fragment>
                     <a
