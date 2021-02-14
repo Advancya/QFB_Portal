@@ -84,7 +84,7 @@ const RM = () => {
           for (let index = 0; index < transactions.length; index++) {
             tranactionItems.push({
               cif: transactions[index]["cif"],
-              requestCreateDate: transactions[index]["transactionDate"],
+              requestCreateDate: transactions[index]["requestDate"],
               customerMobile: transactions[index]["customerMobile"],
               customerName: transactions[index]["customerName"],
               id: transactions[index]["id"],

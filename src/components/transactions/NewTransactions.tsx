@@ -323,6 +323,9 @@ function NewTransaction(props: iNewTransaction) {
                 setLoading(false);
               }}
               innerRef={formikRef_WitihinQFB}
+              enableReinitialize={true}
+              validateOnChange={true}
+              validateOnBlur={true}
             >
               {({
                 values,
@@ -505,6 +508,9 @@ function NewTransaction(props: iNewTransaction) {
                 setLoading(false);
               }}
               innerRef={formikRef_LocalOrInternational}
+              enableReinitialize={true}
+              validateOnChange={true}
+              validateOnBlur={true}
             >
               {({
                 values,
@@ -683,26 +689,7 @@ function NewTransaction(props: iNewTransaction) {
                       id="applyReqBtn"
                       className="btn btn-primary"
                       type="submit"
-                      onClick={(e) => {
-                        validateForm(values);
-                        if (isValid) {
-                          handleSubmit();
-                        } else {
-                          touched.transferFromAccount = true;
-                          touched.beneficiaryId = true;
-                          touched.currency = true;
-                          touched.amount = true;
-                          touched.transactionDate = true;
-                          touched.description = true;
-                          Swal.fire({
-                            position: "top-end",
-                            icon: "error",
-                            title: local_Strings.formValidationMessage,
-                            showConfirmButton: false,
-                            timer: Constant.AlertTimeout,
-                          });
-                        }
-                      }}
+                      onClick={() => handleSubmit()}
                     >
                       {local_Strings.TransactionRequestButton}
                     </button>

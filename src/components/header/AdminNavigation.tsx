@@ -6,6 +6,9 @@ import {
 } from "../../services/cmsService";
 import usericon from "../../images/user-icon.svg";
 import { GetUserLocalData } from "../../Helpers/authHelper";
+import Inbox from "../Inbox/Inbox";
+import Notfications from "../Notifications/Notifications";
+import { Navbar } from "react-bootstrap";
 
 interface IAdminNavigation {
   userType: {
@@ -19,6 +22,7 @@ const AdminNavigation: React.FC<IAdminNavigation> = (props) => {
   const currentContext = useContext(AuthContext);
   local_Strings.setLanguage(currentContext.language);
   const [rmName, setRmName] = React.useState("");
+  const [showNotifications, setShowNotifications] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -35,10 +39,13 @@ const AdminNavigation: React.FC<IAdminNavigation> = (props) => {
 
     if (!!currentContext.selectedCIF && props.userType.RM) {
       fetchRmName();
+      setShowNotifications(true);
     } else if (props.userType.Admin) {
       setRmName(local_Strings.AdminLandingTitle);
+      setShowNotifications(false);
     } else if (props.userType.Management) {
       setRmName(local_Strings.ManagementLandingTitle);
+      setShowNotifications(true);
     }
 
     return () => {
@@ -64,6 +71,21 @@ const AdminNavigation: React.FC<IAdminNavigation> = (props) => {
           <i className="fa fa-sign-out text-sm" />
         </a>
       </div>
+      {showNotifications &&
+        <Navbar expand="md" variant="dark">
+          <Navbar.Toggle aria-controls="basic-navbar-nav">
+            <span className="fa fa-bars"></span>
+          </Navbar.Toggle>
+          <Navbar.Collapse id="basic-navbar-nav">
+            <ul className="navbar-nav">
+              <li className="nav-item">
+                <Inbox />
+                <Notfications />
+              </li>
+            </ul>
+          </Navbar.Collapse>
+        </Navbar>
+      }
     </div>
   );
 }

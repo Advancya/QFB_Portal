@@ -103,8 +103,8 @@ function TransactionsListing(props: iTransactionsListing) {
       >
         <div className="col-sm-8">
           <h5>
-            {!!item.transactionDate
-              ? moment(item.transactionDate).format("DD MMMM YYYY")
+            {!!item.requestDate
+              ? moment(item.requestDate).format("DD MMMM YYYY")
               : ""}
           </h5>
           <h4>
