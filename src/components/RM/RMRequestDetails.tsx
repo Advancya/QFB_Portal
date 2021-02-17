@@ -234,33 +234,33 @@ function RMRequestDetails(props: iRMDetails) {
               </label>
               {item["details"].split(";")[2] !== "FILE_UPLOAD" ? (
                 item["details"].split(";")[2] === "MULTILINE_TEXT" ||
-                  (item["details"].split(";")[2] === "READ_ONLY" &&
-                    item["details"].split(";")[3].toString() !== "NULL") ? (
-                    <Form.Control
-                      as="textarea"
-                      readOnly={true}
-                      defaultValue={getRequestFieldValue(
-                        item["details"].split(";")[0].replace(/ /g, "")
-                      )}
-                      maxLength={400}
-                    />
-                  ) : (
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: getRequestFieldValue(
-                          item["details"].split(";")[0].replace(/ /g, "")
-                        ),
-                      }}
-                      className="request-detail-control"
-                    />
-                  )
-              ) : (
-                  <ViewAttachment
-                    showDelete={false}
-                    fileName={getRequestFieldValue("FileName")}
-                    fileContent={getRequestFieldValue("FileContent")}
+                (item["details"].split(";")[2] === "READ_ONLY" &&
+                  item["details"].split(";")[3].toString() !== "NULL") ? (
+                  <Form.Control
+                    as="textarea"
+                    readOnly={true}
+                    defaultValue={getRequestFieldValue(
+                      item["details"].split(";")[0].replace(/ /g, "")
+                    )}
+                    maxLength={400}
                   />
-                )}
+                ) : (
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: getRequestFieldValue(
+                        item["details"].split(";")[0].replace(/ /g, "")
+                      ),
+                    }}
+                    className="request-detail-control"
+                  />
+                )
+              ) : (
+                <ViewAttachment
+                  showDelete={false}
+                  fileName={getRequestFieldValue("FileName")}
+                  fileContent={getRequestFieldValue("FileContent")}
+                />
+              )}
             </div>
           ))}
           <div className="">
@@ -288,56 +288,59 @@ function RMRequestDetails(props: iRMDetails) {
                 </option>
               </select>
             </div>
+          </div>
 
-            <div className="text-right py-2 px-3">
-              <button
-                id="submitOTPBtn"
-                className="btn btn-primary"
-                type="submit"
-                disabled={selectedStatus === "" || (currentContext.language !== "ar"
+          <div className="text-right py-2 px-3">
+            <button
+              id="submitOTPBtn"
+              className="btn btn-primary"
+              type="submit"
+              disabled={
+                selectedStatus === "" ||
+                (currentContext.language !== "ar"
                   ? currentRequest.requestStatus
-                  : currentRequest.requestStatusAr) === selectedStatus}
-                onClick={async (e) => {
-                  if (!!selectedStatus) {
-                    setLoading(true);
-                    const result = await RmUpdateStatus(
-                      props.itemId.toString(),
-                      selectedStatus
-                    );
-                    setLoading(false);
-                    if (result) {
-                      Swal.fire({
-                        position: "top-end",
-                        icon: "success",
-                        title: local_Strings.ConfirmationTitle,
-                        html: local_Strings.ConfirmationDesc,
-                        showConfirmButton: false,
-                        timer: Constant.AlertTimeout,
-                      });
-                      props.backRMDetailsgModal();
-                    } else {
-                      Swal.fire({
-                        position: "top-end",
-                        icon: "error",
-                        title: local_Strings.GenericErrorMessage,
-                        showConfirmButton: false,
-                        timer: Constant.AlertTimeout,
-                      });
-                    }
+                  : currentRequest.requestStatusAr) === selectedStatus
+              }
+              onClick={async (e) => {
+                if (!!selectedStatus) {
+                  setLoading(true);
+                  const result = await RmUpdateStatus(
+                    props.itemId.toString(),
+                    selectedStatus
+                  );
+                  setLoading(false);
+                  if (result) {
+                    Swal.fire({
+                      position: "top-end",
+                      icon: "success",
+                      title: local_Strings.ConfirmationTitle,
+                      html: local_Strings.ConfirmationDesc,
+                      showConfirmButton: false,
+                      timer: Constant.AlertTimeout,
+                    });
+                    props.backRMDetailsgModal();
                   } else {
                     Swal.fire({
                       position: "top-end",
                       icon: "error",
-                      title: local_Strings.formValidationMessage,
+                      title: local_Strings.GenericErrorMessage,
                       showConfirmButton: false,
                       timer: Constant.AlertTimeout,
                     });
                   }
-                }}
-              >
-                {local_Strings.RMDetailsbutton}
-              </button>
-            </div>
+                } else {
+                  Swal.fire({
+                    position: "top-end",
+                    icon: "error",
+                    title: local_Strings.formValidationMessage,
+                    showConfirmButton: false,
+                    timer: Constant.AlertTimeout,
+                  });
+                }
+              }}
+            >
+              {local_Strings.RMDetailsbutton}
+            </button>
           </div>
         </div>
       </Modal.Body>
