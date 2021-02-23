@@ -2,9 +2,9 @@
   "config": {
     "client_id": "ro.client",
     "m_client_id": "m.m.client",
-    "client_secret": "secret",
-    "scope": "api1 offline_access",
-    "m_scope": "api1",
+    "client_secret": "ProdSecCSecApi",
+    "scope": "QfbProd12@A34@P56@I offline_access",
+    "m_scope": "QfbProd12@A34@P56@I",
     "grant_type": ""
   },
   "storage_key": "@IdentityServerOidc:IdentityServerOAuthKey"
