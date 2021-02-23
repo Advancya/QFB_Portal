@@ -23,7 +23,7 @@ function ToolBarLeft() {
       const userData = await GetUserLocalData();
       if (userData && userData.customerId) {
         const role = await getUserRole(userData.customerId);
-        if (role.name === Constant.CMSADMIN) {
+        if (role && role.name === Constant.CMSADMIN) {
           setShowLanguageSwither(false);
         } else {
           setShowLanguageSwither(true);
@@ -36,7 +36,6 @@ function ToolBarLeft() {
     return () => {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
-
   }, [currentContext.selectedCIF]);
 
   const switchLanguage = (language: string) => {
@@ -66,7 +65,7 @@ function ToolBarLeft() {
         } else if (role && role.name === Constant.Management) {
           history.push(`/${currentContext.language}/Managment`);
         } else if (role.name === Constant.CMSADMIN) {
-          history.push(`/${currentContext.language}/Admin`);
+          history.push(`/en/Admin`);
         } else {
           history.push(`/${currentContext.language}`);
         }
@@ -80,13 +79,13 @@ function ToolBarLeft() {
         <a href="#" onClick={redirectToHome}>
           <FontAwesomeIcon icon={faHome} />
         </a>
-        {showLanguageSwither &&
+        {showLanguageSwither && (
           <a href="#" onClick={() => switchLanguage(currentContext.language)}>
             {currentContext.language === "en"
               ? local_Strings.arabic
               : local_Strings.english}
           </a>
-        }
+        )}
       </div>
     </div>
   );
