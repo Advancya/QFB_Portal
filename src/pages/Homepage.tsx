@@ -132,7 +132,7 @@ const HomePage = () => {
           } else if (role.name === Constant.Management) {
             history.push(`/${currentContext.language}/Managment`);
           } else if (role.name === Constant.CMSADMIN) {
-            history.push(`/${currentContext.language}/Admin`);
+            history.push(`/en/Admin`);
           } else {
             Swal.fire({
               title: local_Strings.SessionTimeOutMessage,

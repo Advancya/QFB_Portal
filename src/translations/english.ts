@@ -264,7 +264,7 @@ const en = {
   CashDetails_Filter_Credit: "Credit",
   HistoricalPayments_PastDueSettlement: "Past Due Settlement",
   HistoricalPayments_SettlemenOfPayment: "Settlement of Payment",
-  OutstandingPayments_PastDueSettlement: "Past Due",
+  OutstandingPayments_PastDueSettlement: "Past Due Payment",
   OutstandingPayments_SettlemenOfPayment: "Payment of Facility",
 
   DepositsAndReceivedProfit: "Deposits and Received Profit",
