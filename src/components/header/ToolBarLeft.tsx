@@ -23,7 +23,7 @@ function ToolBarLeft() {
       const userData = await GetUserLocalData();
       if (userData && userData.customerId) {
         const role = await getUserRole(userData.customerId);
-        if (role.name === Constant.CMSADMIN) {
+        if (role && role.name === Constant.CMSADMIN) {
           setShowLanguageSwither(false);
         } else {
           setShowLanguageSwither(true);

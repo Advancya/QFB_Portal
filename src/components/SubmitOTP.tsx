@@ -141,7 +141,7 @@ const SubmitOTP: React.FC<IProps> = ({ userDetail }) => {
                   value={values.otp || ""}
                   onChange={(e) => {
                     if (e.currentTarget.validity.valid && e.currentTarget.value.length <= 6) {
-                      setFieldValue("otp", e.target.value.replace(/[^0-9]*/, ''));
+                      setFieldValue("otp", e.target.value);
                     }
                   }}
                   onBlur={handleBlur("otp")} />
